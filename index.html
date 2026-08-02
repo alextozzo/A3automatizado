@@ -113,7 +113,7 @@
         select.cell-input { text-align-last: center; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 800; }
         select.cell-input option { background-color: #ffffff; color: var(--randon-black); font-weight: bold; }
 
-        .status-btn { width: 100%; height: 100%; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .status-btn { width: 100%; height: 100%; border: none; background: transparent; display: flex; align-items: center; justify-content: center; }
         .circle { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #94a3b8; background-color: #e2e8f0; transition: 0.2s; }
         .circle.green { background-color: var(--status-green); border-color: #047857; box-shadow: 0 0 8px rgba(16,185,129,0.6); }
         .circle.red { background-color: var(--status-red); border-color: #b91c1c; box-shadow: 0 0 8px rgba(239,68,68,0.6); }
@@ -462,6 +462,7 @@
                 });
             }
 
+            aplicarRegrasAutomaticas(); // Força as cores iniciais
             renderDashboard();
             recalcularKPIs();
             initCharts();
@@ -484,6 +485,35 @@
             document.getElementById(`tab-btn-${tabId}`).classList.add('active');
             if(tabId === 'analytics') updateAnalytics();
             if(tabId === 'apontamento') renderResumoApontamento();
+        }
+
+        // NOVA FUNÇÃO: Motor de Automação de Cores (Verde/Vermelho automático)
+        function aplicarRegrasAutomaticas() {
+            sectionsConfig.forEach(sec => {
+                db.data[sec.id].forEach(row => {
+                    // Validação Automática de ENTRADA
+                    if (row.real_ent && row.real_ent.trim() !== '') {
+                        if (row.real_ent.trim().toUpperCase() === (row.plan_ent || '').trim().toUpperCase()) {
+                            row.stat_ent = 'green';
+                        } else {
+                            row.stat_ent = 'red';
+                        }
+                    } else {
+                        row.stat_ent = ''; // Fica cinza se estiver vazio
+                    }
+
+                    // Validação Automática de SAÍDA
+                    if (row.real_sai && row.real_sai.trim() !== '') {
+                        if (row.real_sai.trim().toUpperCase() === (row.plan_sai || '').trim().toUpperCase()) {
+                            row.stat_sai = 'green';
+                        } else {
+                            row.stat_sai = 'red';
+                        }
+                    } else {
+                        row.stat_sai = ''; // Fica cinza se estiver vazio
+                    }
+                });
+            });
         }
 
         function renderDashboard() {
@@ -554,19 +584,25 @@
                                     <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="plan_ent" value="${row.plan_ent || ''}"></td>
                                     <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="real_ent" value="${row.real_ent || ''}"></td>
                                     <td><input type="number" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="atr_ent" value="${row.atr_ent || ''}"></td>
+                                    
+                                    <!-- A bolinha não tem mais botão de clique, é totalmente automática! -->
                                     <td>
-                                        <button type="button" class="status-btn" onclick="toggleStatus('${sec.id}', ${index}, 'stat_ent', this)">
+                                        <div class="status-btn" title="Avaliação Automática (Verde=No prazo, Vermelho=Atraso/Divergente)">
                                             <div class="circle ${row.stat_ent || ''}"></div>
-                                        </button>
+                                        </div>
                                     </td>
+                                    
                                     <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="plan_sai" value="${row.plan_sai || ''}"></td>
                                     <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="real_sai" value="${row.real_sai || ''}"></td>
                                     <td><input type="number" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="atr_sai" value="${row.atr_sai || ''}"></td>
+                                    
+                                    <!-- A bolinha de saída também é automática -->
                                     <td>
-                                        <button type="button" class="status-btn" onclick="toggleStatus('${sec.id}', ${index}, 'stat_sai', this)">
+                                        <div class="status-btn" title="Avaliação Automática (Verde=No prazo, Vermelho=Atraso/Divergente)">
                                             <div class="circle ${row.stat_sai || ''}"></div>
-                                        </button>
+                                        </div>
                                     </td>
+                                    
                                     <td class="${getColorClass(row.aponta || '')}">
                                         <select class="cell-input center-text" style="color: inherit;" data-section="${sec.id}" data-row="${index}" data-field="aponta">
                                             <option value="" ${row.aponta === '' ? 'selected' : ''}>-</option>
@@ -608,6 +644,14 @@
                     target.parentElement.className = getColorClass(target.value);
                 }
             }
+            
+            aplicarRegrasAutomaticas(); // Recalcula as bolinhas verdes e vermelhas sempre que digitar algo
+            
+            // Se o usuário digitou Real Entrada ou Saída, força a renderização visual das bolinhas
+            if(target.dataset.field === 'real_ent' || target.dataset.field === 'plan_ent' || target.dataset.field === 'real_sai' || target.dataset.field === 'plan_sai') {
+                 renderDashboard();
+            }
+
             recalcularKPIs();
             autoSaveCloud();
         }
@@ -617,14 +661,6 @@
             if(val === 'OK') return 'bg-ok';
             if(val === 'COGI') return 'bg-cogi';
             return '';
-        }
-
-        function toggleStatus(sectionId, rowIndex, field, btnElement) {
-            let current = db.data[sectionId][rowIndex][field];
-            let next = current === '' ? 'green' : (current === 'green' ? 'red' : '');
-            db.data[sectionId][rowIndex][field] = next;
-            btnElement.querySelector('.circle').className = `circle ${next}`;
-            autoSaveCloud();
         }
 
         function recalcularKPIs() {
@@ -786,6 +822,7 @@
                         // Merge seguro para não sobrescrever caso esteja digitando
                         db = nuvemDb; 
                         inicializarBancoLocal(); // Garante que linhas novas não quebrem o DB antigo
+                        aplicarRegrasAutomaticas(); // APLICA AUTOMACAO DE CORES 
                         renderDashboard();
                         recalcularKPIs();
                     } else {
@@ -811,18 +848,38 @@
             } catch (e) { console.log("Erro Nuvem: ", e); }
         }
 
+        // INTEGRAÇÃO DE FÁBRICA REVISADA - Mais inteligente para não perder dados do Posto 3!
         function injetarFabrica(dados) {
-            if(!dados || !dados.postos) return;
+            if(!dados) return;
             let ovEnt = '', ovSai = '';
             
-            dados.postos.forEach(p => {
-                if(!p) return;
-                const n = p.nome ? p.nome.toLowerCase() : '';
-                // POSTO 3 -> Alimentação da Entrada (PRODUTO REAL)
-                if(n.includes('posto 3')) ovEnt = (p.tarde?.ov && p.tarde.ov !== '---') ? p.tarde.ov : (p.manha?.ov && p.manha.ov !== '---' ? p.manha.ov : '');
-                // POSTO 7 -> Alimentação da Saída (SAÍDA REAL)
-                if(n.includes('posto 7')) ovSai = (p.tarde?.ov && p.tarde.ov !== '---') ? p.tarde.ov : (p.manha?.ov && p.manha.ov !== '---' ? p.manha.ov : '');
-            });
+            // 1. TENTA LER O FORMATO ORIGINAL (p.tarde.ov)
+            if (dados.postos && Array.isArray(dados.postos)) {
+                dados.postos.forEach(p => {
+                    if(!p) return;
+                    const n = p.nome ? p.nome.toLowerCase() : '';
+                    // POSTO 3 -> Alimentação da Entrada (PRODUTO REAL)
+                    if(n.includes('posto 3')) ovEnt = (p.tarde?.ov && p.tarde.ov !== '---') ? p.tarde.ov : (p.manha?.ov && p.manha.ov !== '---' ? p.manha.ov : '');
+                    // POSTO 7 -> Alimentação da Saída (SAÍDA REAL)
+                    if(n.includes('posto 7')) ovSai = (p.tarde?.ov && p.tarde.ov !== '---') ? p.tarde.ov : (p.manha?.ov && p.manha.ov !== '---' ? p.manha.ov : '');
+                });
+            } 
+            // 2. PLANO B (FALLBACK): Caso o tablet mande de um jeito simples, ex: {posto3: "OP123"}
+            else {
+                for (let chave in dados) {
+                    let nomeNormalizado = chave.toLowerCase().replace(/\s/g, ''); // posto3, posto7
+                    if (nomeNormalizado === 'posto3') {
+                        ovEnt = typeof dados[chave] === 'object' ? (dados[chave].ov || '') : dados[chave];
+                    }
+                    if (nomeNormalizado === 'posto7') {
+                        ovSai = typeof dados[chave] === 'object' ? (dados[chave].ov || '') : dados[chave];
+                    }
+                }
+            }
+
+            // Remove o traço caso venha em branco
+            if(ovEnt === '---') ovEnt = '';
+            if(ovSai === '---') ovSai = '';
 
             if(ovEnt || ovSai) {
                 const meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
@@ -840,7 +897,11 @@
                 });
                 
                 if(att) {
-                    renderDashboard(); recalcularKPIs(); autoSaveCloud();
+                    // SE MUDOU ALGO DA FÁBRICA, O MOTOR ATUALIZA AS CORES IMEDIATAMENTE
+                    aplicarRegrasAutomaticas(); 
+                    renderDashboard(); 
+                    recalcularKPIs(); 
+                    autoSaveCloud();
                     mostrarToast("Fábrica Atualizou Linha CT", "fa-satellite-dish");
                 }
             }
@@ -1071,6 +1132,8 @@
                     idTabela++;
                 }
             });
+            
+            aplicarRegrasAutomaticas(); // APLICA CORES AUTOMÁTICAS PÓS-PCP
             fecharModalPCP(); renderDashboard(); recalcularKPIs(); autoSaveCloud();
             mostrarToast("PCP Injetado na Linha!", "fa-bolt");
         }
