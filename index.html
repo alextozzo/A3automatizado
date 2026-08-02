@@ -113,7 +113,7 @@
         select.cell-input { text-align-last: center; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 9px; font-weight: 800; }
         select.cell-input option { background-color: #ffffff; color: var(--randon-black); font-weight: bold; }
 
-        .status-btn { width: 100%; height: 100%; border: none; background: transparent; display: flex; align-items: center; justify-content: center; }
+        .status-btn { width: 100%; height: 100%; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .circle { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #94a3b8; background-color: #e2e8f0; transition: 0.2s; }
         .circle.green { background-color: var(--status-green); border-color: #047857; box-shadow: 0 0 8px rgba(16,185,129,0.6); }
         .circle.red { background-color: var(--status-red); border-color: #b91c1c; box-shadow: 0 0 8px rgba(239,68,68,0.6); }
@@ -432,7 +432,7 @@
         let firebaseDB = null;
         let dbRef = null;
 
-        // CAMADA DE SEGURANÇA: Garante que as matrizes de dados existam antes de qualquer ação
+        // CAMADA DE SEGURANÇA
         function inicializarBancoLocal() {
             if(!db.meta) db.meta = {};
             if(!db.data) db.data = {};
@@ -451,7 +451,6 @@
                 db.globalDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
             }
             
-            // Garantindo que a conexão de evento só ocorre se o elemento existir na DOM
             const globalDateInput = document.getElementById('global-date');
             if (globalDateInput) {
                 globalDateInput.value = db.globalDate;
@@ -462,12 +461,10 @@
                 });
             }
 
-            aplicarRegrasAutomaticas(); // Força as cores iniciais
             renderDashboard();
             recalcularKPIs();
             initCharts();
             
-            // Listeners da Área Operacional
             const viewOperacional = document.getElementById('view-operacional');
             if (viewOperacional) {
                 viewOperacional.addEventListener('change', handleInputChange);
@@ -487,43 +484,14 @@
             if(tabId === 'apontamento') renderResumoApontamento();
         }
 
-        // NOVA FUNÇÃO: Motor de Automação de Cores (Verde/Vermelho automático)
-        function aplicarRegrasAutomaticas() {
-            sectionsConfig.forEach(sec => {
-                db.data[sec.id].forEach(row => {
-                    // Validação Automática de ENTRADA
-                    if (row.real_ent && row.real_ent.trim() !== '') {
-                        if (row.real_ent.trim().toUpperCase() === (row.plan_ent || '').trim().toUpperCase()) {
-                            row.stat_ent = 'green';
-                        } else {
-                            row.stat_ent = 'red';
-                        }
-                    } else {
-                        row.stat_ent = ''; // Fica cinza se estiver vazio
-                    }
-
-                    // Validação Automática de SAÍDA
-                    if (row.real_sai && row.real_sai.trim() !== '') {
-                        if (row.real_sai.trim().toUpperCase() === (row.plan_sai || '').trim().toUpperCase()) {
-                            row.stat_sai = 'green';
-                        } else {
-                            row.stat_sai = 'red';
-                        }
-                    } else {
-                        row.stat_sai = ''; // Fica cinza se estiver vazio
-                    }
-                });
-            });
-        }
-
         function renderDashboard() {
             const container = document.getElementById('view-operacional');
-            if (!container) return; // Fallback
+            if (!container) return; 
             
             let html = '';
 
             sectionsConfig.forEach(sec => {
-                const isCT = sec.id === 'carrega_tudo' ? `<span style="font-size: 10px; color: white; background: var(--status-green); padding: 4px 10px; border-radius: 4px; font-weight: 900; margin-left: 15px; box-shadow: 0 0 10px rgba(16,185,129,0.5); border: 1px solid rgba(255,255,255,0.4); display: flex; align-items: center; gap: 5px;"><i class="fa-solid fa-satellite-dish fa-beat"></i> AO VIVO - POSTOS 3 e 7</span>` : '';
+                const isCT = sec.id === 'carrega_tudo' ? `<span style="font-size: 10px; color: white; background: var(--status-green); padding: 4px 10px; border-radius: 4px; font-weight: 900; margin-left: 15px; box-shadow: 0 0 10px rgba(16,185,129,0.5); border: 1px solid rgba(255,255,255,0.4); display: flex; align-items: center; gap: 5px;"><i class="fa-solid fa-satellite-dish fa-beat"></i> INTEGRAÇÃO AUTOMÁTICA</span>` : '';
 
                 html += `
                 <div class="section-card" id="container-${sec.id}">
@@ -584,25 +552,19 @@
                                     <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="plan_ent" value="${row.plan_ent || ''}"></td>
                                     <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="real_ent" value="${row.real_ent || ''}"></td>
                                     <td><input type="number" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="atr_ent" value="${row.atr_ent || ''}"></td>
-                                    
-                                    <!-- A bolinha não tem mais botão de clique, é totalmente automática! -->
                                     <td>
-                                        <div class="status-btn" title="Avaliação Automática (Verde=No prazo, Vermelho=Atraso/Divergente)">
+                                        <button type="button" class="status-btn" onclick="toggleStatus('${sec.id}', ${index}, 'stat_ent', this)">
                                             <div class="circle ${row.stat_ent || ''}"></div>
-                                        </div>
+                                        </button>
                                     </td>
-                                    
                                     <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="plan_sai" value="${row.plan_sai || ''}"></td>
                                     <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="real_sai" value="${row.real_sai || ''}"></td>
                                     <td><input type="number" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="atr_sai" value="${row.atr_sai || ''}"></td>
-                                    
-                                    <!-- A bolinha de saída também é automática -->
                                     <td>
-                                        <div class="status-btn" title="Avaliação Automática (Verde=No prazo, Vermelho=Atraso/Divergente)">
+                                        <button type="button" class="status-btn" onclick="toggleStatus('${sec.id}', ${index}, 'stat_sai', this)">
                                             <div class="circle ${row.stat_sai || ''}"></div>
-                                        </div>
+                                        </button>
                                     </td>
-                                    
                                     <td class="${getColorClass(row.aponta || '')}">
                                         <select class="cell-input center-text" style="color: inherit;" data-section="${sec.id}" data-row="${index}" data-field="aponta">
                                             <option value="" ${row.aponta === '' ? 'selected' : ''}>-</option>
@@ -624,7 +586,6 @@
                 </div>`;
             });
 
-            // Só atualiza o HTML se o usuário não estiver focado (digitando), para evitar pular o cursor via Firebase Sync
             if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT') {
                 container.innerHTML = html;
             }
@@ -632,6 +593,8 @@
 
         function handleInputChange(e) {
             const target = e.target;
+            const formatar = (str) => (str || '').trim().toUpperCase();
+
             if(target.dataset.type === 'meta') {
                 db.meta[target.dataset.section] = parseInt(target.value) || 0;
             } else if(target.classList.contains('cell-input')) {
@@ -640,18 +603,25 @@
                 const field = target.dataset.field;
                 db.data[sec][row][field] = target.value;
 
+                // AUTOMAÇÃO DE COR - Digitação Manual
+                if (field === 'plan_ent' || field === 'real_ent') {
+                    let r = db.data[sec][row];
+                    if (r.real_ent !== '') {
+                        r.stat_ent = (formatar(r.real_ent) === formatar(r.plan_ent) && r.plan_ent !== '') ? 'green' : 'red';
+                    } else { r.stat_ent = ''; }
+                }
+                
+                if (field === 'plan_sai' || field === 'real_sai') {
+                    let r = db.data[sec][row];
+                    if (r.real_sai !== '') {
+                        r.stat_sai = (formatar(r.real_sai) === formatar(r.plan_sai) && r.plan_sai !== '') ? 'green' : 'red';
+                    } else { r.stat_sai = ''; }
+                }
+
                 if(field === 'aponta') {
                     target.parentElement.className = getColorClass(target.value);
                 }
             }
-            
-            aplicarRegrasAutomaticas(); // Recalcula as bolinhas verdes e vermelhas sempre que digitar algo
-            
-            // Se o usuário digitou Real Entrada ou Saída, força a renderização visual das bolinhas
-            if(target.dataset.field === 'real_ent' || target.dataset.field === 'plan_ent' || target.dataset.field === 'real_sai' || target.dataset.field === 'plan_sai') {
-                 renderDashboard();
-            }
-
             recalcularKPIs();
             autoSaveCloud();
         }
@@ -661,6 +631,14 @@
             if(val === 'OK') return 'bg-ok';
             if(val === 'COGI') return 'bg-cogi';
             return '';
+        }
+
+        function toggleStatus(sectionId, rowIndex, field, btnElement) {
+            let current = db.data[sectionId][rowIndex][field];
+            let next = current === '' ? 'green' : (current === 'green' ? 'red' : '');
+            db.data[sectionId][rowIndex][field] = next;
+            btnElement.querySelector('.circle').className = `circle ${next}`;
+            autoSaveCloud();
         }
 
         function recalcularKPIs() {
@@ -695,7 +673,6 @@
                     if(row.aponta && row.aponta.trim() !== '') apontados++;
                 });
 
-                // Tenta atualizar no DOM
                 try {
                     document.getElementById(`kpi-mes-${sec.id}`).innerText = totalProgMes;
                     document.getElementById(`kpi-sem-${sec.id}`).innerText = progSemana;
@@ -714,7 +691,6 @@
                 } catch(e) {}
             });
             
-            // Atualiza aba de apontamento simultaneamente
             renderResumoApontamento();
         }
 
@@ -732,7 +708,6 @@
             };
             const dataBusca = formatDataSearch(globalDate);
             
-            // Atualiza data do layout de impressão
             if(globalDate) {
                 const parts = globalDate.split('-');
                 document.getElementById('print-data-hoje').innerText = `DATA: ${parts[2]}/${parts[1]}/${parts[0]}`;
@@ -741,11 +716,9 @@
             let htmlSaidas = '';
             let hasSaidas = false;
 
-            // 1. Rastreador de Saídas de Hoje
             sectionsConfig.forEach(sec => {
                 db.data[sec.id].forEach(row => {
                     const rowDataLow = (row.data || '').toLowerCase();
-                    // Se a data da linha é igual à data do dia E existe algo programado para sair
                     if (rowDataLow === dataBusca && (row.plan_sai.trim() !== '' || row.real_sai.trim() !== '')) {
                         hasSaidas = true;
                         htmlSaidas += `
@@ -764,7 +737,6 @@
             if(!hasSaidas) htmlSaidas = `<tr><td colspan="5" class="center-text" style="color:var(--randon-grey); padding:30px; font-weight:bold;">Nenhuma saída programada registrada para a data selecionada (${dataBusca || '--'}).</td></tr>`;
             containerSaidas.innerHTML = htmlSaidas;
 
-            // 2. Rastreador Fila MOF
             let htmlMof = '';
             let hasMof = false;
             db.data['mof'].forEach(row => {
@@ -790,9 +762,7 @@
         function autoSaveCloud() { 
             clearTimeout(saveTimeout); 
             saveTimeout = setTimeout(() => { 
-                // Salva Local por Segurança
                 localStorage.setItem('erp_randon_v5', JSON.stringify(db)); 
-                // Push para Nuvem (Firebase)
                 if(dbRef) {
                     dbRef.set(db).then(() => {
                         mostrarToast("Sincronizado na Nuvem", "fa-cloud-arrow-up");
@@ -812,97 +782,117 @@
                 }
                 firebaseDB = firebase.database();
                 
-                // Ref do Dashboard Executivo
+                // 1. Sincroniza o Próprio Painel
                 dbRef = firebaseDB.ref('dashboard_reuniao');
-                
-                // Sincronização Recebendo Dados
                 dbRef.on('value', (snapshot) => {
                     const nuvemDb = snapshot.val();
                     if(nuvemDb) {
-                        // Merge seguro para não sobrescrever caso esteja digitando
                         db = nuvemDb; 
-                        inicializarBancoLocal(); // Garante que linhas novas não quebrem o DB antigo
-                        aplicarRegrasAutomaticas(); // APLICA AUTOMACAO DE CORES 
+                        inicializarBancoLocal(); 
                         renderDashboard();
                         recalcularKPIs();
                     } else {
-                        // Banco vazio na nuvem, garante estrutura default
                         inicializarBancoLocal();
                         renderDashboard();
                         recalcularKPIs();
                     }
                 });
 
-                // Escuta o Chão de Fábrica (Gestão a Vista CT) - MÁGICA 4.0
-                firebaseDB.ref('linhaCT/draft').on('value', snap => injetarFabrica(snap.val()));
+                // 2. ESCUTA APENAS OS SALVAMENTOS OFICIAIS DO TABLET (O CORAÇÃO DA AUTOMAÇÃO)
                 firebaseDB.ref('linhaCT/registros').on('value', snap => {
-                    // Pega o registro salvo oficial do dia atual
-                    const dataDeHojeIso = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
                     const registros = snap.val();
-                    if(registros && registros[dataDeHojeIso]) {
-                        injetarFabrica(registros[dataDeHojeIso].manha); // Simplificado para capturar a manha
-                        injetarFabrica(registros[dataDeHojeIso].tarde); // E a tarde
+                    if(!registros) return;
+                    
+                    // Pega o registro do dia de HOJE para não bagunçar
+                    const dataHojeIso = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+                    
+                    if (registros[dataHojeIso]) {
+                        // Tenta ler a ronda da Tarde primeiro. Se estiver vazio, pega a da Manhã.
+                        const dadosRonda = registros[dataHojeIso].tarde || registros[dataHojeIso].manha;
+                        if(dadosRonda && dadosRonda.postos) {
+                            injetarRondaOficial(dadosRonda.postos, dataHojeIso);
+                        }
                     }
                 });
 
             } catch (e) { console.log("Erro Nuvem: ", e); }
         }
 
-        // INTEGRAÇÃO DE FÁBRICA REVISADA - Mais inteligente para não perder dados do Posto 3!
-        function injetarFabrica(dados) {
-            if(!dados) return;
+        function injetarRondaOficial(postos, dataIso) {
             let ovEnt = '', ovSai = '';
             
-            // 1. TENTA LER O FORMATO ORIGINAL (p.tarde.ov)
-            if (dados.postos && Array.isArray(dados.postos)) {
-                dados.postos.forEach(p => {
-                    if(!p) return;
-                    const n = p.nome ? p.nome.toLowerCase() : '';
-                    // POSTO 3 -> Alimentação da Entrada (PRODUTO REAL)
-                    if(n.includes('posto 3')) ovEnt = (p.tarde?.ov && p.tarde.ov !== '---') ? p.tarde.ov : (p.manha?.ov && p.manha.ov !== '---' ? p.manha.ov : '');
-                    // POSTO 7 -> Alimentação da Saída (SAÍDA REAL)
-                    if(n.includes('posto 7')) ovSai = (p.tarde?.ov && p.tarde.ov !== '---') ? p.tarde.ov : (p.manha?.ov && p.manha.ov !== '---' ? p.manha.ov : '');
-                });
-            } 
-            // 2. PLANO B (FALLBACK): Caso o tablet mande de um jeito simples, ex: {posto3: "OP123"}
-            else {
-                for (let chave in dados) {
-                    let nomeNormalizado = chave.toLowerCase().replace(/\s/g, ''); // posto3, posto7
-                    if (nomeNormalizado === 'posto3') {
-                        ovEnt = typeof dados[chave] === 'object' ? (dados[chave].ov || '') : dados[chave];
-                    }
-                    if (nomeNormalizado === 'posto7') {
-                        ovSai = typeof dados[chave] === 'object' ? (dados[chave].ov || '') : dados[chave];
+            // Procura o Posto 3 e o Posto 7 que vieram do tablet
+            postos.forEach(p => {
+                if(!p || !p.nome) return;
+                const nome = p.nome.toLowerCase().trim();
+                
+                if(nome === 'posto 3') ovEnt = p.tarde?.ov || p.manha?.ov || '';
+                if(nome === 'posto 7') ovSai = p.tarde?.ov || p.manha?.ov || '';
+            });
+
+            ovEnt = ovEnt.trim();
+            ovSai = ovSai.trim();
+
+            if (!ovEnt && !ovSai) return; // Se não tem OV, sai.
+            if (ovEnt === '---') ovEnt = '';
+            if (ovSai === '---') ovSai = '';
+
+            // Converte a data 2026-08-02 do Tablet para o formato 02/08 da tabela
+            const partes = dataIso.split('-');
+            if(partes.length < 3) return;
+            const dataFormatadaTabela = `${partes[2]}/${partes[1]}`; // Ex: 02/08
+            
+            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+            const nomeMes = mesesAbreviados[parseInt(partes[1]) - 1];
+
+            const tabelaCT = db.data['carrega_tudo'];
+            let rowAlvo = -1;
+
+            // REGRA 1: Procura se a data do Tablet JÁ EXISTE escrita na tabela
+            for(let i=0; i < tabelaCT.length; i++) {
+                let d = tabelaCT[i].data.toLowerCase().trim();
+                if(d !== '') {
+                    // Cobre os cenários de quem digita "02/08" ou "02/ago"
+                    if(d.includes(partes[2]) && (d.includes(partes[1]) || d.includes(nomeMes))) {
+                        rowAlvo = i;
+                        break;
                     }
                 }
             }
 
-            // Remove o traço caso venha em branco
-            if(ovEnt === '---') ovEnt = '';
-            if(ovSai === '---') ovSai = '';
+            // REGRA 2: Se não existe essa data, ele NÃO PULA LINHA. Ele pega a PRIMEIRA VAZIA!
+            if (rowAlvo === -1) {
+                rowAlvo = tabelaCT.findIndex(r => r.data === '' && r.plan_ent === '' && r.real_ent === '');
+                if(rowAlvo !== -1) {
+                    tabelaCT[rowAlvo].data = dataFormatadaTabela; // Carimba a data do dia!
+                }
+            }
 
-            if(ovEnt || ovSai) {
-                const meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-                const p = db.globalDate ? db.globalDate.split('-') : [];
-                if(p.length < 3) return;
-                
-                const hojeFormatado = `${parseInt(p[2]).toString().padStart(2,'0')}/${meses[parseInt(p[1])-1]}`.toLowerCase();
-                
-                let att = false;
-                db.data['carrega_tudo'].forEach(row => {
-                    if(row.data.toLowerCase() === hojeFormatado) {
-                        if(ovEnt && row.real_ent !== ovEnt) { row.real_ent = ovEnt; att = true; }
-                        if(ovSai && row.real_sai !== ovSai) { row.real_sai = ovSai; att = true; }
-                    }
-                });
-                
-                if(att) {
-                    // SE MUDOU ALGO DA FÁBRICA, O MOTOR ATUALIZA AS CORES IMEDIATAMENTE
-                    aplicarRegrasAutomaticas(); 
-                    renderDashboard(); 
-                    recalcularKPIs(); 
+            // Se achou a linha certa, escreve os dados nela e automatiza
+            if (rowAlvo !== -1) {
+                let atualizou = false;
+                let row = tabelaCT[rowAlvo];
+                const formatar = (str) => (str || '').trim().toUpperCase();
+
+                if (ovEnt !== '' && row.real_ent !== ovEnt) {
+                    row.real_ent = ovEnt;
+                    let plan = formatar(row.plan_ent);
+                    row.stat_ent = (formatar(ovEnt) === plan && plan !== '') ? 'green' : 'red';
+                    atualizou = true;
+                }
+
+                if (ovSai !== '' && row.real_sai !== ovSai) {
+                    row.real_sai = ovSai;
+                    let plan = formatar(row.plan_sai);
+                    row.stat_sai = (formatar(ovSai) === plan && plan !== '') ? 'green' : 'red';
+                    atualizou = true;
+                }
+
+                if (atualizou) {
+                    renderDashboard();
+                    recalcularKPIs();
                     autoSaveCloud();
-                    mostrarToast("Fábrica Atualizou Linha CT", "fa-satellite-dish");
+                    mostrarToast("Ronda Oficial Carregada!", "fa-check-double");
                 }
             }
         }
@@ -911,7 +901,6 @@
             Chart.defaults.font.family = "'Inter', sans-serif";
             Chart.defaults.color = "#94a3b8";
 
-            // Pareto (Causa-Raiz)
             const ctxPareto = document.getElementById('chartPareto');
             if(ctxPareto) {
                 chartsObj.pareto = new Chart(ctxPareto.getContext('2d'), {
@@ -921,7 +910,6 @@
                 });
             }
 
-            // Evolução Linha
             const ctxLine = document.getElementById('chartEvolucao');
             if(ctxLine) {
                 chartsObj.line = new Chart(ctxLine.getContext('2d'), {
@@ -931,7 +919,6 @@
                 });
             }
 
-            // Rosca Qualidade
             const ctxPie = document.getElementById('chartStatus');
             if(ctxPie) {
                 chartsObj.pie = new Chart(ctxPie.getContext('2d'), {
@@ -941,7 +928,6 @@
                 });
             }
 
-            // Aderência (Barra Comparativa)
             const ctxAderencia = document.getElementById('chartAderencia');
             if(ctxAderencia) {
                 chartsObj.aderencia = new Chart(ctxAderencia.getContext('2d'), {
@@ -976,7 +962,6 @@
                     }
                     totAtrasos += (parseInt(row.atr_ent)||0) + (parseInt(row.atr_sai)||0);
 
-                    // Lógica de Aderência
                     if(row.plan_sai && row.plan_sai.trim() !== '') secPlan++;
                     if(row.real_sai && row.real_sai.trim() !== '') secReal++;
 
@@ -986,7 +971,6 @@
                         if (isCogi) diaAcessoMap[row.data].cogi++;
                     }
 
-                    // Lê coluna de Impactos Padronizados
                     if (row.impactos && row.impactos.trim() !== '') {
                         if(impactosContagem[row.impactos] !== undefined) impactosContagem[row.impactos]++;
                         impactosList.push({ data: row.data, linha: sec.title, desc: row.impactos, tipo: ap });
@@ -996,14 +980,12 @@
                 totalPlanGeral += secPlan;
                 totalRealGeral += secReal;
                 
-                // Formata nome para caber no gráfico
                 let nomeCurto = sec.title.replace('CARREGA TUDO', 'CT').replace('MONTAGEM FINAL', 'MOF').split(' (')[0];
                 aderenciaData.labels.push(nomeCurto);
                 aderenciaData.plan.push(secPlan);
                 aderenciaData.real.push(secReal);
             });
 
-            // Atualiza Cards Superiores
             document.getElementById('dash-total-apontamentos').innerText = totApont;
             let pQualidade = totApont > 0 ? ((totOk / totApont) * 100).toFixed(0) : 0;
             document.getElementById('dash-ok').innerText = `${pQualidade}%`;
@@ -1014,9 +996,8 @@
             document.getElementById('dash-cogi').innerText = totCogi;
             document.getElementById('dash-atrasos').innerText = totAtrasos;
 
-            // 1. Motor Gráfico de PARETO (Cálculo 80/20)
             let paretoArray = Object.keys(impactosContagem).map(k => ({ motivo: k, cont: impactosContagem[k] })).filter(x => x.cont > 0);
-            paretoArray.sort((a,b) => b.cont - a.cont); // Ordena Decrescente
+            paretoArray.sort((a,b) => b.cont - a.cont);
             
             let totalImpactos = paretoArray.reduce((acc, curr) => acc + curr.cont, 0);
             let percentAcumulado = [];
@@ -1040,7 +1021,6 @@
                 chartsObj.pareto.update();
             }
 
-            // 2. Gráfico Evolução Diária
             if(chartsObj.line) {
                 const diasOrdenados = Object.keys(diaAcessoMap).sort();
                 chartsObj.line.data.labels = diasOrdenados;
@@ -1051,13 +1031,11 @@
                 chartsObj.line.update();
             }
 
-            // 3. Rosca Qualidade
             if(chartsObj.pie) {
                 chartsObj.pie.data.datasets[0].data = [totOk, totCogi];
                 chartsObj.pie.update();
             }
 
-            // 4. Gráfico Aderência por Linha
             if(chartsObj.aderencia) {
                 chartsObj.aderencia.data.labels = aderenciaData.labels;
                 chartsObj.aderencia.data.datasets = [
@@ -1067,7 +1045,6 @@
                 chartsObj.aderencia.update();
             }
 
-            // 5. Lista de Impactos (Feed)
             const divImpactos = document.getElementById('lista-impactos');
             if (impactosList.length === 0) {
                 divImpactos.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--randon-grey);"><i class="fa-solid fa-check-circle" style="font-size: 24px; color: var(--status-green);"></i><br>Zero gargalos padronizados registrados.</div>`;
@@ -1083,7 +1060,6 @@
         }
 
         function gerarPDFExecutivo() {
-            // Garante que a aba analytics está ativa
             switchTab('analytics');
             mostrarToast("Processando Relatório. Aguarde...", "fa-spinner");
 
@@ -1097,7 +1073,6 @@
                     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
                 };
 
-                // Esconde botões no PDF para ficar limpo
                 const btnRefresh = document.querySelector('.analytics-header .btn');
                 if(btnRefresh) btnRefresh.style.display = 'none';
 
@@ -1108,7 +1083,6 @@
             }, 1000);
         }
 
-        // Funções do Modal PCP (Importação)
         function abrirModalPCP() { document.getElementById('modal-pcp').classList.add('active'); }
         function fecharModalPCP() { document.getElementById('modal-pcp').classList.remove('active'); document.getElementById('pcp-dados').value = ''; }
         
@@ -1132,8 +1106,6 @@
                     idTabela++;
                 }
             });
-            
-            aplicarRegrasAutomaticas(); // APLICA CORES AUTOMÁTICAS PÓS-PCP
             fecharModalPCP(); renderDashboard(); recalcularKPIs(); autoSaveCloud();
             mostrarToast("PCP Injetado na Linha!", "fa-bolt");
         }
@@ -1146,7 +1118,6 @@
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        /* MODO TV (Rolagem Cinemática) */
         let tvInterval;
         function iniciarModoTV() {
             isTVMode = true; document.body.classList.add('tv-mode');
