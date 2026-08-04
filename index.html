@@ -107,7 +107,8 @@
         .estamparia-table { width: 100%; border-collapse: collapse; border: 2px solid var(--randon-black); }
         .estamparia-table th, .estamparia-table td { border: 1px solid var(--randon-black); padding: 8px; text-align: center; }
         .estamparia-table th { color: var(--randon-dark); font-size: 13px; }
-        .estamparia-table td input { font-size: 15px; font-weight: 900; color: var(--randon-blue); }
+        .estamparia-table td input { font-size: 15px; font-weight: 900; color: var(--randon-blue); width: 100%; text-align: center; border: none; background: transparent; outline: none; }
+        .estamparia-table td input:focus { background-color: #f1f5f9; }
 
         /* BI & ANALYTICS */
         .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 30px; border-radius: 12px; border: 1px solid var(--border-light); border-left: 6px solid var(--randon-red); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
@@ -195,7 +196,7 @@
             </div>
             <p style="font-size: 14px; color: var(--randon-grey); font-weight: 600; margin-bottom: 20px; line-height: 1.5;">
                 <b>Como funciona:</b> Copie do Excel as 5 colunas na ordem exata: <br><strong style="color: var(--randon-blue);">SETOR | DATA | PRODUTO/OP | DATA ENTRADA | DATA SAÍDA</strong> e cole abaixo.<br>
-                O sistema fará a leitura e varredura para preencher as linhas de forma inteligente.
+                O sistema fará a leitura da coluna "Setor" e distribuirá as ordens automaticamente para as abas correspondentes.
             </p>
             <textarea id="pcp-dados" class="pcp-textarea" placeholder="Exemplo de cópia do Excel:
 TQ	03/08/2026	TANQUE INOX 15000L	03/08/2026	06/08/2026
@@ -270,7 +271,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         
         <!-- TABELA 1: SAÍDAS DE LINHA -->
         <div class="apontamento-table-wrapper" style="border-left: 6px solid var(--status-green);">
-            <h3><i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha </h3>
+            <h3><i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha (Data da Reunião)</h3>
             <table>
                 <thead>
                     <tr>
@@ -287,7 +288,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
 
         <!-- TABELA 2: ESPELHO PINTURA E MOF -->
         <div class="apontamento-table-wrapper" style="border-left: 6px solid var(--randon-blue);">
-            <h3><i class="fa-solid fa-layer-group" style="margin-right: 8px;"></i>Pintura, OP1 e OP2</h3>
+            <h3><i class="fa-solid fa-layer-group" style="margin-right: 8px;"></i> Espelho de Processos Finais: Pintura, OP1 e OP2</h3>
             <table>
                 <thead>
                     <tr>
@@ -338,16 +339,21 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         let isTVMode = false;
         let firebaseDB = null, dbRef = null;
 
+        // ESTRUTURA BLINDADA
         function getEmptyRow() {
-            return { data: '', ordem: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', aponta: '', impactos: '', acoes: '', origem: '' };
+            return { data_pcp: '', ordem: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', aponta: '', impactos: '', acoes: '', origem: '' };
         }
 
+        // ==========================================
+        // MOTOR DE ESTAMPARIA (DATAS E DESLIZAMENTO)
+        // ==========================================
         function formatarDataEstamparia(dateObj) {
             const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
             return `${String(dateObj.getDate()).padStart(2, '0')}/${mesesAbreviados[dateObj.getMonth()]}`;
         }
 
         function atualizarDiasEstamparia() {
+            // Se estiver vazio, constrói os últimos 5 dias
             if(!db.estampariaMatriz || !db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
                 let novasDatas = [];
                 for(let i=4; i>=0; i--) {
@@ -356,6 +362,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 }
                 db.estampariaMatriz = { datas: novasDatas, valores: {} };
                 estampariaLinhas.forEach(linha => db.estampariaMatriz.valores[linha] = Array(5).fill(''));
+                autoSaveCloud(); // Garante o salvamento imediato da matriz gerada
                 return;
             }
 
@@ -363,6 +370,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             const hojeFormatado = formatarDataEstamparia(hoje);
             let datasAntigas = db.estampariaMatriz.datas;
             
+            // Se o último dia não for hoje, escorrega a tabela
             if (datasAntigas[datasAntigas.length - 1] !== hojeFormatado) {
                 db.estampariaMatriz.datas.shift();
                 db.estampariaMatriz.datas.push(hojeFormatado);
@@ -372,7 +380,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                     db.estampariaMatriz.valores[linha].shift();
                     db.estampariaMatriz.valores[linha].push('');
                 });
-                autoSaveCloud();
+                autoSaveCloud(); // Garante o salvamento imediato do deslizamento
             }
         }
 
@@ -397,7 +405,6 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 db.globalDate = e.target.value; renderResumoApontamento(); autoSaveCloud();
             });
 
-            forceRenderTodasTabelas();
             initFirebase(); 
             initCharts();
         }
@@ -417,6 +424,9 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         function abrirModalPCP() { document.getElementById('modal-pcp').classList.add('active'); }
         function fecharModalPCP() { document.getElementById('modal-pcp').classList.remove('active'); document.getElementById('pcp-dados').value = ''; }
 
+        // ==========================================
+        // RENDERIZAÇÃO ESTAMPARIA (COM MOTOR DE CORES)
+        // ==========================================
         function renderizarEstampariaMatriz() {
             const container = document.getElementById('tabela-estamparia-matriz');
             if(!container) return;
@@ -448,7 +458,22 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 datas.forEach((d, cIdx) => {
                     const val = (db.estampariaMatriz && db.estampariaMatriz.valores && db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx] !== undefined) ? db.estampariaMatriz.valores[linha][cIdx] : '';
                     let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : '';
-                    tbody += `<td style="${bg}"><input type="text" class="cell-input estamparia-val-input" style="font-size: 16px; font-weight: 900; text-align: center;" data-row-name="${linha}" data-col-idx="${cIdx}" value="${val}"></td>`;
+                    
+                    // Lógica de Cores Inteligentes: Menor que ontem (Verde), Maior que ontem (Vermelho)
+                    let colorStyle = 'color: var(--randon-blue);'; 
+                    if (cIdx > 0 && val !== '') {
+                        const prevVal = (db.estampariaMatriz && db.estampariaMatriz.valores && db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx - 1]) ? db.estampariaMatriz.valores[linha][cIdx - 1] : '';
+                        if (prevVal !== '') {
+                            const numVal = parseFloat(val);
+                            const numPrev = parseFloat(prevVal);
+                            if (!isNaN(numVal) && !isNaN(numPrev)) {
+                                if (numVal < numPrev) colorStyle = 'color: var(--status-green);';
+                                else if (numVal > numPrev) colorStyle = 'color: var(--status-red);';
+                            }
+                        }
+                    }
+
+                    tbody += `<td style="${bg}"><input type="text" class="cell-input estamparia-val-input" style="font-size: 16px; font-weight: 900; text-align: center; ${colorStyle}" data-row-name="${linha}" data-col-idx="${cIdx}" value="${val}"></td>`;
                 });
                 tbody += `</tr>`;
             });
@@ -456,6 +481,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             container.innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`;
         }
 
+        // RENDERIZAÇÃO DAS TABELAS
         function renderizarViews() {
             let htmlViews = { solda: '', pintura: '', op1: '', op2: '' };
 
@@ -467,7 +493,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                         <tr>
                             <td>
                                 ${row.origem ? `<div class="auto-tag">AUTO: ${row.origem}</div>` : ''}
-                                <input type="text" class="cell-input" style="color: var(--randon-black);" data-sec="${sec.id}" data-row="${i}" data-field="data" value="${row.data || ''}">
+                                <input type="text" class="cell-input" style="color: var(--randon-black);" data-sec="${sec.id}" data-row="${i}" data-field="data_pcp" value="${row.data_pcp || ''}">
                             </td>
                             <td><input type="text" class="cell-input" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem" value="${row.ordem || ''}"></td>
                             <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="plan_ent" value="${row.plan_ent || ''}"></td>
@@ -616,13 +642,23 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             return s.includes(`${d}/${mNum}`) || s.includes(`${d}/${mNome}`) || (s.includes(d) && (s.includes(mNum) || s.includes(mNome)));
         }
 
+        // SALVAMENTO SEGURO DA ESTAMPARIA
         document.addEventListener('change', (e) => {
             if(e.target.classList.contains('estamparia-val-input')) {
                 const linha = e.target.dataset.rowName;
                 const cIdx = parseInt(e.target.dataset.colIdx);
-                if(!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = [];
+                
+                // Garantia de Estrutura
+                if(!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
+                if(!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {};
+                if(!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = ['', '', '', '', ''];
+                
                 db.estampariaMatriz.valores[linha][cIdx] = e.target.value;
-                autoSaveCloud(); return;
+                
+                // Salva na nuvem e renderiza a cor nova instantaneamente
+                autoSaveCloud(); 
+                renderizarEstampariaMatriz();
+                return;
             }
             if(e.target.dataset && e.target.dataset.colDate !== undefined) {
                 db.estampariaMatriz.datas[parseInt(e.target.dataset.colDate)] = e.target.value;
@@ -680,6 +716,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             }
         });
 
+        // PCP COMO CHEFE ABSOLUTO DA CRIAÇÃO DE LINHAS
         function processarBasePCP() {
             const text = document.getElementById('pcp-dados').value;
             if(!text.trim()) return mostrarToast('Cole os dados primeiro!', 'fa-triangle-exclamation');
@@ -692,9 +729,10 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                     const destino = (s.includes('TQ')?'tq':s.includes('CT')?'ct':s.includes('BASE')?'bases':s.includes('SILO')?'silo':s.includes('BOX 1')?'esp_box1':s.includes('BOX 2')?'esp_box2':s.includes('BOX 3')?'esp_box3':s.includes('EXTRA')?'extra':'');
                     
                     if (destino && db.data[destino]) {
-                        const idx = db.data[destino].findIndex(r => r.ordem === '' && r.plan_ent === '');
+                        // Busca a primeira linha totalmente vazia
+                        const idx = db.data[destino].findIndex(r => (!r.ordem || r.ordem === '') && (!r.plan_ent || r.plan_ent === ''));
                         if (idx !== -1) { 
-                            db.data[destino][idx].data = col[1].trim(); 
+                            db.data[destino][idx].data_pcp = col[1].trim(); 
                             db.data[destino][idx].ordem = col[2].trim(); 
                             db.data[destino][idx].plan_ent = col[3].trim(); 
                             db.data[destino][idx].plan_sai = col[4].trim(); 
@@ -707,7 +745,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                     const destino = (s.includes('TQ')?'tq':s.includes('CT')?'ct':s.includes('BASE')?'bases':s.includes('SILO')?'silo':s.includes('BOX 1')?'esp_box1':s.includes('BOX 2')?'esp_box2':s.includes('BOX 3')?'esp_box3':s.includes('EXTRA')?'extra':'');
                     
                     if (destino && db.data[destino]) {
-                        const idx = db.data[destino].findIndex(r => r.ordem === '' && r.plan_ent === '');
+                        const idx = db.data[destino].findIndex(r => (!r.ordem || r.ordem === '') && (!r.plan_ent || r.plan_ent === ''));
                         if (idx !== -1) { 
                             db.data[destino][idx].ordem = col[1].trim(); 
                             db.data[destino][idx].plan_ent = col[2].trim(); 
@@ -892,15 +930,23 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                                 Object.keys(nuvemDb.data).forEach(tabelaKey => {
                                     if(Array.isArray(nuvemDb.data[tabelaKey])) {
                                         nuvemDb.data[tabelaKey].forEach(row => {
-                                            if(row && row.data !== undefined && row.ordem === undefined) { 
-                                                row.ordem = row.data; 
-                                                row.data = ''; 
+                                            if(row && row.data !== undefined) { 
+                                                if (row.ordem === undefined || row.ordem === '') {
+                                                    if (String(row.data).includes('/')) {
+                                                        row.data_pcp = row.data;
+                                                    } else {
+                                                        row.ordem = row.data;
+                                                    }
+                                                } else {
+                                                    row.data_pcp = row.data;
+                                                }
+                                                delete row.data; 
                                             }
                                         });
                                     }
                                 });
                             }
-                        } catch(e) { console.error("Ignorando erro de formatação..."); }
+                        } catch(e) { console.error("Ignorando erro de formatação...", e); }
 
                         configuracaoSetores.forEach(sec => {
                             if(!nuvemDb.data[sec.id]) nuvemDb.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
@@ -925,7 +971,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 });
             } catch (e) {
                 console.log("Modo Offline Ativado.");
-                const local = localStorage.getItem('erp_randon_v10'); 
+                const local = localStorage.getItem('erp_randon_v11'); 
                 if(local) { db = JSON.parse(local); atualizarDiasEstamparia(); forceRenderTodasTabelas(); }
             }
         }
@@ -959,17 +1005,14 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             let atualizou = false;
 
             // ==========================================
-            // POSTO 3 -> PREENCHE REAL ENTRADA E DATA
+            // POSTO 3 -> APENAS ATUALIZA ENTRADA
             // ==========================================
             if (ovEntradaCT) {
-                // Procurar somente linhas em que a Ordem bata com o Tablet
                 let linha = tabelaCT.findIndex(r => r.ordem && (r.ordem.toUpperCase().includes(ovEntradaCT) || ovEntradaCT.includes(r.ordem.toUpperCase())));
                 
                 if (linha !== -1) {
-                    // Atualiza a DATA da linha (se estiver vazia)
-                    if (!tabelaCT[linha].data) tabelaCT[linha].data = dataAtualStr;
+                    if (!tabelaCT[linha].data_pcp) tabelaCT[linha].data_pcp = dataAtualStr;
                     
-                    // Atualiza a REAL ENTRADA com a data de hoje e calcula atraso
                     if (tabelaCT[linha].real_ent !== dataAtualStr) {
                         tabelaCT[linha].real_ent = dataAtualStr;
                         const calcEnt = calcularAtraso(tabelaCT[linha].plan_ent, tabelaCT[linha].real_ent);
@@ -981,17 +1024,14 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             }
 
             // ==========================================
-            // POSTO 7 -> PREENCHE REAL SAÍDA E DATA
+            // POSTO 7 -> APENAS ATUALIZA SAÍDA
             // ==========================================
             if (ovSaidaCT) {
-                // Procurar somente linhas em que a Ordem bata com o Tablet
                 let linha = tabelaCT.findIndex(r => r.ordem && (r.ordem.toUpperCase().includes(ovSaidaCT) || ovSaidaCT.includes(r.ordem.toUpperCase())));
                 
                 if (linha !== -1) {
-                    // Atualiza a DATA da linha (se estiver vazia)
-                    if (!tabelaCT[linha].data) tabelaCT[linha].data = dataAtualStr;
+                    if (!tabelaCT[linha].data_pcp) tabelaCT[linha].data_pcp = dataAtualStr;
 
-                    // Atualiza a REAL SAÍDA com a data de hoje e calcula atraso
                     if (tabelaCT[linha].real_sai !== dataAtualStr) {
                         tabelaCT[linha].real_sai = dataAtualStr;
                         const calcSai = calcularAtraso(tabelaCT[linha].plan_sai, tabelaCT[linha].real_sai);
@@ -1011,7 +1051,7 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         function autoSaveCloud() {
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
-                localStorage.setItem('erp_randon_v10', JSON.stringify(db));
+                localStorage.setItem('erp_randon_v11', JSON.stringify(db));
                 if(dbRef) dbRef.set(db).then(() => mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up"));
             }, 800);
         }
