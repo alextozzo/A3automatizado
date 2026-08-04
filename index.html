@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Executivo de Produção - Randon Triel-HT</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
@@ -12,202 +16,147 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        /* CORE VARIABLES - Identidade Randon Triel-HT */
+        /* CORE VARIABLES */
         :root {
-            --randon-red: #e32128;
-            --randon-black: #2a2a2a;
-            --randon-blue: #5b9bd5;
-            --randon-grey: #a6a8ab;
-            --randon-dark: #1e293b;
-            
-            --bg-body: #f8fafc;
-            --bg-card: #ffffff;
-            --border-light: #e2e8f0;
-            --cell-bg: #e8f0f8;
-            
-            --status-green: #10b981;
-            --status-red: #ef4444;
-            --status-yellow: #f59e0b;
+            --randon-red: #e32128; --randon-black: #1e293b; --randon-blue: #3b82f6;
+            --randon-grey: #64748b; --randon-dark: #0f172a; --bg-body: #f1f5f9;
+            --bg-card: #ffffff; --border-light: #e2e8f0; --cell-bg: #f8fafc;
+            --status-green: #10b981; --status-orange: #f59e0b; --status-red: #ef4444;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-
-        /* AUMENTO DA FONTE GERAL E LEITURA */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-body); color: var(--randon-dark); font-size: 13px; overflow-y: scroll; }
 
-        /* HEADER CORPORATIVO */
-        .navbar {
-            background-color: var(--randon-blue);
-            border-bottom: 5px solid var(--randon-black);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 20px; height: 80px; position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .nav-left { display: flex; align-items: center; gap: 30px; height: 100%; }
-        .logo-container svg { height: 60px; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.2)); }
-
-        .nav-tabs { display: flex; height: 100%; }
-        .nav-tab {
-            display: flex; align-items: center; gap: 8px;
-            padding: 0 20px; font-size: 15px; font-weight: 800;
-            color: rgba(255,255,255,0.7); cursor: pointer;
-            border-bottom: 5px solid transparent; transition: all 0.2s; height: 100%;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
+        /* HEADER MODERNO */
+        .navbar { background-color: #0f172a; border-bottom: 4px solid var(--randon-blue); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; height: 80px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .nav-left { display: flex; align-items: center; gap: 25px; height: 100%; }
+        .logo-container svg { height: 55px; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
         
-        .nav-tab:hover { color: white; background-color: rgba(0,0,0,0.1); }
-        .nav-tab.active { color: white; border-bottom: 5px solid var(--randon-red); background-color: rgba(0,0,0,0.2); }
+        .nav-tabs { display: flex; height: 100%; overflow-x: auto; scrollbar-width: none; }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        .nav-tab { display: flex; align-items: center; gap: 8px; padding: 0 15px; font-size: 13px; font-weight: 800; color: #94a3b8; cursor: pointer; border-bottom: 4px solid transparent; transition: 0.3s; height: 100%; text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px;}
+        .nav-tab:hover { color: white; background-color: rgba(255,255,255,0.05); }
+        .nav-tab.active { color: white; border-bottom: 4px solid var(--randon-red); background-color: rgba(255,255,255,0.1); }
 
         .nav-right { display: flex; align-items: center; gap: 12px; }
-        .global-date-container {
-            display: flex; align-items: center; gap: 10px;
-            background-color: rgba(0,0,0,0.2); padding: 8px 15px; border-radius: 6px;
-        }
-        .global-date-container label { font-weight: 900; color: rgba(255,255,255,0.8); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
-        .global-date-container input { border: none; background: transparent; font-weight: 900; font-size: 15px; outline: none; color: white; cursor: pointer; }
+        .global-date-container { display: flex; align-items: center; gap: 10px; background-color: rgba(255,255,255,0.1); padding: 8px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
+        .global-date-container label { font-weight: 800; color: #cbd5e1; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+        .global-date-container input { border: none; background: transparent; font-weight: 900; font-size: 14px; outline: none; color: white; cursor: pointer; font-family: 'Inter', sans-serif; }
         .global-date-container input::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
 
         /* BOTOES EXEC */
-        .btn { padding: 10px 18px; border: none; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn-pcp { background-color: #10b981; color: white; box-shadow: 0 4px 10px rgba(16,185,129,0.3); }
-        .btn-pcp:hover { background-color: #059669; transform: translateY(-2px); }
-        .btn-pdf { background-color: #475569; color: white; box-shadow: 0 4px 10px rgba(71,85,105,0.3); }
-        .btn-pdf:hover { background-color: #334155; transform: translateY(-2px); }
-        .btn-tv { background-color: var(--randon-black); color: white; border: 1px solid rgba(255,255,255,0.2); }
-        .btn-tv:hover { background-color: black; }
+        .btn { padding: 9px 18px; border: none; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-pdf { background-color: #475569; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); } .btn-pdf:hover { background-color: #334155; transform: translateY(-1px); }
+        .btn-tv { background-color: white; color: var(--randon-black); box-shadow: 0 4px 6px rgba(0,0,0,0.1); } .btn-tv:hover { background-color: #f1f5f9; transform: translateY(-1px); }
+        .btn-pcp { background-color: var(--status-green); color: white; box-shadow: 0 4px 10px rgba(16,185,129,0.3); } .btn-pcp:hover { filter: brightness(0.9); transform: translateY(-2px); }
 
-        /* VIEWS (Abas) */
-        .view-container { padding: 20px; display: none; flex-direction: column; gap: 25px; animation: fadeIn 0.3s; }
+        /* MODAL PCP */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
+        .modal-content { background: white; padding: 35px; border-radius: 16px; width: 750px; max-width: 95%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border-top: 6px solid var(--status-green); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .modal-header h3 { font-size: 20px; color: var(--randon-dark); font-weight: 900; text-transform: uppercase; }
+        .close-btn { cursor: pointer; font-size: 24px; color: #94a3b8; background: none; border: none; outline: none; transition: 0.2s; }
+        .close-btn:hover { color: var(--status-red); transform: scale(1.1); }
+        .pcp-textarea { width: 100%; height: 220px; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 15px; font-family: monospace; font-size: 14px; outline: none; resize: none; background-color: #f8fafc; color: var(--randon-dark); font-weight: 600; transition: 0.3s; }
+        .pcp-textarea:focus { border-color: var(--randon-blue); background-color: white; box-shadow: 0 0 0 4px rgba(59,130,246,0.1); }
+
+        /* VIEWS & TABELAS */
+        .view-container { padding: 25px; display: none; flex-direction: column; gap: 30px; animation: fadeIn 0.3s; }
         .view-container.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* TABELAS OPERACIONAIS */
-        .section-card {
-            background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border-light);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden;
-        }
+        .section-card { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-light); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); overflow: hidden; }
+        .section-header { display: flex; justify-content: space-between; align-items: stretch; background: var(--randon-black); border-bottom: 3px solid var(--randon-blue); }
+        .section-title-box { display: flex; align-items: center; gap: 15px; padding: 15px 25px; width: 45%; }
+        .section-title-box h2 { font-size: 18px; font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .section-header { display: flex; justify-content: space-between; align-items: stretch; background: var(--randon-blue); border-bottom: 2px solid var(--randon-black); }
-        .section-title-box { display: flex; align-items: center; gap: 15px; padding: 10px 20px; }
-        .section-title-box h2 { font-size: 24px; font-weight: 900; color: var(--randon-black); text-transform: uppercase; letter-spacing: 2px; }
-
-        .kpi-row-header { display: flex; background: rgba(255,255,255,0.1); }
-        .kpi-box { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 5px 15px; border-left: 1px solid rgba(0,0,0,0.1); min-width: 110px; }
-        .kpi-box span { font-size: 10px; text-transform: uppercase; color: var(--randon-black); font-weight: 900; margin-bottom: 2px; text-align: center; line-height: 1.2; }
-        .kpi-box strong { font-size: 24px; color: white; font-weight: 900; text-shadow: 0px 1px 2px rgba(0,0,0,0.3); }
-        
-        .status-box-giant { width: 80px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: white; transition: 0.3s; border-left: 2px solid var(--randon-black); }
+        .kpi-row-header { display: flex; background: rgba(255,255,255,0.05); width: 55%; justify-content: flex-end; }
+        .kpi-box { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 5px 15px; border-left: 1px solid rgba(255,255,255,0.08); min-width: 95px; }
+        .kpi-box span { font-size: 10px; text-transform: uppercase; color: #94a3b8; font-weight: 800; margin-bottom: 4px; letter-spacing: 0.5px; }
+        .kpi-box strong { font-size: 22px; color: white; font-weight: 900; line-height: 1; }
+        .status-box-giant { width: 80px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white; transition: 0.3s; border-left: 2px solid rgba(255,255,255,0.1); }
         .status-box-giant.red { background-color: var(--status-red); }
         .status-box-giant.green { background-color: var(--status-green); }
 
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th { background-color: var(--randon-black); color: white; padding: 10px 4px; font-size: 11px; font-weight: 800; text-align: center; text-transform: uppercase; border-right: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; line-height: 1.2; }
-        td { padding: 0; height: 32px; border-bottom: 1px solid #cbd5e1; border-right: 1px solid #cbd5e1; background-color: var(--cell-bg); }
+        th { background-color: #f8fafc; color: var(--randon-grey); padding: 12px 6px; font-size: 11px; font-weight: 800; text-align: center; text-transform: uppercase; border-right: 1px solid var(--border-light); border-bottom: 2px solid #cbd5e1; letter-spacing: 0.5px; }
+        td { padding: 4px; height: 42px; border-bottom: 1px solid var(--border-light); border-right: 1px solid var(--border-light); background-color: white; position: relative; }
         tr:nth-child(even) td { background-color: #f8fafc; }
-        tr:hover td { background-color: #e2e8f0; }
+        tr:hover td { background-color: #f1f5f9; }
 
-        /* AUMENTO DA FONTE DOS INPUTS E CÉLULAS */
-        .cell-input { width: 100%; height: 100%; border: none; background: transparent; padding: 0 4px; font-size: 13px; outline: none; color: var(--randon-black); font-weight: 700; font-family: monospace; }
-        .cell-input:focus { background-color: #bae6fd; box-shadow: inset 0 0 0 2px var(--randon-blue); }
-        .center-text { text-align: center; }
+        .cell-input { width: 100%; height: 100%; border: 1px solid transparent; background: transparent; padding: 0 8px; font-size: 13px; outline: none; color: var(--randon-dark); font-weight: 700; text-align: center; border-radius: 6px; transition: 0.2s; }
+        .cell-input:hover { background-color: #e2e8f0; }
+        .cell-input:focus { background-color: white; border-color: var(--randon-blue); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+        select.cell-input { cursor: pointer; text-align-last: center; }
 
-        select.cell-input { text-align-last: center; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 800; }
-        select.cell-input option { background-color: #ffffff; color: var(--randon-black); font-weight: bold; }
+        .status-btn { width: 100%; height: 100%; border: none; background: transparent; display: flex; align-items: center; justify-content: center; }
+        .circle { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #cbd5e1; background-color: #f8fafc; transition: 0.3s; }
+        .circle.green { background-color: var(--status-green); border-color: #047857; box-shadow: 0 0 10px rgba(16,185,129,0.4); }
+        .circle.orange { background-color: var(--status-orange); border-color: #b45309; box-shadow: 0 0 10px rgba(245,158,11,0.4); }
+        .circle.red { background-color: var(--status-red); border-color: #b91c1c; box-shadow: 0 0 10px rgba(239,68,68,0.4); }
 
-        .status-btn { width: 100%; height: 100%; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .circle { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #94a3b8; background-color: #e2e8f0; transition: 0.2s; }
-        .circle.green { background-color: var(--status-green); border-color: #047857; box-shadow: 0 0 8px rgba(16,185,129,0.6); }
-        .circle.red { background-color: var(--status-red); border-color: #b91c1c; box-shadow: 0 0 8px rgba(239,68,68,0.6); }
-
-        .bg-ok { background-color: var(--status-green) !important; color: white !important; }
-        .bg-cogi { background-color: var(--status-red) !important; color: white !important; }
-
-        /* ANÁLISE PROFUNDA (BI & PARETO) */
-        .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--randon-red); }
+        .bg-ok { background-color: #d1fae5 !important; color: #065f46 !important; }
+        .bg-cogi { background-color: #fee2e2 !important; color: #991b1b !important; }
         
-        .dashboard-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
-        .dash-card { background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: 0 4px 15px rgba(0,0,0,0.03); position: relative; overflow: hidden; }
-        .dash-card::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 5px; background: var(--randon-black); }
-        .dash-card.card-red::before { background: var(--randon-red); }
+        .auto-tag { font-size: 9px; background: var(--status-orange); color: white; padding: 3px 6px; border-radius: 4px; position: absolute; top: 2px; left: 4px; pointer-events: none; font-weight: 900; letter-spacing: 0.5px;}
+        .ct-badge { font-size: 10px; color: #064e3b; background: #34d399; padding: 5px 10px; border-radius: 6px; margin-left: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
+        .macro-badge { font-size: 10px; background: var(--randon-dark); color: white; padding: 3px 8px; border-radius: 4px; margin-right: 8px; text-transform: uppercase; font-weight: 900; }
+
+        /* ESTAMPARIA TABLE (IDÊNTICO À IMAGEM) */
+        .estamparia-table { width: 100%; border-collapse: collapse; border: 2px solid var(--randon-black); }
+        .estamparia-table th, .estamparia-table td { border: 1px solid var(--randon-black); padding: 8px; text-align: center; }
+        .estamparia-table th { color: var(--randon-dark); }
+        .estamparia-table td input { font-size: 15px; font-weight: 900; }
+
+        /* BI & ANALYTICS */
+        .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 30px; border-radius: 12px; border: 1px solid var(--border-light); border-left: 6px solid var(--randon-red); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 25px; }
+        .dash-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border-light); position: relative; overflow: hidden; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
+        .dash-card::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 6px; background: var(--randon-black); }
+        .dash-card.card-red::before { background: var(--status-red); }
         .dash-card.card-green::before { background: var(--status-green); }
         .dash-card.card-blue::before { background: var(--randon-blue); }
-        .dash-title { font-size: 12px; text-transform: uppercase; color: var(--randon-grey); font-weight: 900; margin-bottom: 10px; display: flex; justify-content: space-between; letter-spacing: 1px; }
-        .dash-value { font-size: 40px; font-weight: 900; color: var(--randon-black); line-height: 1; }
-
-        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 5px; }
-        .chart-box { background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-        .chart-box h3 { font-size: 15px; font-weight: 900; color: var(--randon-black); margin-bottom: 15px; border-bottom: 2px solid var(--border-light); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .chart-container-bi { position: relative; height: 260px; width: 100%; }
+        .dash-title { font-size: 13px; text-transform: uppercase; color: var(--randon-grey); font-weight: 900; margin-bottom: 15px; display: flex; justify-content: space-between; }
+        .dash-value { font-size: 45px; font-weight: 900; color: var(--randon-dark); line-height: 1; }
         
-        .impacts-list { margin-top: 15px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
-        .impact-item { padding: 12px; border-bottom: 1px solid var(--border-light); font-size: 12px; display: flex; align-items: flex-start; gap: 10px; transition: background 0.2s;}
-        .impact-item:hover { background-color: #f8fafc; }
-        
-        /* Modal PCP */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
-        .modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
-        .modal-content { background: white; padding: 30px; border-radius: 12px; width: 650px; max-width: 90%; box-shadow: 0 15px 50px rgba(0,0,0,0.3); border-top: 6px solid var(--status-green); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .modal-header h3 { font-size: 20px; color: var(--randon-black); font-weight: 900; text-transform: uppercase; display: flex; align-items: center; gap: 10px;}
-        .close-btn { cursor: pointer; font-size: 24px; color: var(--randon-grey); transition: 0.2s; background: none; border: none; outline: none; }
-        .close-btn:hover { color: var(--randon-red); transform: scale(1.1); }
-        .pcp-textarea { width: 100%; height: 180px; border: 2px dashed #cbd5e1; border-radius: 8px; padding: 15px; font-family: monospace; font-size: 13px; outline: none; resize: none; margin-bottom: 20px; background-color: #f8fafc; }
-        .pcp-textarea:focus { border-color: var(--status-green); background-color: white; }
+        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 10px; }
+        .chart-box { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
+        .chart-box h3 { font-size: 16px; font-weight: 900; margin-bottom: 20px; border-bottom: 2px solid var(--border-light); padding-bottom: 12px; text-transform: uppercase; color: var(--randon-dark); }
+        .chart-container-bi { position: relative; height: 280px; width: 100%; }
 
-        /* Notificações e Sincronização Nuvem */
-        .sync-badge { background-color: rgba(16, 185, 129, 0.15); color: #047857; font-size: 10px; padding: 4px 10px; border-radius: 20px; font-weight: 900; display: flex; align-items: center; gap: 5px; border: 1px solid rgba(16, 185, 129, 0.4); text-transform: uppercase; letter-spacing: 1px; }
-        .sync-badge i { animation: spin 4s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        /* MODO TV */
+        body.tv-mode .navbar { display: none !important; }
+        body.tv-mode { overflow: hidden !important; background-color: var(--bg-body); }
+        body.tv-mode .view-container { padding: 15px; pointer-events: none; }
+        #btn-exit-tv { display: none; position: fixed; top: 25px; right: 25px; z-index: 9999; background: var(--status-red); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-weight: 900; cursor: pointer; box-shadow: 0 15px 30px rgba(0,0,0,0.3); text-transform: uppercase; letter-spacing: 1px;}
+        body.tv-mode #btn-exit-tv { display: flex; align-items: center; gap: 10px; pointer-events: auto; }
 
-        #toast { position: fixed; bottom: 30px; right: 30px; background-color: var(--randon-black); color: #fff; padding: 15px 25px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: 0.3s; transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; display: flex; align-items: center; gap: 10px; border-left: 5px solid var(--status-green); text-transform: uppercase; letter-spacing: 1px; font-size: 14px; }
+        .apontamento-table-wrapper { background: white; border-radius: 12px; border: 1px solid var(--border-light); overflow: hidden; margin-bottom: 30px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .apontamento-table-wrapper h3 { background: var(--randon-black); color: white; padding: 18px 25px; font-size: 16px; text-transform: uppercase; margin: 0; font-weight: 900; }
+
+        #toast { position: fixed; bottom: 35px; right: 35px; background-color: var(--randon-dark); color: #fff; padding: 18px 30px; border-radius: 10px; transition: 0.3s; transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; display: flex; align-items: center; gap: 12px; border-left: 6px solid var(--status-green); box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
         #toast.show { transform: translateY(0); opacity: 1; }
 
-        /* MODO TV (Kiosk) */
-        body.tv-mode .navbar { display: none !important; }
-        body.tv-mode { overflow: hidden !important; background-color: #e2e8f0; }
-        body.tv-mode .view-container { padding: 10px; pointer-events: none; }
-        body.tv-mode .cell-input { appearance: none; -moz-appearance: none; -webkit-appearance: none; background: transparent; }
-        
-        #btn-exit-tv { display: none; position: fixed; top: 20px; right: 20px; z-index: 9999; background: var(--status-red); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.4); text-transform: uppercase; letter-spacing: 1px; font-size: 14px;}
-        body.tv-mode #btn-exit-tv { display: flex; align-items: center; gap: 8px; pointer-events: auto; }
-        #btn-exit-tv:hover { background: #b91c1c; transform: scale(1.05); }
-
-        /* Estilos da Aba de Apontamento */
-        .apontamento-table-wrapper { background: white; border-radius: 8px; border: 1px solid var(--border-light); overflow: hidden; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .apontamento-table-wrapper h3 { background: var(--randon-black); color: white; padding: 15px 20px; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; margin: 0; }
-        .apontamento-print-header { display: none; } /* Só aparece na impressão */
-
-        /* CSS Específico de Impressão */
         @media print {
             body { background-color: white !important; font-size: 12px; overflow: visible !important; }
-            .navbar, #toast, #btn-exit-tv, .modal-overlay { display: none !important; }
-            .view-container { display: none !important; padding: 0 !important; }
-            #view-apontamento { display: block !important; }
-            .apontamento-print-header { display: flex !important; justify-content: space-between; align-items: center; border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px; }
-            .apontamento-print-header h2 { font-size: 20px; margin: 0; color: black !important; }
-            .btn-imprimir { display: none !important; }
-            .analytics-header { border: none !important; box-shadow: none !important; padding: 0 !important; margin-bottom: 10px !important; }
-            table { border: 1px solid black; }
-            th { background-color: #f1f5f9 !important; color: black !important; border: 1px solid black; -webkit-print-color-adjust: exact; }
-            td { border: 1px solid black; }
-            .apontamento-table-wrapper { border: none !important; box-shadow: none !important; margin-bottom: 20px !important; }
-            .apontamento-table-wrapper h3 { border: 1px solid black; background: #e2e8f0 !important; color: black !important; -webkit-print-color-adjust: exact; }
+            .navbar, #toast, #btn-exit-tv, .btn-pdf, .btn-tv, .btn-pcp { display: none !important; }
+            .analytics-header { border: none !important; box-shadow: none !important; padding: 0 !important; }
+            table { border: 1px solid black; } th, td { border: 1px solid black; }
+            .macro-badge { -webkit-print-color-adjust: exact; background-color: black !important; color: white !important; }
+            .section-card { border: none !important; box-shadow: none !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR CORPORATIVA -->
     <nav class="navbar" id="navbar">
         <div class="nav-left">
             <div class="logo-container">
-                <!-- Logo Oficial Randon Triel-HT Vetorizada VAZADA -->
                 <svg viewBox="0 0 350 100" xmlns="http://www.w3.org/2000/svg">
                     <rect x="5" y="5" width="335" height="48" fill="none" stroke="#2a2a2a" stroke-width="3"/>
                     <rect x="10" y="10" width="325" height="38" fill="#2a2a2a"/>
                     <text x="172" y="40" fill="white" font-family="'Arial Black', Impact, sans-serif" font-size="37" font-weight="900" text-anchor="middle" letter-spacing="2">RANDON</text>
-                    <text x="344" y="15" fill="#2a2a2a" font-family="Arial" font-size="12" font-weight="bold">®</text>
                     <text x="5" y="88" fill="#2a2a2a" font-family="'Arial Black', Impact, sans-serif" font-size="34" font-weight="900" letter-spacing="1">TRIEL-HT</text>
                     <polygon points="215,60 270,60 245,88 215,88" fill="#e32128"/>
                     <polygon points="275,60 288,60 263,88 250,88" fill="#2a2a2a"/>
@@ -215,939 +164,811 @@
                 </svg>
             </div>
             <div class="nav-tabs">
-                <div class="nav-tab active" onclick="switchTab('operacional')" id="tab-btn-operacional">
-                    <i class="fa-solid fa-industry"></i> Operacional
-                </div>
-                <div class="nav-tab" onclick="switchTab('analytics')" id="tab-btn-analytics">
-                    <i class="fa-solid fa-chart-pie"></i> Análise Executiva
-                </div>
-                <div class="nav-tab" onclick="switchTab('apontamento')" id="tab-btn-apontamento">
-                    <i class="fa-solid fa-clipboard-list"></i> Guia Apontamento
-                </div>
+                <div class="nav-tab active" onclick="switchTab('estamparia')" id="tab-btn-estamparia">Estamparia</div>
+                <div class="nav-tab" onclick="switchTab('solda')" id="tab-btn-solda">Linha Solda</div>
+                <div class="nav-tab" onclick="switchTab('pintura')" id="tab-btn-pintura">Pintura</div>
+                <div class="nav-tab" onclick="switchTab('op1')" id="tab-btn-op1">MOF OP1</div>
+                <div class="nav-tab" onclick="switchTab('op2')" id="tab-btn-op2">MOF OP2</div>
+                <div class="nav-tab" onclick="switchTab('analytics')" id="tab-btn-analytics"><i class="fa-solid fa-chart-pie"></i> BI & Análise</div>
+                <div class="nav-tab" onclick="switchTab('apontamento')" id="tab-btn-apontamento"><i class="fa-solid fa-print"></i> Guia Apontamento</div>
             </div>
         </div>
-        
         <div class="nav-right">
             <div class="global-date-container">
-                <label>Data Reunião</label>
+                <label>Data</label>
                 <input type="date" id="global-date">
             </div>
             <button class="btn btn-pcp" onclick="abrirModalPCP()"><i class="fa-solid fa-bolt"></i> Carga PCP</button>
-            <button class="btn btn-pdf" onclick="gerarPDFExecutivo()"><i class="fa-solid fa-file-pdf"></i> Gerar PDF</button>
-            <button class="btn btn-tv" onclick="iniciarModoTV()"><i class="fa-solid fa-tv"></i> Modo TV</button>
+            <button class="btn btn-pdf" onclick="gerarPDFExecutivo()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+            <button class="btn btn-tv" onclick="iniciarModoTV()"><i class="fa-solid fa-tv"></i> TV</button>
         </div>
     </nav>
 
-    <!-- Botão de Sair do Modo TV (Oculto por Padrão) -->
-    <button id="btn-exit-tv" onclick="sairModoTV()"><i class="fa-solid fa-xmark"></i> Sair do Modo TV</button>
+    <button id="btn-exit-tv" onclick="sairModoTV()"><i class="fa-solid fa-power-off"></i> Sair do Modo TV</button>
 
-    <!-- ABA 1: PAINEL OPERACIONAL DIÁRIO -->
-    <div id="view-operacional" class="view-container active">
-        <!-- O Javascript injeta todas as tabelas (Tanques, Carrega Tudo, Bases...) aqui -->
-    </div>
-
-    <!-- ABA 2: ANÁLISE EXECUTIVA E INDICADORES (BI) -->
-    <div id="view-analytics" class="view-container">
-        <div class="analytics-header">
-            <div>
-                <h2 style="font-size: 24px; font-weight: 900; color: var(--randon-black); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Inteligência de Produção</h2>
-                <p style="color: var(--randon-grey); font-size: 13px; font-weight: 700; text-transform: uppercase;">Business Intelligence - Relatório Gerencial Consolidado</p>
-            </div>
-            <button class="btn btn-pdf" style="background: var(--randon-black);" onclick="updateAnalytics()"><i class="fa-solid fa-rotate"></i> Atualizar Dados</button>
-        </div>
-
-        <div class="dashboard-grid">
-            <div class="dash-card">
-                <div class="dash-title">Total Apontamentos <i class="fa-solid fa-clipboard-check"></i></div>
-                <div class="dash-value" id="dash-total-apontamentos">0</div>
-            </div>
-            <div class="dash-card card-blue">
-                <div class="dash-title">Aderência ao Plano <i class="fa-solid fa-bullseye"></i></div>
-                <div class="dash-value" id="dash-aderencia" style="color: var(--randon-blue);">0%</div>
-            </div>
-            <div class="dash-card card-green">
-                <div class="dash-title">Índice Qualidade (OK) <i class="fa-solid fa-award"></i></div>
-                <div class="dash-value" id="dash-ok" style="color: var(--status-green);">0%</div>
-            </div>
-            <div class="dash-card card-red">
-                <div class="dash-title">Gargalos (COGI) <i class="fa-solid fa-triangle-exclamation"></i></div>
-                <div class="dash-value" id="dash-cogi" style="color: var(--status-red);">0</div>
-            </div>
-            <div class="dash-card card-red">
-                <div class="dash-title">Atrasos (Dias) <i class="fa-solid fa-clock"></i></div>
-                <div class="dash-value" id="dash-atrasos" style="color: var(--status-red);">0</div>
-            </div>
-        </div>
-
-        <div class="charts-grid">
-            <div class="chart-box">
-                <h3><i class="fa-solid fa-chart-column" style="color: var(--randon-blue);"></i> Pareto de Impactos (Causa-Raiz)</h3>
-                <div class="chart-container-bi">
-                    <canvas id="chartPareto"></canvas>
-                </div>
-            </div>
-            <div class="chart-box">
-                <h3><i class="fa-solid fa-chart-line" style="color: var(--randon-red);"></i> Evolução Diária do Ritmo</h3>
-                <div class="chart-container-bi">
-                    <canvas id="chartEvolucao"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="charts-grid" style="grid-template-columns: 1fr 1.5fr 1fr; margin-top: 5px;" id="pdf-charts-2">
-            <div class="chart-box">
-                <h3><i class="fa-solid fa-chart-pie" style="color: var(--status-green);"></i> Qualidade Geral</h3>
-                <div class="chart-container-bi" style="height: 220px;">
-                    <canvas id="chartStatus"></canvas>
-                </div>
-            </div>
-            <div class="chart-box">
-                <h3><i class="fa-solid fa-bullseye" style="color: var(--randon-blue);"></i> Aderência (Plan vs Real)</h3>
-                <div class="chart-container-bi" style="height: 220px;">
-                    <canvas id="chartAderencia"></canvas>
-                </div>
-            </div>
-            <div class="chart-box">
-                <h3><i class="fa-solid fa-comment-dots" style="color: var(--randon-red);"></i> Histórico Gargalos</h3>
-                <div class="impacts-list" id="lista-impactos" style="max-height: 220px;">
-                    <!-- JS injeta os gargalos aqui -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ABA 3: GUIA DE APONTAMENTO DIÁRIO -->
-    <div id="view-apontamento" class="view-container">
-        <div class="analytics-header">
-            <div>
-                <h2 style="font-size: 24px; font-weight: 900; color: var(--randon-black); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Guia de Apontamento de Linha</h2>
-                <p style="color: var(--randon-grey); font-size: 13px; font-weight: 700; text-transform: uppercase;">Resumo automático de saídas previstas para hoje e status da MOF.</p>
-            </div>
-            <button class="btn btn-imprimir" style="background: var(--randon-black); color: white; padding: 12px 25px; font-size: 14px;" onclick="window.print()">
-                <i class="fa-solid fa-print"></i> Imprimir Guia Físico
-            </button>
-        </div>
-
-        <!-- Cabeçalho visível apenas na impressão -->
-        <div class="apontamento-print-header">
-            <h2>RANDON TRIEL-HT - GUIA DE APONTAMENTO (CHÃO DE FÁBRICA)</h2>
-            <strong style="font-size: 16px;" id="print-data-hoje">DATA: --/--/----</strong>
-        </div>
-
-        <div class="apontamento-table-wrapper" style="border-left: 5px solid var(--status-green);">
-            <h3><i class="fa-solid fa-door-open"></i> Previstos para Sair de Linha Hoje</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 15%; text-align: left; padding-left: 15px;">Setor / Linha</th>
-                        <th style="width: 15%;">OP (Plan. Saída)</th>
-                        <th style="width: 20%;">OP (Físico Posto 7)</th>
-                        <th style="width: 15%;">Status Apontamento</th>
-                        <th style="width: 10%;">Atraso</th>
-                        <th style="width: 25%; text-align: left; padding-left: 15px;">Ações Corretivas / Obs</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody-saidas-hoje">
-                    <!-- Gerado via JS -->
-                </tbody>
-            </table>
-        </div>
-
-        <div class="apontamento-table-wrapper" style="border-left: 5px solid var(--randon-blue);">
-            <h3><i class="fa-solid fa-screwdriver-wrench"></i> Fila Ativa - Montagem Final (MOF)</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 15%;">Data Prevista</th>
-                        <th style="width: 20%;">OP (Plan. Entrada)</th>
-                        <th style="width: 20%;">OP (Real Entrada)</th>
-                        <th style="width: 20%;">OP (Plan. Saída)</th>
-                        <th style="width: 25%; text-align: left; padding-left: 15px;">Gargalos / Impactos</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody-fila-mof">
-                    <!-- Gerado via JS -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- TOAST NOTIFICATION -->
-    <div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Sincronizado!</span></div>
-
-    <!-- MODAL PCP -->
+    <!-- MODAL CARGA PCP -->
     <div class="modal-overlay" id="modal-pcp">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-bolt" style="color: var(--status-green);"></i> Carga Rápida PCP</h3>
+                <h3><i class="fa-solid fa-bolt" style="color: var(--status-green);"></i> Carga Base de Dados PCP</h3>
                 <button class="close-btn" onclick="fecharModalPCP()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 13px; color: var(--randon-grey); font-weight: bold; margin-bottom: 15px; text-transform: uppercase;">
-                Selecione as 3 colunas no Excel: <b>DATA | PLAN ENTRADA | PLAN SAÍDA</b>, copie e cole abaixo.
+            <p style="font-size: 14px; color: var(--randon-grey); font-weight: 600; margin-bottom: 20px; line-height: 1.5;">
+                <b>Como funciona:</b> Copie do Excel as colunas na ordem exata: <br><strong style="color: var(--randon-blue);">SETOR | PRODUTO/OP | DATA ENTRADA | DATA SAÍDA</strong> e cole abaixo.<br>
+                O sistema fará a leitura da coluna "Setor" e distribuirá as ordens automaticamente para as abas correspondentes.
             </p>
-            <div style="margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px;">
-                <label style="font-size: 11px; font-weight: 900; color: var(--randon-black); text-transform: uppercase;">Linha de Produção Alvo</label>
-                <select id="pcp-linha" style="padding: 10px; border-radius: 6px; border: 2px solid var(--border-light); font-size: 13px; font-weight: 800; outline: none; cursor: pointer;">
-                    <option value="tanques">TANQUES</option>
-                    <option value="carrega_tudo">CARREGA TUDO</option>
-                    <option value="bases">BASES (CHASSI)</option>
-                    <option value="especiais">ESPECIAIS</option>
-                    <option value="silo">SILOS</option>
-                    <option value="mof">MONTAGEM FINAL (MOF)</option>
-                </select>
-            </div>
-            <textarea id="pcp-dados" class="pcp-textarea" placeholder="Cole aqui os dados copiados do Excel (Ctrl+V)..."></textarea>
+            <textarea id="pcp-dados" class="pcp-textarea" placeholder="Exemplo de cópia do Excel:
+TQ	TANQUE INOX 15000L	03/08/2026	06/08/2026
+CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             
-            <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                <button class="btn" style="background: var(--border-light); color: var(--randon-black);" onclick="fecharModalPCP()">Cancelar</button>
-                <button class="btn btn-pcp" onclick="processarPCP()">Injetar Programação</button>
+            <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
+                <button class="btn btn-tv" onclick="fecharModalPCP()">Cancelar</button>
+                <button class="btn btn-pcp" onclick="processarBasePCP()"><i class="fa-solid fa-check-double"></i> Injetar Programação</button>
             </div>
         </div>
     </div>
 
-    <script>
-        // Opções Padronizadas para o Gráfico de Pareto
-        const MOTIVOS_GARGALO = [
-            "Falta de Material",
-            "Manutenção / Quebra",
-            "Qualidade / Retrabalho",
-            "Engenharia / Projeto",
-            "Atraso Cliente / Chassi",
-            "Falta de Efetivo (RH)",
-            "Logística / Movimentação",
-            "Outros"
-        ];
+    <!-- ABA 1: ESTAMPARIA -->
+    <div id="view-estamparia" class="view-container active">
+        <div class="section-card">
+            <div class="section-header" style="background: var(--randon-dark);">
+                <div class="section-title-box" style="width: 100%;">
+                    <h2>Controle Manufaturados - Estamparia</h2>
+                </div>
+            </div>
+            <div style="padding: 20px; background: white; overflow-x: auto;">
+                <table class="estamparia-table" id="tabela-estamparia-matriz">
+                    <!-- Gerado via JS dinamicamente -->
+                </table>
+            </div>
+        </div>
+    </div>
 
-        /* APENAS 3 LINHAS POR SETOR CONFORME SOLICITADO */
-        const sectionsConfig = [
-            { id: 'tanques', title: 'TANQUES', rows: 3, metaDefault: 2 },
-            { id: 'carrega_tudo', title: 'CARREGA TUDO', rows: 3, metaDefault: 2 },
-            { id: 'bases', title: 'BASES (CHASSI)', rows: 3, metaDefault: 4 },
-            { id: 'especiais', title: 'ESPECIAIS', rows: 3, metaDefault: 4 },
-            { id: 'silo', title: 'SILOS', rows: 3, metaDefault: 2 },
-            { id: 'mof', title: 'MONTAGEM FINAL (MOF)', rows: 3, metaDefault: 5 }
-        ];
+    <!-- DEMAIS ABAS DINÂMICAS -->
+    <div id="view-solda" class="view-container"></div>
+    <div id="view-pintura" class="view-container"></div>
+    <div id="view-op1" class="view-container"></div>
+    <div id="view-op2" class="view-container"></div>
 
-        let db = { globalDate: '', meta: {}, data: {} };
-        let chartsObj = { pareto: null, pie: null, line: null, aderencia: null };
-        let isTVMode = false;
+    <!-- ABA: ANÁLISE EXECUTIVA (BI) -->
+    <div id="view-analytics" class="view-container">
+        <div class="analytics-header">
+            <div>
+                <h2 style="font-size: 26px; font-weight: 900; color: var(--randon-dark); margin-bottom: 8px; text-transform: uppercase;">Inteligência de Produção</h2>
+                <p style="color: var(--randon-grey); font-size: 14px; font-weight: 700; text-transform: uppercase;">Business Intelligence - Relatório Gerencial Consolidado</p>
+            </div>
+            <button class="btn btn-tv" onclick="updateAnalytics()" style="padding: 12px 20px; font-size: 14px;"><i class="fa-solid fa-rotate"></i> Atualizar Dados</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dash-card"><div class="dash-title">Apontamentos <i class="fa-solid fa-clipboard-check"></i></div><div class="dash-value" id="dash-total-apontamentos">0</div></div>
+            <div class="dash-card card-blue"><div class="dash-title">Aderência Plano <i class="fa-solid fa-bullseye"></i></div><div class="dash-value" id="dash-aderencia" style="color: var(--randon-blue);">0%</div></div>
+            <div class="dash-card card-green"><div class="dash-title">Qualidade (OK) <i class="fa-solid fa-award"></i></div><div class="dash-value" id="dash-ok" style="color: var(--status-green);">0%</div></div>
+            <div class="dash-card card-red"><div class="dash-title">Gargalos (COGI) <i class="fa-solid fa-triangle-exclamation"></i></div><div class="dash-value" id="dash-cogi" style="color: var(--status-red);">0</div></div>
+            <div class="dash-card card-red"><div class="dash-title">Atrasos (Dias) <i class="fa-solid fa-clock"></i></div><div class="dash-value" id="dash-atrasos" style="color: var(--status-red);">0</div></div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-box"><h3><i class="fa-solid fa-chart-column" style="color: var(--randon-blue); margin-right: 8px;"></i> Pareto de Impactos (Causa-Raiz)</h3><div class="chart-container-bi"><canvas id="chartPareto"></canvas></div></div>
+            <div class="chart-box"><h3><i class="fa-solid fa-chart-line" style="color: var(--status-orange); margin-right: 8px;"></i> Evolução Diária do Ritmo</h3><div class="chart-container-bi"><canvas id="chartEvolucao"></canvas></div></div>
+        </div>
+        <div class="charts-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="chart-box"><h3><i class="fa-solid fa-chart-pie" style="color: var(--status-green); margin-right: 8px;"></i> Qualidade Geral</h3><div class="chart-container-bi"><canvas id="chartStatus"></canvas></div></div>
+            <div class="chart-box"><h3><i class="fa-solid fa-bullseye" style="color: var(--randon-red); margin-right: 8px;"></i> Aderência por Setor</h3><div class="chart-container-bi"><canvas id="chartAderencia"></canvas></div></div>
+        </div>
+    </div>
+
+    <!-- ABA: GUIA DE APONTAMENTO DIÁRIO -->
+    <div id="view-apontamento" class="view-container">
+        <div class="analytics-header">
+            <div>
+                <h2 style="font-size: 26px; font-weight: 900; color: var(--randon-dark); margin-bottom: 8px; text-transform: uppercase;">Guia de Apontamento Consolidada</h2>
+                <p style="color: var(--randon-grey); font-size: 14px; font-weight: 700; text-transform: uppercase;">Espelho de Saídas de Linha e Fila Atual (Pintura, OP1 e OP2).</p>
+            </div>
+            <button class="btn btn-tv" onclick="window.print()" style="padding: 12px 20px; font-size: 14px;"><i class="fa-solid fa-print"></i> Imprimir Guia Físico</button>
+        </div>
         
-        let firebaseDB = null;
-        let dbRef = null;
+        <!-- TABELA 1: SAÍDAS DE LINHA -->
+        <div class="apontamento-table-wrapper" style="border-left: 6px solid var(--status-green);">
+            <h3><i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha (Data da Reunião)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%; text-align: left; padding-left: 20px;">Linha de Origem</th>
+                        <th style="width: 20%;">Produto / OP</th>
+                        <th style="width: 10%;">Saída Real</th>
+                        <th style="width: 15%;">Status Apontamento</th>
+                        <th style="width: 30%; text-align: left; padding-left: 20px;">Ações Corretivas / Obs</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-saidas-linha"></tbody>
+            </table>
+        </div>
 
-        function inicializarBancoLocal() {
-            if(!db.meta) db.meta = {};
-            if(!db.data) db.data = {};
-            sectionsConfig.forEach(sec => {
-                if(db.meta[sec.id] === undefined) db.meta[sec.id] = sec.metaDefault;
-                
-                // Se a tabela já existir mas tiver mais linhas, não apaga os dados, só mantém
-                // Se não existir, cria com 3 linhas
-                if(!db.data[sec.id]) {
-                    db.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
-                } else if (db.data[sec.id].length > sec.rows) {
-                    // Mantém apenas as primeiras 3 linhas para limpar o visual
-                    db.data[sec.id] = db.data[sec.id].slice(0, sec.rows);
-                } else while(db.data[sec.id].length < sec.rows) {
-                    db.data[sec.id].push(getEmptyRow());
+        <!-- TABELA 2: ESPELHO PINTURA E MOF -->
+        <div class="apontamento-table-wrapper" style="border-left: 6px solid var(--randon-blue);">
+            <h3><i class="fa-solid fa-layer-group" style="margin-right: 8px;"></i> Espelho de Processos Finais: Pintura, OP1 e OP2</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%; text-align: left; padding-left: 20px;">Setor Atual</th>
+                        <th style="width: 20%;">Produto / OP</th>
+                        <th style="width: 10%;">Entrada Real</th>
+                        <th style="width: 10%;">Saída Real</th>
+                        <th style="width: 35%; text-align: left; padding-left: 20px;">Status / Gargalo</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-espelho-finais"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Sincronizado!</span></div>
+
+    <script>
+        const MOTIVOS_GARGALO = ["Falta de Material", "Manutenção / Quebra", "Qualidade / Retrabalho", "Engenharia / Projeto", "Atraso Cliente / Chassi", "Falta de Efetivo (RH)", "Logística / Movimentação", "Outros"];
+
+        const configuracaoSetores = [
+            { id: 'tq', view: 'solda', title: 'TANQUES (TQ)', rows: 21, metaDef: 5 },
+            { id: 'ct', view: 'solda', title: 'CARREGA TUDO (CT)', rows: 19, metaDef: 3 },
+            { id: 'bases', view: 'solda', title: 'BASES (CHASSI)', rows: 52, metaDef: 10 },
+            { id: 'silo', view: 'solda', title: 'SILOS', rows: 5, metaDef: 2 },
+            { id: 'esp_box1', view: 'solda', title: 'ESPECIAIS - BOX 1', rows: 4, metaDef: 1 },
+            { id: 'esp_box2', view: 'solda', title: 'ESPECIAIS - BOX 2', rows: 4, metaDef: 1 },
+            { id: 'esp_box3', view: 'solda', title: 'ESPECIAIS - BOX 3', rows: 4, metaDef: 1 },
+            { id: 'extra', view: 'solda', title: 'EQUIPE EXTRA', rows: 5, metaDef: 2 },
+            { id: 'pintura', view: 'pintura', title: 'PROCESSO DE PINTURA', rows: 30, metaDef: 15 },
+            { id: 'op1_tq1', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 1)', rows: 5, metaDef: 2 },
+            { id: 'op1_tq2', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 2)', rows: 5, metaDef: 2 },
+            { id: 'op1_tq3', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 3)', rows: 5, metaDef: 2 },
+            { id: 'op1_silo', view: 'op1', title: 'MOF OP1: SILO (1 BOX)', rows: 5, metaDef: 1 },
+            { id: 'op1_ct', view: 'op1', title: 'MOF OP1: CARREGA TUDO (1 BOX)', rows: 5, metaDef: 1 },
+            { id: 'op1_bases', view: 'op1', title: 'MOF OP1: BASES (1 BOX)', rows: 5, metaDef: 3 },
+            { id: 'op2_geral', view: 'op2', title: 'MOF OP2: GERAL', rows: 15, metaDef: 10 }
+        ];
+
+        const estampariaLinhas = [
+            "Atraso Programação", "Estamparia Geral", "Laser", "Linea", 
+            "Dobra", "PRM - Carbo", "115 - CDL", "160 - Externo"
+        ];
+
+        let db = { globalDate: '', data: {}, meta: {}, estampariaMatriz: { datas: [], valores: {} } };
+        let chartsObj = { pareto: null, pie: null, line: null, aderencia: null };
+        let saveTimeout, tvInterval;
+        let isTVMode = false;
+        let firebaseDB = null, dbRef = null;
+
+        function getEmptyRow() {
+            return { ordem: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', aponta: '', impactos: '', acoes: '', origem: '' };
+        }
+
+        // MOTOR DE DATAS ESTAMPARIA (DIAS AUTOMÁTICOS)
+        function formatarDataEstamparia(dateObj) {
+            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+            return `${String(dateObj.getDate()).padStart(2, '0')}/${mesesAbreviados[dateObj.getMonth()]}`;
+        }
+
+        function atualizarDiasEstamparia() {
+            if(!db.estampariaMatriz || !db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
+                let novasDatas = [];
+                for(let i=4; i>=0; i--) {
+                    let d = new Date(); d.setDate(d.getDate() - i);
+                    novasDatas.push(formatarDataEstamparia(d));
                 }
-            });
+                db.estampariaMatriz = { datas: novasDatas, valores: {} };
+                estampariaLinhas.forEach(linha => db.estampariaMatriz.valores[linha] = Array(5).fill(''));
+                return;
+            }
+
+            const hoje = new Date();
+            const hojeFormatado = formatarDataEstamparia(hoje);
+            let datasAntigas = db.estampariaMatriz.datas;
+            
+            if (datasAntigas[datasAntigas.length - 1] !== hojeFormatado) {
+                db.estampariaMatriz.datas.shift();
+                db.estampariaMatriz.datas.push(hojeFormatado);
+                
+                estampariaLinhas.forEach(linha => {
+                    if(!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                    db.estampariaMatriz.valores[linha].shift();
+                    db.estampariaMatriz.valores[linha].push('');
+                });
+                autoSaveCloud();
+            }
+        }
+
+        // FUNÇÃO DE RENDERIZAÇÃO IMEDIATA (ANTI TELA-BRANCA)
+        function forceRenderTodasTabelas() {
+            renderizarEstampariaMatriz();
+            renderizarViews(); 
+            recalcularDashboard(); 
+            renderResumoApontamento();
         }
 
         function init() {
-            inicializarBancoLocal(); 
+            // Garante Arrays preenchidos antes de desenhar a tela
+            configuracaoSetores.forEach(sec => {
+                if(!db.data[sec.id]) db.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
+                else while(db.data[sec.id].length < sec.rows) db.data[sec.id].push(getEmptyRow());
+                if(db.meta[sec.id] === undefined) db.meta[sec.id] = sec.metaDef;
+            });
+
+            const today = new Date();
+            db.globalDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            document.getElementById('global-date').value = db.globalDate;
+            document.getElementById('global-date').addEventListener('change', (e) => {
+                db.globalDate = e.target.value; renderResumoApontamento(); autoSaveCloud();
+            });
+
+            // DESENHA NA TELA IMEDIATAMENTE (SEGURANÇA)
+            forceRenderTodasTabelas();
+            
             initFirebase(); 
-
-            if(!db.globalDate) {
-                const today = new Date();
-                db.globalDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-            }
-            
-            const globalDateInput = document.getElementById('global-date');
-            if (globalDateInput) {
-                globalDateInput.value = db.globalDate;
-                globalDateInput.addEventListener('change', (e) => {
-                    db.globalDate = e.target.value;
-                    recalcularKPIs();
-                    autoSaveCloud();
-                });
-            }
-
-            renderDashboard();
-            recalcularKPIs();
             initCharts();
-            
-            const viewOperacional = document.getElementById('view-operacional');
-            if (viewOperacional) {
-                viewOperacional.addEventListener('change', handleInputChange);
-            }
-        }
-
-        function getEmptyRow() {
-            return { data: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', aponta: '', impactos: '', acoes: '' };
         }
 
         function switchTab(tabId) {
             document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
             document.getElementById(`view-${tabId}`).classList.add('active');
-            document.getElementById(`tab-btn-${tabId}`).classList.add('active');
+            
+            const btn = document.getElementById(`tab-btn-${tabId}`);
+            if(btn) btn.classList.add('active');
+
             if(tabId === 'analytics') updateAnalytics();
             if(tabId === 'apontamento') renderResumoApontamento();
         }
 
-        function renderDashboard() {
-            const container = document.getElementById('view-operacional');
-            if (!container) return; 
+        function abrirModalPCP() { document.getElementById('modal-pcp').classList.add('active'); }
+        function fecharModalPCP() { document.getElementById('modal-pcp').classList.remove('active'); document.getElementById('pcp-dados').value = ''; }
+
+        function renderizarEstampariaMatriz() {
+            const container = document.getElementById('tabela-estamparia-matriz');
+            if(!container) return;
             
-            let html = '';
+            const datas = (db.estampariaMatriz && db.estampariaMatriz.datas && db.estampariaMatriz.datas.length === 5) ? db.estampariaMatriz.datas : ['','','','',''];
+            
+            let thead = `
+                <tr>
+                    <th colspan="6" style="text-align: center; font-size: 16px; padding: 12px; border-bottom: 2px solid var(--randon-black);">
+                        <i class="fa-solid fa-industry" style="margin-right: 8px;"></i> Controle Manufaturados
+                    </th>
+                </tr>
+                <tr>
+                    <th style="width: 280px; text-align: left; padding-left: 20px; background-color: white;"></th>`;
+            
+            datas.forEach((d, cIdx) => {
+                let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : 'background-color: white;';
+                thead += `<th style="${bg} border-bottom: 2px solid var(--randon-black); border-top: 1px solid var(--randon-black);">
+                            <input type="text" class="cell-input" style="font-weight:900; font-size: 15px; text-align: center; ${bg}" data-col-date="${cIdx}" value="${d}">
+                          </th>`;
+            });
+            thead += `</tr>`;
 
-            sectionsConfig.forEach(sec => {
-                const isCT = sec.id === 'carrega_tudo' ? `<span style="font-size: 11px; color: white; background: var(--status-green); padding: 5px 12px; border-radius: 4px; font-weight: 900; margin-left: 15px; box-shadow: 0 0 10px rgba(16,185,129,0.5); border: 1px solid rgba(255,255,255,0.4); display: flex; align-items: center; gap: 5px;"><i class="fa-solid fa-satellite-dish fa-beat"></i> INTEGRAÇÃO TABLET ATIVA</span>` : '';
-
-                html += `
-                <div class="section-card" id="container-${sec.id}">
-                    <div class="section-header">
-                        <div class="section-title-box">
-                            <h2 style="color: white;">${sec.title}</h2>
-                            ${isCT}
-                        </div>
-                        
-                        <div class="kpi-row-header">
-                            <div class="kpi-box"><span>Prog. Mês</span><strong id="kpi-mes-${sec.id}">0</strong></div>
-                            <div class="kpi-box"><span>Prog. Sem</span><strong id="kpi-sem-${sec.id}">0</strong></div>
-                            <div class="kpi-box"><span>Prog. Dia</span><strong id="kpi-dia-${sec.id}">0</strong></div>
-                            
-                            <div class="kpi-box" style="background: rgba(239,68,68,0.2);">
-                                <span style="color: #fca5a5;">Atraso Ent.</span>
-                                <strong id="kpi-atr-ent-${sec.id}" style="color: #fca5a5;">0</strong>
-                            </div>
-                            <div class="kpi-box" style="background: rgba(239,68,68,0.2);">
-                                <span style="color: #fca5a5;">Atraso Saí.</span>
-                                <strong id="kpi-atr-sai-${sec.id}" style="color: #fca5a5;">0</strong>
-                            </div>
-                            
-                            <div class="kpi-box" style="background: rgba(16,185,129,0.2);">
-                                <span style="color: #6ee7b7;">Apontados</span>
-                                <strong id="kpi-apontados-${sec.id}" style="color: #6ee7b7;">0</strong>
-                            </div>
-                            <div class="kpi-box">
-                                <span style="color: #cbd5e1;">Meta Dia</span>
-                                <input type="number" data-type="meta" data-section="${sec.id}" value="${db.meta[sec.id]}" style="width:50px; background: transparent; border: 1px dashed rgba(255,255,255,0.3); color: white; text-align: center; font-size: 20px; font-weight: 900; outline: none;">
-                            </div>
-                            
-                            <div class="status-box-giant red" id="status-box-${sec.id}">❌</div>
-                        </div>
-                    </div>
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width:6%">Data</th>
-                                <th style="width:9%">Plan Entrada</th>
-                                <th style="width:9%">Real Entrada</th>
-                                <th style="width:5%">Atr. Ent</th>
-                                <th style="width:4%">Stat</th>
-                                <th style="width:9%">Plan Saída</th>
-                                <th style="width:9%">Real Saída</th>
-                                <th style="width:5%">Atr. Sai</th>
-                                <th style="width:4%">Stat</th>
-                                <th style="width:10%">Apontamento</th>
-                                <th style="width:15%">Causa-Raiz (Gargalo)</th>
-                                <th style="width:15%">Ações Corretivas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${db.data[sec.id].map((row, index) => `
-                                <tr>
-                                    <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="data" value="${row.data || ''}"></td>
-                                    <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="plan_ent" value="${row.plan_ent || ''}"></td>
-                                    <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="real_ent" value="${row.real_ent || ''}"></td>
-                                    <td><input type="number" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="atr_ent" value="${row.atr_ent || ''}"></td>
-                                    <td>
-                                        <div class="status-btn">
-                                            <div class="circle ${row.stat_ent || ''}"></div>
-                                        </div>
-                                    </td>
-                                    <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="plan_sai" value="${row.plan_sai || ''}"></td>
-                                    <td><input type="text" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="real_sai" value="${row.real_sai || ''}"></td>
-                                    <td><input type="number" class="cell-input center-text" data-section="${sec.id}" data-row="${index}" data-field="atr_sai" value="${row.atr_sai || ''}"></td>
-                                    <td>
-                                        <div class="status-btn">
-                                            <div class="circle ${row.stat_sai || ''}"></div>
-                                        </div>
-                                    </td>
-                                    <td class="${getColorClass(row.aponta || '')}">
-                                        <select class="cell-input center-text" style="color: inherit;" data-section="${sec.id}" data-row="${index}" data-field="aponta">
-                                            <option value="" ${row.aponta === '' ? 'selected' : ''}>-</option>
-                                            <option value="OK" ${row.aponta === 'OK' ? 'selected' : ''}>🟢 OK</option>
-                                            <option value="COGI" ${row.aponta === 'COGI' ? 'selected' : ''}>🔴 COGI</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="cell-input" data-section="${sec.id}" data-row="${index}" data-field="impactos">
-                                            <option value="">-- Sem Impacto --</option>
-                                            ${MOTIVOS_GARGALO.map(m => `<option value="${m}" ${(row.impactos === m) ? 'selected' : ''}>${m}</option>`).join('')}
-                                        </select>
-                                    </td>
-                                    <td><input type="text" class="cell-input" data-section="${sec.id}" data-row="${index}" data-field="acoes" value="${row.acoes || ''}"></td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>`;
+            let tbody = '';
+            estampariaLinhas.forEach((linha) => {
+                tbody += `<tr>`;
+                tbody += `<td style="font-weight: 900; padding-left: 20px; color: var(--randon-dark); font-size: 14px; border-right: 2px solid var(--randon-black);">${linha}</td>`;
+                
+                datas.forEach((d, cIdx) => {
+                    const val = (db.estampariaMatriz && db.estampariaMatriz.valores && db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx] !== undefined) ? db.estampariaMatriz.valores[linha][cIdx] : '';
+                    let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : '';
+                    tbody += `<td style="${bg}"><input type="text" class="cell-input estamparia-val-input" style="font-size: 16px; font-weight: 900; text-align: center;" data-row-name="${linha}" data-col-idx="${cIdx}" value="${val}"></td>`;
+                });
+                tbody += `</tr>`;
             });
 
-            if(document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT') {
-                container.innerHTML = html;
-            }
+            container.innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`;
         }
 
-        // MOTOR DE AUTOMAÇÃO VERDE/VERMELHO 
-        function aplicarRegrasAutomaticas(sec, row) {
-            let r = db.data[sec][row];
-            const formatar = (str) => (str || '').trim().toUpperCase();
+        function renderizarViews() {
+            let htmlViews = { solda: '', pintura: '', op1: '', op2: '' };
 
-            if (r.real_ent !== '') {
-                r.stat_ent = (formatar(r.real_ent) === formatar(r.plan_ent) && r.plan_ent !== '') ? 'green' : 'red';
-            } else { r.stat_ent = ''; }
-
-            if (r.real_sai !== '') {
-                r.stat_sai = (formatar(r.real_sai) === formatar(r.plan_sai) && r.plan_sai !== '') ? 'green' : 'red';
-            } else { r.stat_sai = ''; }
-        }
-
-        function handleInputChange(e) {
-            const target = e.target;
-
-            if(target.dataset.type === 'meta') {
-                db.meta[target.dataset.section] = parseInt(target.value) || 0;
-            } else if(target.classList.contains('cell-input')) {
-                const sec = target.dataset.section;
-                const row = target.dataset.row;
-                const field = target.dataset.field;
-                db.data[sec][row][field] = target.value;
-
-                aplicarRegrasAutomaticas(sec, row);
-
-                if(field === 'aponta') {
-                    target.parentElement.className = getColorClass(target.value);
+            configuracaoSetores.forEach(sec => {
+                let tbody = '';
+                for(let i = 0; i < sec.rows; i++) {
+                    const row = db.data[sec.id] ? (db.data[sec.id][i] || getEmptyRow()) : getEmptyRow();
+                    tbody += `
+                        <tr>
+                            <td>
+                                ${row.origem ? `<div class="auto-tag">AUTO: ${row.origem}</div>` : ''}
+                                <input type="text" class="cell-input" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem" value="${row.ordem || ''}">
+                            </td>
+                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="plan_ent" value="${row.plan_ent || ''}"></td>
+                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}"></td>
+                            <td><input type="text" class="cell-input" readonly style="color: var(--status-red);" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent || ''}"></td>
+                            <td><div class="status-btn"><div class="circle ${row.stat_ent || ''}"></div></div></td>
+                            
+                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="plan_sai" value="${row.plan_sai || ''}"></td>
+                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_sai" value="${row.real_sai || ''}"></td>
+                            <td><input type="text" class="cell-input" readonly style="color: var(--status-red);" data-sec="${sec.id}" data-row="${i}" data-field="atr_sai" value="${row.atr_sai || ''}"></td>
+                            <td><div class="status-btn"><div class="circle ${row.stat_sai || ''}"></div></div></td>
+                            
+                            <td class="${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' ? 'bg-cogi' : '')}">
+                                <select class="cell-input" style="color: inherit;" data-sec="${sec.id}" data-row="${i}" data-field="aponta">
+                                    <option value="" ${row.aponta === '' ? 'selected' : ''}>-</option>
+                                    <option value="OK" ${row.aponta === 'OK' ? 'selected' : ''}>${sec.view === 'pintura' ? '🟢 ENTREGUE' : '🟢 OK'}</option>
+                                    <option value="COGI" ${row.aponta === 'COGI' ? 'selected' : ''}>🔴 COGI</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="impactos">
+                                    <option value="">--</option>
+                                    ${MOTIVOS_GARGALO.map(m => `<option value="${m}" ${row.impactos === m ? 'selected' : ''}>${m}</option>`).join('')}
+                                </select>
+                            </td>
+                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="acoes" value="${row.acoes || ''}" style="text-align: left; padding-left: 10px;"></td>
+                        </tr>
+                    `;
                 }
-            }
-            recalcularKPIs();
-            autoSaveCloud();
-        }
 
-        // FUNÇÃO QUE ATUALIZA O DROPDOWN A PARTIR DA ABA GUIA DE APONTAMENTO
-        window.atualizarApontamentoGuia = function(secId, rowIndex, valor) {
-            db.data[secId][rowIndex].aponta = valor;
-            renderDashboard(); // Atualiza tabela mestre por baixo dos panos
-            recalcularKPIs();  // Atualiza indicadores e a própria Guia
-            autoSaveCloud();   // Salva na nuvem
-        }
+                let badgeCT = sec.id === 'ct' ? `<div class="ct-badge"><i class="fa-solid fa-satellite-dish fa-beat"></i> Integração Tablet On</div>` : '';
 
-        function getColorClass(val) {
-            val = val.toUpperCase().trim();
-            if(val === 'OK') return 'bg-ok';
-            if(val === 'COGI') return 'bg-cogi';
-            return '';
-        }
+                htmlViews[sec.view] += `
+                    <div class="section-card">
+                        <div class="section-header">
+                            <div class="section-title-box">
+                                <h2>${sec.title}</h2>
+                                ${badgeCT}
+                            </div>
+                            <div class="kpi-row-header">
+                                <div class="kpi-box"><span>Prog. Mês</span><strong id="kpi-mes-${sec.id}">0</strong></div>
+                                <div class="kpi-box" style="background: rgba(239,68,68,0.2);">
+                                    <span style="color: #fca5a5;">Atraso Ent.</span><strong id="kpi-atr-ent-${sec.id}" style="color: #fca5a5;">0</strong>
+                                </div>
+                                <div class="kpi-box" style="background: rgba(239,68,68,0.2);">
+                                    <span style="color: #fca5a5;">Atraso Saí.</span><strong id="kpi-atr-sai-${sec.id}" style="color: #fca5a5;">0</strong>
+                                </div>
+                                <div class="kpi-box" style="background: rgba(16,185,129,0.2);">
+                                    <span style="color: #6ee7b7;">Apontados</span><strong id="kpi-apontados-${sec.id}" style="color: #6ee7b7;">0</strong>
+                                </div>
+                                <div class="kpi-box">
+                                    <span style="color: #cbd5e1;">Meta Dia</span>
+                                    <input type="number" class="meta-input" data-sec="${sec.id}" value="${db.meta[sec.id] || 0}" style="width:60px; background: transparent; border: 1px dashed rgba(255,255,255,0.3); color: white; text-align: center; font-size: 20px; font-weight: 900; outline: none; border-radius: 6px;">
+                                </div>
+                                <div class="status-box-giant red" id="status-box-${sec.id}">❌</div>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:12%">Ordem / Produto</th><th style="width:8%">Plan Ent.</th><th style="width:8%">Real Ent.</th>
+                                    <th style="width:4%">Atr</th><th style="width:4%">St</th><th style="width:8%">Plan Saída</th>
+                                    <th style="width:8%">Real Saída</th><th style="width:4%">Atr</th><th style="width:4%">St</th>
+                                    <th style="width:10%">Aponta</th><th style="width:12%">Gargalo</th><th style="width:18%; text-align: left; padding-left: 10px;">Ações Corretivas</th>
+                                </tr>
+                            </thead>
+                            <tbody>${tbody}</tbody>
+                        </table>
+                    </div>
+                `;
+            });
 
-        function recalcularKPIs() {
-            // ... (restante da logica kpis inalterada - apenas os totais)
-            sectionsConfig.forEach(sec => {
-                let sumAtrEnt = 0, sumAtrSai = 0, totalProgMes = 0;
-                let progDia = 0, progSemana = 0, apontados = 0;
-
-                db.data[sec.id].forEach((row, index) => {
-                    sumAtrEnt += parseInt(row.atr_ent) || 0;
-                    sumAtrSai += parseInt(row.atr_sai) || 0;
-                    if(row.plan_ent.trim() !== '') totalProgMes++;
-                    if(row.aponta && row.aponta.trim() !== '') apontados++;
+            if(document.activeElement && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT') {
+                ['solda', 'pintura', 'op1', 'op2'].forEach(v => {
+                    const el = document.getElementById(`view-${v}`);
+                    if(el) el.innerHTML = htmlViews[v];
                 });
+            }
+        }
 
+        function recalcularDashboard() {
+            configuracaoSetores.forEach(sec => {
+                let sumAtrEnt = 0, sumAtrSai = 0, totalProgMes = 0, apontados = 0;
+                if(db.data[sec.id]) {
+                    db.data[sec.id].forEach(row => {
+                        sumAtrEnt += parseInt(row.atr_ent) || 0;
+                        sumAtrSai += parseInt(row.atr_sai) || 0;
+                        if(row.plan_ent && row.plan_ent.trim() !== '') totalProgMes++;
+                        if(row.aponta && row.aponta.trim() !== '') apontados++;
+                    });
+                }
                 try {
                     document.getElementById(`kpi-mes-${sec.id}`).innerText = totalProgMes;
                     document.getElementById(`kpi-atr-ent-${sec.id}`).innerText = sumAtrEnt;
                     document.getElementById(`kpi-atr-sai-${sec.id}`).innerText = sumAtrSai;
                     document.getElementById(`kpi-apontados-${sec.id}`).innerText = apontados;
-
-                    const meta = db.meta[sec.id];
+                    const meta = db.meta[sec.id] || 0;
                     const box = document.getElementById(`status-box-${sec.id}`);
-                    if(apontados >= meta && meta > 0) {
-                        box.className = 'status-box-giant green'; box.innerText = '✅';
-                    } else {
-                        box.className = 'status-box-giant red'; box.innerText = '❌';
-                    }
+                    if(apontados >= meta && meta > 0) { box.className = 'status-box-giant green'; box.innerText = '✅'; } 
+                    else { box.className = 'status-box-giant red'; box.innerText = '❌'; }
                 } catch(e) {}
             });
-            
-            renderResumoApontamento();
         }
 
-        // MOTOR DE BUSCA CORRIGIDO - ACHA QUALQUER FORMATO DE DATA (03/08, 03/ago, 2026-08-03)
-        function renderResumoApontamento() {
-            const containerSaidas = document.getElementById('tbody-saidas-hoje');
-            const containerMof = document.getElementById('tbody-fila-mof');
-            if(!containerSaidas || !containerMof) return;
+        function calcularAtraso(planStr, realStr) {
+            if(!planStr || !realStr || planStr.trim() === '' || realStr.trim() === '') return { atraso: '', status: '' };
+            const [diaP, mesP, anoP] = planStr.split('/');
+            const [diaR, mesR, anoR] = realStr.split('/');
+            if(!diaP || !diaR) return { atraso: 0, status: 'green' };
 
-            const globalDate = db.globalDate; 
-            
-            if(!globalDate) return;
-            
-            const parts = globalDate.split('-'); // ex: ["2026", "08", "03"]
-            const diaBusca = parts[2];
-            const mesNumBusca = parts[1];
-            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-            const mesNomeBusca = mesesAbreviados[parseInt(mesNumBusca) - 1];
+            const year = new Date().getFullYear();
+            const dPlan = new Date(anoP || year, parseInt(mesP) - 1, parseInt(diaP));
+            const dReal = new Date(anoR || year, parseInt(mesR) - 1, parseInt(diaR));
+            const diffDays = Math.ceil((dReal - dPlan) / (1000 * 60 * 60 * 24));
 
-            document.getElementById('print-data-hoje').innerText = `DATA: ${diaBusca}/${mesNumBusca}/${parts[0]}`;
+            let status = 'green';
+            if(diffDays === 2) status = 'orange';
+            if(diffDays > 2) status = 'red';
+            return { atraso: diffDays > 0 ? diffDays : 0, status: status };
+        }
 
-            let htmlSaidas = '';
-            let hasSaidas = false;
+        function adicionarUmDia(dataStr) {
+            if(!dataStr || dataStr.trim() === '') return '';
+            const partes = dataStr.split('/');
+            if(partes.length < 2) return dataStr;
+            const year = new Date().getFullYear();
+            const d = new Date(partes[2] || year, parseInt(partes[1]) - 1, parseInt(partes[0]));
+            d.setDate(d.getDate() + 1);
+            return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+        }
 
-            sectionsConfig.forEach(sec => {
-                db.data[sec.id].forEach((row, index) => {
-                    const rowDataLow = (row.data || '').toLowerCase().trim();
-                    
-                    // Checagem Infalível: Vê se o DIA bate, e se o MÊS (em número ou nome) bate na string da tabela
-                    const dataBate = rowDataLow !== '' && rowDataLow.includes(diaBusca) && (rowDataLow.includes(mesNumBusca) || rowDataLow.includes(mesNomeBusca));
+        document.addEventListener('change', (e) => {
+            if(e.target.classList.contains('estamparia-val-input')) {
+                const linha = e.target.dataset.rowName;
+                const cIdx = parseInt(e.target.dataset.colIdx);
+                if(!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = [];
+                db.estampariaMatriz.valores[linha][cIdx] = e.target.value;
+                autoSaveCloud(); return;
+            }
+            if(e.target.dataset && e.target.dataset.colDate !== undefined) {
+                db.estampariaMatriz.datas[parseInt(e.target.dataset.colDate)] = e.target.value;
+                autoSaveCloud(); return;
+            }
 
-                    // Se a data bateu e tem algo previsto (ou já entregue fisicamente na Saída Real)
-                    if (dataBate && (row.plan_sai.trim() !== '' || row.real_sai.trim() !== '')) {
-                        hasSaidas = true;
-                        
-                        let isLiberado = row.real_sai.trim() !== '';
-                        let badgePosto7 = isLiberado 
-                            ? `<div style="background: var(--status-green); color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 900; margin-top: 4px; display: inline-block; box-shadow: 0 2px 4px rgba(16,185,129,0.3); text-transform: uppercase; letter-spacing: 0.5px;"><i class="fa-solid fa-check-double"></i> Pronto p/ Apontar</div>`
-                            : `<div style="background: #f59e0b; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 900; margin-top: 4px; display: inline-block; text-transform: uppercase; letter-spacing: 0.5px;"><i class="fa-solid fa-spinner fa-spin"></i> Aguardando Posto 7</div>`;
+            if(e.target.classList.contains('meta-input')) {
+                db.meta[e.target.dataset.sec] = parseInt(e.target.value) || 0;
+                recalcularDashboard(); autoSaveCloud(); return;
+            }
 
-                        htmlSaidas += `
-                            <tr>
-                                <td style="font-weight:900; color: var(--randon-blue); padding-left: 15px; font-size: 13px;">${sec.title}</td>
-                                <td class="center-text" style="font-weight:900; font-size:15px; color: var(--randon-black);">${row.plan_sai || '-'}</td>
-                                <td class="center-text" style="padding: 8px;">
-                                    <strong style="font-size: 16px; color: ${isLiberado ? 'var(--status-green)' : 'var(--randon-grey)'};">${row.real_sai || '-'}</strong><br>
-                                    ${badgePosto7}
-                                </td>
-                                
-                                <!-- NOVO: DROPDOWN DE APONTAMENTO DIRETO NA GUIA -->
-                                <td class="center-text ${getColorClass(row.aponta || '')}">
-                                    <select class="cell-input center-text" style="color: inherit; font-size: 14px; padding: 6px;" onchange="atualizarApontamentoGuia('${sec.id}', ${index}, this.value)">
-                                        <option value="" ${row.aponta === '' ? 'selected' : ''}>- Selecionar -</option>
-                                        <option value="OK" ${row.aponta === 'OK' ? 'selected' : ''}>🟢 APONTADO (OK)</option>
-                                        <option value="COGI" ${row.aponta === 'COGI' ? 'selected' : ''}>🔴 ERRO (COGI)</option>
-                                    </select>
-                                </td>
+            if(e.target.classList.contains('cell-input')) {
+                const secId = e.target.dataset.sec, rowIdx = e.target.dataset.row, field = e.target.dataset.field;
+                const val = e.target.value.toUpperCase();
+                const row = db.data[secId][rowIdx];
+                const oldRealSai = row.real_sai, oldAponta = row.aponta;
+                
+                row[field] = val;
 
-                                <td class="center-text" style="color: var(--status-red); font-weight:bold; font-size: 15px;">${row.atr_sai || '-'}</td>
-                                <td style="padding-left: 15px; color: var(--randon-grey); font-weight:600; font-size: 12px;">${row.acoes || '-'}</td>
-                            </tr>
-                        `;
+                const calcEnt = calcularAtraso(row.plan_ent, row.real_ent);
+                row.atr_ent = calcEnt.atraso; row.stat_ent = calcEnt.status;
+                const calcSai = calcularAtraso(row.plan_sai, row.real_sai);
+                row.atr_sai = calcSai.atraso; row.stat_sai = calcSai.status;
+
+                const secConfig = configuracaoSetores.find(c => c.id === secId);
+                
+                if (secConfig && secConfig.view === 'solda' && field === 'real_sai' && val !== '' && oldRealSai !== val) {
+                    const dataPintura = adicionarUmDia(row.real_sai);
+                    const tbPintura = db.data['pintura'];
+                    const freeIdx = tbPintura.findIndex(r => r.ordem === '' && r.plan_ent === '');
+                    if(freeIdx !== -1) {
+                        tbPintura[freeIdx].ordem = row.ordem; tbPintura[freeIdx].plan_ent = dataPintura; tbPintura[freeIdx].origem = secConfig.title;
+                        mostrarToast(`Avançou para Pintura (Plan: ${dataPintura})`, 'fa-robot');
                     }
-                });
-            });
+                }
 
-            if(!hasSaidas) htmlSaidas = `<tr><td colspan="6" class="center-text" style="color:var(--randon-grey); padding:30px; font-weight:bold; font-size: 14px;">Nenhuma saída programada ou registrada fisicamente para a data de hoje.</td></tr>`;
-            containerSaidas.innerHTML = htmlSaidas;
+                if (secConfig && secConfig.view === 'pintura' && field === 'aponta' && val === 'OK' && oldAponta !== 'OK') {
+                    let target = 'op1_bases'; 
+                    const info = (row.ordem + row.origem).toUpperCase();
+                    if(info.includes('TQ')) target = 'op1_tq1'; 
+                    else if(info.includes('CT')) target = 'op1_ct'; 
+                    else if(info.includes('SILO')) target = 'op1_silo';
 
-            let htmlMof = '';
-            let hasMof = false;
-            db.data['mof'].forEach(row => {
-                if (row.data.trim() !== '' || row.plan_ent.trim() !== '' || row.plan_sai.trim() !== '') {
-                    hasMof = true;
-                    htmlMof += `
-                        <tr>
-                            <td class="center-text" style="font-weight:bold; font-size: 13px;">${row.data || '-'}</td>
-                            <td class="center-text" style="font-weight:900; font-size:14px; color: var(--randon-black);">${row.plan_ent || '-'}</td>
-                            <td class="center-text" style="font-weight:bold; font-size: 14px;">${row.real_ent || '-'}</td>
-                            <td class="center-text" style="font-weight:bold; font-size: 14px;">${row.plan_sai || '-'}</td>
-                            <td style="padding-left: 15px; color: var(--status-red); font-weight:900; font-size: 13px;">${row.impactos || '-'}</td>
-                        </tr>
-                    `;
+                    const tbMof = db.data[target];
+                    const freeIdx = tbMof.findIndex(r => r.ordem === '' && r.real_ent === '');
+                    if(freeIdx !== -1) {
+                        const today = new Date();
+                        tbMof[freeIdx].ordem = row.ordem; 
+                        tbMof[freeIdx].real_ent = `${String(today.getDate()).padStart(2,'0')}/${String(today.getMonth()+1).padStart(2,'0')}/${today.getFullYear()}`;
+                        tbMof[freeIdx].origem = 'PINTURA';
+                        mostrarToast(`Avançou para MOF (${target})`, 'fa-flag-checkered');
+                    }
+                }
+                forceRenderTodasTabelas(); autoSaveCloud();
+            }
+        });
+
+        function processarBasePCP() {
+            const text = document.getElementById('pcp-dados').value;
+            if(!text.trim()) return mostrarToast('Cole os dados primeiro!', 'fa-triangle-exclamation');
+            let count = 0;
+            text.split('\n').forEach(linha => {
+                const col = linha.split('\t');
+                if (col.length >= 4 && !col[0].toLowerCase().includes('setor')) {
+                    const s = col[0].toUpperCase().trim();
+                    const destino = (s.includes('TQ')?'tq':s.includes('CT')?'ct':s.includes('BASE')?'bases':s.includes('SILO')?'silo':s.includes('BOX 1')?'esp_box1':s.includes('BOX 2')?'esp_box2':s.includes('BOX 3')?'esp_box3':s.includes('EXTRA')?'extra':'');
+                    
+                    if (destino && db.data[destino]) {
+                        const idx = db.data[destino].findIndex(r => r.ordem === '' && r.plan_ent === '');
+                        if (idx !== -1) { db.data[destino][idx].ordem = col[1].trim(); db.data[destino][idx].plan_ent = col[2].trim(); db.data[destino][idx].plan_sai = col[3].trim(); count++; }
+                    }
                 }
             });
-            
-            if(!hasMof) htmlMof = `<tr><td colspan="5" class="center-text" style="color:var(--randon-grey); padding:30px; font-weight:bold; font-size: 14px;">Fila da Montagem Final (MOF) está vazia no momento.</td></tr>`;
-            containerMof.innerHTML = htmlMof;
+            fecharModalPCP();
+            forceRenderTodasTabelas(); autoSaveCloud();
+            mostrarToast(`${count} Ordens importadas!`, 'fa-bolt');
         }
 
-        let saveTimeout;
-        function autoSaveCloud() { 
-            clearTimeout(saveTimeout); 
-            saveTimeout = setTimeout(() => { 
-                localStorage.setItem('erp_randon_v5', JSON.stringify(db)); 
-                if(dbRef) {
-                    dbRef.set(db).then(() => {
-                        mostrarToast("Sincronizado na Nuvem", "fa-cloud-arrow-up");
+        // GUIAS DE APONTAMENTO
+        function dateMatches(dateStr, globalDateStr) {
+            if(!dateStr || !globalDateStr) return false;
+            const parts = globalDateStr.split('-');
+            const d = parts[2]; const mNum = parts[1];
+            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+            const mNome = mesesAbreviados[parseInt(mNum) - 1];
+            const s = dateStr.toLowerCase();
+            return s.includes(`${d}/${mNum}`) || s.includes(`${d}/${mNome}`) || (s.includes(d) && (s.includes(mNum) || s.includes(mNome)));
+        }
+
+        function renderResumoApontamento() {
+            const tbodySaidas = document.getElementById('tbody-saidas-linha');
+            const tbodyEspelho = document.getElementById('tbody-espelho-finais');
+            if(!tbodySaidas || !tbodyEspelho || !db.globalDate) return;
+            
+            let htmlSaidas = '', hasSaidas = false;
+            let htmlEspelho = '', hasEspelho = false;
+
+            const setoresSolda = ['tq', 'ct', 'bases', 'silo', 'esp_box1', 'esp_box2', 'esp_box3', 'extra'];
+            const setoresFinais = ['pintura', 'op1_tq1', 'op1_tq2', 'op1_tq3', 'op1_silo', 'op1_ct', 'op1_bases', 'op2_geral'];
+
+            setoresSolda.forEach(secId => {
+                const sec = configuracaoSetores.find(s => s.id === secId);
+                if(db.data[secId]) {
+                    db.data[secId].forEach(row => {
+                        const plan = row.plan_sai || '';
+                        const real = row.real_sai || '';
+                        
+                        if (dateMatches(plan, db.globalDate) || dateMatches(real, db.globalDate) || (real.trim() !== '' && row.aponta === '')) {
+                            hasSaidas = true;
+                            let isLiberado = real.trim() !== '';
+                            htmlSaidas += `
+                                <tr>
+                                    <td style="font-weight:900; color: var(--randon-black); padding-left: 20px; font-size: 13px;">
+                                        <span class="macro-badge">SOLDA</span><br>${sec.title}
+                                    </td>
+                                    <td style="font-weight:900; font-size:14px; text-align: center; color: var(--randon-blue);">${row.ordem || '-'}</td>
+                                    <td style="font-size: 16px; font-weight: 900; text-align: center; color: var(--status-green);">${real || '-'}</td>
+                                    <td class="center-text ${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' ? 'bg-cogi' : '')}" style="border-radius: 6px; margin: 4px; display: table-cell;">
+                                        <div style="text-align: center; font-weight: 900; font-size: 13px;">${row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' ? '🔴 COGI' : '⏳ PENDENTE')}</div>
+                                    </td>
+                                    <td style="padding-left: 20px; color: var(--randon-grey); font-weight:700; font-size: 12px;">${row.acoes || '-'}</td>
+                                </tr>
+                            `;
+                        }
                     });
                 }
-            }, 800); 
+            });
+
+            setoresFinais.forEach(secId => {
+                const sec = configuracaoSetores.find(s => s.id === secId);
+                if(db.data[secId]) {
+                    db.data[secId].forEach(row => {
+                        if (row.ordem && row.ordem.trim() !== '') {
+                            hasEspelho = true;
+                            let statusText = row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' ? '🔴 COGI' : '⏳ EM ANDAMENTO');
+                            let gargalo = row.impactos ? ` | Gargalo: ${row.impactos}` : '';
+                            
+                            htmlEspelho += `
+                                <tr>
+                                    <td style="font-weight:900; color: var(--randon-black); padding-left: 20px; font-size: 13px;">${sec.title}</td>
+                                    <td style="font-weight:900; font-size:14px; text-align: center; color: var(--randon-blue);">${row.ordem}</td>
+                                    <td style="font-weight: 900; font-size: 14px; text-align: center; color: var(--randon-dark);">${row.real_ent || '-'}</td>
+                                    <td style="font-weight: 900; font-size: 14px; text-align: center; color: var(--status-green);">${row.real_sai || '-'}</td>
+                                    <td style="padding-left: 20px; font-weight:800; font-size: 13px; color: ${row.aponta === 'COGI' ? 'var(--status-red)' : 'var(--randon-grey)'};">
+                                        ${statusText} ${gargalo}
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    });
+                }
+            });
+
+            if(!hasSaidas) htmlSaidas = `<tr><td colspan="5" style="text-align:center; color:var(--randon-grey); padding:30px; font-weight:800; font-size: 14px;">Nenhuma saída de linha registrada ou pendente nesta data.</td></tr>`;
+            if(!hasEspelho) htmlEspelho = `<tr><td colspan="5" style="text-align:center; color:var(--randon-grey); padding:30px; font-weight:800; font-size: 14px;">Nenhum produto em processamento no momento.</td></tr>`;
+
+            tbodySaidas.innerHTML = htmlSaidas;
+            tbodyEspelho.innerHTML = htmlEspelho;
         }
 
+        // GRAFICOS BI
+        function initCharts() {
+            Chart.defaults.font.family = "'Inter', sans-serif"; Chart.defaults.color = "#94a3b8";
+            chartsObj.pareto = new Chart(document.getElementById('chartPareto'), { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { y1: { type: 'linear', position: 'right' } } } });
+            chartsObj.line = new Chart(document.getElementById('chartEvolucao'), { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3 } });
+            chartsObj.pie = new Chart(document.getElementById('chartStatus'), { type: 'doughnut', data: { labels: ['OK', 'COGI'], datasets: [{ data: [0,0], backgroundColor: ['#10b981', '#ef4444'] }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%' } });
+            chartsObj.aderencia = new Chart(document.getElementById('chartAderencia'), { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false } });
+        }
+
+        function updateAnalytics() {
+            let totApont = 0, totOk = 0, totCogi = 0, totAtrasos = 0, totalPlan = 0, totalReal = 0;
+            let impactosContagem = {}; MOTIVOS_GARGALO.forEach(m => impactosContagem[m] = 0);
+            let aderenciaLabels = [], aderenciaPlan = [], aderenciaReal = [];
+            let diaAcessoMap = {}; 
+
+            configuracaoSetores.forEach(sec => {
+                let secPlan = 0, secReal = 0;
+                if(db.data[sec.id]) {
+                    db.data[sec.id].forEach(row => {
+                        const ap = row.aponta;
+                        if(ap === 'OK') { totApont++; totOk++; }
+                        if(ap === 'COGI') { totApont++; totCogi++; }
+                        totAtrasos += (parseInt(row.atr_ent)||0) + (parseInt(row.atr_sai)||0);
+                        
+                        if(row.plan_sai && row.plan_sai.trim() !== '') {
+                            secPlan++;
+                            if(row.real_sai && row.real_sai.trim() !== '') {
+                                secReal++;
+                            }
+                        }
+                        
+                        if(row.real_sai && row.real_sai.trim() !== '') {
+                            const d = row.real_sai;
+                            if(!diaAcessoMap[d]) diaAcessoMap[d] = { ok: 0, cogi: 0 };
+                            if(ap === 'OK') diaAcessoMap[d].ok++;
+                            if(ap === 'COGI') diaAcessoMap[d].cogi++;
+                        }
+                        
+                        if(row.impactos && impactosContagem[row.impactos] !== undefined) impactosContagem[row.impactos]++;
+                    });
+                }
+                totalPlan += secPlan; totalReal += secReal;
+                if (['tq', 'ct', 'bases', 'pintura'].includes(sec.id)) { aderenciaLabels.push(sec.title.split(' ')[0]); aderenciaPlan.push(secPlan); aderenciaReal.push(secReal); }
+            });
+
+            document.getElementById('dash-total-apontamentos').innerText = totApont;
+            document.getElementById('dash-ok').innerText = totApont > 0 ? ((totOk/totApont)*100).toFixed(0) + '%' : '0%';
+            
+            let pAderencia = totalPlan > 0 ? ((totalReal / totalPlan) * 100) : 0;
+            if(pAderencia > 100) pAderencia = 100;
+            document.getElementById('dash-aderencia').innerText = pAderencia.toFixed(0) + '%';
+            
+            document.getElementById('dash-cogi').innerText = totCogi;
+            document.getElementById('dash-atrasos').innerText = totAtrasos;
+
+            let paretoArray = Object.keys(impactosContagem).map(k => ({ m: k, c: impactosContagem[k] })).filter(x => x.c > 0).sort((a,b) => b.c - a.c);
+            chartsObj.pareto.data.labels = paretoArray.map(i => i.m.substring(0,10));
+            chartsObj.pareto.data.datasets = [{ type: 'bar', label: 'Ocorrências', data: paretoArray.map(i => i.c), backgroundColor: '#3b82f6', borderRadius: 6 }];
+            chartsObj.pareto.update();
+
+            const diasOrdenados = Object.keys(diaAcessoMap).sort();
+            chartsObj.line.data.labels = diasOrdenados;
+            chartsObj.line.data.datasets = [
+                { label: 'Entregas (OK)', data: diasOrdenados.map(d => diaAcessoMap[d].ok), borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true },
+                { label: 'Atrasos (COGI)', data: diasOrdenados.map(d => diaAcessoMap[d].cogi), borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', fill: true }
+            ];
+            chartsObj.line.update();
+
+            chartsObj.pie.data.datasets[0].data = [totOk, totCogi]; chartsObj.pie.update();
+            chartsObj.aderencia.data.labels = aderenciaLabels;
+            chartsObj.aderencia.data.datasets = [{ label: 'Plan', data: aderenciaPlan, backgroundColor: '#cbd5e1', borderRadius: 4 }, { label: 'Real', data: aderenciaReal, backgroundColor: '#3b82f6', borderRadius: 4 }];
+            chartsObj.aderencia.update();
+        }
+
+        // FIREBASE COM SCRIPT DE RESGATE BLINDADO
         function initFirebase() {
             try {
                 if (!firebase.apps.length) {
-                    firebase.initializeApp({
-                        apiKey: "AIzaSyADizntIBb7U7SRJbENZq6ybZ1NuS2ri8w",
-                        databaseURL: "https://gestaoalocamentolinhact-default-rtdb.firebaseio.com",
-                        projectId: "gestaoalocamentolinhact"
-                    });
+                    firebase.initializeApp({ apiKey: "AIzaSyADizntIBb7U7SRJbENZq6ybZ1NuS2ri8w", databaseURL: "https://gestaoalocamentolinhact-default-rtdb.firebaseio.com", projectId: "gestaoalocamentolinhact" });
                 }
                 firebaseDB = firebase.database();
+                dbRef = firebaseDB.ref('dashboard_reuniao'); 
                 
-                dbRef = firebaseDB.ref('dashboard_reuniao');
                 dbRef.on('value', (snapshot) => {
                     const nuvemDb = snapshot.val();
-                    if(nuvemDb) {
+                    if(nuvemDb) { 
+                        try {
+                            const mapLegado = { 'tanques': 'tq', 'carrega_tudo': 'ct', 'especiais': 'esp_box1', 'mof': 'op1_bases' };
+                            Object.keys(mapLegado).forEach(oldKey => {
+                                const newKey = mapLegado[oldKey];
+                                if(nuvemDb.data && nuvemDb.data[oldKey] && Array.isArray(nuvemDb.data[oldKey])) {
+                                    if(!nuvemDb.data[newKey] || (Array.isArray(nuvemDb.data[newKey]) && nuvemDb.data[newKey].every(r => !r.ordem && !r.plan_ent))) {
+                                        nuvemDb.data[newKey] = JSON.parse(JSON.stringify(nuvemDb.data[oldKey]));
+                                    }
+                                }
+                            });
+
+                            if(nuvemDb.data) {
+                                Object.keys(nuvemDb.data).forEach(tabelaKey => {
+                                    if(Array.isArray(nuvemDb.data[tabelaKey])) {
+                                        nuvemDb.data[tabelaKey].forEach(row => {
+                                            if(row && row.data !== undefined && row.ordem === undefined) { 
+                                                row.ordem = row.data; 
+                                                delete row.data; 
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        } catch(e) { console.error("Ignorando erro de formatação..."); }
+
+                        configuracaoSetores.forEach(sec => {
+                            if(!nuvemDb.data[sec.id]) nuvemDb.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
+                            else while(nuvemDb.data[sec.id].length < sec.rows) nuvemDb.data[sec.id].push(getEmptyRow());
+                        });
+
                         db = nuvemDb; 
-                        inicializarBancoLocal(); 
-                        renderDashboard();
-                        recalcularKPIs();
-                    } else {
-                        inicializarBancoLocal();
-                        renderDashboard();
-                        recalcularKPIs();
+                        atualizarDiasEstamparia();
+                        forceRenderTodasTabelas();
                     }
                 });
 
-                // CÓDIGO DA MÁGICA: Escuta EXATAMENTE o clique de "Salvar Ronda" do Tablet
                 firebaseDB.ref('linhaCT/registros').on('value', snap => {
-                    const registros = snap.val();
-                    if(!registros) return;
-                    
-                    // Pega a data de hoje para garantir que só leia coisas de hoje
+                    const registros = snap.val(); if(!registros) return;
                     const dataHojeIso = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-                    
                     if (registros[dataHojeIso]) {
                         if(registros[dataHojeIso].manha) injetarDaFabrica(registros[dataHojeIso].manha, dataHojeIso);
                         if(registros[dataHojeIso].tarde) injetarDaFabrica(registros[dataHojeIso].tarde, dataHojeIso);
                     }
                 });
-
-            } catch (e) { console.log("Erro Nuvem: ", e); }
+            } catch (e) {
+                console.log("Modo Offline Ativado.");
+                const local = localStorage.getItem('erp_randon_v10'); 
+                if(local) { db = JSON.parse(local); atualizarDiasEstamparia(); forceRenderTodasTabelas(); }
+            }
         }
 
-        // FUNÇÃO DE INJEÇÃO DEFINITIVA (SÓ UMA LINHA E NO DIA CERTO)
         function injetarDaFabrica(dadosRonda, dataIsoTablet) {
             if(!dadosRonda || !dadosRonda.postos) return;
-
-            let ovEntradaCT = '';
-            let ovSaidaCT = '';
+            let ovEntradaCT = '', ovSaidaCT = '';
             
-            // Varre o tablet procurando o posto 3 e 7
             dadosRonda.postos.forEach(p => {
-                if(!p || !p.nome) return;
-                const n = p.nome.toLowerCase().trim();
-                
-                if(n === 'posto 3') {
-                    if (p.tarde && p.tarde.ov && p.tarde.ov !== '---') ovEntradaCT = p.tarde.ov;
-                    else if (p.manha && p.manha.ov && p.manha.ov !== '---') ovEntradaCT = p.manha.ov;
-                }
-                if(n === 'posto 7') {
-                    if (p.tarde && p.tarde.ov && p.tarde.ov !== '---') ovSaidaCT = p.tarde.ov;
-                    else if (p.manha && p.manha.ov && p.manha.ov !== '---') ovSaidaCT = p.manha.ov;
-                }
+                if(p.nome && p.nome.toLowerCase().includes('posto 3') && p.ov && p.ov !== '---') ovEntradaCT = p.ov;
+                if(p.nome && p.nome.toLowerCase().includes('posto 7') && p.ov && p.ov !== '---') ovSaidaCT = p.ov;
             });
+            if(!ovEntradaCT && !ovSaidaCT) return;
 
-            if(!ovEntradaCT && !ovSaidaCT) return; // Nada para injetar
-
-            // Transforma 2026-08-02 em "02/08" (Formato que o PCP entende)
+            const tabelaCT = db.data['ct'];
             const partes = dataIsoTablet.split('-');
-            const dataPCP_Num = `${partes[2]}/${partes[1]}`; 
-            
-            // Transforma 2026-08-02 em "02/ago" (Formato alternativo que o PCP usa)
-            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-            const dataPCP_Texto = `${partes[2]}/${mesesAbreviados[parseInt(partes[1]) - 1]}`;
+            const dataData = `${partes[2]}/${partes[1]}`;
 
-            let tabelaCT = db.data['carrega_tudo'];
-            let linhaAlvo = -1;
+            let linhaAlvo = tabelaCT.findIndex(r => (r.ordem && r.ordem.includes(ovEntradaCT)) || (r.ordem && r.ordem.includes(ovSaidaCT)));
+            if(linhaAlvo === -1) linhaAlvo = tabelaCT.findIndex(r => r.plan_sai === dataData || r.plan_ent === dataData);
+            if(linhaAlvo === -1) linhaAlvo = tabelaCT.findIndex(r => r.ordem === '' && r.plan_ent === '');
 
-            // REGRA 1: Procura se o PCP já planejou esse dia (procura 02/08 ou 02/ago)
-            for(let i = 0; i < tabelaCT.length; i++) {
-                let dataCelula = (tabelaCT[i].data || '').toLowerCase().trim();
-                if (dataCelula !== '' && (dataCelula === dataPCP_Num || dataCelula === dataPCP_Texto || (dataCelula.includes(partes[2]) && (dataCelula.includes(partes[1]) || dataCelula.includes(mesesAbreviados[parseInt(partes[1]) - 1]))))) {
-                    linhaAlvo = i;
-                    break;
-                }
-            }
-
-            // REGRA 2: Se o PCP não planejou essa data ainda, o sistema joga na primeira linha vazia!
-            if(linhaAlvo === -1) {
-                linhaAlvo = tabelaCT.findIndex(r => r.data === '' && r.plan_ent === '' && r.real_ent === '');
-                if (linhaAlvo !== -1) {
-                    tabelaCT[linhaAlvo].data = dataPCP_Num; // Carimba a data do tablet na tabela vazia
-                }
-            }
-
-            // SE ACHOU UMA LINHA (seja a do dia, seja uma vazia), FAZ A INJEÇÃO!
             if(linhaAlvo !== -1) {
-                let precisouAtualizar = false;
-
-                if (ovEntradaCT !== '' && tabelaCT[linhaAlvo].real_ent !== ovEntradaCT) {
-                    tabelaCT[linhaAlvo].real_ent = ovEntradaCT;
-                    precisouAtualizar = true;
-                }
-
-                if (ovSaidaCT !== '' && tabelaCT[linhaAlvo].real_sai !== ovSaidaCT) {
-                    tabelaCT[linhaAlvo].real_sai = ovSaidaCT;
-                    precisouAtualizar = true;
-                }
-
-                if(precisouAtualizar) {
-                    aplicarRegrasAutomaticas('carrega_tudo', linhaAlvo); // O Cérebro decide se fica verde ou vermelho
-                    renderDashboard();
-                    recalcularKPIs();
-                    autoSaveCloud();
-                    mostrarToast("CT: Posto 3 e 7 Sincronizados!", "fa-satellite-dish");
-                }
-            }
-        }
-
-        // FUNÇÕES DOS GRÁFICOS E BI (Inalteradas)
-        function initCharts() {
-            Chart.defaults.font.family = "'Inter', sans-serif";
-            Chart.defaults.color = "#94a3b8";
-
-            const ctxPareto = document.getElementById('chartPareto');
-            if(ctxPareto) {
-                chartsObj.pareto = new Chart(ctxPareto.getContext('2d'), {
-                    type: 'bar',
-                    data: { labels: [], datasets: [] },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true }, y1: { type: 'linear', position: 'right', max: 100, min: 0 } }, plugins: { legend: { position: 'bottom' } } }
-                });
-            }
-
-            const ctxLine = document.getElementById('chartEvolucao');
-            if(ctxLine) {
-                chartsObj.line = new Chart(ctxLine.getContext('2d'), {
-                    type: 'line',
-                    data: { labels: [], datasets: [] },
-                    options: { responsive: true, maintainAspectRatio: false, tension: 0.3, plugins: { legend: { position: 'bottom' } } }
-                });
-            }
-
-            const ctxPie = document.getElementById('chartStatus');
-            if(ctxPie) {
-                chartsObj.pie = new Chart(ctxPie.getContext('2d'), {
-                    type: 'doughnut',
-                    data: { labels: ['Entregas OK', 'Atrasos/COGI'], datasets: [{ data: [0,0], backgroundColor: ['#10b981', '#ef4444'], borderWidth: 2, borderColor: '#fff' }] },
-                    options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'bottom' } } }
-                });
-            }
-
-            const ctxAderencia = document.getElementById('chartAderencia');
-            if(ctxAderencia) {
-                chartsObj.aderencia = new Chart(ctxAderencia.getContext('2d'), {
-                    type: 'bar',
-                    data: { labels: [], datasets: [] },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }, plugins: { legend: { position: 'bottom' } } }
-                });
-            }
-        }
-
-        function updateAnalytics() {
-            let totApont = 0, totOk = 0, totCogi = 0, totAtrasos = 0;
-            let totalPlanGeral = 0, totalRealGeral = 0;
-            let diaAcessoMap = {}; 
-            let impactosContagem = {}; 
-            let impactosList = [];
-            let aderenciaData = { labels: [], plan: [], real: [] };
-
-            MOTIVOS_GARGALO.forEach(m => impactosContagem[m] = 0);
-
-            sectionsConfig.forEach(sec => {
-                let secPlan = 0, secReal = 0;
-
-                db.data[sec.id].forEach(row => {
-                    const ap = (row.aponta || '').toUpperCase().trim();
-                    let isOk = false, isCogi = false;
-
-                    if(ap !== '') {
-                        totApont++;
-                        if(ap === 'OK') { totOk++; isOk = true; }
-                        if(ap === 'COGI') { totCogi++; isCogi = true; }
-                    }
-                    totAtrasos += (parseInt(row.atr_ent)||0) + (parseInt(row.atr_sai)||0);
-
-                    if(row.plan_sai && row.plan_sai.trim() !== '') secPlan++;
-                    if(row.real_sai && row.real_sai.trim() !== '') secReal++;
-
-                    if (row.data && row.data.trim() !== '') {
-                        if (!diaAcessoMap[row.data]) diaAcessoMap[row.data] = { ok: 0, cogi: 0 };
-                        if (isOk) diaAcessoMap[row.data].ok++;
-                        if (isCogi) diaAcessoMap[row.data].cogi++;
-                    }
-
-                    if (row.impactos && row.impactos.trim() !== '') {
-                        if(impactosContagem[row.impactos] !== undefined) impactosContagem[row.impactos]++;
-                        impactosList.push({ data: row.data, linha: sec.title, desc: row.impactos, tipo: ap });
-                    }
-                });
-
-                totalPlanGeral += secPlan;
-                totalRealGeral += secReal;
+                let atualizou = false;
+                if(ovEntradaCT && tabelaCT[linhaAlvo].real_ent !== ovEntradaCT) { tabelaCT[linhaAlvo].real_ent = ovEntradaCT; atualizou = true; }
+                if(ovSaidaCT && tabelaCT[linhaAlvo].real_sai !== ovSaidaCT) { tabelaCT[linhaAlvo].real_sai = ovSaidaCT; atualizou = true; }
                 
-                let nomeCurto = sec.title.replace('CARREGA TUDO', 'CT').replace('MONTAGEM FINAL', 'MOF').split(' (')[0];
-                aderenciaData.labels.push(nomeCurto);
-                aderenciaData.plan.push(secPlan);
-                aderenciaData.real.push(secReal);
-            });
+                if(atualizou) {
+                    const row = tabelaCT[linhaAlvo];
+                    const calcEnt = calcularAtraso(row.plan_ent, row.real_ent);
+                    row.atr_ent = calcEnt.atraso; row.stat_ent = calcEnt.status;
+                    const calcSai = calcularAtraso(row.plan_sai, row.real_sai);
+                    row.atr_sai = calcSai.atraso; row.stat_sai = calcSai.status;
 
-            document.getElementById('dash-total-apontamentos').innerText = totApont;
-            let pQualidade = totApont > 0 ? ((totOk / totApont) * 100).toFixed(0) : 0;
-            document.getElementById('dash-ok').innerText = `${pQualidade}%`;
-            
-            let pAderencia = totalPlanGeral > 0 ? ((totalRealGeral / totalPlanGeral) * 100).toFixed(0) : 0;
-            document.getElementById('dash-aderencia').innerText = `${pAderencia}%`;
-
-            document.getElementById('dash-cogi').innerText = totCogi;
-            document.getElementById('dash-atrasos').innerText = totAtrasos;
-
-            let paretoArray = Object.keys(impactosContagem).map(k => ({ motivo: k, cont: impactosContagem[k] })).filter(x => x.cont > 0);
-            paretoArray.sort((a,b) => b.cont - a.cont);
-            
-            let totalImpactos = paretoArray.reduce((acc, curr) => acc + curr.cont, 0);
-            let percentAcumulado = [];
-            let somaParcial = 0;
-            let labelsPareto = [];
-            let dadosPareto = [];
-
-            paretoArray.forEach(item => {
-                labelsPareto.push(item.motivo.substring(0, 15) + "...");
-                dadosPareto.push(item.cont);
-                somaParcial += item.cont;
-                percentAcumulado.push(((somaParcial / totalImpactos) * 100).toFixed(1));
-            });
-
-            if(chartsObj.pareto) {
-                chartsObj.pareto.data.labels = labelsPareto;
-                chartsObj.pareto.data.datasets = [
-                    { type: 'line', label: '% Acumulado', data: percentAcumulado, borderColor: '#e32128', backgroundColor: 'transparent', yAxisID: 'y1', pointStyle: 'circle', pointRadius: 4, pointBackgroundColor: '#e32128' },
-                    { type: 'bar', label: 'Vol. Ocorrências', data: dadosPareto, backgroundColor: '#5b9bd5', borderRadius: 4, yAxisID: 'y' }
-                ];
-                chartsObj.pareto.update();
-            }
-
-            if(chartsObj.line) {
-                const diasOrdenados = Object.keys(diaAcessoMap).sort();
-                chartsObj.line.data.labels = diasOrdenados;
-                chartsObj.line.data.datasets = [
-                    { label: 'Entregas (OK)', data: diasOrdenados.map(d => diaAcessoMap[d].ok), borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true },
-                    { label: 'Atrasos (COGI)', data: diasOrdenados.map(d => diaAcessoMap[d].cogi), borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', fill: true }
-                ];
-                chartsObj.line.update();
-            }
-
-            if(chartsObj.pie) {
-                chartsObj.pie.data.datasets[0].data = [totOk, totCogi];
-                chartsObj.pie.update();
-            }
-
-            if(chartsObj.aderencia) {
-                chartsObj.aderencia.data.labels = aderenciaData.labels;
-                chartsObj.aderencia.data.datasets = [
-                    { label: 'Programado', data: aderenciaData.plan, backgroundColor: '#cbd5e1', borderRadius: 4 },
-                    { label: 'Realizado', data: aderenciaData.real, backgroundColor: '#5b9bd5', borderRadius: 4 }
-                ];
-                chartsObj.aderencia.update();
-            }
-
-            const divImpactos = document.getElementById('lista-impactos');
-            if (impactosList.length === 0) {
-                divImpactos.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--randon-grey); font-size: 14px;"><i class="fa-solid fa-check-circle" style="font-size: 24px; color: var(--status-green);"></i><br>Zero gargalos padronizados registrados.</div>`;
-            } else {
-                divImpactos.innerHTML = impactosList.reverse().map(imp => `
-                    <div class="impact-item">
-                        <div style="min-width: 50px; font-weight: 900; color: var(--randon-grey);">${imp.data}</div>
-                        <div style="min-width: 100px; font-weight: 900; color: var(--randon-black);">${imp.linha}</div>
-                        <div style="flex-grow: 1; color: var(--randon-red); font-weight: 900;">${imp.desc}</div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function gerarPDFExecutivo() {
-            switchTab('analytics');
-            mostrarToast("Processando Relatório. Aguarde...", "fa-spinner");
-
-            setTimeout(() => {
-                const element = document.getElementById('view-analytics');
-                const opt = {
-                    margin:       10,
-                    filename:     `Relatorio_Executivo_Randon_${db.globalDate}.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { scale: 2, useCORS: true },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
-                };
-
-                const btnRefresh = document.querySelector('.analytics-header .btn');
-                if(btnRefresh) btnRefresh.style.display = 'none';
-
-                html2pdf().set(opt).from(element).save().then(() => {
-                    if(btnRefresh) btnRefresh.style.display = 'flex';
-                    mostrarToast("PDF Gerado com Sucesso!", "fa-file-pdf");
-                });
-            }, 1000);
-        }
-
-        function abrirModalPCP() { document.getElementById('modal-pcp').classList.add('active'); }
-        function fecharModalPCP() { document.getElementById('modal-pcp').classList.remove('active'); document.getElementById('pcp-dados').value = ''; }
-        
-        function processarPCP() {
-            const linhaId = document.getElementById('pcp-linha').value;
-            const dados = document.getElementById('pcp-dados').value.split('\n');
-            if(!dados.length || dados[0].trim() === '') { mostrarToast("Cole dados primeiro!", "fa-triangle-exclamation"); return; }
-            
-            let idTabela = 0;
-            for(let i=0; i<db.data[linhaId].length; i++) { if(db.data[linhaId][i].data === '') { idTabela = i; break; } }
-
-            dados.forEach(linha => {
-                if(!linha.trim()) return;
-                const col = linha.split('\t');
-                if(col[0] && col[0].toLowerCase().includes('data')) return;
-                
-                if(idTabela < db.data[linhaId].length) {
-                    if(col[0]) db.data[linhaId][idTabela].data = col[0].trim();
-                    if(col[1]) db.data[linhaId][idTabela].plan_ent = col[1].trim();
-                    if(col[2]) db.data[linhaId][idTabela].plan_sai = col[2].trim(); 
-                    idTabela++;
+                    forceRenderTodasTabelas(); autoSaveCloud();
+                    mostrarToast("CT: Integração Tablet Sincronizada!", "fa-satellite-dish");
                 }
-            });
-            fecharModalPCP(); renderDashboard(); recalcularKPIs(); autoSaveCloud();
-            mostrarToast("PCP Injetado na Linha!", "fa-bolt");
+            }
         }
 
-        function mostrarToast(msg, icon) {
-            const t = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            t.querySelector('i').className = `fa-solid ${icon}`;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
+        function autoSaveCloud() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                localStorage.setItem('erp_randon_v10', JSON.stringify(db));
+                if(dbRef) dbRef.set(db).then(() => mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up"));
+            }, 800);
         }
 
-        let tvInterval;
         function iniciarModoTV() {
             isTVMode = true; document.body.classList.add('tv-mode');
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) elem.requestFullscreen();
-            switchTab('operacional');
-
-            clearInterval(tvInterval); let wait = 0;
+            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+            switchTab('solda'); clearInterval(tvInterval); let wait = 0;
             tvInterval = setInterval(() => {
                 if(!isTVMode) return clearInterval(tvInterval);
                 if(wait > 0) { wait--; return; }
                 const maxScroll = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
-                if (window.scrollY >= maxScroll - 5) {
-                    wait = 120; window.scrollTo({ top: 0, behavior: 'smooth' });
-                    setTimeout(() => { wait = 120; }, 1000); 
-                } else { window.scrollBy(0, 1.5); }
+                if (window.scrollY >= maxScroll - 5) { wait = 120; window.scrollTo({ top: 0, behavior: 'smooth' }); } else { window.scrollBy(0, 1.5); }
             }, 30);
         }
-        
-        function sairModoTV() {
-            isTVMode = false; document.body.classList.remove('tv-mode'); clearInterval(tvInterval);
-            if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
+        function sairModoTV() { isTVMode = false; document.body.classList.remove('tv-mode'); clearInterval(tvInterval); if (document.exitFullscreen) document.exitFullscreen(); }
+        function gerarPDFExecutivo() { switchTab('analytics'); setTimeout(() => { html2pdf().set({ margin: 10, filename: `Relatorio_Randon.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { orientation: 'landscape' } }).from(document.getElementById('view-analytics')).save(); }, 1000); }
+
+        function mostrarToast(msg, icon) {
+            const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg;
+            t.querySelector('i').className = `fa-solid ${icon}`; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
         }
 
         window.onload = init;
