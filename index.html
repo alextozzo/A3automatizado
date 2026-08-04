@@ -80,12 +80,12 @@
         .status-box-giant.green { background-color: var(--status-green); }
 
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th { background-color: #f8fafc; color: var(--randon-grey); padding: 12px 6px; font-size: 11px; font-weight: 800; text-align: center; text-transform: uppercase; border-right: 1px solid var(--border-light); border-bottom: 2px solid #cbd5e1; letter-spacing: 0.5px; }
+        th { background-color: #f8fafc; color: var(--randon-grey); padding: 12px 6px; font-size: 10px; font-weight: 900; text-align: center; text-transform: uppercase; border-right: 1px solid var(--border-light); border-bottom: 2px solid #cbd5e1; letter-spacing: 0.5px; }
         td { padding: 4px; height: 42px; border-bottom: 1px solid var(--border-light); border-right: 1px solid var(--border-light); background-color: white; position: relative; }
         tr:nth-child(even) td { background-color: #f8fafc; }
         tr:hover td { background-color: #f1f5f9; }
 
-        .cell-input { width: 100%; height: 100%; border: 1px solid transparent; background: transparent; padding: 0 8px; font-size: 13px; outline: none; color: var(--randon-dark); font-weight: 700; text-align: center; border-radius: 6px; transition: 0.2s; }
+        .cell-input { width: 100%; height: 100%; border: 1px solid transparent; background: transparent; padding: 0 6px; font-size: 12px; outline: none; color: var(--randon-dark); font-weight: 700; text-align: center; border-radius: 6px; transition: 0.2s; }
         .cell-input:hover { background-color: #e2e8f0; }
         .cell-input:focus { background-color: white; border-color: var(--randon-blue); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
         select.cell-input { cursor: pointer; text-align-last: center; }
@@ -103,11 +103,11 @@
         .ct-badge { font-size: 10px; color: #064e3b; background: #34d399; padding: 5px 10px; border-radius: 6px; margin-left: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
         .macro-badge { font-size: 10px; background: var(--randon-dark); color: white; padding: 3px 8px; border-radius: 4px; margin-right: 8px; text-transform: uppercase; font-weight: 900; }
 
-        /* ESTAMPARIA TABLE (IDÊNTICO À IMAGEM) */
+        /* ESTAMPARIA TABLE */
         .estamparia-table { width: 100%; border-collapse: collapse; border: 2px solid var(--randon-black); }
         .estamparia-table th, .estamparia-table td { border: 1px solid var(--randon-black); padding: 8px; text-align: center; }
-        .estamparia-table th { color: var(--randon-dark); }
-        .estamparia-table td input { font-size: 15px; font-weight: 900; }
+        .estamparia-table th { color: var(--randon-dark); font-size: 13px; }
+        .estamparia-table td input { font-size: 15px; font-weight: 900; color: var(--randon-blue); }
 
         /* BI & ANALYTICS */
         .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 30px; border-radius: 12px; border: 1px solid var(--border-light); border-left: 6px solid var(--randon-red); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
@@ -194,12 +194,12 @@
                 <button class="close-btn" onclick="fecharModalPCP()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <p style="font-size: 14px; color: var(--randon-grey); font-weight: 600; margin-bottom: 20px; line-height: 1.5;">
-                <b>Como funciona:</b> Copie do Excel as colunas na ordem exata: <br><strong style="color: var(--randon-blue);">SETOR | PRODUTO/OP | DATA ENTRADA | DATA SAÍDA</strong> e cole abaixo.<br>
-                O sistema fará a leitura da coluna "Setor" e distribuirá as ordens automaticamente para as abas correspondentes.
+                <b>Como funciona:</b> Copie do Excel as 5 colunas na ordem exata: <br><strong style="color: var(--randon-blue);">SETOR | DATA | PRODUTO/OP | DATA ENTRADA | DATA SAÍDA</strong> e cole abaixo.<br>
+                O sistema fará a leitura e varredura para preencher as linhas de forma inteligente.
             </p>
             <textarea id="pcp-dados" class="pcp-textarea" placeholder="Exemplo de cópia do Excel:
-TQ	TANQUE INOX 15000L	03/08/2026	06/08/2026
-CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
+TQ	03/08/2026	TANQUE INOX 15000L	03/08/2026	06/08/2026
+CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             
             <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
                 <button class="btn btn-tv" onclick="fecharModalPCP()">Cancelar</button>
@@ -213,7 +213,7 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         <div class="section-card">
             <div class="section-header" style="background: var(--randon-dark);">
                 <div class="section-title-box" style="width: 100%;">
-                    <h2>Controle Manufaturados - Estamparia</h2>
+                    <h2>Controle Manufaturados</h2>
                 </div>
             </div>
             <div style="padding: 20px; background: white; overflow-x: auto;">
@@ -270,7 +270,7 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         
         <!-- TABELA 1: SAÍDAS DE LINHA -->
         <div class="apontamento-table-wrapper" style="border-left: 6px solid var(--status-green);">
-            <h3><i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha (Data da Reunião)</h3>
+            <h3><i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha </h3>
             <table>
                 <thead>
                     <tr>
@@ -287,7 +287,7 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
 
         <!-- TABELA 2: ESPELHO PINTURA E MOF -->
         <div class="apontamento-table-wrapper" style="border-left: 6px solid var(--randon-blue);">
-            <h3><i class="fa-solid fa-layer-group" style="margin-right: 8px;"></i> Espelho de Processos Finais: Pintura, OP1 e OP2</h3>
+            <h3><i class="fa-solid fa-layer-group" style="margin-right: 8px;"></i>Pintura, OP1 e OP2</h3>
             <table>
                 <thead>
                     <tr>
@@ -339,10 +339,9 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         let firebaseDB = null, dbRef = null;
 
         function getEmptyRow() {
-            return { ordem: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', aponta: '', impactos: '', acoes: '', origem: '' };
+            return { data: '', ordem: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', aponta: '', impactos: '', acoes: '', origem: '' };
         }
 
-        // MOTOR DE DATAS ESTAMPARIA (DIAS AUTOMÁTICOS)
         function formatarDataEstamparia(dateObj) {
             const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
             return `${String(dateObj.getDate()).padStart(2, '0')}/${mesesAbreviados[dateObj.getMonth()]}`;
@@ -377,7 +376,6 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             }
         }
 
-        // FUNÇÃO DE RENDERIZAÇÃO IMEDIATA (ANTI TELA-BRANCA)
         function forceRenderTodasTabelas() {
             renderizarEstampariaMatriz();
             renderizarViews(); 
@@ -386,7 +384,6 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         }
 
         function init() {
-            // Garante Arrays preenchidos antes de desenhar a tela
             configuracaoSetores.forEach(sec => {
                 if(!db.data[sec.id]) db.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
                 else while(db.data[sec.id].length < sec.rows) db.data[sec.id].push(getEmptyRow());
@@ -400,9 +397,7 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 db.globalDate = e.target.value; renderResumoApontamento(); autoSaveCloud();
             });
 
-            // DESENHA NA TELA IMEDIATAMENTE (SEGURANÇA)
             forceRenderTodasTabelas();
-            
             initFirebase(); 
             initCharts();
         }
@@ -472,8 +467,9 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                         <tr>
                             <td>
                                 ${row.origem ? `<div class="auto-tag">AUTO: ${row.origem}</div>` : ''}
-                                <input type="text" class="cell-input" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem" value="${row.ordem || ''}">
+                                <input type="text" class="cell-input" style="color: var(--randon-black);" data-sec="${sec.id}" data-row="${i}" data-field="data" value="${row.data || ''}">
                             </td>
+                            <td><input type="text" class="cell-input" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem" value="${row.ordem || ''}"></td>
                             <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="plan_ent" value="${row.plan_ent || ''}"></td>
                             <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}"></td>
                             <td><input type="text" class="cell-input" readonly style="color: var(--status-red);" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent || ''}"></td>
@@ -532,10 +528,17 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                         <table>
                             <thead>
                                 <tr>
-                                    <th style="width:12%">Ordem / Produto</th><th style="width:8%">Plan Ent.</th><th style="width:8%">Real Ent.</th>
-                                    <th style="width:4%">Atr</th><th style="width:4%">St</th><th style="width:8%">Plan Saída</th>
-                                    <th style="width:8%">Real Saída</th><th style="width:4%">Atr</th><th style="width:4%">St</th>
-                                    <th style="width:10%">Aponta</th><th style="width:12%">Gargalo</th><th style="width:18%; text-align: left; padding-left: 10px;">Ações Corretivas</th>
+                                    <th style="width:6%">Data</th>
+                                    <th style="width:10%">Ordem / Produto</th>
+                                    <th style="width:7%">Plan Ent.</th>
+                                    <th style="width:7%">Real Ent.</th>
+                                    <th style="width:4%">Atr</th><th style="width:4%">St</th>
+                                    <th style="width:7%">Plan Saída</th>
+                                    <th style="width:7%">Real Saída</th>
+                                    <th style="width:4%">Atr</th><th style="width:4%">St</th>
+                                    <th style="width:10%">Aponta</th>
+                                    <th style="width:12%">Gargalo</th>
+                                    <th style="width:18%; text-align: left; padding-left: 10px;">Ações Corretivas</th>
                                 </tr>
                             </thead>
                             <tbody>${tbody}</tbody>
@@ -601,6 +604,16 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             const d = new Date(partes[2] || year, parseInt(partes[1]) - 1, parseInt(partes[0]));
             d.setDate(d.getDate() + 1);
             return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+        }
+
+        function dateMatches(dateStr, globalDateStr) {
+            if(!dateStr || !globalDateStr) return false;
+            const parts = globalDateStr.split('-');
+            const d = parts[2]; const mNum = parts[1];
+            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+            const mNome = mesesAbreviados[parseInt(mNum) - 1];
+            const s = dateStr.toLowerCase();
+            return s.includes(`${d}/${mNum}`) || s.includes(`${d}/${mNome}`) || (s.includes(d) && (s.includes(mNum) || s.includes(mNome)));
         }
 
         document.addEventListener('change', (e) => {
@@ -673,30 +686,40 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             let count = 0;
             text.split('\n').forEach(linha => {
                 const col = linha.split('\t');
-                if (col.length >= 4 && !col[0].toLowerCase().includes('setor')) {
+                
+                if (col.length >= 5 && !col[0].toLowerCase().includes('setor')) {
                     const s = col[0].toUpperCase().trim();
                     const destino = (s.includes('TQ')?'tq':s.includes('CT')?'ct':s.includes('BASE')?'bases':s.includes('SILO')?'silo':s.includes('BOX 1')?'esp_box1':s.includes('BOX 2')?'esp_box2':s.includes('BOX 3')?'esp_box3':s.includes('EXTRA')?'extra':'');
                     
                     if (destino && db.data[destino]) {
                         const idx = db.data[destino].findIndex(r => r.ordem === '' && r.plan_ent === '');
-                        if (idx !== -1) { db.data[destino][idx].ordem = col[1].trim(); db.data[destino][idx].plan_ent = col[2].trim(); db.data[destino][idx].plan_sai = col[3].trim(); count++; }
+                        if (idx !== -1) { 
+                            db.data[destino][idx].data = col[1].trim(); 
+                            db.data[destino][idx].ordem = col[2].trim(); 
+                            db.data[destino][idx].plan_ent = col[3].trim(); 
+                            db.data[destino][idx].plan_sai = col[4].trim(); 
+                            count++; 
+                        }
+                    }
+                } 
+                else if (col.length === 4 && !col[0].toLowerCase().includes('setor')) {
+                    const s = col[0].toUpperCase().trim();
+                    const destino = (s.includes('TQ')?'tq':s.includes('CT')?'ct':s.includes('BASE')?'bases':s.includes('SILO')?'silo':s.includes('BOX 1')?'esp_box1':s.includes('BOX 2')?'esp_box2':s.includes('BOX 3')?'esp_box3':s.includes('EXTRA')?'extra':'');
+                    
+                    if (destino && db.data[destino]) {
+                        const idx = db.data[destino].findIndex(r => r.ordem === '' && r.plan_ent === '');
+                        if (idx !== -1) { 
+                            db.data[destino][idx].ordem = col[1].trim(); 
+                            db.data[destino][idx].plan_ent = col[2].trim(); 
+                            db.data[destino][idx].plan_sai = col[3].trim(); 
+                            count++; 
+                        }
                     }
                 }
             });
             fecharModalPCP();
             forceRenderTodasTabelas(); autoSaveCloud();
             mostrarToast(`${count} Ordens importadas!`, 'fa-bolt');
-        }
-
-        // GUIAS DE APONTAMENTO
-        function dateMatches(dateStr, globalDateStr) {
-            if(!dateStr || !globalDateStr) return false;
-            const parts = globalDateStr.split('-');
-            const d = parts[2]; const mNum = parts[1];
-            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-            const mNome = mesesAbreviados[parseInt(mNum) - 1];
-            const s = dateStr.toLowerCase();
-            return s.includes(`${d}/${mNum}`) || s.includes(`${d}/${mNome}`) || (s.includes(d) && (s.includes(mNum) || s.includes(mNome)));
         }
 
         function renderResumoApontamento() {
@@ -770,7 +793,6 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             tbodyEspelho.innerHTML = htmlEspelho;
         }
 
-        // GRAFICOS BI
         function initCharts() {
             Chart.defaults.font.family = "'Inter', sans-serif"; Chart.defaults.color = "#94a3b8";
             chartsObj.pareto = new Chart(document.getElementById('chartPareto'), { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { y1: { type: 'linear', position: 'right' } } } });
@@ -844,7 +866,6 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             chartsObj.aderencia.update();
         }
 
-        // FIREBASE COM SCRIPT DE RESGATE BLINDADO
         function initFirebase() {
             try {
                 if (!firebase.apps.length) {
@@ -873,7 +894,7 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                                         nuvemDb.data[tabelaKey].forEach(row => {
                                             if(row && row.data !== undefined && row.ordem === undefined) { 
                                                 row.ordem = row.data; 
-                                                delete row.data; 
+                                                row.data = ''; 
                                             }
                                         });
                                     }
@@ -895,7 +916,9 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 firebaseDB.ref('linhaCT/registros').on('value', snap => {
                     const registros = snap.val(); if(!registros) return;
                     const dataHojeIso = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+                    
                     if (registros[dataHojeIso]) {
+                        injetarDaFabrica(registros[dataHojeIso], dataHojeIso);
                         if(registros[dataHojeIso].manha) injetarDaFabrica(registros[dataHojeIso].manha, dataHojeIso);
                         if(registros[dataHojeIso].tarde) injetarDaFabrica(registros[dataHojeIso].tarde, dataHojeIso);
                     }
@@ -907,39 +930,81 @@ CT	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             }
         }
 
+        // INTEGRAÇÃO BLINDADA DO TABLET
         function injetarDaFabrica(dadosRonda, dataIsoTablet) {
             if(!dadosRonda || !dadosRonda.postos) return;
             let ovEntradaCT = '', ovSaidaCT = '';
             
             dadosRonda.postos.forEach(p => {
-                if(p.nome && p.nome.toLowerCase().includes('posto 3') && p.ov && p.ov !== '---') ovEntradaCT = p.ov;
-                if(p.nome && p.nome.toLowerCase().includes('posto 7') && p.ov && p.ov !== '---') ovSaidaCT = p.ov;
+                if (!p || !p.nome) return;
+                const nome = p.nome.toLowerCase();
+                let ovEncontrada = '';
+
+                if (p.ov && p.ov !== '---') ovEncontrada = p.ov.toString().trim().toUpperCase();
+                else if (p.tarde && p.tarde.ov && p.tarde.ov !== '---') ovEncontrada = p.tarde.ov.toString().trim().toUpperCase();
+                else if (p.manha && p.manha.ov && p.manha.ov !== '---') ovEncontrada = p.manha.ov.toString().trim().toUpperCase();
+
+                if (ovEncontrada) {
+                    if (nome.includes('posto 3')) ovEntradaCT = ovEncontrada;
+                    if (nome.includes('posto 7')) ovSaidaCT = ovEncontrada;
+                }
             });
+
             if(!ovEntradaCT && !ovSaidaCT) return;
 
             const tabelaCT = db.data['ct'];
             const partes = dataIsoTablet.split('-');
-            const dataData = `${partes[2]}/${partes[1]}`;
+            const dataAtualStr = `${partes[2]}/${partes[1]}`;
 
-            let linhaAlvo = tabelaCT.findIndex(r => (r.ordem && r.ordem.includes(ovEntradaCT)) || (r.ordem && r.ordem.includes(ovSaidaCT)));
-            if(linhaAlvo === -1) linhaAlvo = tabelaCT.findIndex(r => r.plan_sai === dataData || r.plan_ent === dataData);
-            if(linhaAlvo === -1) linhaAlvo = tabelaCT.findIndex(r => r.ordem === '' && r.plan_ent === '');
+            let atualizou = false;
 
-            if(linhaAlvo !== -1) {
-                let atualizou = false;
-                if(ovEntradaCT && tabelaCT[linhaAlvo].real_ent !== ovEntradaCT) { tabelaCT[linhaAlvo].real_ent = ovEntradaCT; atualizou = true; }
-                if(ovSaidaCT && tabelaCT[linhaAlvo].real_sai !== ovSaidaCT) { tabelaCT[linhaAlvo].real_sai = ovSaidaCT; atualizou = true; }
+            // ==========================================
+            // POSTO 3 -> PREENCHE REAL ENTRADA E DATA
+            // ==========================================
+            if (ovEntradaCT) {
+                // Procurar somente linhas em que a Ordem bata com o Tablet
+                let linha = tabelaCT.findIndex(r => r.ordem && (r.ordem.toUpperCase().includes(ovEntradaCT) || ovEntradaCT.includes(r.ordem.toUpperCase())));
                 
-                if(atualizou) {
-                    const row = tabelaCT[linhaAlvo];
-                    const calcEnt = calcularAtraso(row.plan_ent, row.real_ent);
-                    row.atr_ent = calcEnt.atraso; row.stat_ent = calcEnt.status;
-                    const calcSai = calcularAtraso(row.plan_sai, row.real_sai);
-                    row.atr_sai = calcSai.atraso; row.stat_sai = calcSai.status;
-
-                    forceRenderTodasTabelas(); autoSaveCloud();
-                    mostrarToast("CT: Integração Tablet Sincronizada!", "fa-satellite-dish");
+                if (linha !== -1) {
+                    // Atualiza a DATA da linha (se estiver vazia)
+                    if (!tabelaCT[linha].data) tabelaCT[linha].data = dataAtualStr;
+                    
+                    // Atualiza a REAL ENTRADA com a data de hoje e calcula atraso
+                    if (tabelaCT[linha].real_ent !== dataAtualStr) {
+                        tabelaCT[linha].real_ent = dataAtualStr;
+                        const calcEnt = calcularAtraso(tabelaCT[linha].plan_ent, tabelaCT[linha].real_ent);
+                        tabelaCT[linha].atr_ent = calcEnt.atraso; 
+                        tabelaCT[linha].stat_ent = calcEnt.status;
+                        atualizou = true;
+                    }
                 }
+            }
+
+            // ==========================================
+            // POSTO 7 -> PREENCHE REAL SAÍDA E DATA
+            // ==========================================
+            if (ovSaidaCT) {
+                // Procurar somente linhas em que a Ordem bata com o Tablet
+                let linha = tabelaCT.findIndex(r => r.ordem && (r.ordem.toUpperCase().includes(ovSaidaCT) || ovSaidaCT.includes(r.ordem.toUpperCase())));
+                
+                if (linha !== -1) {
+                    // Atualiza a DATA da linha (se estiver vazia)
+                    if (!tabelaCT[linha].data) tabelaCT[linha].data = dataAtualStr;
+
+                    // Atualiza a REAL SAÍDA com a data de hoje e calcula atraso
+                    if (tabelaCT[linha].real_sai !== dataAtualStr) {
+                        tabelaCT[linha].real_sai = dataAtualStr;
+                        const calcSai = calcularAtraso(tabelaCT[linha].plan_sai, tabelaCT[linha].real_sai);
+                        tabelaCT[linha].atr_sai = calcSai.atraso; 
+                        tabelaCT[linha].stat_sai = calcSai.status;
+                        atualizou = true;
+                    }
+                }
+            }
+
+            if(atualizou) {
+                forceRenderTodasTabelas(); autoSaveCloud();
+                mostrarToast("CT: Integração Tablet Sincronizada!", "fa-satellite-dish");
             }
         }
 
