@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -26,6 +26,14 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-body); color: var(--randon-dark); font-size: 13px; overflow-y: scroll; }
+        
+        /* SISTEMA DE MODO ADMINISTRADOR VS LEITURA */
+        body.readonly-mode .cell-input, 
+        body.readonly-mode .meta-input, 
+        body.readonly-mode .estamparia-val-input { pointer-events: none; }
+        
+        .admin-only { display: none !important; }
+        body.admin-mode .admin-only { display: flex !important; }
 
         /* HEADER MODERNO */
         .navbar { background-color: #0f172a; border-bottom: 4px solid var(--randon-blue); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; height: 80px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
@@ -38,28 +46,36 @@
         .nav-tab:hover { color: white; background-color: rgba(255,255,255,0.05); }
         .nav-tab.active { color: white; border-bottom: 4px solid var(--randon-red); background-color: rgba(255,255,255,0.1); }
 
-        .nav-right { display: flex; align-items: center; gap: 12px; }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
         .global-date-container { display: flex; align-items: center; gap: 10px; background-color: rgba(255,255,255,0.1); padding: 8px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
         .global-date-container label { font-weight: 800; color: #cbd5e1; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
-        .global-date-container input { border: none; background: transparent; font-weight: 900; font-size: 14px; outline: none; color: white; cursor: pointer; font-family: 'Inter', sans-serif; }
-        .global-date-container input::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        .global-date-container input { border: none; background: transparent; font-weight: 900; font-size: 14px; outline: none; color: white; cursor: pointer; font-family: 'Inter', sans-serif; pointer-events: none;}
+        
+        .auth-container { display: flex; align-items: center; gap: 5px; background-color: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; border: 1px solid rgba(255,255,255,0.05);}
+        .auth-container:hover { background-color: rgba(255,255,255,0.2); }
+        .auth-icon { color: white; font-size: 16px; }
 
         /* BOTOES EXEC */
-        .btn { padding: 9px 18px; border: none; border-radius: 6px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn { padding: 9px 15px; border: none; border-radius: 6px; font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-pdf { background-color: #475569; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); } .btn-pdf:hover { background-color: #334155; transform: translateY(-1px); }
         .btn-tv { background-color: white; color: var(--randon-black); box-shadow: 0 4px 6px rgba(0,0,0,0.1); } .btn-tv:hover { background-color: #f1f5f9; transform: translateY(-1px); }
         .btn-pcp { background-color: var(--status-green); color: white; box-shadow: 0 4px 10px rgba(16,185,129,0.3); } .btn-pcp:hover { filter: brightness(0.9); transform: translateY(-2px); }
+        .btn-limpar { background-color: var(--randon-red); color: white; box-shadow: 0 4px 10px rgba(227,33,40,0.3); } .btn-limpar:hover { background-color: #b91c1c; transform: translateY(-2px); }
+        .btn-auth { background-color: var(--randon-blue); color: white; box-shadow: 0 4px 10px rgba(59,130,246,0.3); } .btn-auth:hover { filter: brightness(0.9); transform: translateY(-2px); }
+        .btn-orange { background-color: var(--status-orange); color: white; box-shadow: 0 4px 10px rgba(245,158,11,0.3); } .btn-orange:hover { filter: brightness(0.9); transform: translateY(-2px); }
 
-        /* MODAL PCP */
+        /* MODAIS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
-        .modal-content { background: white; padding: 35px; border-radius: 16px; width: 750px; max-width: 95%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border-top: 6px solid var(--status-green); }
+        .modal-content { background: white; padding: 35px; border-radius: 16px; width: 850px; max-width: 95%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border-top: 6px solid var(--status-green); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .modal-header h3 { font-size: 20px; color: var(--randon-dark); font-weight: 900; text-transform: uppercase; }
         .close-btn { cursor: pointer; font-size: 24px; color: #94a3b8; background: none; border: none; outline: none; transition: 0.2s; }
         .close-btn:hover { color: var(--status-red); transform: scale(1.1); }
-        .pcp-textarea { width: 100%; height: 220px; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 15px; font-family: monospace; font-size: 14px; outline: none; resize: none; background-color: #f8fafc; color: var(--randon-dark); font-weight: 600; transition: 0.3s; }
+        .pcp-textarea { width: 100%; height: 250px; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 15px; font-family: monospace; font-size: 13px; outline: none; resize: none; background-color: #f8fafc; color: var(--randon-dark); font-weight: 600; transition: 0.3s; white-space: pre; overflow-wrap: normal; overflow-x: scroll;}
         .pcp-textarea:focus { border-color: var(--randon-blue); background-color: white; box-shadow: 0 0 0 4px rgba(59,130,246,0.1); }
+        .input-senha { padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; width: 100%; font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 20px; outline: none; transition: 0.2s;}
+        .input-senha:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,0.15);}
 
         /* VIEWS & TABELAS */
         .view-container { padding: 25px; display: none; flex-direction: column; gap: 30px; animation: fadeIn 0.3s; }
@@ -101,7 +117,11 @@
         
         .auto-tag { font-size: 9px; background: var(--status-orange); color: white; padding: 3px 6px; border-radius: 4px; position: absolute; top: 2px; left: 4px; pointer-events: none; font-weight: 900; letter-spacing: 0.5px;}
         .ct-badge { font-size: 10px; color: #064e3b; background: #34d399; padding: 5px 10px; border-radius: 6px; margin-left: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
-        .macro-badge { font-size: 10px; background: var(--randon-dark); color: white; padding: 3px 8px; border-radius: 4px; margin-right: 8px; text-transform: uppercase; font-weight: 900; }
+        
+        /* EXPANSÃO DE LINHAS (VER MAIS) */
+        .ver-mais-container { background-color: #f8fafc; padding: 10px; text-align: center; border-top: 1px solid var(--border-light); }
+        .btn-expandir { background-color: white; border: 1px solid #cbd5e1; color: var(--randon-blue); padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-transform: uppercase;}
+        .btn-expandir:hover { background-color: var(--randon-blue); color: white; }
 
         /* ESTAMPARIA TABLE */
         .estamparia-table { width: 100%; border-collapse: collapse; border: 2px solid var(--randon-black); }
@@ -141,15 +161,16 @@
 
         @media print {
             body { background-color: white !important; font-size: 12px; overflow: visible !important; }
-            .navbar, #toast, #btn-exit-tv, .btn-pdf, .btn-tv, .btn-pcp { display: none !important; }
+            .navbar, #toast, #btn-exit-tv, .btn-pdf, .btn-tv, .btn-pcp, .btn-limpar, .ver-mais-container, .auth-container, .admin-only { display: none !important; }
             .analytics-header { border: none !important; box-shadow: none !important; padding: 0 !important; }
             table { border: 1px solid black; } th, td { border: 1px solid black; }
             .macro-badge { -webkit-print-color-adjust: exact; background-color: black !important; color: white !important; }
             .section-card { border: none !important; box-shadow: none !important; }
+            tr[style*="display: none"] { display: table-row !important; } 
         }
     </style>
 </head>
-<body>
+<body class="readonly-mode">
 
     <nav class="navbar" id="navbar">
         <div class="nav-left">
@@ -175,17 +196,40 @@
             </div>
         </div>
         <div class="nav-right">
+            <div class="auth-container" onclick="abrirModalAuth()" id="auth-btn" title="Desbloquear Modo Administrador">
+                <i class="fa-solid fa-lock auth-icon" id="lock-icon"></i>
+            </div>
             <div class="global-date-container">
                 <label>Data</label>
-                <input type="date" id="global-date">
+                <input type="text" id="global-date" readonly>
             </div>
-            <button class="btn btn-pcp" onclick="abrirModalPCP()"><i class="fa-solid fa-bolt"></i> Carga PCP</button>
+            
+            <!-- BOTAO DE RESGATE DE EMERGENCIA DA ESTAMPARIA -->
+            <button class="btn btn-orange admin-only" onclick="forcarResgateEstamparia()" title="Recuperar Estamparia Antiga"><i class="fa-solid fa-life-ring"></i> Resgatar Estamparia</button>
+            
+            <button class="btn btn-limpar admin-only" onclick="apagarProgramacaoPCP()" title="Zerar programação inteira do Mês"><i class="fa-solid fa-trash-can"></i> Zerar PCP</button>
+            <button class="btn btn-pcp admin-only" onclick="abrirModalPCP()"><i class="fa-solid fa-bolt"></i> Carga PCP</button>
             <button class="btn btn-pdf" onclick="gerarPDFExecutivo()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
             <button class="btn btn-tv" onclick="iniciarModoTV()"><i class="fa-solid fa-tv"></i> TV</button>
         </div>
     </nav>
 
     <button id="btn-exit-tv" onclick="sairModoTV()"><i class="fa-solid fa-power-off"></i> Sair do Modo TV</button>
+
+    <!-- MODAL AUTENTICAÇÃO -->
+    <div class="modal-overlay" id="modal-auth">
+        <div class="modal-content" style="width: 400px; text-align: center; padding: 40px 30px;">
+            <div class="modal-header" style="justify-content: center; margin-bottom: 20px;">
+                <h3 style="font-size: 24px;"><i class="fa-solid fa-shield-halved" style="color: var(--randon-blue); margin-right: 10px;"></i> Acesso Restrito</h3>
+            </div>
+            <p style="margin-bottom: 25px; color: var(--randon-grey); font-weight: 600; font-size: 14px;">Digite a senha de administrador para liberar a edição do painel e controle de PCP.</p>
+            <input type="password" id="senha-admin" class="input-senha" placeholder="••••••••">
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-tv" style="flex: 1; justify-content: center;" onclick="fecharModalAuth()">Cancelar</button>
+                <button class="btn btn-auth" style="flex: 2; justify-content: center; font-size: 14px;" onclick="verificarSenha()"><i class="fa-solid fa-unlock"></i> Desbloquear</button>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL CARGA PCP -->
     <div class="modal-overlay" id="modal-pcp">
@@ -194,13 +238,11 @@
                 <h3><i class="fa-solid fa-bolt" style="color: var(--status-green);"></i> Carga Base de Dados PCP</h3>
                 <button class="close-btn" onclick="fecharModalPCP()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 14px; color: var(--randon-grey); font-weight: 600; margin-bottom: 20px; line-height: 1.5;">
-                <b>Como funciona:</b> Copie do Excel as 5 colunas na ordem exata: <br><strong style="color: var(--randon-blue);">SETOR | DATA | PRODUTO/OP | DATA ENTRADA | DATA SAÍDA</strong> e cole abaixo.<br>
-                O sistema fará a leitura da coluna "Setor" e distribuirá as ordens automaticamente para as abas correspondentes.
+            <p style="font-size: 14px; color: var(--randon-grey); font-weight: 600; margin-bottom: 15px; line-height: 1.5;">
+                <b>Instrução de Carga:</b> Copie do seu Excel exatamente as 5 colunas na ordem do arquivo: <br><strong style="color: var(--randon-blue);">LINHA | ORDEM E VENDA | PRODUTO | DATA ENTRADA | DATA SAÍDA</strong> e cole abaixo.<br>
             </p>
-            <textarea id="pcp-dados" class="pcp-textarea" placeholder="Exemplo de cópia do Excel:
-TQ	03/08/2026	TANQUE INOX 15000L	03/08/2026	06/08/2026
-CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
+            <textarea id="pcp-dados" class="pcp-textarea" placeholder="Cole os dados do Excel aqui... Ex:
+CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></textarea>
             
             <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
                 <button class="btn btn-tv" onclick="fecharModalPCP()">Cancelar</button>
@@ -221,6 +263,20 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 <table class="estamparia-table" id="tabela-estamparia-matriz">
                     <!-- Gerado via JS dinamicamente -->
                 </table>
+            </div>
+        </div>
+        
+        <!-- DASHBOARD ESTAMPARIA -->
+        <div class="section-card">
+            <div class="section-header" style="background: white; border-bottom: 2px solid var(--border-light);">
+                <div class="section-title-box" style="width: 100%;">
+                    <h2 style="color: var(--randon-dark);"><i class="fa-solid fa-chart-area" style="color: var(--randon-blue); margin-right: 8px;"></i> Evolução Diária - Estamparia</h2>
+                </div>
+            </div>
+            <div style="padding: 20px; background: white;">
+                <div class="chart-container-bi" style="height: 350px;">
+                    <canvas id="chartEstamparia"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -266,12 +322,14 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 <h2 style="font-size: 26px; font-weight: 900; color: var(--randon-dark); margin-bottom: 8px; text-transform: uppercase;">Guia de Apontamento Consolidada</h2>
                 <p style="color: var(--randon-grey); font-size: 14px; font-weight: 700; text-transform: uppercase;">Espelho de Saídas de Linha e Fila Atual (Pintura, OP1 e OP2).</p>
             </div>
-            <button class="btn btn-tv" onclick="window.print()" style="padding: 12px 20px; font-size: 14px;"><i class="fa-solid fa-print"></i> Imprimir Guia Físico</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-orange admin-only" onclick="zerarApontamentos()"><i class="fa-solid fa-eraser"></i> Limpar Apontamentos (Mantém PCP e Tablet)</button>
+                <button class="btn btn-tv" onclick="window.print()" style="padding: 12px 20px; font-size: 14px;"><i class="fa-solid fa-print"></i> Imprimir Guia Físico</button>
+            </div>
         </div>
         
-        <!-- TABELA 1: SAÍDAS DE LINHA -->
         <div class="apontamento-table-wrapper" style="border-left: 6px solid var(--status-green);">
-            <h3><i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha (Data da Reunião)</h3>
+            <h3 id="titulo-guia-saidas"><i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha</h3>
             <table>
                 <thead>
                     <tr>
@@ -286,7 +344,6 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             </table>
         </div>
 
-        <!-- TABELA 2: ESPELHO PINTURA E MOF -->
         <div class="apontamento-table-wrapper" style="border-left: 6px solid var(--randon-blue);">
             <h3><i class="fa-solid fa-layer-group" style="margin-right: 8px;"></i> Espelho de Processos Finais: Pintura, OP1 e OP2</h3>
             <table>
@@ -308,10 +365,13 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
 
     <script>
         const MOTIVOS_GARGALO = ["Falta de Material", "Manutenção / Quebra", "Qualidade / Retrabalho", "Engenharia / Projeto", "Atraso Cliente / Chassi", "Falta de Efetivo (RH)", "Logística / Movimentação", "Outros"];
+        
+        const SENHA_ADMIN = "randon123";
+        let isAdmin = false;
 
         const configuracaoSetores = [
             { id: 'tq', view: 'solda', title: 'TANQUES (TQ)', rows: 21, metaDef: 5 },
-            { id: 'ct', view: 'solda', title: 'CARREGA TUDO (CT)', rows: 19, metaDef: 3 },
+            { id: 'ct', view: 'solda', title: 'CARREGA TUDO (CT)', rows: 25, metaDef: 3 },
             { id: 'bases', view: 'solda', title: 'BASES (CHASSI)', rows: 52, metaDef: 10 },
             { id: 'silo', view: 'solda', title: 'SILOS', rows: 5, metaDef: 2 },
             { id: 'esp_box1', view: 'solda', title: 'ESPECIAIS - BOX 1', rows: 4, metaDef: 1 },
@@ -334,26 +394,140 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         ];
 
         let db = { globalDate: '', data: {}, meta: {}, estampariaMatriz: { datas: [], valores: {} } };
-        let chartsObj = { pareto: null, pie: null, line: null, aderencia: null };
+        let chartsObj = { pareto: null, pie: null, line: null, aderencia: null, estamparia: null };
         let saveTimeout, tvInterval;
-        let isTVMode = false;
         let firebaseDB = null, dbRef = null;
+        let firebaseRegistrosTablet = {}; 
 
-        // ESTRUTURA BLINDADA
+        const DEFAULT_VISIBLES_ROWS = 15;
+        let expandedSections = {};
+
         function getEmptyRow() {
-            return { data_pcp: '', ordem: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', aponta: '', impactos: '', acoes: '', origem: '' };
+            return { data_pcp: '', ordem: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', aponta: '', impactos: '', acoes: '', origem: '', data_real_ent: '', data_real_sai: '' };
         }
 
         // ==========================================
-        // MOTOR DE ESTAMPARIA (DATAS E DESLIZAMENTO)
+        // O ROBÔ DE RESGATE DE DADOS DA ESTAMPARIA
         // ==========================================
+        function forcarResgateEstamparia() {
+            let melhorVersao = null;
+            let maxPreenchidos = -1;
+
+            // Varre as 50 últimas versões que testamos hoje
+            for (let i = 1; i <= 50; i++) {
+                let oldStorage = localStorage.getItem('erp_randon_v' + i);
+                if (oldStorage) {
+                    try {
+                        let oldDb = JSON.parse(oldStorage);
+                        if (oldDb && oldDb.estampariaMatriz && oldDb.estampariaMatriz.valores) {
+                            let count = 0;
+                            Object.values(oldDb.estampariaMatriz.valores).forEach(arr => {
+                                if(Array.isArray(arr)) {
+                                    arr.forEach(val => { if (val && String(val).trim() !== '') count++; });
+                                }
+                            });
+                            // Pega a versão que tiver mais números digitados
+                            if (count > maxPreenchidos) {
+                                maxPreenchidos = count;
+                                melhorVersao = oldDb.estampariaMatriz;
+                            }
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            if (maxPreenchidos > 0 && melhorVersao) {
+                db.estampariaMatriz = melhorVersao;
+                renderizarEstampariaMatriz();
+                autoSaveCloud(true);
+                alert("SUCESSO! O Robô de Resgate encontrou a sua versão com " + maxPreenchidos + " células preenchidas e restaurou a tela inteira!");
+            } else {
+                alert("Ops, não encontramos nenhum dado antigo salvo no cache deste navegador.");
+            }
+        }
+
+        // ==========================================
+        // EXTERMINADOR DE LINHAS FANTASMAS (LIMPEZA DEFINITIVA)
+        // ==========================================
+        function expurgarLinhasFantasmas() {
+            let limpouAlgo = false;
+            
+            configuracaoSetores.forEach(sec => {
+                if(!db.data[sec.id]) db.data[sec.id] = [];
+                
+                const originalLen = db.data[sec.id].length;
+                
+                let validas = db.data[sec.id].filter(r => {
+                    if (!r) return false;
+                    const txtConcat = (r.ordem || '') + (r.plan_ent || '') + (r.real_ent || '') + (r.plan_sai || '') + (r.real_sai || '') + (r.aponta || '') + (r.impactos || '') + (r.acoes || '');
+                    return txtConcat.trim().length > 0;
+                });
+                
+                while (validas.length < sec.rows) {
+                    validas.push(getEmptyRow());
+                }
+                
+                validas.push(getEmptyRow());
+                validas.push(getEmptyRow());
+                validas.push(getEmptyRow());
+                
+                if (originalLen > validas.length + 10) {
+                    limpouAlgo = true;
+                }
+                
+                db.data[sec.id] = validas;
+            });
+            
+            if (limpouAlgo) {
+                console.log("Fantasmas destruídos.");
+                autoSaveCloud(false); 
+            }
+        }
+
+        function abrirModalAuth() { 
+            if(isAdmin) {
+                isAdmin = false; 
+                document.body.classList.add('readonly-mode');
+                document.body.classList.remove('admin-mode');
+                document.getElementById('lock-icon').className = 'fa-solid fa-lock';
+                mostrarToast("Modo Visualização Ativado.", "fa-lock");
+            } else {
+                document.getElementById('modal-auth').classList.add('active'); 
+                setTimeout(() => document.getElementById('senha-admin').focus(), 100);
+            }
+        }
+        function fecharModalAuth() { 
+            document.getElementById('modal-auth').classList.remove('active'); 
+            document.getElementById('senha-admin').value = ''; 
+        }
+        function verificarSenha() {
+            if(document.getElementById('senha-admin').value === SENHA_ADMIN) {
+                isAdmin = true; 
+                document.body.classList.remove('readonly-mode');
+                document.body.classList.add('admin-mode');
+                document.getElementById('lock-icon').className = 'fa-solid fa-lock-open';
+                fecharModalAuth(); 
+                mostrarToast("Painel Liberado para Edição Manual!", "fa-lock-open");
+            } else { 
+                alert("Senha Incorreta."); 
+                document.getElementById('senha-admin').value = '';
+            }
+        }
+        document.getElementById('senha-admin').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') verificarSenha();
+        });
+
+        function getDataAtualFormatada() {
+            const hoje = new Date();
+            return `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}`;
+        }
+
         function formatarDataEstamparia(dateObj) {
             const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
             return `${String(dateObj.getDate()).padStart(2, '0')}/${mesesAbreviados[dateObj.getMonth()]}`;
         }
 
         function atualizarDiasEstamparia() {
-            // Se estiver vazio, constrói os últimos 5 dias
             if(!db.estampariaMatriz || !db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
                 let novasDatas = [];
                 for(let i=4; i>=0; i--) {
@@ -362,29 +536,100 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 }
                 db.estampariaMatriz = { datas: novasDatas, valores: {} };
                 estampariaLinhas.forEach(linha => db.estampariaMatriz.valores[linha] = Array(5).fill(''));
-                autoSaveCloud(); // Garante o salvamento imediato da matriz gerada
                 return;
             }
-
             const hoje = new Date();
             const hojeFormatado = formatarDataEstamparia(hoje);
             let datasAntigas = db.estampariaMatriz.datas;
             
-            // Se o último dia não for hoje, escorrega a tabela
             if (datasAntigas[datasAntigas.length - 1] !== hojeFormatado) {
                 db.estampariaMatriz.datas.shift();
                 db.estampariaMatriz.datas.push(hojeFormatado);
-                
                 estampariaLinhas.forEach(linha => {
                     if(!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
                     db.estampariaMatriz.valores[linha].shift();
                     db.estampariaMatriz.valores[linha].push('');
                 });
-                autoSaveCloud(); // Garante o salvamento imediato do deslizamento
+                autoSaveCloud(false);
             }
         }
 
+        // ==========================================
+        // O MOTOR DE ATRASOS (DESVIO FURA-FILA E VARREDURA)
+        // ==========================================
+        function atualizarAtrasosGlobais() {
+            const hojeStr = getDataAtualFormatada();
+            
+            Object.keys(db.data).forEach(secId => {
+                const tabela = db.data[secId];
+                
+                tabela.forEach(row => {
+                    if (!row.ordem && !row.plan_ent && !row.plan_sai && !row.real_ent && !row.real_sai) {
+                        row.atr_ent = ''; row.stat_ent = '';
+                        row.atr_sai = ''; row.stat_sai = '';
+                        return;
+                    }
+
+                    // --- ENTRADA ---
+                    let planEnt = row.plan_ent;
+                    let dataCalcEnt = row.data_real_ent || row.data_pcp || hojeStr;
+                    let mismatchEnt = false;
+
+                    if (row.real_ent && row.real_ent.trim() !== '') {
+                        dataCalcEnt = row.data_real_ent || row.data_pcp || hojeStr;
+                        const ovReal = row.real_ent.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                        const ovPlan = row.ordem ? row.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase() : '';
+                        
+                        // Fura-fila (OV Diferente da planejada naquela linha)
+                        if (ovPlan && ovReal.length >= 3 && !ovPlan.endsWith(ovReal) && !ovReal.endsWith(ovPlan)) {
+                            mismatchEnt = true; 
+                        } else if(ovReal.length >= 3) {
+                            // Varre tudo para achar o plano original dessa OV digitada
+                            const lOrig = tabela.find(r => r.ordem && r.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase().endsWith(ovReal));
+                            if(lOrig && lOrig.plan_ent) planEnt = lOrig.plan_ent;
+                        }
+                    } else {
+                        dataCalcEnt = hojeStr;
+                    }
+                    
+                    if (planEnt) {
+                        const cEnt = calcularAtraso(planEnt, dataCalcEnt);
+                        row.atr_ent = cEnt.atraso; 
+                        row.stat_ent = mismatchEnt ? 'red' : cEnt.status; 
+                    }
+
+                    // --- SAÍDA ---
+                    let planSai = row.plan_sai;
+                    let dataCalcSai = row.data_real_sai || row.data_pcp || hojeStr;
+                    let mismatchSai = false;
+                    
+                    if (row.real_sai && row.real_sai.trim() !== '') {
+                        dataCalcSai = row.data_real_sai || row.data_pcp || hojeStr;
+                        const ovReal = row.real_sai.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                        const ovPlan = row.ordem ? row.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase() : '';
+                        
+                        if (ovPlan && ovReal.length >= 3 && !ovPlan.endsWith(ovReal) && !ovReal.endsWith(ovPlan)) {
+                            mismatchSai = true;
+                        } else if(ovReal.length >= 3) {
+                            const lOrig = tabela.find(r => r.ordem && r.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase().endsWith(ovReal));
+                            if(lOrig && lOrig.plan_sai) planSai = lOrig.plan_sai;
+                        }
+                    } else {
+                        dataCalcSai = hojeStr; 
+                    }
+                    
+                    if (planSai) {
+                        const cSai = calcularAtraso(planSai, dataCalcSai);
+                        row.atr_sai = cSai.atraso; 
+                        row.stat_sai = mismatchSai ? 'red' : cSai.status; 
+                    }
+                });
+            });
+        }
+
         function forceRenderTodasTabelas() {
+            expurgarLinhasFantasmas();
+            atualizarAtrasosGlobais(); 
             renderizarEstampariaMatriz();
             renderizarViews(); 
             recalcularDashboard(); 
@@ -393,46 +638,39 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
 
         function init() {
             configuracaoSetores.forEach(sec => {
+                expandedSections[sec.id] = false;
                 if(!db.data[sec.id]) db.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
-                else while(db.data[sec.id].length < sec.rows) db.data[sec.id].push(getEmptyRow());
                 if(db.meta[sec.id] === undefined) db.meta[sec.id] = sec.metaDef;
             });
 
-            const today = new Date();
-            db.globalDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            db.globalDate = getDataAtualFormatada();
             document.getElementById('global-date').value = db.globalDate;
-            document.getElementById('global-date').addEventListener('change', (e) => {
-                db.globalDate = e.target.value; renderResumoApontamento(); autoSaveCloud();
-            });
+            document.getElementById('titulo-guia-saidas').innerHTML = `<i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha (Data da Reunião: ${db.globalDate})`;
 
+            forceRenderTodasTabelas();
             initFirebase(); 
             initCharts();
+            updateEstampariaChart();
         }
 
         function switchTab(tabId) {
             document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
             document.getElementById(`view-${tabId}`).classList.add('active');
-            
             const btn = document.getElementById(`tab-btn-${tabId}`);
             if(btn) btn.classList.add('active');
-
             if(tabId === 'analytics') updateAnalytics();
             if(tabId === 'apontamento') renderResumoApontamento();
+            if(tabId === 'estamparia') updateEstampariaChart();
         }
 
         function abrirModalPCP() { document.getElementById('modal-pcp').classList.add('active'); }
         function fecharModalPCP() { document.getElementById('modal-pcp').classList.remove('active'); document.getElementById('pcp-dados').value = ''; }
 
-        // ==========================================
-        // RENDERIZAÇÃO ESTAMPARIA (COM MOTOR DE CORES)
-        // ==========================================
         function renderizarEstampariaMatriz() {
             const container = document.getElementById('tabela-estamparia-matriz');
             if(!container) return;
-            
             const datas = (db.estampariaMatriz && db.estampariaMatriz.datas && db.estampariaMatriz.datas.length === 5) ? db.estampariaMatriz.datas : ['','','','',''];
-            
             let thead = `
                 <tr>
                     <th colspan="6" style="text-align: center; font-size: 16px; padding: 12px; border-bottom: 2px solid var(--randon-black);">
@@ -441,7 +679,6 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 </tr>
                 <tr>
                     <th style="width: 280px; text-align: left; padding-left: 20px; background-color: white;"></th>`;
-            
             datas.forEach((d, cIdx) => {
                 let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : 'background-color: white;';
                 thead += `<th style="${bg} border-bottom: 2px solid var(--randon-black); border-top: 1px solid var(--randon-black);">
@@ -454,12 +691,9 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             estampariaLinhas.forEach((linha) => {
                 tbody += `<tr>`;
                 tbody += `<td style="font-weight: 900; padding-left: 20px; color: var(--randon-dark); font-size: 14px; border-right: 2px solid var(--randon-black);">${linha}</td>`;
-                
                 datas.forEach((d, cIdx) => {
                     const val = (db.estampariaMatriz && db.estampariaMatriz.valores && db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx] !== undefined) ? db.estampariaMatriz.valores[linha][cIdx] : '';
                     let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : '';
-                    
-                    // Lógica de Cores Inteligentes: Menor que ontem (Verde), Maior que ontem (Vermelho)
                     let colorStyle = 'color: var(--randon-blue);'; 
                     if (cIdx > 0 && val !== '') {
                         const prevVal = (db.estampariaMatriz && db.estampariaMatriz.valores && db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx - 1]) ? db.estampariaMatriz.valores[linha][cIdx - 1] : '';
@@ -472,36 +706,54 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                             }
                         }
                     }
-
                     tbody += `<td style="${bg}"><input type="text" class="cell-input estamparia-val-input" style="font-size: 16px; font-weight: 900; text-align: center; ${colorStyle}" data-row-name="${linha}" data-col-idx="${cIdx}" value="${val}"></td>`;
                 });
                 tbody += `</tr>`;
             });
 
             container.innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`;
+            updateEstampariaChart();
         }
 
-        // RENDERIZAÇÃO DAS TABELAS
+        function toggleRows(secId) {
+            expandedSections[secId] = !expandedSections[secId];
+            renderizarViews();
+        }
+
+        // ==========================================
+        // RENDERIZAÇÃO DA TABELA (MODO OCULTO PARA PLANOS - VISUAL S&OP CLEAN)
+        // ==========================================
         function renderizarViews() {
             let htmlViews = { solda: '', pintura: '', op1: '', op2: '' };
 
             configuracaoSetores.forEach(sec => {
                 let tbody = '';
-                for(let i = 0; i < sec.rows; i++) {
+                const limit = DEFAULT_VISIBLES_ROWS; 
+                const totalRows = db.data[sec.id] ? Math.max(db.data[sec.id].length, sec.rows) : sec.rows;
+                const isExpanded = expandedSections[sec.id];
+
+                for(let i = 0; i < totalRows; i++) {
                     const row = db.data[sec.id] ? (db.data[sec.id][i] || getEmptyRow()) : getEmptyRow();
+                    let displayStyle = (!isExpanded && i >= limit) ? 'display: none;' : '';
+                    
                     tbody += `
-                        <tr>
+                        <tr style="${displayStyle}">
                             <td>
                                 ${row.origem ? `<div class="auto-tag">AUTO: ${row.origem}</div>` : ''}
                                 <input type="text" class="cell-input" style="color: var(--randon-black);" data-sec="${sec.id}" data-row="${i}" data-field="data_pcp" value="${row.data_pcp || ''}">
                             </td>
                             <td><input type="text" class="cell-input" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem" value="${row.ordem || ''}"></td>
-                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="plan_ent" value="${row.plan_ent || ''}"></td>
+                            
+                            <!-- COLUNA PLANO ENTRADA OCULTA -->
+                            <td style="display: none;"><input type="text" tabindex="-1" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="plan_ent" value="${row.plan_ent || ''}"></td>
+                            
                             <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}"></td>
                             <td><input type="text" class="cell-input" readonly style="color: var(--status-red);" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent || ''}"></td>
                             <td><div class="status-btn"><div class="circle ${row.stat_ent || ''}"></div></div></td>
                             
-                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="plan_sai" value="${row.plan_sai || ''}"></td>
+                            <!-- COLUNA PLANO SAÍDA OCULTA -->
+                            <td style="display: none;"><input type="text" tabindex="-1" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="plan_sai" value="${row.plan_sai || ''}"></td>
+                            
                             <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_sai" value="${row.real_sai || ''}"></td>
                             <td><input type="text" class="cell-input" readonly style="color: var(--status-red);" data-sec="${sec.id}" data-row="${i}" data-field="atr_sai" value="${row.atr_sai || ''}"></td>
                             <td><div class="status-btn"><div class="circle ${row.stat_sai || ''}"></div></div></td>
@@ -525,6 +777,11 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 }
 
                 let badgeCT = sec.id === 'ct' ? `<div class="ct-badge"><i class="fa-solid fa-satellite-dish fa-beat"></i> Integração Tablet On</div>` : '';
+                let btnVerMais = '';
+                if (totalRows > limit) {
+                    let btnText = isExpanded ? 'Ocultar Linhas Excedentes <i class="fa-solid fa-chevron-up"></i>' : `Ver Mais ${totalRows - limit} Linhas <i class="fa-solid fa-chevron-down"></i>`;
+                    btnVerMais = `<div class="ver-mais-container"><button class="btn-expandir" onclick="toggleRows('${sec.id}')">${btnText}</button></div>`;
+                }
 
                 htmlViews[sec.view] += `
                     <div class="section-card">
@@ -555,20 +812,21 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                             <thead>
                                 <tr>
                                     <th style="width:6%">Data</th>
-                                    <th style="width:10%">Ordem / Produto</th>
-                                    <th style="width:7%">Plan Ent.</th>
-                                    <th style="width:7%">Real Ent.</th>
+                                    <th style="width:16%">Ordem / Produto</th>
+                                    <th style="display:none;">Plan Ent.</th>
+                                    <th style="width:8%">Real Ent.</th>
                                     <th style="width:4%">Atr</th><th style="width:4%">St</th>
-                                    <th style="width:7%">Plan Saída</th>
-                                    <th style="width:7%">Real Saída</th>
+                                    <th style="display:none;">Plan Saída</th>
+                                    <th style="width:8%">Real Saída</th>
                                     <th style="width:4%">Atr</th><th style="width:4%">St</th>
-                                    <th style="width:10%">Aponta</th>
-                                    <th style="width:12%">Gargalo</th>
-                                    <th style="width:18%; text-align: left; padding-left: 10px;">Ações Corretivas</th>
+                                    <th style="width:12%">Aponta</th>
+                                    <th style="width:14%">Gargalo</th>
+                                    <th style="width:20%; text-align: left; padding-left: 10px;">Ações Corretivas</th>
                                 </tr>
                             </thead>
                             <tbody>${tbody}</tbody>
                         </table>
+                        ${btnVerMais}
                     </div>
                 `;
             });
@@ -606,20 +864,30 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         }
 
         function calcularAtraso(planStr, realStr) {
-            if(!planStr || !realStr || planStr.trim() === '' || realStr.trim() === '') return { atraso: '', status: '' };
-            const [diaP, mesP, anoP] = planStr.split('/');
-            const [diaR, mesR, anoR] = realStr.split('/');
-            if(!diaP || !diaR) return { atraso: 0, status: 'green' };
-
+            if(!planStr || planStr.trim() === '') return { atraso: '', status: '' };
+            let diaR, mesR, anoR;
             const year = new Date().getFullYear();
+            if (!realStr || realStr.trim() === '') {
+                const hoje = new Date();
+                diaR = String(hoje.getDate()).padStart(2, '0');
+                mesR = String(hoje.getMonth() + 1).padStart(2, '0');
+                anoR = year;
+            } else {
+                [diaR, mesR, anoR] = realStr.split('/');
+                if(!anoR) anoR = year;
+            }
+
+            const [diaP, mesP, anoP] = planStr.split('/');
+            if(!diaP) return { atraso: 0, status: 'green' };
+
             const dPlan = new Date(anoP || year, parseInt(mesP) - 1, parseInt(diaP));
-            const dReal = new Date(anoR || year, parseInt(mesR) - 1, parseInt(diaR));
+            const dReal = new Date(anoR, parseInt(mesR) - 1, parseInt(diaR));
             const diffDays = Math.ceil((dReal - dPlan) / (1000 * 60 * 60 * 24));
 
             let status = 'green';
             if(diffDays === 2) status = 'orange';
-            if(diffDays > 2) status = 'red';
-            return { atraso: diffDays > 0 ? diffDays : 0, status: status };
+            if(diffDays >= 3) status = 'red';
+            return { atraso: diffDays > 0 ? diffDays : '', status: status };
         }
 
         function adicionarUmDia(dataStr) {
@@ -635,34 +903,32 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
         function dateMatches(dateStr, globalDateStr) {
             if(!dateStr || !globalDateStr) return false;
             const parts = globalDateStr.split('-');
-            const d = parts[2]; const mNum = parts[1];
+            const d = parts[2] ? parts[2] : globalDateStr.split('/')[0]; 
+            const mNum = parts[1] ? parts[1] : globalDateStr.split('/')[1];
             const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
             const mNome = mesesAbreviados[parseInt(mNum) - 1];
             const s = dateStr.toLowerCase();
             return s.includes(`${d}/${mNum}`) || s.includes(`${d}/${mNome}`) || (s.includes(d) && (s.includes(mNum) || s.includes(mNome)));
         }
 
-        // SALVAMENTO SEGURO DA ESTAMPARIA
+        // ==========================================
+        // FLUXO AUTOMÁTICO DE PROGRESSÃO (OK -> PRÓXIMO SETOR)
+        // ==========================================
         document.addEventListener('change', (e) => {
             if(e.target.classList.contains('estamparia-val-input')) {
                 const linha = e.target.dataset.rowName;
                 const cIdx = parseInt(e.target.dataset.colIdx);
-                
-                // Garantia de Estrutura
-                if(!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-                if(!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {};
-                if(!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = ['', '', '', '', ''];
-                
+                if(!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = [];
                 db.estampariaMatriz.valores[linha][cIdx] = e.target.value;
-                
-                // Salva na nuvem e renderiza a cor nova instantaneamente
                 autoSaveCloud(); 
                 renderizarEstampariaMatriz();
                 return;
             }
             if(e.target.dataset && e.target.dataset.colDate !== undefined) {
                 db.estampariaMatriz.datas[parseInt(e.target.dataset.colDate)] = e.target.value;
-                autoSaveCloud(); return;
+                autoSaveCloud(); 
+                renderizarEstampariaMatriz();
+                return;
             }
 
             if(e.target.classList.contains('meta-input')) {
@@ -674,90 +940,188 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 const secId = e.target.dataset.sec, rowIdx = e.target.dataset.row, field = e.target.dataset.field;
                 const val = e.target.value.toUpperCase();
                 const row = db.data[secId][rowIdx];
-                const oldRealSai = row.real_sai, oldAponta = row.aponta;
+                const oldAponta = row.aponta;
                 
                 row[field] = val;
 
-                const calcEnt = calcularAtraso(row.plan_ent, row.real_ent);
-                row.atr_ent = calcEnt.atraso; row.stat_ent = calcEnt.status;
-                const calcSai = calcularAtraso(row.plan_sai, row.real_sai);
-                row.atr_sai = calcSai.atraso; row.stat_sai = calcSai.status;
-
-                const secConfig = configuracaoSetores.find(c => c.id === secId);
-                
-                if (secConfig && secConfig.view === 'solda' && field === 'real_sai' && val !== '' && oldRealSai !== val) {
-                    const dataPintura = adicionarUmDia(row.real_sai);
-                    const tbPintura = db.data['pintura'];
-                    const freeIdx = tbPintura.findIndex(r => r.ordem === '' && r.plan_ent === '');
-                    if(freeIdx !== -1) {
-                        tbPintura[freeIdx].ordem = row.ordem; tbPintura[freeIdx].plan_ent = dataPintura; tbPintura[freeIdx].origem = secConfig.title;
-                        mostrarToast(`Avançou para Pintura (Plan: ${dataPintura})`, 'fa-robot');
-                    }
+                if (field === 'data_pcp') {
+                    row.data_real_ent = val;
+                    row.data_real_sai = val;
+                } else if ((field === 'real_ent' || field === 'real_sai') && row.data_pcp === '') {
+                    row.data_pcp = getDataAtualFormatada();
+                    if(field === 'real_ent') row.data_real_ent = row.data_pcp;
+                    if(field === 'real_sai') row.data_real_sai = row.data_pcp;
                 }
 
-                if (secConfig && secConfig.view === 'pintura' && field === 'aponta' && val === 'OK' && oldAponta !== 'OK') {
-                    let target = 'op1_bases'; 
-                    const info = (row.ordem + row.origem).toUpperCase();
-                    if(info.includes('TQ')) target = 'op1_tq1'; 
-                    else if(info.includes('CT')) target = 'op1_ct'; 
-                    else if(info.includes('SILO')) target = 'op1_silo';
+                atualizarAtrasosGlobais();
 
-                    const tbMof = db.data[target];
-                    const freeIdx = tbMof.findIndex(r => r.ordem === '' && r.real_ent === '');
-                    if(freeIdx !== -1) {
-                        const today = new Date();
-                        tbMof[freeIdx].ordem = row.ordem; 
-                        tbMof[freeIdx].real_ent = `${String(today.getDate()).padStart(2,'0')}/${String(today.getMonth()+1).padStart(2,'0')}/${today.getFullYear()}`;
-                        tbMof[freeIdx].origem = 'PINTURA';
-                        mostrarToast(`Avançou para MOF (${target})`, 'fa-flag-checkered');
+                // AVANÇO AUTOMÁTICO DE SETORES
+                if (field === 'aponta' && val === 'OK' && oldAponta !== 'OK') {
+                    const secConfig = configuracaoSetores.find(c => c.id === secId);
+                    let targetId = null;
+
+                    if (secConfig.view === 'solda') targetId = 'pintura';
+                    else if (secConfig.view === 'pintura') {
+                        const info = (row.ordem + (row.origem || '')).toUpperCase();
+                        if (info.includes('TQ')) targetId = 'op1_tq1'; 
+                        else if (info.includes('CT')) targetId = 'op1_ct'; 
+                        else if (info.includes('SILO')) targetId = 'op1_silo';
+                        else targetId = 'op1_bases'; 
+                    }
+                    else if (secConfig.view === 'op1') targetId = 'op2_geral';
+
+                    if (targetId) {
+                        const tbDest = db.data[targetId];
+                        let freeIdx = tbDest.findIndex(r => !r.ordem || r.ordem.trim() === '');
+                        if (freeIdx === -1) {
+                            tbDest.push(getEmptyRow());
+                            freeIdx = tbDest.length - 1;
+                        }
+                        
+                        const hojeDataStr = getDataAtualFormatada();
+                        
+                        // Busca o plano original na raiz do PCP para fazer a matemática correta
+                        let planSaiOrig = row.plan_sai;
+                        if (!planSaiOrig && row.ordem) {
+                            const ovBusca = row.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                            if(ovBusca.length >= 3) {
+                                const lOrig = db.data[secId].find(r => r.ordem && r.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase().endsWith(ovBusca));
+                                if(lOrig && lOrig.plan_sai) planSaiOrig = lOrig.plan_sai;
+                            }
+                        }
+
+                        // Plano de Entrada da próxima fase = Plano de Saída da fase atual + 1 dia
+                        const planEntDest = planSaiOrig ? adicionarUmDia(planSaiOrig) : '';
+                        
+                        tbDest[freeIdx].ordem = row.ordem;
+                        tbDest[freeIdx].plan_ent = planEntDest; // Fica oculto pro S&OP
+                        
+                        tbDest[freeIdx].real_ent = row.ordem.split('-')[0].replace(/[^0-9]/g, '');
+                        tbDest[freeIdx].data_pcp = hojeDataStr;
+                        tbDest[freeIdx].data_real_ent = hojeDataStr;
+                        tbDest[freeIdx].origem = secConfig.title;
+
+                        let calc = calcularAtraso(planEntDest, hojeDataStr);
+                        tbDest[freeIdx].atr_ent = calc.atraso;
+                        tbDest[freeIdx].stat_ent = calc.status;
+
+                        const destTitle = configuracaoSetores.find(c=>c.id===targetId).title;
+                        mostrarToast(`Avançou para: ${destTitle}`, 'fa-truck-fast');
                     }
                 }
-                forceRenderTodasTabelas(); autoSaveCloud();
+                forceRenderTodasTabelas(); autoSaveCloud(true);
             }
         });
 
-        // PCP COMO CHEFE ABSOLUTO DA CRIAÇÃO DE LINHAS
+        // ==========================================
+        // CEREBRO DA CARGA PCP: FILTRO INTELIGENTE E CORTE
+        // ==========================================
         function processarBasePCP() {
             const text = document.getElementById('pcp-dados').value;
             if(!text.trim()) return mostrarToast('Cole os dados primeiro!', 'fa-triangle-exclamation');
             let count = 0;
-            text.split('\n').forEach(linha => {
+            
+            const formatPcpDate = (dStr) => {
+                if(!dStr) return '';
+                const parts = dStr.split(/[\/\.]/); 
+                if(parts.length >= 2) return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}`;
+                return dStr;
+            };
+
+            let linhasOriginais = text.split('\n');
+            
+            // O SCANNER DE PONTO DE PARTIDA: Ignora tudo antes da OV 1003100262
+            let indexInicio = linhasOriginais.findIndex(l => l.replace(/\s/g, '').includes('1003100262'));
+            let linhasParaProcessar = indexInicio !== -1 ? linhasOriginais.slice(indexInicio) : linhasOriginais;
+
+            linhasParaProcessar.forEach(linha => {
                 const col = linha.split('\t');
                 
-                if (col.length >= 5 && !col[0].toLowerCase().includes('setor')) {
-                    const s = col[0].toUpperCase().trim();
-                    const destino = (s.includes('TQ')?'tq':s.includes('CT')?'ct':s.includes('BASE')?'bases':s.includes('SILO')?'silo':s.includes('BOX 1')?'esp_box1':s.includes('BOX 2')?'esp_box2':s.includes('BOX 3')?'esp_box3':s.includes('EXTRA')?'extra':'');
+                if (col.length >= 5 && col[0].trim() !== '' && !col[0].toLowerCase().includes('linha') && !col[0].toLowerCase().includes('venda')) {
+                    const linhaAlvo = col[0].trim();
+                    const ov = col[1].trim();
+                    const prod = col[2].trim();
+                    const dataEntrada = formatPcpDate(col[3].trim());
+                    const dataSaida = formatPcpDate(col[4].trim());
+                    
+                    if (ov === '') return;
+
+                    let destino = '';
+                    if (linhaAlvo === 'Tanque') destino = 'tq';
+                    else if (linhaAlvo === 'CARREGA TUDO') destino = 'ct';
+                    else if (linhaAlvo === 'BASES') destino = 'bases';
+                    else if (linhaAlvo === 'Silo Cilindríco') destino = 'silo';
+                    else if (linhaAlvo === 'Especiais') destino = 'esp_box1';
+                    else if (linhaAlvo === 'Pintura') destino = 'pintura';
+                    else if (linhaAlvo === 'OP1') destino = 'op1_bases';
+                    else if (linhaAlvo === 'OP2') destino = 'op2_geral';
                     
                     if (destino && db.data[destino]) {
-                        // Busca a primeira linha totalmente vazia
-                        const idx = db.data[destino].findIndex(r => (!r.ordem || r.ordem === '') && (!r.plan_ent || r.plan_ent === ''));
-                        if (idx !== -1) { 
-                            db.data[destino][idx].data_pcp = col[1].trim(); 
-                            db.data[destino][idx].ordem = col[2].trim(); 
-                            db.data[destino][idx].plan_ent = col[3].trim(); 
-                            db.data[destino][idx].plan_sai = col[4].trim(); 
-                            count++; 
+                        let idx = db.data[destino].findIndex(r => (!r.ordem || r.ordem === ''));
+                        if (idx === -1) {
+                            db.data[destino].push(getEmptyRow());
+                            idx = db.data[destino].length - 1;
                         }
+                        
+                        db.data[destino][idx].data_pcp = ''; 
+                        db.data[destino][idx].ordem = `${ov} - ${prod}`; 
+                        db.data[destino][idx].plan_ent = dataEntrada; 
+                        db.data[destino][idx].plan_sai = dataSaida; 
+                        
+                        count++; 
                     }
                 } 
-                else if (col.length === 4 && !col[0].toLowerCase().includes('setor')) {
-                    const s = col[0].toUpperCase().trim();
-                    const destino = (s.includes('TQ')?'tq':s.includes('CT')?'ct':s.includes('BASE')?'bases':s.includes('SILO')?'silo':s.includes('BOX 1')?'esp_box1':s.includes('BOX 2')?'esp_box2':s.includes('BOX 3')?'esp_box3':s.includes('EXTRA')?'extra':'');
-                    
-                    if (destino && db.data[destino]) {
-                        const idx = db.data[destino].findIndex(r => (!r.ordem || r.ordem === '') && (!r.plan_ent || r.plan_ent === ''));
-                        if (idx !== -1) { 
-                            db.data[destino][idx].ordem = col[1].trim(); 
-                            db.data[destino][idx].plan_ent = col[2].trim(); 
-                            db.data[destino][idx].plan_sai = col[3].trim(); 
-                            count++; 
-                        }
-                    }
-                }
             });
             fecharModalPCP();
-            forceRenderTodasTabelas(); autoSaveCloud();
-            mostrarToast(`${count} Ordens importadas!`, 'fa-bolt');
+            
+            reconstruirDadosTablet();
+            
+            forceRenderTodasTabelas(); autoSaveCloud(true);
+            mostrarToast(`${count} Ordens importadas com Sucesso!`, 'fa-bolt');
+        }
+
+        function apagarProgramacaoPCP() {
+            if(!isAdmin) return abrirModalAuth();
+            const confirmacao = confirm("ATENÇÃO PERIGO: Deseja apagar TODAS as Ordens, Datas e Programações da fábrica inteira para iniciar um NOVO MÊS? (Isso não apaga a Estamparia nem o histórico do Tablet)");
+            if (confirmacao) {
+                configuracaoSetores.forEach(sec => {
+                    db.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
+                });
+                
+                reconstruirDadosTablet(); 
+                forceRenderTodasTabelas();
+                autoSaveCloud(true);
+                fecharModalPCP();
+                mostrarToast("Lousa Formatada para Mês Novo!", "fa-trash-can");
+            }
+        }
+
+        function zerarApontamentos() {
+            if(!isAdmin) return abrirModalAuth();
+            const confirmacao = confirm("Deseja LIMPAR os apontamentos manuais (OK/COGI, Ações, Gargalos) para iniciar a reunião de hoje? A programação do PCP e do Tablet NÃO serão afetadas.");
+            
+            if (confirmacao) {
+                Object.keys(db.data).forEach(tabelaKey => {
+                    db.data[tabelaKey].forEach(row => {
+                        row.aponta = '';
+                        row.impactos = '';
+                        row.acoes = '';
+                        
+                        if(tabelaKey !== 'ct') {
+                            row.real_ent = '';
+                            row.real_sai = '';
+                            row.data_pcp = '';
+                            row.data_real_ent = '';
+                            row.data_real_sai = '';
+                        }
+                    });
+                });
+                
+                reconstruirDadosTablet();
+                forceRenderTodasTabelas();
+                autoSaveCloud(true);
+                mostrarToast("Lousa pronta para hoje!", "fa-eraser");
+            }
         }
 
         function renderResumoApontamento() {
@@ -777,10 +1141,10 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                     db.data[secId].forEach(row => {
                         const plan = row.plan_sai || '';
                         const real = row.real_sai || '';
+                        const dataExec = row.data_pcp || '';
                         
-                        if (dateMatches(plan, db.globalDate) || dateMatches(real, db.globalDate) || (real.trim() !== '' && row.aponta === '')) {
+                        if (dateMatches(plan, db.globalDate) || dateMatches(dataExec, db.globalDate) || dateMatches(real, db.globalDate) || (real.trim() !== '' && row.aponta === '')) {
                             hasSaidas = true;
-                            let isLiberado = real.trim() !== '';
                             htmlSaidas += `
                                 <tr>
                                     <td style="font-weight:900; color: var(--randon-black); padding-left: 20px; font-size: 13px;">
@@ -837,6 +1201,34 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             chartsObj.line = new Chart(document.getElementById('chartEvolucao'), { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3 } });
             chartsObj.pie = new Chart(document.getElementById('chartStatus'), { type: 'doughnut', data: { labels: ['OK', 'COGI'], datasets: [{ data: [0,0], backgroundColor: ['#10b981', '#ef4444'] }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%' } });
             chartsObj.aderencia = new Chart(document.getElementById('chartAderencia'), { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false } });
+            chartsObj.estamparia = new Chart(document.getElementById('chartEstamparia'), { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3, plugins: { legend: { position: 'bottom' } } } });
+        }
+
+        function updateEstampariaChart() {
+            if(!chartsObj.estamparia || !db.estampariaMatriz) return;
+            const datas = (db.estampariaMatriz.datas && db.estampariaMatriz.datas.length === 5) ? db.estampariaMatriz.datas : ['','','','',''];
+            chartsObj.estamparia.data.labels = datas;
+            
+            const datasets = [];
+            const cores = { "Atraso Programação": "#ef4444", "Estamparia Geral": "#3b82f6", "Laser": "#10b981", "Linea": "#f59e0b", "Dobra": "#8b5cf6", "PRM - Carbo": "#ec4899", "115 - CDL": "#14b8a6", "160 - Externo": "#64748b" };
+
+            estampariaLinhas.forEach(linha => {
+                const valArray = (db.estampariaMatriz.valores && db.estampariaMatriz.valores[linha]) ? db.estampariaMatriz.valores[linha] : ['','','','',''];
+                const numData = valArray.map(v => parseFloat(v) || 0);
+                datasets.push({
+                    label: linha,
+                    data: numData,
+                    borderColor: cores[linha] || "#cbd5e1",
+                    backgroundColor: 'transparent',
+                    borderWidth: 3,
+                    pointBackgroundColor: cores[linha],
+                    pointRadius: 5,
+                    hidden: !["Atraso Programação", "Estamparia Geral", "Laser", "Dobra"].includes(linha)
+                });
+            });
+
+            chartsObj.estamparia.data.datasets = datasets;
+            chartsObj.estamparia.update();
         }
 
         function updateAnalytics() {
@@ -862,10 +1254,12 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                         }
                         
                         if(row.real_sai && row.real_sai.trim() !== '') {
-                            const d = row.real_sai;
-                            if(!diaAcessoMap[d]) diaAcessoMap[d] = { ok: 0, cogi: 0 };
-                            if(ap === 'OK') diaAcessoMap[d].ok++;
-                            if(ap === 'COGI') diaAcessoMap[d].cogi++;
+                            const d = row.data_pcp || row.real_sai;
+                            if(d && d.includes('/')) {
+                                if(!diaAcessoMap[d]) diaAcessoMap[d] = { ok: 0, cogi: 0 };
+                                if(ap === 'OK') diaAcessoMap[d].ok++;
+                                if(ap === 'COGI') diaAcessoMap[d].cogi++;
+                            }
                         }
                         
                         if(row.impactos && impactosContagem[row.impactos] !== undefined) impactosContagem[row.impactos]++;
@@ -877,11 +1271,9 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
 
             document.getElementById('dash-total-apontamentos').innerText = totApont;
             document.getElementById('dash-ok').innerText = totApont > 0 ? ((totOk/totApont)*100).toFixed(0) + '%' : '0%';
-            
             let pAderencia = totalPlan > 0 ? ((totalReal / totalPlan) * 100) : 0;
             if(pAderencia > 100) pAderencia = 100;
             document.getElementById('dash-aderencia').innerText = pAderencia.toFixed(0) + '%';
-            
             document.getElementById('dash-cogi').innerText = totCogi;
             document.getElementById('dash-atrasos').innerText = totAtrasos;
 
@@ -904,6 +1296,9 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
             chartsObj.aderencia.update();
         }
 
+        // ==========================================
+        // FIREBASE E INTEGRAÇÃO DO TABLET
+        // ==========================================
         function initFirebase() {
             try {
                 if (!firebase.apps.length) {
@@ -915,144 +1310,136 @@ CT	03/08/2026	CARREGA TUDO 3EIXOS	03/08/2026	08/08/2026"></textarea>
                 dbRef.on('value', (snapshot) => {
                     const nuvemDb = snapshot.val();
                     if(nuvemDb) { 
-                        try {
-                            const mapLegado = { 'tanques': 'tq', 'carrega_tudo': 'ct', 'especiais': 'esp_box1', 'mof': 'op1_bases' };
-                            Object.keys(mapLegado).forEach(oldKey => {
-                                const newKey = mapLegado[oldKey];
-                                if(nuvemDb.data && nuvemDb.data[oldKey] && Array.isArray(nuvemDb.data[oldKey])) {
-                                    if(!nuvemDb.data[newKey] || (Array.isArray(nuvemDb.data[newKey]) && nuvemDb.data[newKey].every(r => !r.ordem && !r.plan_ent))) {
-                                        nuvemDb.data[newKey] = JSON.parse(JSON.stringify(nuvemDb.data[oldKey]));
-                                    }
-                                }
-                            });
-
-                            if(nuvemDb.data) {
-                                Object.keys(nuvemDb.data).forEach(tabelaKey => {
-                                    if(Array.isArray(nuvemDb.data[tabelaKey])) {
-                                        nuvemDb.data[tabelaKey].forEach(row => {
-                                            if(row && row.data !== undefined) { 
-                                                if (row.ordem === undefined || row.ordem === '') {
-                                                    if (String(row.data).includes('/')) {
-                                                        row.data_pcp = row.data;
-                                                    } else {
-                                                        row.ordem = row.data;
-                                                    }
-                                                } else {
-                                                    row.data_pcp = row.data;
-                                                }
-                                                delete row.data; 
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        } catch(e) { console.error("Ignorando erro de formatação...", e); }
-
-                        configuracaoSetores.forEach(sec => {
-                            if(!nuvemDb.data[sec.id]) nuvemDb.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
-                            else while(nuvemDb.data[sec.id].length < sec.rows) nuvemDb.data[sec.id].push(getEmptyRow());
-                        });
-
                         db = nuvemDb; 
+                        
                         atualizarDiasEstamparia();
+                        reconstruirDadosTablet();
                         forceRenderTodasTabelas();
                     }
                 });
 
                 firebaseDB.ref('linhaCT/registros').on('value', snap => {
-                    const registros = snap.val(); if(!registros) return;
-                    const dataHojeIso = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0];
-                    
-                    if (registros[dataHojeIso]) {
-                        injetarDaFabrica(registros[dataHojeIso], dataHojeIso);
-                        if(registros[dataHojeIso].manha) injetarDaFabrica(registros[dataHojeIso].manha, dataHojeIso);
-                        if(registros[dataHojeIso].tarde) injetarDaFabrica(registros[dataHojeIso].tarde, dataHojeIso);
-                    }
+                    firebaseRegistrosTablet = snap.val() || {};
+                    reconstruirDadosTablet();
+                    forceRenderTodasTabelas();
                 });
             } catch (e) {
                 console.log("Modo Offline Ativado.");
-                const local = localStorage.getItem('erp_randon_v11'); 
+                const local = localStorage.getItem('erp_randon_v39'); 
                 if(local) { db = JSON.parse(local); atualizarDiasEstamparia(); forceRenderTodasTabelas(); }
             }
         }
 
-        // INTEGRAÇÃO BLINDADA DO TABLET
-        function injetarDaFabrica(dadosRonda, dataIsoTablet) {
-            if(!dadosRonda || !dadosRonda.postos) return;
-            let ovEntradaCT = '', ovSaidaCT = '';
-            
-            dadosRonda.postos.forEach(p => {
-                if (!p || !p.nome) return;
-                const nome = p.nome.toLowerCase();
-                let ovEncontrada = '';
-
-                if (p.ov && p.ov !== '---') ovEncontrada = p.ov.toString().trim().toUpperCase();
-                else if (p.tarde && p.tarde.ov && p.tarde.ov !== '---') ovEncontrada = p.tarde.ov.toString().trim().toUpperCase();
-                else if (p.manha && p.manha.ov && p.manha.ov !== '---') ovEncontrada = p.manha.ov.toString().trim().toUpperCase();
-
-                if (ovEncontrada) {
-                    if (nome.includes('posto 3')) ovEntradaCT = ovEncontrada;
-                    if (nome.includes('posto 7')) ovSaidaCT = ovEncontrada;
-                }
-            });
-
-            if(!ovEntradaCT && !ovSaidaCT) return;
-
-            const tabelaCT = db.data['ct'];
-            const partes = dataIsoTablet.split('-');
-            const dataAtualStr = `${partes[2]}/${partes[1]}`;
-
-            let atualizou = false;
-
-            // ==========================================
-            // POSTO 3 -> APENAS ATUALIZA ENTRADA
-            // ==========================================
-            if (ovEntradaCT) {
-                let linha = tabelaCT.findIndex(r => r.ordem && (r.ordem.toUpperCase().includes(ovEntradaCT) || ovEntradaCT.includes(r.ordem.toUpperCase())));
-                
-                if (linha !== -1) {
-                    if (!tabelaCT[linha].data_pcp) tabelaCT[linha].data_pcp = dataAtualStr;
-                    
-                    if (tabelaCT[linha].real_ent !== dataAtualStr) {
-                        tabelaCT[linha].real_ent = dataAtualStr;
-                        const calcEnt = calcularAtraso(tabelaCT[linha].plan_ent, tabelaCT[linha].real_ent);
-                        tabelaCT[linha].atr_ent = calcEnt.atraso; 
-                        tabelaCT[linha].stat_ent = calcEnt.status;
-                        atualizou = true;
-                    }
-                }
-            }
-
-            // ==========================================
-            // POSTO 7 -> APENAS ATUALIZA SAÍDA
-            // ==========================================
-            if (ovSaidaCT) {
-                let linha = tabelaCT.findIndex(r => r.ordem && (r.ordem.toUpperCase().includes(ovSaidaCT) || ovSaidaCT.includes(r.ordem.toUpperCase())));
-                
-                if (linha !== -1) {
-                    if (!tabelaCT[linha].data_pcp) tabelaCT[linha].data_pcp = dataAtualStr;
-
-                    if (tabelaCT[linha].real_sai !== dataAtualStr) {
-                        tabelaCT[linha].real_sai = dataAtualStr;
-                        const calcSai = calcularAtraso(tabelaCT[linha].plan_sai, tabelaCT[linha].real_sai);
-                        tabelaCT[linha].atr_sai = calcSai.atraso; 
-                        tabelaCT[linha].stat_sai = calcSai.status;
-                        atualizou = true;
-                    }
-                }
-            }
-
-            if(atualizou) {
-                forceRenderTodasTabelas(); autoSaveCloud();
-                mostrarToast("CT: Integração Tablet Sincronizada!", "fa-satellite-dish");
-            }
+        function normalizarDataISO(key) {
+            const k = String(key).trim();
+            if (/^\d{4}-\d{2}-\d{2}$/.test(k)) return k;
+            if (/^\d{2}-\d{2}-\d{4}$/.test(k)) { let p = k.split('-'); return `${p[2]}-${p[1]}-${p[0]}`; }
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(k)) { let p = k.split('/'); return `${p[2]}-${p[1]}-${p[0]}`; }
+            return null;
         }
 
-        function autoSaveCloud() {
+        function extrairPostosDia(dadosDia) {
+            let extraidos = [];
+            const percorrer = (nodo) => {
+                if (!nodo || typeof nodo !== 'object') return;
+                
+                let nome = String(nodo.nome || nodo.posto || '').toLowerCase();
+                let ov = String(nodo.ov || (nodo.tarde && nodo.tarde.ov) || (nodo.manha && nodo.manha.ov) || (nodo.noite && nodo.noite.ov) || '').replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                
+                if (ov.length >= 3 && (nome.includes('posto 3') || nome === '3' || nome.includes('posto 03'))) {
+                    extraidos.push({ ov: ov, tipo: 'entrada' });
+                }
+                if (ov.length >= 3 && (nome.includes('posto 7') || nome === '7' || nome.includes('posto 07'))) {
+                    extraidos.push({ ov: ov, tipo: 'saida' });
+                }
+                
+                Object.values(nodo).forEach(filho => {
+                    if (typeof filho === 'object') percorrer(filho);
+                });
+            };
+            percorrer(dadosDia);
+            return extraidos;
+        }
+
+        function alocarNoPainelCT(ovTablet, tipo, dataCarimbo) {
+            let tabelaCT = db.data['ct'];
+            let atualizou = false;
+            
+            let idx = tabelaCT.findIndex(r => {
+                if (!r.ordem) return false;
+                let ovPCP = r.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                if (ovPCP.length < 3) return false;
+                return ovPCP.endsWith(ovTablet) || ovTablet.endsWith(ovPCP);
+            });
+            
+            if (idx === -1) {
+                idx = tabelaCT.findIndex(r => !r.ordem || r.ordem.trim() === '');
+                if (idx === -1) {
+                    tabelaCT.push(getEmptyRow());
+                    idx = tabelaCT.length - 1;
+                }
+            }
+            
+            if (idx !== -1) {
+                let row = tabelaCT[idx];
+                if (!row.ordem) row.ordem = ovTablet + " (AUTO)";
+                
+                if (tipo === 'entrada') {
+                    let currentEnt = String(row.real_ent).replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                    if (!currentEnt.endsWith(ovTablet) && !ovTablet.endsWith(currentEnt)) {
+                        row.real_ent = ovTablet;
+                        if (!row.data_pcp) row.data_pcp = dataCarimbo;
+                        row.data_real_ent = dataCarimbo;
+                        atualizou = true;
+                    }
+                }
+                if (tipo === 'saida') {
+                    let currentSai = String(row.real_sai).replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                    if (!currentSai.endsWith(ovTablet) && !ovTablet.endsWith(currentSai)) {
+                        row.real_sai = ovTablet;
+                        if (!row.data_pcp) row.data_pcp = dataCarimbo;
+                        row.data_real_sai = dataCarimbo;
+                        atualizou = true;
+                    }
+                }
+            }
+            return atualizou;
+        }
+
+        function reconstruirDadosTablet() {
+            if (!firebaseRegistrosTablet) return;
+            let atualizouGeral = false;
+            
+            const chavesOrdenadas = Object.keys(firebaseRegistrosTablet).sort();
+            
+            chavesOrdenadas.forEach(key => {
+                const dataIso = normalizarDataISO(key);
+                // INICIA A VARREDURA APENAS DE 03/08/2026 PARA FRENTE
+                if (!dataIso || dataIso < "2026-08-03") return;
+                
+                const partes = dataIso.split('-'); 
+                const dataCarimbo = `${partes[2]}/${partes[1]}`; 
+                
+                const dadosDia = firebaseRegistrosTablet[key];
+                const postosScaneados = extrairPostosDia(dadosDia);
+                
+                postosScaneados.forEach(scan => {
+                    if(alocarNoPainelCT(scan.ov, scan.tipo, dataCarimbo)) {
+                        atualizouGeral = true;
+                    }
+                });
+            });
+
+            if (atualizouGeral) autoSaveCloud(false); 
+        }
+
+        function autoSaveCloud(exibirAviso = true) {
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
-                localStorage.setItem('erp_randon_v11', JSON.stringify(db));
-                if(dbRef) dbRef.set(db).then(() => mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up"));
+                localStorage.setItem('erp_randon_v39', JSON.stringify(db));
+                if(dbRef) dbRef.set(db).then(() => {
+                    if(exibirAviso) mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up");
+                });
             }, 800);
         }
 
