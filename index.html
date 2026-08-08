@@ -16,18 +16,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        /* CORE VARIABLES */
+        /* ===== ESTILOS COMPLETOS (mantidos) ===== */
         :root {
-            --randon-red: #e32128; --randon-black: #1e293b; --randon-blue: #3b82f6;
-            --randon-grey: #64748b; --randon-dark: #0f172a; --bg-body: #f1f5f9;
-            --bg-card: #ffffff; --border-light: #e2e8f0; --cell-bg: #f8fafc;
-            --status-green: #10b981; --status-orange: #f59e0b; --status-red: #ef4444;
+            --randon-red: #e32128;
+            --randon-black: #1e293b;
+            --randon-blue: #3b82f6;
+            --randon-grey: #64748b;
+            --randon-dark: #0f172a;
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --border-light: #e2e8f0;
+            --cell-bg: #f8fafc;
+            --status-green: #10b981;
+            --status-orange: #f59e0b;
+            --status-red: #ef4444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-body); color: var(--randon-dark); font-size: 13px; overflow-y: scroll; }
         
-        /* SISTEMA DE MODO ADMINISTRADOR VS LEITURA */
         body.readonly-mode .cell-input, 
         body.readonly-mode .meta-input, 
         body.readonly-mode .estamparia-val-input { pointer-events: none; }
@@ -35,7 +42,6 @@
         .admin-only { display: none !important; }
         body.admin-mode .admin-only { display: flex !important; }
 
-        /* HEADER MODERNO */
         .navbar { background-color: #0f172a; border-bottom: 4px solid var(--randon-blue); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; height: 80px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .nav-left { display: flex; align-items: center; gap: 25px; height: 100%; }
         .logo-container svg { height: 55px; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
@@ -55,7 +61,6 @@
         .auth-container:hover { background-color: rgba(255,255,255,0.2); }
         .auth-icon { color: white; font-size: 16px; }
 
-        /* BOTOES EXEC */
         .btn { padding: 9px 15px; border: none; border-radius: 6px; font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-pdf { background-color: #475569; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); } .btn-pdf:hover { background-color: #334155; transform: translateY(-1px); }
         .btn-tv { background-color: white; color: var(--randon-black); box-shadow: 0 4px 6px rgba(0,0,0,0.1); } .btn-tv:hover { background-color: #f1f5f9; transform: translateY(-1px); }
@@ -64,7 +69,6 @@
         .btn-auth { background-color: var(--randon-blue); color: white; box-shadow: 0 4px 10px rgba(59,130,246,0.3); } .btn-auth:hover { filter: brightness(0.9); transform: translateY(-2px); }
         .btn-orange { background-color: var(--status-orange); color: white; box-shadow: 0 4px 10px rgba(245,158,11,0.3); } .btn-orange:hover { filter: brightness(0.9); transform: translateY(-2px); }
 
-        /* MODAIS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
         .modal-content { background: white; padding: 35px; border-radius: 16px; width: 850px; max-width: 95%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border-top: 6px solid var(--status-green); }
@@ -77,7 +81,6 @@
         .input-senha { padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; width: 100%; font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 20px; outline: none; transition: 0.2s;}
         .input-senha:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,0.15);}
 
-        /* VIEWS & TABELAS */
         .view-container { padding: 25px; display: none; flex-direction: column; gap: 30px; animation: fadeIn 0.3s; }
         .view-container.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -117,20 +120,18 @@
         
         .auto-tag { font-size: 9px; background: var(--status-orange); color: white; padding: 3px 6px; border-radius: 4px; position: absolute; top: 2px; left: 4px; pointer-events: none; font-weight: 900; letter-spacing: 0.5px;}
         .ct-badge { font-size: 10px; color: #064e3b; background: #34d399; padding: 5px 10px; border-radius: 6px; margin-left: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
+        .data-badge { font-size: 10px; color: #1e40af; background: #bfdbfe; padding: 5px 10px; border-radius: 6px; margin-left: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
         
-        /* EXPANSÃO DE LINHAS (VER MAIS) */
         .ver-mais-container { background-color: #f8fafc; padding: 10px; text-align: center; border-top: 1px solid var(--border-light); }
         .btn-expandir { background-color: white; border: 1px solid #cbd5e1; color: var(--randon-blue); padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-transform: uppercase;}
         .btn-expandir:hover { background-color: var(--randon-blue); color: white; }
 
-        /* ESTAMPARIA TABLE */
         .estamparia-table { width: 100%; border-collapse: collapse; border: 2px solid var(--randon-black); }
         .estamparia-table th, .estamparia-table td { border: 1px solid var(--randon-black); padding: 8px; text-align: center; }
         .estamparia-table th { color: var(--randon-dark); font-size: 13px; }
         .estamparia-table td input { font-size: 15px; font-weight: 900; color: var(--randon-blue); width: 100%; text-align: center; border: none; background: transparent; outline: none; }
         .estamparia-table td input:focus { background-color: #f1f5f9; }
 
-        /* BI & ANALYTICS */
         .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 30px; border-radius: 12px; border: 1px solid var(--border-light); border-left: 6px solid var(--randon-red); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
         .dashboard-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 25px; }
         .dash-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border-light); position: relative; overflow: hidden; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
@@ -146,7 +147,6 @@
         .chart-box h3 { font-size: 16px; font-weight: 900; margin-bottom: 20px; border-bottom: 2px solid var(--border-light); padding-bottom: 12px; text-transform: uppercase; color: var(--randon-dark); }
         .chart-container-bi { position: relative; height: 280px; width: 100%; }
 
-        /* MODO TV */
         body.tv-mode .navbar { display: none !important; }
         body.tv-mode { overflow: hidden !important; background-color: var(--bg-body); }
         body.tv-mode .view-container { padding: 15px; pointer-events: none; }
@@ -167,6 +167,27 @@
             .macro-badge { -webkit-print-color-adjust: exact; background-color: black !important; color: white !important; }
             .section-card { border: none !important; box-shadow: none !important; }
             tr[style*="display: none"] { display: table-row !important; } 
+        }
+
+        .ordem-programada {
+            background-color: #dbeafe !important;
+            font-weight: 900 !important;
+            color: #1e40af !important;
+        }
+        .ordem-diferente {
+            background-color: #fee2e2 !important;
+            color: #991b1b !important;
+            font-weight: 900 !important;
+        }
+        .ordem-ok {
+            background-color: #d1fae5 !important;
+            color: #065f46 !important;
+            font-weight: 900 !important;
+        }
+        .data-input {
+            background-color: #fffbeb !important;
+            font-weight: 900 !important;
+            color: #92400e !important;
         }
     </style>
 </head>
@@ -204,9 +225,8 @@
                 <input type="text" id="global-date" readonly>
             </div>
             
-            <!-- BOTAO DE RESGATE DE EMERGENCIA DA ESTAMPARIA -->
-            <button class="btn btn-orange admin-only" onclick="forcarResgateEstamparia()" title="Recuperar Estamparia Antiga"><i class="fa-solid fa-life-ring"></i> Resgatar Estamparia</button>
-            
+            <button class="btn btn-orange admin-only" onclick="forcarResgateEstamparia()" title="Recuperar Estamparia Antiga"><i class="fa-solid fa-life-ring"></i></button>
+            <button class="btn btn-limpar admin-only" style="background-color: #7f1d1d;" onclick="apagarTablet()" title="Apagar Histórico do Tablet"><i class="fa-solid fa-tablet"></i> Zerar Tablet</button>
             <button class="btn btn-limpar admin-only" onclick="apagarProgramacaoPCP()" title="Zerar programação inteira do Mês"><i class="fa-solid fa-trash-can"></i> Zerar PCP</button>
             <button class="btn btn-pcp admin-only" onclick="abrirModalPCP()"><i class="fa-solid fa-bolt"></i> Carga PCP</button>
             <button class="btn btn-pdf" onclick="gerarPDFExecutivo()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
@@ -216,7 +236,6 @@
 
     <button id="btn-exit-tv" onclick="sairModoTV()"><i class="fa-solid fa-power-off"></i> Sair do Modo TV</button>
 
-    <!-- MODAL AUTENTICAÇÃO -->
     <div class="modal-overlay" id="modal-auth">
         <div class="modal-content" style="width: 400px; text-align: center; padding: 40px 30px;">
             <div class="modal-header" style="justify-content: center; margin-bottom: 20px;">
@@ -231,7 +250,6 @@
         </div>
     </div>
 
-    <!-- MODAL CARGA PCP -->
     <div class="modal-overlay" id="modal-pcp">
         <div class="modal-content">
             <div class="modal-header">
@@ -239,10 +257,12 @@
                 <button class="close-btn" onclick="fecharModalPCP()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <p style="font-size: 14px; color: var(--randon-grey); font-weight: 600; margin-bottom: 15px; line-height: 1.5;">
-                <b>Instrução de Carga:</b> Copie do seu Excel exatamente as 5 colunas na ordem do arquivo: <br><strong style="color: var(--randon-blue);">LINHA | ORDEM E VENDA | PRODUTO | DATA ENTRADA | DATA SAÍDA</strong> e cole abaixo.<br>
+                <b>Instrução de Carga:</b> Copie do seu Excel exatamente as colunas na ordem do arquivo: <br><strong style="color: var(--randon-blue);">LINHA | ORDEM E VENDA | DATA ENTRADA | DATA SAÍDA</strong> e cole abaixo.<br>
+                <span style="color: var(--status-orange);">⚠️ O campo DATA será preenchido pelo apontador na linha.</span>
             </p>
             <textarea id="pcp-dados" class="pcp-textarea" placeholder="Cole os dados do Excel aqui... Ex:
-CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></textarea>
+CARREGA TUDO	1003088021	29.07.2026	05.08.2026
+BASES	1003071122	12.05.2026	26.06.2026"></textarea>
             
             <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
                 <button class="btn btn-tv" onclick="fecharModalPCP()">Cancelar</button>
@@ -251,7 +271,6 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
         </div>
     </div>
 
-    <!-- ABA 1: ESTAMPARIA -->
     <div id="view-estamparia" class="view-container active">
         <div class="section-card">
             <div class="section-header" style="background: var(--randon-dark);">
@@ -261,12 +280,10 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
             </div>
             <div style="padding: 20px; background: white; overflow-x: auto;">
                 <table class="estamparia-table" id="tabela-estamparia-matriz">
-                    <!-- Gerado via JS dinamicamente -->
                 </table>
             </div>
         </div>
         
-        <!-- DASHBOARD ESTAMPARIA -->
         <div class="section-card">
             <div class="section-header" style="background: white; border-bottom: 2px solid var(--border-light);">
                 <div class="section-title-box" style="width: 100%;">
@@ -281,13 +298,11 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
         </div>
     </div>
 
-    <!-- DEMAIS ABAS DINÂMICAS -->
     <div id="view-solda" class="view-container"></div>
     <div id="view-pintura" class="view-container"></div>
     <div id="view-op1" class="view-container"></div>
     <div id="view-op2" class="view-container"></div>
 
-    <!-- ABA: ANÁLISE EXECUTIVA (BI) -->
     <div id="view-analytics" class="view-container">
         <div class="analytics-header">
             <div>
@@ -315,7 +330,6 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
         </div>
     </div>
 
-    <!-- ABA: GUIA DE APONTAMENTO DIÁRIO -->
     <div id="view-apontamento" class="view-container">
         <div class="analytics-header">
             <div>
@@ -364,11 +378,17 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
     <div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Sincronizado!</span></div>
 
     <script>
+        // ============================================================
+        // CONFIGURAÇÕES GLOBAIS
+        // ============================================================
         const MOTIVOS_GARGALO = ["Falta de Material", "Manutenção / Quebra", "Qualidade / Retrabalho", "Engenharia / Projeto", "Atraso Cliente / Chassi", "Falta de Efetivo (RH)", "Logística / Movimentação", "Outros"];
-        
         const SENHA_ADMIN = "randon123";
         let isAdmin = false;
+        let isTVMode = false;
 
+        // ============================================================
+        // CONFIGURAÇÃO DOS SETORES
+        // ============================================================
         const configuracaoSetores = [
             { id: 'tq', view: 'solda', title: 'TANQUES (TQ)', rows: 21, metaDef: 5 },
             { id: 'ct', view: 'solda', title: 'CARREGA TUDO (CT)', rows: 25, metaDef: 3 },
@@ -388,12 +408,36 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
             { id: 'op2_geral', view: 'op2', title: 'MOF OP2: GERAL', rows: 15, metaDef: 10 }
         ];
 
+        const mapaLinhaParaSetor = {
+            'Tanque': 'tq',
+            'CARREGA TUDO': 'ct',
+            'BASES': 'bases',
+            'Silo Cilindríco': 'silo',
+            'Silo': 'silo',
+            'Especiais': 'esp_box1',
+            'Pintura': 'pintura',
+            'OP1': 'op1_bases',
+            'OP2': 'op2_geral'
+        };
+
         const estampariaLinhas = [
             "Atraso Programação", "Estamparia Geral", "Laser", "Linea", 
             "Dobra", "PRM - Carbo", "115 - CDL", "160 - Externo"
         ];
 
-        let db = { globalDate: '', data: {}, meta: {}, estampariaMatriz: { datas: [], valores: {} } };
+        // ============================================================
+        // ESTRUTURA DE DADOS
+        // ============================================================
+        let db = { 
+            globalDate: '', 
+            data: {}, 
+            meta: {}, 
+            estampariaMatriz: { 
+                datas: [], 
+                valores: {} 
+            } 
+        };
+        
         let chartsObj = { pareto: null, pie: null, line: null, aderencia: null, estamparia: null };
         let saveTimeout, tvInterval;
         let firebaseDB = null, dbRef = null;
@@ -402,88 +446,150 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
         const DEFAULT_VISIBLES_ROWS = 15;
         let expandedSections = {};
 
+        // ============================================================
+        // FUNÇÕES AUXILIARES
+        // ============================================================
         function getEmptyRow() {
-            return { data_pcp: '', ordem: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', aponta: '', impactos: '', acoes: '', origem: '', data_real_ent: '', data_real_sai: '' };
+            return { 
+                data_pcp: '', ordem: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', 
+                plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', aponta: '', impactos: '', acoes: '', 
+                origem: '', data_real_ent: '', data_real_sai: '',
+                lock_ordem: false, lock_ent: false, lock_sai: false,
+                ordem_programada: '', data_apontamento: ''
+            };
         }
 
-        // ==========================================
-        // O ROBÔ DE RESGATE DE DADOS DA ESTAMPARIA
-        // ==========================================
-        function forcarResgateEstamparia() {
-            let melhorVersao = null;
-            let maxPreenchidos = -1;
+        function getDataAtualFormatada() {
+            const hoje = new Date();
+            return `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}`;
+        }
 
-            // Varre as 50 últimas versões que testamos hoje
-            for (let i = 1; i <= 50; i++) {
-                let oldStorage = localStorage.getItem('erp_randon_v' + i);
-                if (oldStorage) {
-                    try {
-                        let oldDb = JSON.parse(oldStorage);
-                        if (oldDb && oldDb.estampariaMatriz && oldDb.estampariaMatriz.valores) {
-                            let count = 0;
-                            Object.values(oldDb.estampariaMatriz.valores).forEach(arr => {
-                                if(Array.isArray(arr)) {
-                                    arr.forEach(val => { if (val && String(val).trim() !== '') count++; });
-                                }
-                            });
-                            // Pega a versão que tiver mais números digitados
-                            if (count > maxPreenchidos) {
-                                maxPreenchidos = count;
-                                melhorVersao = oldDb.estampariaMatriz;
-                            }
-                        }
-                    } catch(e) {}
-                }
+        function getDataCompleta() {
+            const hoje = new Date();
+            return `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}/${hoje.getFullYear()}`;
+        }
+
+        function formatarDataEstamparia(dateObj) {
+            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+            return `${String(dateObj.getDate()).padStart(2, '0')}/${mesesAbreviados[dateObj.getMonth()]}`;
+        }
+
+        function formatPcpDate(dStr) {
+            if(!dStr) return '';
+            dStr = dStr.trim();
+            const parts = dStr.split(/[\/\.]/); 
+            if(parts.length >= 2) {
+                const dia = parts[0].padStart(2, '0');
+                const mes = parts[1].padStart(2, '0');
+                const ano = parts[2] ? parts[2] : '2026';
+                return `${dia}/${mes}/${ano}`;
             }
+            return dStr;
+        }
 
-            if (maxPreenchidos > 0 && melhorVersao) {
-                db.estampariaMatriz = melhorVersao;
-                renderizarEstampariaMatriz();
-                autoSaveCloud(true);
-                alert("SUCESSO! O Robô de Resgate encontrou a sua versão com " + maxPreenchidos + " células preenchidas e restaurou a tela inteira!");
+        function adicionarUmDia(dataStr) {
+            if(!dataStr || dataStr.trim() === '') return '';
+            const partes = dataStr.split('/');
+            if(partes.length < 2) return dataStr;
+            const year = parseInt(partes[2]) || new Date().getFullYear();
+            const d = new Date(year, parseInt(partes[1]) - 1, parseInt(partes[0]));
+            d.setDate(d.getDate() + 1);
+            return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+        }
+
+        function dateMatches(dateStr, globalDateStr) {
+            if(!dateStr || !globalDateStr) return false;
+            const parts = globalDateStr.split('-');
+            const d = parts[2] ? parts[2] : globalDateStr.split('/')[0]; 
+            const mNum = parts[1] ? parts[1] : globalDateStr.split('/')[1];
+            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+            const mNome = mesesAbreviados[parseInt(mNum) - 1];
+            const s = dateStr.toLowerCase();
+            return s.includes(`${d}/${mNum}`) || s.includes(`${d}/${mNome}`) || (s.includes(d) && (s.includes(mNum) || s.includes(mNome)));
+        }
+
+        function normalizarDataISO(key) {
+            const k = String(key).trim();
+            const parts = k.split(/[-/]/);
+            if (parts.length === 3) {
+                let y, m, d;
+                if (parts[0].length === 4) { y = parts[0]; m = parts[1]; d = parts[2]; } 
+                else if (parts[2].length === 4) { d = parts[0]; m = parts[1]; y = parts[2]; } 
+                else { return null; }
+                return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+            }
+            return null;
+        }
+
+        function extrairNumeroOrdem(texto) {
+            if (!texto) return '';
+            const match = texto.match(/(\d{8,})/);
+            return match ? match[1] : texto.replace(/[^0-9]/g, '');
+        }
+
+        function normalizarDataParaComparacao(dataStr) {
+            if (!dataStr) return '';
+            let limpo = dataStr.trim();
+            limpo = limpo.replace(/[.\-]/g, '/');
+            const parts = limpo.split('/');
+            if (parts.length >= 2) {
+                const dia = parts[0].padStart(2, '0');
+                const mes = parts[1].padStart(2, '0');
+                return `${dia}/${mes}`;
+            }
+            return limpo;
+        }
+
+        function calcularAtraso(planStr, realStr) {
+            if(!planStr || planStr.trim() === '') return { atraso: '', status: '' };
+            let diaR, mesR, anoR;
+            const year = new Date().getFullYear();
+            if (!realStr || realStr.trim() === '') {
+                return { atraso: '', status: '' };
             } else {
-                alert("Ops, não encontramos nenhum dado antigo salvo no cache deste navegador.");
+                [diaR, mesR, anoR] = realStr.split('/');
+                if(!anoR) anoR = year;
+            }
+
+            const [diaP, mesP, anoP] = planStr.split('/');
+            if(!diaP) return { atraso: 0, status: 'green' };
+
+            const dPlan = new Date(anoP || year, parseInt(mesP) - 1, parseInt(diaP));
+            const dReal = new Date(anoR, parseInt(mesR) - 1, parseInt(diaR));
+            const diffDays = Math.ceil((dReal - dPlan) / (1000 * 60 * 60 * 24));
+
+            let status = 'green';
+            if(diffDays === 1) status = 'orange';
+            if(diffDays >= 2) status = 'red';
+            return { atraso: diffDays > 0 ? diffDays : '', status: status };
+        }
+
+        function sanearParaFirebase(obj) {
+            if (Array.isArray(obj)) {
+                return obj.map(item => sanearParaFirebase(item));
+            } else if (obj !== null && typeof obj === 'object') {
+                let novoObj = {};
+                for (let key in obj) {
+                    novoObj[key] = sanearParaFirebase(obj[key]);
+                }
+                return novoObj;
+            } else {
+                return (obj === null || obj === undefined) ? '' : obj;
             }
         }
 
-        // ==========================================
-        // EXTERMINADOR DE LINHAS FANTASMAS (LIMPEZA DEFINITIVA)
-        // ==========================================
-        function expurgarLinhasFantasmas() {
-            let limpouAlgo = false;
-            
-            configuracaoSetores.forEach(sec => {
-                if(!db.data[sec.id]) db.data[sec.id] = [];
-                
-                const originalLen = db.data[sec.id].length;
-                
-                let validas = db.data[sec.id].filter(r => {
-                    if (!r) return false;
-                    const txtConcat = (r.ordem || '') + (r.plan_ent || '') + (r.real_ent || '') + (r.plan_sai || '') + (r.real_sai || '') + (r.aponta || '') + (r.impactos || '') + (r.acoes || '');
-                    return txtConcat.trim().length > 0;
-                });
-                
-                while (validas.length < sec.rows) {
-                    validas.push(getEmptyRow());
-                }
-                
-                validas.push(getEmptyRow());
-                validas.push(getEmptyRow());
-                validas.push(getEmptyRow());
-                
-                if (originalLen > validas.length + 10) {
-                    limpouAlgo = true;
-                }
-                
-                db.data[sec.id] = validas;
-            });
-            
-            if (limpouAlgo) {
-                console.log("Fantasmas destruídos.");
-                autoSaveCloud(false); 
-            }
+        function mostrarToast(msg, icon = "fa-circle-check") {
+            const t = document.getElementById('toast'); 
+            if (!t) return;
+            document.getElementById('toast-msg').innerText = msg;
+            t.querySelector('i').className = `fa-solid ${icon}`; 
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
         }
 
+        // ============================================================
+        // AUTENTICAÇÃO
+        // ============================================================
         function abrirModalAuth() { 
             if(isAdmin) {
                 isAdmin = false; 
@@ -496,10 +602,12 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                 setTimeout(() => document.getElementById('senha-admin').focus(), 100);
             }
         }
+
         function fecharModalAuth() { 
             document.getElementById('modal-auth').classList.remove('active'); 
             document.getElementById('senha-admin').value = ''; 
         }
+
         function verificarSenha() {
             if(document.getElementById('senha-admin').value === SENHA_ADMIN) {
                 isAdmin = true; 
@@ -513,164 +621,186 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                 document.getElementById('senha-admin').value = '';
             }
         }
+
         document.getElementById('senha-admin').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') verificarSenha();
         });
 
-        function getDataAtualFormatada() {
-            const hoje = new Date();
-            return `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}`;
+        // ============================================================
+        // MODAIS PCP
+        // ============================================================
+        function abrirModalPCP() { 
+            if(!isAdmin) { abrirModalAuth(); return; }
+            document.getElementById('modal-pcp').classList.add('active'); 
+        }
+        function fecharModalPCP() { 
+            document.getElementById('modal-pcp').classList.remove('active'); 
+            document.getElementById('pcp-dados').value = ''; 
         }
 
-        function formatarDataEstamparia(dateObj) {
-            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-            return `${String(dateObj.getDate()).padStart(2, '0')}/${mesesAbreviados[dateObj.getMonth()]}`;
-        }
-
-        function atualizarDiasEstamparia() {
-            if(!db.estampariaMatriz || !db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
-                let novasDatas = [];
-                for(let i=4; i>=0; i--) {
-                    let d = new Date(); d.setDate(d.getDate() - i);
-                    novasDatas.push(formatarDataEstamparia(d));
+        // ============================================================
+        // BUSCAS
+        // ============================================================
+        function buscarOrdemPorNumero(secId, numeroOrdem) {
+            const tabela = db.data[secId];
+            if (!tabela) return null;
+            for (let r of tabela) {
+                if (!r.ordem) continue;
+                const num = extrairNumeroOrdem(r.ordem);
+                if (num === numeroOrdem) {
+                    return r;
                 }
-                db.estampariaMatriz = { datas: novasDatas, valores: {} };
-                estampariaLinhas.forEach(linha => db.estampariaMatriz.valores[linha] = Array(5).fill(''));
-                return;
             }
-            const hoje = new Date();
-            const hojeFormatado = formatarDataEstamparia(hoje);
-            let datasAntigas = db.estampariaMatriz.datas;
-            
-            if (datasAntigas[datasAntigas.length - 1] !== hojeFormatado) {
-                db.estampariaMatriz.datas.shift();
-                db.estampariaMatriz.datas.push(hojeFormatado);
-                estampariaLinhas.forEach(linha => {
-                    if(!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                    db.estampariaMatriz.valores[linha].shift();
-                    db.estampariaMatriz.valores[linha].push('');
-                });
-                autoSaveCloud(false);
-            }
+            return null;
         }
 
-        // ==========================================
-        // O MOTOR DE ATRASOS (DESVIO FURA-FILA E VARREDURA)
-        // ==========================================
+        function buscarOrdemProgramada(secId, dataApontamento, linhaAtual) {
+            const tabela = db.data[secId];
+            if (!tabela) return null;
+            const dataNormalizada = normalizarDataParaComparacao(dataApontamento);
+            if (!dataNormalizada) return null;
+
+            // Procura por plan_ent igual à data
+            for (let r of tabela) {
+                if (r === linhaAtual) continue;
+                if (!r.ordem || r.ordem.trim() === '') continue;
+                if (!r.plan_ent || r.plan_ent.trim() === '') continue;
+                const planNormalizada = normalizarDataParaComparacao(r.plan_ent);
+                if (planNormalizada === dataNormalizada) {
+                    return r;
+                }
+            }
+
+            // Procura por plan_sai igual à data
+            for (let r of tabela) {
+                if (r === linhaAtual) continue;
+                if (!r.ordem || r.ordem.trim() === '') continue;
+                if (!r.plan_sai || r.plan_sai.trim() === '') continue;
+                const planNormalizada = normalizarDataParaComparacao(r.plan_sai);
+                if (planNormalizada === dataNormalizada) {
+                    return r;
+                }
+            }
+
+            // Próxima ordem disponível (mais antiga)
+            const disponiveis = tabela.filter(r => 
+                r !== linhaAtual &&
+                r.ordem && r.ordem.trim() !== '' &&
+                r.plan_ent && r.plan_ent.trim() !== '' &&
+                !r.data_apontamento
+            );
+            if (disponiveis.length > 0) {
+                disponiveis.sort((a, b) => {
+                    const da = a.plan_ent.split('/');
+                    const db_ = b.plan_ent.split('/');
+                    const dateA = new Date(da[2] || 2026, da[1]-1, da[0]);
+                    const dateB = new Date(db_[2] || 2026, db_[1]-1, db_[0]);
+                    return dateA - dateB;
+                });
+                return disponiveis[0];
+            }
+            return null;
+        }
+
+        // ============================================================
+        // ATUALIZAR ATRASOS
+        // ============================================================
         function atualizarAtrasosGlobais() {
-            const hojeStr = getDataAtualFormatada();
+            if (!db.data) return;
             
             Object.keys(db.data).forEach(secId => {
                 const tabela = db.data[secId];
+                if (!tabela) return;
                 
                 tabela.forEach(row => {
                     if (!row.ordem && !row.plan_ent && !row.plan_sai && !row.real_ent && !row.real_sai) {
                         row.atr_ent = ''; row.stat_ent = '';
                         row.atr_sai = ''; row.stat_sai = '';
+                        row.ordem_programada = '';
                         return;
                     }
 
-                    // --- ENTRADA ---
-                    let planEnt = row.plan_ent;
-                    let dataCalcEnt = row.data_real_ent || row.data_pcp || hojeStr;
-                    let mismatchEnt = false;
+                    // Se data preenchida e sem real_ent, puxa ordem programada
+                    if (row.data_pcp && row.data_pcp.trim() !== '' && !row.real_ent) {
+                        const encontrada = buscarOrdemProgramada(secId, row.data_pcp, row);
+                        if (encontrada && encontrada.ordem) {
+                            row.ordem_programada = encontrada.ordem;
+                            if (!row.lock_ordem) {
+                                row.ordem = encontrada.ordem;
+                            }
+                        }
+                    }
 
+                    // Atraso entrada
                     if (row.real_ent && row.real_ent.trim() !== '') {
-                        dataCalcEnt = row.data_real_ent || row.data_pcp || hojeStr;
-                        const ovReal = row.real_ent.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
-                        const ovPlan = row.ordem ? row.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase() : '';
-                        
-                        // Fura-fila (OV Diferente da planejada naquela linha)
-                        if (ovPlan && ovReal.length >= 3 && !ovPlan.endsWith(ovReal) && !ovReal.endsWith(ovPlan)) {
-                            mismatchEnt = true; 
-                        } else if(ovReal.length >= 3) {
-                            // Varre tudo para achar o plano original dessa OV digitada
-                            const lOrig = tabela.find(r => r.ordem && r.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase().endsWith(ovReal));
-                            if(lOrig && lOrig.plan_ent) planEnt = lOrig.plan_ent;
+                        const ordemReal = extrairNumeroOrdem(row.real_ent);
+                        const linhaReal = buscarOrdemPorNumero(secId, ordemReal);
+                        if (linhaReal) {
+                            const planEntReal = linhaReal.plan_ent;
+                            if (planEntReal && planEntReal.trim() !== '') {
+                                const cEnt = calcularAtraso(planEntReal, row.data_real_ent || getDataCompleta());
+                                row.atr_ent = cEnt.atraso;
+                                row.stat_ent = cEnt.status;
+                            } else {
+                                row.atr_ent = '';
+                                row.stat_ent = '';
+                            }
+                            const ordemPlan = extrairNumeroOrdem(row.ordem_programada || row.ordem);
+                            if (ordemReal && ordemPlan && ordemReal !== ordemPlan) {
+                                row.stat_ent = 'red';
+                                if (!row.atr_ent) row.atr_ent = '0';
+                            }
+                        } else {
+                            row.atr_ent = '';
+                            row.stat_ent = '';
                         }
                     } else {
-                        dataCalcEnt = hojeStr;
-                    }
-                    
-                    if (planEnt) {
-                        const cEnt = calcularAtraso(planEnt, dataCalcEnt);
-                        row.atr_ent = cEnt.atraso; 
-                        row.stat_ent = mismatchEnt ? 'red' : cEnt.status; 
+                        row.atr_ent = '';
+                        row.stat_ent = '';
                     }
 
-                    // --- SAÍDA ---
-                    let planSai = row.plan_sai;
-                    let dataCalcSai = row.data_real_sai || row.data_pcp || hojeStr;
-                    let mismatchSai = false;
-                    
+                    // Atraso saída
                     if (row.real_sai && row.real_sai.trim() !== '') {
-                        dataCalcSai = row.data_real_sai || row.data_pcp || hojeStr;
-                        const ovReal = row.real_sai.replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
-                        const ovPlan = row.ordem ? row.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase() : '';
-                        
-                        if (ovPlan && ovReal.length >= 3 && !ovPlan.endsWith(ovReal) && !ovReal.endsWith(ovPlan)) {
-                            mismatchSai = true;
-                        } else if(ovReal.length >= 3) {
-                            const lOrig = tabela.find(r => r.ordem && r.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase().endsWith(ovReal));
-                            if(lOrig && lOrig.plan_sai) planSai = lOrig.plan_sai;
+                        const ordemReal = extrairNumeroOrdem(row.real_sai);
+                        const linhaReal = buscarOrdemPorNumero(secId, ordemReal);
+                        if (linhaReal) {
+                            const planSaiReal = linhaReal.plan_sai;
+                            if (planSaiReal && planSaiReal.trim() !== '') {
+                                const cSai = calcularAtraso(planSaiReal, row.data_real_sai || getDataCompleta());
+                                row.atr_sai = cSai.atraso;
+                                row.stat_sai = cSai.status;
+                            } else {
+                                row.atr_sai = '';
+                                row.stat_sai = '';
+                            }
+                        } else {
+                            row.atr_sai = '';
+                            row.stat_sai = '';
                         }
                     } else {
-                        dataCalcSai = hojeStr; 
-                    }
-                    
-                    if (planSai) {
-                        const cSai = calcularAtraso(planSai, dataCalcSai);
-                        row.atr_sai = cSai.atraso; 
-                        row.stat_sai = mismatchSai ? 'red' : cSai.status; 
+                        row.atr_sai = '';
+                        row.stat_sai = '';
                     }
                 });
             });
         }
 
-        function forceRenderTodasTabelas() {
-            expurgarLinhasFantasmas();
-            atualizarAtrasosGlobais(); 
-            renderizarEstampariaMatriz();
-            renderizarViews(); 
-            recalcularDashboard(); 
-            renderResumoApontamento();
-        }
-
-        function init() {
-            configuracaoSetores.forEach(sec => {
-                expandedSections[sec.id] = false;
-                if(!db.data[sec.id]) db.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
-                if(db.meta[sec.id] === undefined) db.meta[sec.id] = sec.metaDef;
-            });
-
-            db.globalDate = getDataAtualFormatada();
-            document.getElementById('global-date').value = db.globalDate;
-            document.getElementById('titulo-guia-saidas').innerHTML = `<i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha (Data da Reunião: ${db.globalDate})`;
-
-            forceRenderTodasTabelas();
-            initFirebase(); 
-            initCharts();
-            updateEstampariaChart();
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-            document.getElementById(`view-${tabId}`).classList.add('active');
-            const btn = document.getElementById(`tab-btn-${tabId}`);
-            if(btn) btn.classList.add('active');
-            if(tabId === 'analytics') updateAnalytics();
-            if(tabId === 'apontamento') renderResumoApontamento();
-            if(tabId === 'estamparia') updateEstampariaChart();
-        }
-
-        function abrirModalPCP() { document.getElementById('modal-pcp').classList.add('active'); }
-        function fecharModalPCP() { document.getElementById('modal-pcp').classList.remove('active'); document.getElementById('pcp-dados').value = ''; }
-
+        // ============================================================
+        // RENDERIZAÇÃO
+        // ============================================================
         function renderizarEstampariaMatriz() {
             const container = document.getElementById('tabela-estamparia-matriz');
             if(!container) return;
-            const datas = (db.estampariaMatriz && db.estampariaMatriz.datas && db.estampariaMatriz.datas.length === 5) ? db.estampariaMatriz.datas : ['','','','',''];
+            
+            if (!db.estampariaMatriz) {
+                db.estampariaMatriz = { datas: [], valores: {} };
+            }
+            if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
+                atualizarDiasEstamparia();
+            }
+            
+            const datas = db.estampariaMatriz.datas || ['','','','',''];
+            
             let thead = `
                 <tr>
                     <th colspan="6" style="text-align: center; font-size: 16px; padding: 12px; border-bottom: 2px solid var(--randon-black);">
@@ -678,25 +808,36 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                     </th>
                 </tr>
                 <tr>
-                    <th style="width: 280px; text-align: left; padding-left: 20px; background-color: white;"></th>`;
+                    <th style="width: 280px; text-align: left; padding-left: 20px; background-color: white;">Linha</th>`;
+            
             datas.forEach((d, cIdx) => {
                 let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : 'background-color: white;';
                 thead += `<th style="${bg} border-bottom: 2px solid var(--randon-black); border-top: 1px solid var(--randon-black);">
-                            <input type="text" class="cell-input" style="font-weight:900; font-size: 15px; text-align: center; ${bg}" data-col-date="${cIdx}" value="${d}">
+                            <input type="text" class="cell-input" style="font-weight:900; font-size: 15px; text-align: center; ${bg}" data-col-date="${cIdx}" value="${d || ''}">
                           </th>`;
             });
             thead += `</tr>`;
 
             let tbody = '';
             estampariaLinhas.forEach((linha) => {
+                if (!db.estampariaMatriz.valores[linha]) {
+                    db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                }
+                
                 tbody += `<tr>`;
                 tbody += `<td style="font-weight: 900; padding-left: 20px; color: var(--randon-dark); font-size: 14px; border-right: 2px solid var(--randon-black);">${linha}</td>`;
+                
                 datas.forEach((d, cIdx) => {
-                    const val = (db.estampariaMatriz && db.estampariaMatriz.valores && db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx] !== undefined) ? db.estampariaMatriz.valores[linha][cIdx] : '';
+                    const val = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx] !== undefined) 
+                        ? db.estampariaMatriz.valores[linha][cIdx] 
+                        : '';
                     let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : '';
                     let colorStyle = 'color: var(--randon-blue);'; 
+                    
                     if (cIdx > 0 && val !== '') {
-                        const prevVal = (db.estampariaMatriz && db.estampariaMatriz.valores && db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx - 1]) ? db.estampariaMatriz.valores[linha][cIdx - 1] : '';
+                        const prevVal = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx - 1]) 
+                            ? db.estampariaMatriz.valores[linha][cIdx - 1] 
+                            : '';
                         if (prevVal !== '') {
                             const numVal = parseFloat(val);
                             const numPrev = parseFloat(prevVal);
@@ -706,7 +847,13 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                             }
                         }
                     }
-                    tbody += `<td style="${bg}"><input type="text" class="cell-input estamparia-val-input" style="font-size: 16px; font-weight: 900; text-align: center; ${colorStyle}" data-row-name="${linha}" data-col-idx="${cIdx}" value="${val}"></td>`;
+                    
+                    tbody += `<td style="${bg}">
+                                <input type="text" class="cell-input estamparia-val-input" 
+                                       style="font-size: 16px; font-weight: 900; text-align: center; ${colorStyle}" 
+                                       data-row-name="${linha}" data-col-idx="${cIdx}" 
+                                       value="${val}">
+                             </td>`;
                 });
                 tbody += `</tr>`;
             });
@@ -715,14 +862,6 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
             updateEstampariaChart();
         }
 
-        function toggleRows(secId) {
-            expandedSections[secId] = !expandedSections[secId];
-            renderizarViews();
-        }
-
-        // ==========================================
-        // RENDERIZAÇÃO DA TABELA (MODO OCULTO PARA PLANOS - VISUAL S&OP CLEAN)
-        // ==========================================
         function renderizarViews() {
             let htmlViews = { solda: '', pintura: '', op1: '', op2: '' };
 
@@ -736,26 +875,41 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                     const row = db.data[sec.id] ? (db.data[sec.id][i] || getEmptyRow()) : getEmptyRow();
                     let displayStyle = (!isExpanded && i >= limit) ? 'display: none;' : '';
                     
+                    let ordemExibida = '';
+                    let classeOrdem = '';
+                    if (row.data_pcp || row.real_ent) {
+                        ordemExibida = row.ordem || '';
+                        if (row.stat_ent === 'red' && row.real_ent) {
+                            classeOrdem = 'ordem-diferente';
+                        } else if (row.real_ent && row.real_ent.trim() !== '' && row.stat_ent === 'green') {
+                            classeOrdem = 'ordem-ok';
+                        } else if (row.ordem_programada && !row.real_ent) {
+                            classeOrdem = 'ordem-programada';
+                        }
+                    }
+                    
+                    let dataClass = row.data_pcp ? 'data-input' : '';
+                    
                     tbody += `
                         <tr style="${displayStyle}">
                             <td>
                                 ${row.origem ? `<div class="auto-tag">AUTO: ${row.origem}</div>` : ''}
-                                <input type="text" class="cell-input" style="color: var(--randon-black);" data-sec="${sec.id}" data-row="${i}" data-field="data_pcp" value="${row.data_pcp || ''}">
+                                <input type="text" class="cell-input ${dataClass}" style="color: var(--randon-black); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="data_pcp" value="${row.data_pcp || ''}" placeholder="DD/MM">
                             </td>
-                            <td><input type="text" class="cell-input" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem" value="${row.ordem || ''}"></td>
+                            <td class="${classeOrdem}">
+                                <input type="text" class="cell-input" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem" value="${ordemExibida}" placeholder="Ordem">
+                            </td>
                             
-                            <!-- COLUNA PLANO ENTRADA OCULTA -->
                             <td style="display: none;"><input type="text" tabindex="-1" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="plan_ent" value="${row.plan_ent || ''}"></td>
                             
-                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}"></td>
-                            <td><input type="text" class="cell-input" readonly style="color: var(--status-red);" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent || ''}"></td>
+                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}" placeholder="Ordem Real"></td>
+                            <td><input type="text" class="cell-input" readonly style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent || ''}"></td>
                             <td><div class="status-btn"><div class="circle ${row.stat_ent || ''}"></div></div></td>
                             
-                            <!-- COLUNA PLANO SAÍDA OCULTA -->
                             <td style="display: none;"><input type="text" tabindex="-1" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="plan_sai" value="${row.plan_sai || ''}"></td>
                             
-                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_sai" value="${row.real_sai || ''}"></td>
-                            <td><input type="text" class="cell-input" readonly style="color: var(--status-red);" data-sec="${sec.id}" data-row="${i}" data-field="atr_sai" value="${row.atr_sai || ''}"></td>
+                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_sai" value="${row.real_sai || ''}" placeholder="Ordem Real"></td>
+                            <td><input type="text" class="cell-input" readonly style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_sai" value="${row.atr_sai || ''}"></td>
                             <td><div class="status-btn"><div class="circle ${row.stat_sai || ''}"></div></div></td>
                             
                             <td class="${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' ? 'bg-cogi' : '')}">
@@ -777,6 +931,8 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                 }
 
                 let badgeCT = sec.id === 'ct' ? `<div class="ct-badge"><i class="fa-solid fa-satellite-dish fa-beat"></i> Integração Tablet On</div>` : '';
+                let badgeData = `<div class="data-badge"><i class="fa-solid fa-calendar-day"></i> Apontamento por Data</div>`;
+                
                 let btnVerMais = '';
                 if (totalRows > limit) {
                     let btnText = isExpanded ? 'Ocultar Linhas Excedentes <i class="fa-solid fa-chevron-up"></i>' : `Ver Mais ${totalRows - limit} Linhas <i class="fa-solid fa-chevron-down"></i>`;
@@ -789,6 +945,7 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                             <div class="section-title-box">
                                 <h2>${sec.title}</h2>
                                 ${badgeCT}
+                                ${badgeData}
                             </div>
                             <div class="kpi-row-header">
                                 <div class="kpi-box"><span>Prog. Mês</span><strong id="kpi-mes-${sec.id}">0</strong></div>
@@ -811,17 +968,17 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                         <table>
                             <thead>
                                 <tr>
-                                    <th style="width:6%">Data</th>
-                                    <th style="width:16%">Ordem / Produto</th>
+                                    <th style="width:8%">📅 Data</th>
+                                    <th style="width:16%">📦 Ordem / Produto</th>
                                     <th style="display:none;">Plan Ent.</th>
-                                    <th style="width:8%">Real Ent.</th>
-                                    <th style="width:4%">Atr</th><th style="width:4%">St</th>
+                                    <th style="width:10%">✅ Real Ent.</th>
+                                    <th style="width:5%">⏱️ Atr</th><th style="width:5%">🔴 St</th>
                                     <th style="display:none;">Plan Saída</th>
-                                    <th style="width:8%">Real Saída</th>
-                                    <th style="width:4%">Atr</th><th style="width:4%">St</th>
-                                    <th style="width:12%">Aponta</th>
-                                    <th style="width:14%">Gargalo</th>
-                                    <th style="width:20%; text-align: left; padding-left: 10px;">Ações Corretivas</th>
+                                    <th style="width:10%">✅ Real Saída</th>
+                                    <th style="width:5%">⏱️ Atr</th><th style="width:5%">🔴 St</th>
+                                    <th style="width:12%">📋 Aponta</th>
+                                    <th style="width:14%">⚠️ Gargalo</th>
+                                    <th style="width:20%; text-align: left; padding-left: 10px;">🛠️ Ações Corretivas</th>
                                 </tr>
                             </thead>
                             <tbody>${tbody}</tbody>
@@ -837,6 +994,13 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                     if(el) el.innerHTML = htmlViews[v];
                 });
             }
+            
+            recalcularDashboard();
+        }
+
+        function toggleRows(secId) {
+            expandedSections[secId] = !expandedSections[secId];
+            renderizarViews();
         }
 
         function recalcularDashboard() {
@@ -851,279 +1015,343 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                     });
                 }
                 try {
-                    document.getElementById(`kpi-mes-${sec.id}`).innerText = totalProgMes;
-                    document.getElementById(`kpi-atr-ent-${sec.id}`).innerText = sumAtrEnt;
-                    document.getElementById(`kpi-atr-sai-${sec.id}`).innerText = sumAtrSai;
-                    document.getElementById(`kpi-apontados-${sec.id}`).innerText = apontados;
-                    const meta = db.meta[sec.id] || 0;
+                    const elMes = document.getElementById(`kpi-mes-${sec.id}`);
+                    const elAtrEnt = document.getElementById(`kpi-atr-ent-${sec.id}`);
+                    const elAtrSai = document.getElementById(`kpi-atr-sai-${sec.id}`);
+                    const elApont = document.getElementById(`kpi-apontados-${sec.id}`);
                     const box = document.getElementById(`status-box-${sec.id}`);
-                    if(apontados >= meta && meta > 0) { box.className = 'status-box-giant green'; box.innerText = '✅'; } 
-                    else { box.className = 'status-box-giant red'; box.innerText = '❌'; }
+                    if (elMes) elMes.innerText = totalProgMes;
+                    if (elAtrEnt) elAtrEnt.innerText = sumAtrEnt;
+                    if (elAtrSai) elAtrSai.innerText = sumAtrSai;
+                    if (elApont) elApont.innerText = apontados;
+                    if (box) {
+                        const meta = db.meta[sec.id] || 0;
+                        if(apontados >= meta && meta > 0) { box.className = 'status-box-giant green'; box.innerText = '✅'; } 
+                        else { box.className = 'status-box-giant red'; box.innerText = '❌'; }
+                    }
                 } catch(e) {}
             });
         }
 
-        function calcularAtraso(planStr, realStr) {
-            if(!planStr || planStr.trim() === '') return { atraso: '', status: '' };
-            let diaR, mesR, anoR;
-            const year = new Date().getFullYear();
-            if (!realStr || realStr.trim() === '') {
-                const hoje = new Date();
-                diaR = String(hoje.getDate()).padStart(2, '0');
-                mesR = String(hoje.getMonth() + 1).padStart(2, '0');
-                anoR = year;
-            } else {
-                [diaR, mesR, anoR] = realStr.split('/');
-                if(!anoR) anoR = year;
-            }
-
-            const [diaP, mesP, anoP] = planStr.split('/');
-            if(!diaP) return { atraso: 0, status: 'green' };
-
-            const dPlan = new Date(anoP || year, parseInt(mesP) - 1, parseInt(diaP));
-            const dReal = new Date(anoR, parseInt(mesR) - 1, parseInt(diaR));
-            const diffDays = Math.ceil((dReal - dPlan) / (1000 * 60 * 60 * 24));
-
-            let status = 'green';
-            if(diffDays === 2) status = 'orange';
-            if(diffDays >= 3) status = 'red';
-            return { atraso: diffDays > 0 ? diffDays : '', status: status };
+        function forceRenderTodasTabelas() {
+            expurgarLinhasFantasmas();
+            atualizarAtrasosGlobais(); 
+            renderizarEstampariaMatriz();
+            renderizarViews(); 
+            recalcularDashboard(); 
+            renderResumoApontamento();
         }
 
-        function adicionarUmDia(dataStr) {
-            if(!dataStr || dataStr.trim() === '') return '';
-            const partes = dataStr.split('/');
-            if(partes.length < 2) return dataStr;
-            const year = new Date().getFullYear();
-            const d = new Date(partes[2] || year, parseInt(partes[1]) - 1, parseInt(partes[0]));
-            d.setDate(d.getDate() + 1);
-            return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-        }
-
-        function dateMatches(dateStr, globalDateStr) {
-            if(!dateStr || !globalDateStr) return false;
-            const parts = globalDateStr.split('-');
-            const d = parts[2] ? parts[2] : globalDateStr.split('/')[0]; 
-            const mNum = parts[1] ? parts[1] : globalDateStr.split('/')[1];
-            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-            const mNome = mesesAbreviados[parseInt(mNum) - 1];
-            const s = dateStr.toLowerCase();
-            return s.includes(`${d}/${mNum}`) || s.includes(`${d}/${mNome}`) || (s.includes(d) && (s.includes(mNum) || s.includes(mNome)));
-        }
-
-        // ==========================================
-        // FLUXO AUTOMÁTICO DE PROGRESSÃO (OK -> PRÓXIMO SETOR)
-        // ==========================================
-        document.addEventListener('change', (e) => {
-            if(e.target.classList.contains('estamparia-val-input')) {
-                const linha = e.target.dataset.rowName;
-                const cIdx = parseInt(e.target.dataset.colIdx);
-                if(!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = [];
-                db.estampariaMatriz.valores[linha][cIdx] = e.target.value;
-                autoSaveCloud(); 
-                renderizarEstampariaMatriz();
-                return;
-            }
-            if(e.target.dataset && e.target.dataset.colDate !== undefined) {
-                db.estampariaMatriz.datas[parseInt(e.target.dataset.colDate)] = e.target.value;
-                autoSaveCloud(); 
-                renderizarEstampariaMatriz();
-                return;
-            }
-
-            if(e.target.classList.contains('meta-input')) {
-                db.meta[e.target.dataset.sec] = parseInt(e.target.value) || 0;
-                recalcularDashboard(); autoSaveCloud(); return;
-            }
-
-            if(e.target.classList.contains('cell-input')) {
-                const secId = e.target.dataset.sec, rowIdx = e.target.dataset.row, field = e.target.dataset.field;
-                const val = e.target.value.toUpperCase();
-                const row = db.data[secId][rowIdx];
-                const oldAponta = row.aponta;
-                
-                row[field] = val;
-
-                if (field === 'data_pcp') {
-                    row.data_real_ent = val;
-                    row.data_real_sai = val;
-                } else if ((field === 'real_ent' || field === 'real_sai') && row.data_pcp === '') {
-                    row.data_pcp = getDataAtualFormatada();
-                    if(field === 'real_ent') row.data_real_ent = row.data_pcp;
-                    if(field === 'real_sai') row.data_real_sai = row.data_pcp;
+        function expurgarLinhasFantasmas() {
+            if (!db.data) db.data = {}; 
+            configuracaoSetores.forEach(sec => {
+                if(!db.data[sec.id]) db.data[sec.id] = [];
+                const originalLen = db.data[sec.id].length;
+                let validas = db.data[sec.id].filter(r => {
+                    if (!r) return false;
+                    let textConcat = (r.ordem || '') + (r.plan_ent || '') + (r.real_ent || '') + (r.plan_sai || '') + (r.real_sai || '') + (r.acoes || '');
+                    let limpo = textConcat.replace(/[^a-zA-Z0-9]/g, '');
+                    return limpo.length > 0;
+                });
+                while (validas.length < sec.rows) {
+                    validas.push(getEmptyRow());
                 }
+                validas.push(getEmptyRow());
+                validas.push(getEmptyRow());
+                validas.push(getEmptyRow());
+                db.data[sec.id] = validas;
+            });
+        }
 
-                atualizarAtrasosGlobais();
-
-                // AVANÇO AUTOMÁTICO DE SETORES
-                if (field === 'aponta' && val === 'OK' && oldAponta !== 'OK') {
-                    const secConfig = configuracaoSetores.find(c => c.id === secId);
-                    let targetId = null;
-
-                    if (secConfig.view === 'solda') targetId = 'pintura';
-                    else if (secConfig.view === 'pintura') {
-                        const info = (row.ordem + (row.origem || '')).toUpperCase();
-                        if (info.includes('TQ')) targetId = 'op1_tq1'; 
-                        else if (info.includes('CT')) targetId = 'op1_ct'; 
-                        else if (info.includes('SILO')) targetId = 'op1_silo';
-                        else targetId = 'op1_bases'; 
+        // ============================================================
+        // ESTAMPARIA - DIAS
+        // ============================================================
+        function atualizarDiasEstamparia() {
+            if (!db.estampariaMatriz) {
+                db.estampariaMatriz = { datas: [], valores: {} };
+            }
+            if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
+                let novasDatas = [];
+                for(let i=4; i>=0; i--) {
+                    let d = new Date(); 
+                    d.setDate(d.getDate() - i);
+                    novasDatas.push(formatarDataEstamparia(d));
+                }
+                db.estampariaMatriz.datas = novasDatas;
+                estampariaLinhas.forEach(linha => {
+                    if (!db.estampariaMatriz.valores[linha]) {
+                        db.estampariaMatriz.valores[linha] = Array(5).fill('');
                     }
-                    else if (secConfig.view === 'op1') targetId = 'op2_geral';
+                });
+                return;
+            }
+            const hoje = new Date();
+            const hojeFormatado = formatarDataEstamparia(hoje);
+            let datasAntigas = db.estampariaMatriz.datas;
+            if (datasAntigas[datasAntigas.length - 1] !== hojeFormatado) {
+                datasAntigas.shift();
+                datasAntigas.push(hojeFormatado);
+                estampariaLinhas.forEach(linha => {
+                    if (!db.estampariaMatriz.valores[linha]) {
+                        db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                    }
+                    db.estampariaMatriz.valores[linha].shift();
+                    db.estampariaMatriz.valores[linha].push('');
+                });
+                autoSaveCloud(false);
+            }
+        }
 
-                    if (targetId) {
-                        const tbDest = db.data[targetId];
-                        let freeIdx = tbDest.findIndex(r => !r.ordem || r.ordem.trim() === '');
-                        if (freeIdx === -1) {
-                            tbDest.push(getEmptyRow());
-                            freeIdx = tbDest.length - 1;
-                        }
-                        
-                        const hojeDataStr = getDataAtualFormatada();
-                        
-                        // Busca o plano original na raiz do PCP para fazer a matemática correta
-                        let planSaiOrig = row.plan_sai;
-                        if (!planSaiOrig && row.ordem) {
-                            const ovBusca = row.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
-                            if(ovBusca.length >= 3) {
-                                const lOrig = db.data[secId].find(r => r.ordem && r.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase().endsWith(ovBusca));
-                                if(lOrig && lOrig.plan_sai) planSaiOrig = lOrig.plan_sai;
+        function forcarResgateEstamparia() {
+            let melhorVersao = null;
+            let maxPreenchidos = -1;
+            for (let i = 1; i <= 60; i++) {
+                let oldStorage = localStorage.getItem('erp_randon_v' + i);
+                if (oldStorage) {
+                    try {
+                        let oldDb = JSON.parse(oldStorage);
+                        if (oldDb && oldDb.estampariaMatriz && oldDb.estampariaMatriz.valores) {
+                            let count = 0;
+                            Object.values(oldDb.estampariaMatriz.valores).forEach(arr => {
+                                if(Array.isArray(arr)) {
+                                    arr.forEach(val => { 
+                                        if (val && String(val).trim() !== '') count++; 
+                                    });
+                                }
+                            });
+                            if (count > maxPreenchidos) {
+                                maxPreenchidos = count;
+                                melhorVersao = oldDb.estampariaMatriz;
                             }
                         }
-
-                        // Plano de Entrada da próxima fase = Plano de Saída da fase atual + 1 dia
-                        const planEntDest = planSaiOrig ? adicionarUmDia(planSaiOrig) : '';
-                        
-                        tbDest[freeIdx].ordem = row.ordem;
-                        tbDest[freeIdx].plan_ent = planEntDest; // Fica oculto pro S&OP
-                        
-                        tbDest[freeIdx].real_ent = row.ordem.split('-')[0].replace(/[^0-9]/g, '');
-                        tbDest[freeIdx].data_pcp = hojeDataStr;
-                        tbDest[freeIdx].data_real_ent = hojeDataStr;
-                        tbDest[freeIdx].origem = secConfig.title;
-
-                        let calc = calcularAtraso(planEntDest, hojeDataStr);
-                        tbDest[freeIdx].atr_ent = calc.atraso;
-                        tbDest[freeIdx].stat_ent = calc.status;
-
-                        const destTitle = configuracaoSetores.find(c=>c.id===targetId).title;
-                        mostrarToast(`Avançou para: ${destTitle}`, 'fa-truck-fast');
-                    }
+                    } catch(e) {}
                 }
-                forceRenderTodasTabelas(); autoSaveCloud(true);
             }
-        });
+            if (maxPreenchidos > 0 && melhorVersao) {
+                if (melhorVersao.datas && melhorVersao.datas.length === 5) {
+                    db.estampariaMatriz.datas = melhorVersao.datas;
+                } else {
+                    let novasDatas = [];
+                    for(let i=4; i>=0; i--) {
+                        let d = new Date(); 
+                        d.setDate(d.getDate() - i);
+                        novasDatas.push(formatarDataEstamparia(d));
+                    }
+                    db.estampariaMatriz.datas = novasDatas;
+                }
+                db.estampariaMatriz.valores = {};
+                estampariaLinhas.forEach(linha => {
+                    if (melhorVersao.valores && melhorVersao.valores[linha]) {
+                        db.estampariaMatriz.valores[linha] = melhorVersao.valores[linha].slice();
+                    } else {
+                        db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                    }
+                });
+                renderizarEstampariaMatriz();
+                autoSaveCloud(true);
+                alert("SUCESSO! O Robô encontrou " + maxPreenchidos + " células preenchidas e restaurou a tela!");
+            } else {
+                alert("Ops, não encontramos nenhum dado antigo salvo no cache deste navegador.");
+            }
+        }
 
-        // ==========================================
-        // CEREBRO DA CARGA PCP: FILTRO INTELIGENTE E CORTE
-        // ==========================================
+        // ============================================================
+        // CARGA PCP
+        // ============================================================
         function processarBasePCP() {
             const text = document.getElementById('pcp-dados').value;
             if(!text.trim()) return mostrarToast('Cole os dados primeiro!', 'fa-triangle-exclamation');
-            let count = 0;
             
-            const formatPcpDate = (dStr) => {
-                if(!dStr) return '';
-                const parts = dStr.split(/[\/\.]/); 
-                if(parts.length >= 2) return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}`;
-                return dStr;
-            };
+            let count = 0, erros = 0;
+            let linhasOriginais = text.split('\n').filter(l => l.trim() !== '');
+            if(!db.data) db.data = {};
 
-            let linhasOriginais = text.split('\n');
-            
-            // O SCANNER DE PONTO DE PARTIDA: Ignora tudo antes da OV 1003100262
-            let indexInicio = linhasOriginais.findIndex(l => l.replace(/\s/g, '').includes('1003100262'));
-            let linhasParaProcessar = indexInicio !== -1 ? linhasOriginais.slice(indexInicio) : linhasOriginais;
-
-            linhasParaProcessar.forEach(linha => {
-                const col = linha.split('\t');
+            linhasOriginais.forEach(linha => {
+                let col = linha.split('\t');
+                if (col.length < 2) {
+                    col = linha.split(/\s{2,}/);
+                }
+                if (col.length < 2) {
+                    col = linha.split(/\s+/);
+                }
+                col = col.filter(c => c.trim() !== '');
                 
-                if (col.length >= 5 && col[0].trim() !== '' && !col[0].toLowerCase().includes('linha') && !col[0].toLowerCase().includes('venda')) {
+                const primeiraCol = col[0] ? col[0].toLowerCase() : '';
+                if (primeiraCol.includes('linha') || primeiraCol.includes('ordem') || primeiraCol.includes('venda')) {
+                    return;
+                }
+                
+                if (col.length >= 4) {
                     const linhaAlvo = col[0].trim();
                     const ov = col[1].trim();
-                    const prod = col[2].trim();
-                    const dataEntrada = formatPcpDate(col[3].trim());
-                    const dataSaida = formatPcpDate(col[4].trim());
+                    let dataEntrada = col[2].trim();
+                    let dataSaida = col[3].trim();
                     
-                    if (ov === '') return;
-
-                    let destino = '';
-                    if (linhaAlvo === 'Tanque') destino = 'tq';
-                    else if (linhaAlvo === 'CARREGA TUDO') destino = 'ct';
-                    else if (linhaAlvo === 'BASES') destino = 'bases';
-                    else if (linhaAlvo === 'Silo Cilindríco') destino = 'silo';
-                    else if (linhaAlvo === 'Especiais') destino = 'esp_box1';
-                    else if (linhaAlvo === 'Pintura') destino = 'pintura';
-                    else if (linhaAlvo === 'OP1') destino = 'op1_bases';
-                    else if (linhaAlvo === 'OP2') destino = 'op2_geral';
+                    if (col.length >= 5) {
+                        const testData = col[2].trim();
+                        if (testData.match(/^\d{1,2}[\/\.]\d{1,2}/)) {
+                            dataEntrada = testData;
+                            dataSaida = col[3].trim();
+                        } else {
+                            dataEntrada = col[3].trim();
+                            dataSaida = col[4].trim();
+                        }
+                    }
+                    
+                    if (ov === '' || ov.length < 3) {
+                        erros++;
+                        return;
+                    }
+                    
+                    dataEntrada = formatPcpDate(dataEntrada);
+                    dataSaida = formatPcpDate(dataSaida);
+                    
+                    let destino = mapaLinhaParaSetor[linhaAlvo] || null;
+                    if (!destino) {
+                        const lowerLinha = linhaAlvo.toLowerCase();
+                        if (lowerLinha.includes('tanque')) destino = 'tq';
+                        else if (lowerLinha.includes('carrega tudo') || lowerLinha.includes('carrega')) destino = 'ct';
+                        else if (lowerLinha.includes('bases')) destino = 'bases';
+                        else if (lowerLinha.includes('silo')) destino = 'silo';
+                        else if (lowerLinha.includes('especiais')) destino = 'esp_box1';
+                        else if (lowerLinha.includes('pintura')) destino = 'pintura';
+                        else if (lowerLinha.includes('op1')) destino = 'op1_bases';
+                        else if (lowerLinha.includes('op2')) destino = 'op2_geral';
+                    }
                     
                     if (destino && db.data[destino]) {
-                        let idx = db.data[destino].findIndex(r => (!r.ordem || r.ordem === ''));
+                        let idx = db.data[destino].findIndex(r => (!r.ordem || r.ordem.trim() === '') && !r.lock_ordem);
                         if (idx === -1) {
                             db.data[destino].push(getEmptyRow());
                             idx = db.data[destino].length - 1;
                         }
-                        
-                        db.data[destino][idx].data_pcp = ''; 
-                        db.data[destino][idx].ordem = `${ov} - ${prod}`; 
+                        db.data[destino][idx].ordem = ov; 
                         db.data[destino][idx].plan_ent = dataEntrada; 
                         db.data[destino][idx].plan_sai = dataSaida; 
-                        
+                        db.data[destino][idx].data_pcp = ''; 
+                        db.data[destino][idx].real_ent = '';
+                        db.data[destino][idx].real_sai = '';
+                        db.data[destino][idx].data_real_ent = '';
+                        db.data[destino][idx].data_real_sai = '';
+                        db.data[destino][idx].ordem_programada = '';
+                        db.data[destino][idx].data_apontamento = '';
+                        db.data[destino][idx].lock_ent = false;
+                        db.data[destino][idx].lock_sai = false;
                         count++; 
+                    } else {
+                        erros++;
                     }
-                } 
+                } else {
+                    erros++;
+                }
             });
+            
             fecharModalPCP();
-            
-            reconstruirDadosTablet();
-            
-            forceRenderTodasTabelas(); autoSaveCloud(true);
-            mostrarToast(`${count} Ordens importadas com Sucesso!`, 'fa-bolt');
+            if (count > 0) {
+                reconstruirDadosTablet();
+                forceRenderTodasTabelas(); 
+                autoSaveCloud(true);
+                mostrarToast(`${count} Ordens importadas com Sucesso! ${erros > 0 ? `(${erros} ignoradas)` : ''}`, 'fa-bolt');
+            } else {
+                mostrarToast(`Nenhuma ordem importada. Verifique o formato dos dados.`, 'fa-triangle-exclamation');
+            }
+        }
+
+        // ============================================================
+        // BOTÕES
+        // ============================================================
+        function apagarTablet() {
+            if(!isAdmin) return abrirModalAuth();
+            const confirmacao = confirm("ATENÇÃO: Deseja apagar a memória do TABLET?\n\n⚠️ A programação do PCP NÃO será afetada!");
+            if (confirmacao) {
+                firebaseRegistrosTablet = {};
+                if(firebaseDB) {
+                    firebaseDB.ref('linhaCT/registros').remove().then(() => {
+                        mostrarToast("Memória do Tablet Zerada! (PCP mantido)", "fa-mobile-screen-button");
+                    }).catch(e => alert("Erro ao limpar tablet: " + e.message));
+                } else {
+                    mostrarToast("Memória do Tablet Zerada (Offline)!", "fa-mobile-screen-button");
+                }
+            }
         }
 
         function apagarProgramacaoPCP() {
             if(!isAdmin) return abrirModalAuth();
-            const confirmacao = confirm("ATENÇÃO PERIGO: Deseja apagar TODAS as Ordens, Datas e Programações da fábrica inteira para iniciar um NOVO MÊS? (Isso não apaga a Estamparia nem o histórico do Tablet)");
+            const confirmacao = confirm("ATENÇÃO: Deseja apagar TODAS as Ordens, Datas e Programações da fábrica inteira para iniciar um NOVO MÊS?\n\n⚠️ O Tablet NÃO será afetado!");
             if (confirmacao) {
+                if(!db.data) db.data = {};
                 configuracaoSetores.forEach(sec => {
-                    db.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
+                    db.data[sec.id] = [];
+                    for(let i=0; i<sec.rows; i++) {
+                        db.data[sec.id].push(getEmptyRow());
+                    }
+                    db.data[sec.id].push(getEmptyRow());
+                    db.data[sec.id].push(getEmptyRow());
+                    db.data[sec.id].push(getEmptyRow());
                 });
-                
-                reconstruirDadosTablet(); 
-                forceRenderTodasTabelas();
-                autoSaveCloud(true);
-                fecharModalPCP();
-                mostrarToast("Lousa Formatada para Mês Novo!", "fa-trash-can");
+                atualizarAtrasosGlobais();
+                renderizarViews();
+                recalcularDashboard();
+                renderResumoApontamento();
+                clearTimeout(saveTimeout);
+                let dbLimpo = sanearParaFirebase(db);
+                localStorage.setItem('erp_randon_v49', JSON.stringify(dbLimpo));
+                if(firebaseDB) {
+                    dbRef.set(dbLimpo).then(() => {
+                        mostrarToast("Programação PCP Zerada! (Tablet mantido)", "fa-trash-can");
+                    }).catch(e => {
+                        console.error("Erro no Firebase:", e);
+                        mostrarToast("Erro ao salvar. Tela limpa localmente.", "fa-triangle-exclamation");
+                    });
+                } else {
+                    mostrarToast("Programação PCP Zerada Localmente!", "fa-trash-can");
+                }
             }
         }
 
         function zerarApontamentos() {
             if(!isAdmin) return abrirModalAuth();
             const confirmacao = confirm("Deseja LIMPAR os apontamentos manuais (OK/COGI, Ações, Gargalos) para iniciar a reunião de hoje? A programação do PCP e do Tablet NÃO serão afetadas.");
-            
             if (confirmacao) {
+                if(!db.data) db.data = {};
                 Object.keys(db.data).forEach(tabelaKey => {
                     db.data[tabelaKey].forEach(row => {
                         row.aponta = '';
                         row.impactos = '';
                         row.acoes = '';
-                        
                         if(tabelaKey !== 'ct') {
                             row.real_ent = '';
                             row.real_sai = '';
                             row.data_pcp = '';
                             row.data_real_ent = '';
                             row.data_real_sai = '';
+                            row.ordem_programada = '';
+                            row.data_apontamento = '';
                         }
                     });
                 });
-                
                 reconstruirDadosTablet();
-                forceRenderTodasTabelas();
-                autoSaveCloud(true);
-                mostrarToast("Lousa pronta para hoje!", "fa-eraser");
+                atualizarAtrasosGlobais();
+                renderizarViews();
+                recalcularDashboard();
+                renderResumoApontamento();
+                clearTimeout(saveTimeout);
+                let dbLimpo = sanearParaFirebase(db);
+                localStorage.setItem('erp_randon_v49', JSON.stringify(dbLimpo));
+                if(firebaseDB) {
+                    firebaseDB.ref('dashboard_reuniao').set(dbLimpo).then(() => {
+                        mostrarToast("Lousa pronta para hoje!", "fa-eraser");
+                    }).catch(e => {
+                        console.error("Erro no Firebase:", e);
+                        mostrarToast("Erro de Conexão. Limpo apenas na tela.", "fa-triangle-exclamation");
+                    });
+                }
             }
         }
 
+        // ============================================================
+        // RESUMO APONTAMENTO
+        // ============================================================
         function renderResumoApontamento() {
             const tbodySaidas = document.getElementById('tbody-saidas-linha');
             const tbodyEspelho = document.getElementById('tbody-espelho-finais');
@@ -1137,12 +1365,11 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
 
             setoresSolda.forEach(secId => {
                 const sec = configuracaoSetores.find(s => s.id === secId);
-                if(db.data[secId]) {
+                if(db.data && db.data[secId]) {
                     db.data[secId].forEach(row => {
                         const plan = row.plan_sai || '';
                         const real = row.real_sai || '';
                         const dataExec = row.data_pcp || '';
-                        
                         if (dateMatches(plan, db.globalDate) || dateMatches(dataExec, db.globalDate) || dateMatches(real, db.globalDate) || (real.trim() !== '' && row.aponta === '')) {
                             hasSaidas = true;
                             htmlSaidas += `
@@ -1165,13 +1392,12 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
 
             setoresFinais.forEach(secId => {
                 const sec = configuracaoSetores.find(s => s.id === secId);
-                if(db.data[secId]) {
+                if(db.data && db.data[secId]) {
                     db.data[secId].forEach(row => {
                         if (row.ordem && row.ordem.trim() !== '') {
                             hasEspelho = true;
                             let statusText = row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' ? '🔴 COGI' : '⏳ EM ANDAMENTO');
                             let gargalo = row.impactos ? ` | Gargalo: ${row.impactos}` : '';
-                            
                             htmlEspelho += `
                                 <tr>
                                     <td style="font-weight:900; color: var(--randon-black); padding-left: 20px; font-size: 13px;">${sec.title}</td>
@@ -1195,25 +1421,250 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
             tbodyEspelho.innerHTML = htmlEspelho;
         }
 
+        // ============================================================
+        // EVENTOS DE MUDANÇA
+        // ============================================================
+        document.addEventListener('change', function(e) {
+            const target = e.target;
+            
+            // Estamparia
+            if(target.classList.contains('estamparia-val-input')) {
+                const linha = target.dataset.rowName;
+                const cIdx = parseInt(target.dataset.colIdx);
+                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
+                if (!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {};
+                if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                db.estampariaMatriz.valores[linha][cIdx] = target.value;
+                autoSaveCloud(); 
+                renderizarEstampariaMatriz();
+                return;
+            }
+            if(target.dataset && target.dataset.colDate !== undefined) {
+                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
+                db.estampariaMatriz.datas[parseInt(target.dataset.colDate)] = target.value;
+                autoSaveCloud(); 
+                renderizarEstampariaMatriz();
+                return;
+            }
+
+            // Meta
+            if(target.classList.contains('meta-input')) {
+                db.meta[target.dataset.sec] = parseInt(target.value) || 0;
+                recalcularDashboard(); 
+                autoSaveCloud(); 
+                return;
+            }
+
+            // Células da tabela
+            if(target.classList.contains('cell-input')) {
+                const secId = target.dataset.sec, rowIdx = target.dataset.row, field = target.dataset.field;
+                if (!secId || rowIdx === undefined || !field) return;
+                const row = db.data[secId] && db.data[secId][rowIdx];
+                if (!row) return;
+                const val = target.value.toUpperCase();
+                const oldAponta = row.aponta;
+                
+                // Data mágica
+                if (field === 'data_pcp' && val.trim() !== '') {
+                    row.data_pcp = val;
+                    row.data_apontamento = val;
+                    const encontrada = buscarOrdemProgramada(secId, val, row);
+                    if (encontrada && encontrada.ordem) {
+                        row.ordem_programada = encontrada.ordem;
+                        if (!row.lock_ordem) {
+                            row.ordem = encontrada.ordem;
+                        }
+                        mostrarToast(`📦 Ordem programada para ${val}: ${encontrada.ordem}`, 'fa-magic');
+                    } else {
+                        mostrarToast(`⚠️ Nenhuma ordem programada para ${val}`, 'fa-triangle-exclamation');
+                    }
+                    forceRenderTodasTabelas();
+                    autoSaveCloud(true);
+                    return;
+                }
+                
+                // Real Entrada
+                if (field === 'real_ent' && val.trim() !== '') {
+                    const hojeDataStr = getDataCompleta();
+                    if (!row.data_pcp) row.data_pcp = getDataAtualFormatada();
+                    row.data_real_ent = hojeDataStr;
+                    row.lock_ent = true;
+                    
+                    const ordemReal = extrairNumeroOrdem(val);
+                    const linhaReal = buscarOrdemPorNumero(secId, ordemReal);
+                    if (linhaReal) {
+                        const planEntReal = linhaReal.plan_ent;
+                        if (planEntReal && planEntReal.trim() !== '') {
+                            const cEnt = calcularAtraso(planEntReal, hojeDataStr);
+                            row.atr_ent = cEnt.atraso;
+                            row.stat_ent = cEnt.status;
+                        } else {
+                            row.atr_ent = '';
+                            row.stat_ent = '';
+                        }
+                        const ordemPlan = extrairNumeroOrdem(row.ordem_programada || row.ordem);
+                        if (ordemReal && ordemPlan && ordemReal !== ordemPlan) {
+                            row.stat_ent = 'red';
+                            if (!row.atr_ent) row.atr_ent = '0';
+                            mostrarToast(`⚠️ ORDEM DIFERENTE! Programada: ${ordemPlan} | Real: ${ordemReal}`, 'fa-triangle-exclamation');
+                        } else {
+                            if (row.atr_ent && parseInt(row.atr_ent) > 0) {
+                                mostrarToast(`⏱️ Atraso de ${row.atr_ent} dia(s) na ordem ${ordemReal}`, 'fa-clock');
+                            }
+                        }
+                    } else {
+                        row.atr_ent = '';
+                        row.stat_ent = '';
+                        mostrarToast(`⚠️ Ordem ${val} não encontrada na programação`, 'fa-triangle-exclamation');
+                    }
+                }
+                
+                // Real Saída
+                if (field === 'real_sai' && val.trim() !== '') {
+                    const hojeDataStr = getDataCompleta();
+                    if (!row.data_pcp) row.data_pcp = getDataAtualFormatada();
+                    row.data_real_sai = hojeDataStr;
+                    row.lock_sai = true;
+                    const ordemReal = extrairNumeroOrdem(val);
+                    const linhaReal = buscarOrdemPorNumero(secId, ordemReal);
+                    if (linhaReal) {
+                        const planSaiReal = linhaReal.plan_sai;
+                        if (planSaiReal && planSaiReal.trim() !== '') {
+                            const cSai = calcularAtraso(planSaiReal, hojeDataStr);
+                            row.atr_sai = cSai.atraso;
+                            row.stat_sai = cSai.status;
+                        } else {
+                            row.atr_sai = '';
+                            row.stat_sai = '';
+                        }
+                    } else {
+                        row.atr_sai = '';
+                        row.stat_sai = '';
+                    }
+                }
+                
+                row[field] = val;
+                if (field === 'ordem') row.lock_ordem = true;
+                atualizarAtrasosGlobais();
+
+                // Avanço automático
+                if (field === 'aponta' && val === 'OK' && oldAponta !== 'OK') {
+                    const secConfig = configuracaoSetores.find(c => c.id === secId);
+                    let targetId = null;
+                    if (secConfig.view === 'solda') targetId = 'pintura';
+                    else if (secConfig.view === 'pintura') {
+                        const info = (row.ordem + (row.origem || '')).toUpperCase();
+                        if (info.includes('TQ')) targetId = 'op1_tq1'; 
+                        else if (info.includes('CT')) targetId = 'op1_ct'; 
+                        else if (info.includes('SILO')) targetId = 'op1_silo';
+                        else targetId = 'op1_bases'; 
+                    }
+                    else if (secConfig.view === 'op1') targetId = 'op2_geral';
+                    if (targetId) {
+                        const tbDest = db.data[targetId];
+                        let freeIdx = tbDest.findIndex(r => !r.ordem || r.ordem.trim() === '');
+                        if (freeIdx === -1) {
+                            tbDest.push(getEmptyRow());
+                            freeIdx = tbDest.length - 1;
+                        }
+                        const hojeDataStr = getDataCompleta();
+                        let planSaiOrig = row.plan_sai;
+                        if (!planSaiOrig && row.ordem) {
+                            const ovBusca = row.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                            if(ovBusca.length >= 3) {
+                                const lOrig = db.data[secId].find(r => r.ordem && r.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase().endsWith(ovBusca));
+                                if(lOrig && lOrig.plan_sai) planSaiOrig = lOrig.plan_sai;
+                            }
+                        }
+                        const planEntDest = planSaiOrig ? adicionarUmDia(planSaiOrig) : '';
+                        tbDest[freeIdx].ordem = row.ordem;
+                        tbDest[freeIdx].plan_ent = planEntDest; 
+                        tbDest[freeIdx].real_ent = row.ordem.split('-')[0].replace(/[^0-9]/g, '');
+                        tbDest[freeIdx].data_pcp = getDataAtualFormatada();
+                        tbDest[freeIdx].data_real_ent = hojeDataStr;
+                        tbDest[freeIdx].origem = secConfig.title;
+                        let calc = calcularAtraso(planEntDest, getDataAtualFormatada());
+                        tbDest[freeIdx].atr_ent = calc.atraso;
+                        tbDest[freeIdx].stat_ent = calc.status;
+                        const destTitle = configuracaoSetores.find(c=>c.id===targetId).title;
+                        mostrarToast(`Avançou para: ${destTitle}`, 'fa-truck-fast');
+                    }
+                }
+                forceRenderTodasTabelas(); 
+                autoSaveCloud(true);
+            }
+        });
+
+        // ============================================================
+        // SWITCH TAB
+        // ============================================================
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+            const container = document.getElementById(`view-${tabId}`);
+            if (container) container.classList.add('active');
+            const btn = document.getElementById(`tab-btn-${tabId}`);
+            if (btn) btn.classList.add('active');
+            if (tabId === 'analytics') updateAnalytics();
+            if (tabId === 'apontamento') renderResumoApontamento();
+            if (tabId === 'estamparia') updateEstampariaChart();
+        }
+
+        // ============================================================
+        // CHART.JS
+        // ============================================================
         function initCharts() {
-            Chart.defaults.font.family = "'Inter', sans-serif"; Chart.defaults.color = "#94a3b8";
-            chartsObj.pareto = new Chart(document.getElementById('chartPareto'), { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { y1: { type: 'linear', position: 'right' } } } });
-            chartsObj.line = new Chart(document.getElementById('chartEvolucao'), { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3 } });
-            chartsObj.pie = new Chart(document.getElementById('chartStatus'), { type: 'doughnut', data: { labels: ['OK', 'COGI'], datasets: [{ data: [0,0], backgroundColor: ['#10b981', '#ef4444'] }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%' } });
-            chartsObj.aderencia = new Chart(document.getElementById('chartAderencia'), { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false } });
-            chartsObj.estamparia = new Chart(document.getElementById('chartEstamparia'), { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3, plugins: { legend: { position: 'bottom' } } } });
+            Chart.defaults.font.family = "'Inter', sans-serif"; 
+            Chart.defaults.color = "#94a3b8";
+            chartsObj.pareto = new Chart(document.getElementById('chartPareto'), { 
+                type: 'bar', 
+                data: { labels: [], datasets: [] }, 
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } } 
+            });
+            chartsObj.line = new Chart(document.getElementById('chartEvolucao'), { 
+                type: 'line', 
+                data: { labels: [], datasets: [] }, 
+                options: { responsive: true, maintainAspectRatio: false, tension: 0.3, scales: { y: { beginAtZero: true } } } 
+            });
+            chartsObj.pie = new Chart(document.getElementById('chartStatus'), { 
+                type: 'doughnut', 
+                data: { labels: ['OK', 'COGI'], datasets: [{ data: [0,0], backgroundColor: ['#10b981', '#ef4444'] }] }, 
+                options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'bottom' } } } 
+            });
+            chartsObj.aderencia = new Chart(document.getElementById('chartAderencia'), { 
+                type: 'bar', 
+                data: { labels: [], datasets: [] }, 
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { position: 'bottom' } } } 
+            });
+            chartsObj.estamparia = new Chart(document.getElementById('chartEstamparia'), { 
+                type: 'line', 
+                data: { labels: [], datasets: [] }, 
+                options: { responsive: true, maintainAspectRatio: false, tension: 0.3, scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'bottom' } } } 
+            });
         }
 
         function updateEstampariaChart() {
-            if(!chartsObj.estamparia || !db.estampariaMatriz) return;
-            const datas = (db.estampariaMatriz.datas && db.estampariaMatriz.datas.length === 5) ? db.estampariaMatriz.datas : ['','','','',''];
+            if(!chartsObj.estamparia) return;
+            if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
+            if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
+                atualizarDiasEstamparia();
+            }
+            const datas = db.estampariaMatriz.datas || ['','','','',''];
             chartsObj.estamparia.data.labels = datas;
-            
             const datasets = [];
-            const cores = { "Atraso Programação": "#ef4444", "Estamparia Geral": "#3b82f6", "Laser": "#10b981", "Linea": "#f59e0b", "Dobra": "#8b5cf6", "PRM - Carbo": "#ec4899", "115 - CDL": "#14b8a6", "160 - Externo": "#64748b" };
-
+            const cores = { 
+                "Atraso Programação": "#ef4444", 
+                "Estamparia Geral": "#3b82f6", 
+                "Laser": "#10b981", 
+                "Linea": "#f59e0b", 
+                "Dobra": "#8b5cf6", 
+                "PRM - Carbo": "#ec4899", 
+                "115 - CDL": "#14b8a6", 
+                "160 - Externo": "#64748b" 
+            };
             estampariaLinhas.forEach(linha => {
-                const valArray = (db.estampariaMatriz.valores && db.estampariaMatriz.valores[linha]) ? db.estampariaMatriz.valores[linha] : ['','','','',''];
+                if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                const valArray = db.estampariaMatriz.valores[linha];
                 const numData = valArray.map(v => parseFloat(v) || 0);
                 datasets.push({
                     label: linha,
@@ -1221,22 +1672,22 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                     borderColor: cores[linha] || "#cbd5e1",
                     backgroundColor: 'transparent',
                     borderWidth: 3,
-                    pointBackgroundColor: cores[linha],
+                    pointBackgroundColor: cores[linha] || "#cbd5e1",
                     pointRadius: 5,
                     hidden: !["Atraso Programação", "Estamparia Geral", "Laser", "Dobra"].includes(linha)
                 });
             });
-
             chartsObj.estamparia.data.datasets = datasets;
             chartsObj.estamparia.update();
         }
 
         function updateAnalytics() {
             let totApont = 0, totOk = 0, totCogi = 0, totAtrasos = 0, totalPlan = 0, totalReal = 0;
-            let impactosContagem = {}; MOTIVOS_GARGALO.forEach(m => impactosContagem[m] = 0);
+            let impactosContagem = {}; 
+            MOTIVOS_GARGALO.forEach(m => impactosContagem[m] = 0);
             let aderenciaLabels = [], aderenciaPlan = [], aderenciaReal = [];
             let diaAcessoMap = {}; 
-
+            if(!db.data) return;
             configuracaoSetores.forEach(sec => {
                 let secPlan = 0, secReal = 0;
                 if(db.data[sec.id]) {
@@ -1245,14 +1696,12 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                         if(ap === 'OK') { totApont++; totOk++; }
                         if(ap === 'COGI') { totApont++; totCogi++; }
                         totAtrasos += (parseInt(row.atr_ent)||0) + (parseInt(row.atr_sai)||0);
-                        
                         if(row.plan_sai && row.plan_sai.trim() !== '') {
                             secPlan++;
                             if(row.real_sai && row.real_sai.trim() !== '') {
                                 secReal++;
                             }
                         }
-                        
                         if(row.real_sai && row.real_sai.trim() !== '') {
                             const d = row.data_pcp || row.real_sai;
                             if(d && d.includes('/')) {
@@ -1261,12 +1710,15 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                                 if(ap === 'COGI') diaAcessoMap[d].cogi++;
                             }
                         }
-                        
                         if(row.impactos && impactosContagem[row.impactos] !== undefined) impactosContagem[row.impactos]++;
                     });
                 }
                 totalPlan += secPlan; totalReal += secReal;
-                if (['tq', 'ct', 'bases', 'pintura'].includes(sec.id)) { aderenciaLabels.push(sec.title.split(' ')[0]); aderenciaPlan.push(secPlan); aderenciaReal.push(secReal); }
+                if (['tq', 'ct', 'bases', 'pintura'].includes(sec.id)) { 
+                    aderenciaLabels.push(sec.title.split(' ')[0]); 
+                    aderenciaPlan.push(secPlan); 
+                    aderenciaReal.push(secReal); 
+                }
             });
 
             document.getElementById('dash-total-apontamentos').innerText = totApont;
@@ -1279,7 +1731,12 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
 
             let paretoArray = Object.keys(impactosContagem).map(k => ({ m: k, c: impactosContagem[k] })).filter(x => x.c > 0).sort((a,b) => b.c - a.c);
             chartsObj.pareto.data.labels = paretoArray.map(i => i.m.substring(0,10));
-            chartsObj.pareto.data.datasets = [{ type: 'bar', label: 'Ocorrências', data: paretoArray.map(i => i.c), backgroundColor: '#3b82f6', borderRadius: 6 }];
+            chartsObj.pareto.data.datasets = [{ 
+                label: 'Ocorrências', 
+                data: paretoArray.map(i => i.c), 
+                backgroundColor: '#3b82f6', 
+                borderRadius: 6 
+            }];
             chartsObj.pareto.update();
 
             const diasOrdenados = Object.keys(diaAcessoMap).sort();
@@ -1290,34 +1747,41 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
             ];
             chartsObj.line.update();
 
-            chartsObj.pie.data.datasets[0].data = [totOk, totCogi]; chartsObj.pie.update();
+            chartsObj.pie.data.datasets[0].data = [totOk, totCogi]; 
+            chartsObj.pie.update();
+            
             chartsObj.aderencia.data.labels = aderenciaLabels;
-            chartsObj.aderencia.data.datasets = [{ label: 'Plan', data: aderenciaPlan, backgroundColor: '#cbd5e1', borderRadius: 4 }, { label: 'Real', data: aderenciaReal, backgroundColor: '#3b82f6', borderRadius: 4 }];
+            chartsObj.aderencia.data.datasets = [
+                { label: 'Plan', data: aderenciaPlan, backgroundColor: '#cbd5e1', borderRadius: 4 },
+                { label: 'Real', data: aderenciaReal, backgroundColor: '#3b82f6', borderRadius: 4 }
+            ];
             chartsObj.aderencia.update();
         }
 
-        // ==========================================
-        // FIREBASE E INTEGRAÇÃO DO TABLET
-        // ==========================================
+        // ============================================================
+        // FIREBASE E TABLET
+        // ============================================================
         function initFirebase() {
             try {
                 if (!firebase.apps.length) {
-                    firebase.initializeApp({ apiKey: "AIzaSyADizntIBb7U7SRJbENZq6ybZ1NuS2ri8w", databaseURL: "https://gestaoalocamentolinhact-default-rtdb.firebaseio.com", projectId: "gestaoalocamentolinhact" });
+                    firebase.initializeApp({ 
+                        apiKey: "AIzaSyADizntIBb7U7SRJbENZq6ybZ1NuS2ri8w", 
+                        databaseURL: "https://gestaoalocamentolinhact-default-rtdb.firebaseio.com", 
+                        projectId: "gestaoalocamentolinhact" 
+                    });
                 }
                 firebaseDB = firebase.database();
                 dbRef = firebaseDB.ref('dashboard_reuniao'); 
-                
                 dbRef.on('value', (snapshot) => {
                     const nuvemDb = snapshot.val();
                     if(nuvemDb) { 
+                        if (!nuvemDb.data) nuvemDb.data = {}; 
                         db = nuvemDb; 
-                        
+                        expurgarLinhasFantasmas(); 
                         atualizarDiasEstamparia();
-                        reconstruirDadosTablet();
                         forceRenderTodasTabelas();
                     }
                 });
-
                 firebaseDB.ref('linhaCT/registros').on('value', snap => {
                     firebaseRegistrosTablet = snap.val() || {};
                     reconstruirDadosTablet();
@@ -1325,34 +1789,27 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
                 });
             } catch (e) {
                 console.log("Modo Offline Ativado.");
-                const local = localStorage.getItem('erp_randon_v39'); 
-                if(local) { db = JSON.parse(local); atualizarDiasEstamparia(); forceRenderTodasTabelas(); }
+                const local = localStorage.getItem('erp_randon_v49'); 
+                if(local) { 
+                    db = JSON.parse(local); 
+                    atualizarDiasEstamparia(); 
+                    forceRenderTodasTabelas(); 
+                }
             }
-        }
-
-        function normalizarDataISO(key) {
-            const k = String(key).trim();
-            if (/^\d{4}-\d{2}-\d{2}$/.test(k)) return k;
-            if (/^\d{2}-\d{2}-\d{4}$/.test(k)) { let p = k.split('-'); return `${p[2]}-${p[1]}-${p[0]}`; }
-            if (/^\d{2}\/\d{2}\/\d{4}$/.test(k)) { let p = k.split('/'); return `${p[2]}-${p[1]}-${p[0]}`; }
-            return null;
         }
 
         function extrairPostosDia(dadosDia) {
             let extraidos = [];
             const percorrer = (nodo) => {
                 if (!nodo || typeof nodo !== 'object') return;
-                
                 let nome = String(nodo.nome || nodo.posto || '').toLowerCase();
                 let ov = String(nodo.ov || (nodo.tarde && nodo.tarde.ov) || (nodo.manha && nodo.manha.ov) || (nodo.noite && nodo.noite.ov) || '').replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
-                
                 if (ov.length >= 3 && (nome.includes('posto 3') || nome === '3' || nome.includes('posto 03'))) {
                     extraidos.push({ ov: ov, tipo: 'entrada' });
                 }
                 if (ov.length >= 3 && (nome.includes('posto 7') || nome === '7' || nome.includes('posto 07'))) {
                     extraidos.push({ ov: ov, tipo: 'saida' });
                 }
-                
                 Object.values(nodo).forEach(filho => {
                     if (typeof filho === 'object') percorrer(filho);
                 });
@@ -1362,40 +1819,37 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
         }
 
         function alocarNoPainelCT(ovTablet, tipo, dataCarimbo) {
+            if(!db.data['ct']) db.data['ct'] = [];
             let tabelaCT = db.data['ct'];
             let atualizou = false;
-            
             let idx = tabelaCT.findIndex(r => {
                 if (!r.ordem) return false;
                 let ovPCP = r.ordem.split('-')[0].replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
                 if (ovPCP.length < 3) return false;
                 return ovPCP.endsWith(ovTablet) || ovTablet.endsWith(ovPCP);
             });
-            
             if (idx === -1) {
-                idx = tabelaCT.findIndex(r => !r.ordem || r.ordem.trim() === '');
+                idx = tabelaCT.findIndex(r => (!r.ordem || r.ordem.trim() === '') && !r.lock_ordem);
                 if (idx === -1) {
                     tabelaCT.push(getEmptyRow());
                     idx = tabelaCT.length - 1;
                 }
             }
-            
             if (idx !== -1) {
                 let row = tabelaCT[idx];
-                if (!row.ordem) row.ordem = ovTablet + " (AUTO)";
-                
-                if (tipo === 'entrada') {
-                    let currentEnt = String(row.real_ent).replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
-                    if (!currentEnt.endsWith(ovTablet) && !ovTablet.endsWith(currentEnt)) {
+                if (!row.ordem && !row.lock_ordem) row.ordem = ovTablet + " (AUTO)";
+                if (tipo === 'entrada' && !row.lock_ent) {
+                    let currentEnt = String(row.real_ent || '').replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                    if (currentEnt === '' || (!currentEnt.endsWith(ovTablet) && !ovTablet.endsWith(currentEnt))) {
                         row.real_ent = ovTablet;
                         if (!row.data_pcp) row.data_pcp = dataCarimbo;
                         row.data_real_ent = dataCarimbo;
                         atualizou = true;
                     }
                 }
-                if (tipo === 'saida') {
-                    let currentSai = String(row.real_sai).replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
-                    if (!currentSai.endsWith(ovTablet) && !ovTablet.endsWith(currentSai)) {
+                if (tipo === 'saida' && !row.lock_sai) {
+                    let currentSai = String(row.real_sai || '').replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
+                    if (currentSai === '' || (!currentSai.endsWith(ovTablet) && !ovTablet.endsWith(currentSai))) {
                         row.real_sai = ovTablet;
                         if (!row.data_pcp) row.data_pcp = dataCarimbo;
                         row.data_real_sai = dataCarimbo;
@@ -1409,58 +1863,106 @@ CARREGA TUDO    1003088021    MTG BS CT PD...    29.07.2026    05.08.2026"></tex
         function reconstruirDadosTablet() {
             if (!firebaseRegistrosTablet) return;
             let atualizouGeral = false;
-            
+            if (!db.data) db.data = {};
             const chavesOrdenadas = Object.keys(firebaseRegistrosTablet).sort();
-            
             chavesOrdenadas.forEach(key => {
                 const dataIso = normalizarDataISO(key);
-                // INICIA A VARREDURA APENAS DE 03/08/2026 PARA FRENTE
                 if (!dataIso || dataIso < "2026-08-03") return;
-                
                 const partes = dataIso.split('-'); 
                 const dataCarimbo = `${partes[2]}/${partes[1]}`; 
-                
                 const dadosDia = firebaseRegistrosTablet[key];
                 const postosScaneados = extrairPostosDia(dadosDia);
-                
                 postosScaneados.forEach(scan => {
                     if(alocarNoPainelCT(scan.ov, scan.tipo, dataCarimbo)) {
                         atualizouGeral = true;
                     }
                 });
             });
-
             if (atualizouGeral) autoSaveCloud(false); 
         }
 
         function autoSaveCloud(exibirAviso = true) {
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
-                localStorage.setItem('erp_randon_v39', JSON.stringify(db));
-                if(dbRef) dbRef.set(db).then(() => {
-                    if(exibirAviso) mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up");
-                });
+                let dbLimpo = sanearParaFirebase(db);
+                localStorage.setItem('erp_randon_v49', JSON.stringify(dbLimpo));
+                if(dbRef) {
+                    dbRef.set(dbLimpo).then(() => {
+                        if(exibirAviso) mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up");
+                    }).catch(err => {
+                        console.error("ERRO FIREBASE:", err);
+                    });
+                }
             }, 800);
         }
 
+        // ============================================================
+        // MODO TV
+        // ============================================================
         function iniciarModoTV() {
-            isTVMode = true; document.body.classList.add('tv-mode');
+            isTVMode = true; 
+            document.body.classList.add('tv-mode');
             if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
-            switchTab('solda'); clearInterval(tvInterval); let wait = 0;
+            switchTab('solda'); 
+            clearInterval(tvInterval); 
+            let wait = 0;
             tvInterval = setInterval(() => {
                 if(!isTVMode) return clearInterval(tvInterval);
                 if(wait > 0) { wait--; return; }
                 const maxScroll = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
-                if (window.scrollY >= maxScroll - 5) { wait = 120; window.scrollTo({ top: 0, behavior: 'smooth' }); } else { window.scrollBy(0, 1.5); }
+                if (window.scrollY >= maxScroll - 5) { 
+                    wait = 120; 
+                    window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                } else { 
+                    window.scrollBy(0, 1.5); 
+                }
             }, 30);
         }
-        function sairModoTV() { isTVMode = false; document.body.classList.remove('tv-mode'); clearInterval(tvInterval); if (document.exitFullscreen) document.exitFullscreen(); }
-        function gerarPDFExecutivo() { switchTab('analytics'); setTimeout(() => { html2pdf().set({ margin: 10, filename: `Relatorio_Randon.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { orientation: 'landscape' } }).from(document.getElementById('view-analytics')).save(); }, 1000); }
 
-        function mostrarToast(msg, icon) {
-            const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = msg;
-            t.querySelector('i').className = `fa-solid ${icon}`; t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
+        function sairModoTV() { 
+            isTVMode = false; 
+            document.body.classList.remove('tv-mode'); 
+            clearInterval(tvInterval); 
+            if (document.exitFullscreen) document.exitFullscreen(); 
+        }
+
+        function gerarPDFExecutivo() { 
+            switchTab('analytics'); 
+            setTimeout(() => { 
+                html2pdf().set({ 
+                    margin: 10, 
+                    filename: `Relatorio_Randon.pdf`, 
+                    image: { type: 'jpeg', quality: 0.98 }, 
+                    html2canvas: { scale: 2 }, 
+                    jsPDF: { orientation: 'landscape' } 
+                }).from(document.getElementById('view-analytics')).save(); 
+            }, 1000); 
+        }
+
+        // ============================================================
+        // INICIALIZAÇÃO
+        // ============================================================
+        function init() {
+            // Inicializa estruturas
+            configuracaoSetores.forEach(sec => {
+                expandedSections[sec.id] = false;
+                if(!db.data[sec.id]) db.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
+                if(db.meta[sec.id] === undefined) db.meta[sec.id] = sec.metaDef;
+            });
+
+            if (!db.estampariaMatriz) {
+                db.estampariaMatriz = { datas: [], valores: {} };
+            }
+            atualizarDiasEstamparia();
+
+            db.globalDate = getDataAtualFormatada();
+            document.getElementById('global-date').value = db.globalDate;
+            document.getElementById('titulo-guia-saidas').innerHTML = `<i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha (Data da Reunião: ${db.globalDate})`;
+
+            forceRenderTodasTabelas();
+            initFirebase(); 
+            initCharts();
+            updateEstampariaChart();
         }
 
         window.onload = init;
