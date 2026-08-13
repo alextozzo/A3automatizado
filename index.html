@@ -809,17 +809,19 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             if (tipo === 'entrada') {
                 if (tabelaCT.find(r => extrairNumeroOrdem(r.real_ent) === numOvTablet)) return false;
                 
-                let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_ent) === numOvTablet && r.real_ent === '');
-                
+                // Prioridade de busca (evita entrada/saída da MESMA ordem em linhas diferentes):
+                // 1) Já existe uma linha com a SAÍDA real dessa mesma ordem aguardando a entrada
+                //    (acontece quando os postos são lidos fora da ordem cronológica esperada)
+                let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_sai) === numOvTablet && r.real_ent === '');
+                // 2) Linha programada (ordem_ent já bate com essa ordem) e ainda sem entrada real
+                if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_ent) === numOvTablet && r.real_ent === '');
+                // 3) Linha com a mesma data prevista e ainda sem entrada real
+                if (idx === -1) idx = tabelaCT.findIndex(r => r.data_pcp === dataCarimbo && r.real_ent === '');
+                // 4) Primeira linha totalmente vazia
+                if (idx === -1) idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
                 if (idx === -1) {
-                    idx = tabelaCT.findIndex(r => r.data_pcp === dataCarimbo && r.real_ent === '');
-                    if (idx === -1) {
-                        idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
-                        if (idx === -1) {
-                            tabelaCT.push(getEmptyRow());
-                            idx = tabelaCT.length - 1;
-                        }
-                    }
+                    tabelaCT.push(getEmptyRow());
+                    idx = tabelaCT.length - 1;
                 }
                 
                 const row = tabelaCT[idx];
@@ -846,18 +848,20 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             else if (tipo === 'saida') {
                 if (tabelaCT.find(r => extrairNumeroOrdem(r.real_sai) === numOvTablet)) return false;
                 
-                let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_sai) === numOvTablet && r.real_sai === '');
-                
+                // Prioridade de busca (mesma lógica da entrada, espelhada):
+                // 1) Já existe uma linha com a ENTRADA real dessa mesma ordem aguardando a saída
+                //    — este é o caso mais comum e é o que garante que entrada e saída fiquem
+                //    sempre juntas na mesma linha
+                let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_ent) === numOvTablet && r.real_sai === '');
+                // 2) Linha programada (ordem_sai já bate com essa ordem) e ainda sem saída real
+                if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_sai) === numOvTablet && r.real_sai === '');
+                // 3) Linha com a mesma data prevista, que já teve entrada registrada, e sem saída real
+                if (idx === -1) idx = tabelaCT.findIndex(r => r.data_pcp === dataCarimbo && r.real_sai === '' && r.real_ent !== '');
+                // 4) Primeira linha totalmente vazia
+                if (idx === -1) idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
                 if (idx === -1) {
-                    idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_ent) === numOvTablet && r.real_sai === '');
-                    
-                    if (idx === -1) {
-                        idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
-                        if (idx === -1) {
-                            tabelaCT.push(getEmptyRow());
-                            idx = tabelaCT.length - 1;
-                        }
-                    }
+                    tabelaCT.push(getEmptyRow());
+                    idx = tabelaCT.length - 1;
                 }
                 
                 const row = tabelaCT[idx];
@@ -883,6 +887,47 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             }
             
             return atualizou;
+        }
+
+        // Corrige o caso em que a entrada (Posto 3) e a saída (Posto 7) da MESMA ordem
+        // acabaram registradas em linhas diferentes da tabela do CT (bug de alocação antigo,
+        // ou dados que já ficaram divididos antes desta correção). Sempre que encontra esse
+        // padrão, junta tudo na linha da entrada e esvazia a linha "órfã" da saída.
+        function mesclarLinhasDivididasCT() {
+            if (!db.data || !db.data['ct']) return false;
+            const tabela = db.data['ct'];
+            let mesclou = false;
+
+            for (let i = 0; i < tabela.length; i++) {
+                const rowEnt = tabela[i];
+                if (!rowEnt.real_ent || rowEnt.real_ent.trim() === '' || (rowEnt.real_sai && rowEnt.real_sai.trim() !== '')) continue;
+                const numEnt = extrairNumeroOrdem(rowEnt.real_ent);
+                if (!numEnt) continue;
+
+                for (let j = 0; j < tabela.length; j++) {
+                    if (i === j) continue;
+                    const rowSai = tabela[j];
+                    if (!rowSai.real_sai || rowSai.real_sai.trim() === '') continue;
+                    if (rowSai.real_ent && rowSai.real_ent.trim() !== '') continue; // já tem própria entrada, não é uma linha "órfã"
+                    if (extrairNumeroOrdem(rowSai.real_sai) !== numEnt) continue;
+
+                    // Encontrou: a saída dessa ordem está numa linha separada. Junta na linha da entrada.
+                    rowEnt.real_sai = rowSai.real_sai;
+                    rowEnt.data_real_sai = rowSai.data_real_sai || rowEnt.data_real_sai;
+                    if (!rowEnt.ordem_sai) rowEnt.ordem_sai = rowSai.ordem_sai;
+                    if (!rowEnt.plan_sai) rowEnt.plan_sai = rowSai.plan_sai;
+                    rowEnt.lock_sai = rowSai.lock_sai || rowEnt.lock_sai;
+                    if (rowSai.aponta && !rowEnt.aponta) rowEnt.aponta = rowSai.aponta;
+                    if (rowSai.impactos && !rowEnt.impactos) rowEnt.impactos = rowSai.impactos;
+                    if (rowSai.acoes && !rowEnt.acoes) rowEnt.acoes = rowSai.acoes;
+
+                    // Esvazia a linha "órfã" (será removida automaticamente no expurgo de linhas fantasmas)
+                    tabela[j] = getEmptyRow();
+                    mesclou = true;
+                    break;
+                }
+            }
+            return mesclou;
         }
 
         function reconstruirDadosTablet() {
@@ -1189,7 +1234,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         if (!isNaN(aEnt) && aEnt > 0) sumAtrEnt += aEnt;
                         if (!isNaN(aSai) && aSai > 0) sumAtrSai += aSai;
                         
-                        if((row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '')) totalProgMes++;
+                        // Conta como "programada" tanto a ordem puxada automaticamente do PCP (plan_ent/plan_sai)
+                        // quanto a ordem digitada manualmente pelo apontador (ordem_ent/ordem_sai) quando não
+                        // havia nada no cofre para aquela data. As duas formas de preenchimento são válidas.
+                        const temProgramacao = (row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '') ||
+                                                (row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '');
+                        if(temProgramacao) totalProgMes++;
                         if(row.aponta && row.aponta.trim() !== '') apontados++;
                     });
                 }
@@ -1213,6 +1263,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         function forceRenderTodasTabelas() {
+            mesclarLinhasDivididasCT();
             expurgarLinhasFantasmas();
             atualizarAtrasosGlobais(); 
             renderizarEstampariaMatriz();
@@ -1228,7 +1279,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 if(!db.data[sec.id]) db.data[sec.id] = [];
                 let validas = db.data[sec.id].filter(r => {
                     if (!r) return false;
-                    let textConcat = (r.ordem_ent || '') + (r.ordem_sai || '') + (r.plan_ent || '') + (r.real_ent || '') + (r.plan_sai || '') + (r.real_sai || '') + (r.acoes || '');
+                    // Correção: Agora incluímos data_pcp, aponta e impactos para garantir que linhas preenchidas apenas parcialmente não desapareçam
+                    let textConcat = (r.data_pcp || '') + (r.ordem_ent || '') + (r.ordem_sai || '') + (r.plan_ent || '') + (r.real_ent || '') + (r.plan_sai || '') + (r.real_sai || '') + (r.acoes || '') + (r.aponta || '') + (r.impactos || '');
                     let limpo = textConcat.replace(/[^a-zA-Z0-9]/g, '');
                     return limpo.length > 0;
                 });
@@ -1705,7 +1757,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         if (row.ordem_ent || row.ordem_sai) {
                             mostrarToast(`📦 Ordens puxadas para ${valNormalizado}`, 'fa-wand-magic-sparkles');
                         } else {
-                            mostrarToast(`⚠️ Nenhuma ordem programada para ${valNormalizado}`, 'fa-triangle-exclamation');
+                            // Não há nada no cofre do PCP para essa data — não é um erro,
+                            // apenas significa que essa ordem não foi carregada via planilha.
+                            // O apontador pode (e deve) preencher "Prog Ent" / "Prog Sai" manualmente
+                            // aqui do lado, e o sistema vai considerar esse apontamento normalmente
+                            // nos indicadores de Prog. Mês e Aderência.
+                            mostrarToast(`⚠️ Sem ordem no PCP p/ ${valNormalizado} — pode preencher Prog Ent/Sai manualmente`, 'fa-pen');
                         }
                     }
                     atualizarAtrasosGlobais();
@@ -2020,7 +2077,13 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         if (!isNaN(aEnt) && aEnt > 0) totAtrasos += aEnt;
                         if (!isNaN(aSai) && aSai > 0) totAtrasos += aSai;
 
-                        if((row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '')) {
+                        // Igual ao KPI de "Prog. Mês": conta tanto o que veio do PCP (plan_ent/plan_sai)
+                        // quanto o que foi digitado manualmente pelo apontador (ordem_ent/ordem_sai),
+                        // para que a Aderência reflita o trabalho real da linha e não só o que estava
+                        // previamente carregado na planilha do PCP.
+                        const temProgramacaoBI = (row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '') ||
+                                                  (row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '');
+                        if(temProgramacaoBI) {
                             secPlan++;
                             if((row.real_ent && row.real_ent.trim() !== '') || (row.real_sai && row.real_sai.trim() !== '')) {
                                 secReal++;
