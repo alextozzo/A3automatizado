@@ -17,7 +17,7 @@
 
     <style>
         /* =========================================================
-           CORE VARIABLES E RESET (mesmo de antes)
+           CORE VARIABLES E RESET
         ========================================================= */
         :root {
             --randon-red: #e32128;
@@ -32,6 +32,7 @@
             --status-green: #10b981;
             --status-orange: #f59e0b;
             --status-red: #ef4444;
+            --gold: #f59e0b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -40,7 +41,9 @@
         
         body.readonly-mode .cell-input, 
         body.readonly-mode .meta-input, 
-        body.readonly-mode .estamparia-val-input { 
+        body.readonly-mode .estamparia-val-input,
+        body.readonly-mode .premio-config-input,
+        body.readonly-mode .pino-val-input { 
             pointer-events: none; 
             background-color: transparent !important;
         }
@@ -49,26 +52,56 @@
         body.admin-mode .admin-only { display: flex !important; }
 
         .navbar { background-color: #0f172a; border-bottom: 4px solid var(--randon-blue); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; height: 80px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .nav-left { display: flex; align-items: center; gap: 25px; height: 100%; }
-        .logo-container svg { height: 55px; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
+        .nav-left { display: flex; align-items: center; gap: 20px; height: 100%; }
+        .logo-container svg { height: 50px; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
         
         .nav-tabs { display: flex; height: 100%; overflow-x: auto; scrollbar-width: none; }
         .nav-tabs::-webkit-scrollbar { display: none; }
-        .nav-tab { display: flex; align-items: center; gap: 8px; padding: 0 15px; font-size: 13px; font-weight: 800; color: #94a3b8; cursor: pointer; border-bottom: 4px solid transparent; transition: 0.3s; height: 100%; text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px;}
+        .nav-tab { display: flex; align-items: center; gap: 8px; padding: 0 14px; font-size: 12px; font-weight: 800; color: #94a3b8; cursor: pointer; border-bottom: 4px solid transparent; transition: 0.3s; height: 100%; text-transform: uppercase; white-space: nowrap; letter-spacing: 0.5px;}
         .nav-tab:hover { color: white; background-color: rgba(255,255,255,0.05); }
         .nav-tab.active { color: white; border-bottom: 4px solid var(--randon-red); background-color: rgba(255,255,255,0.1); }
+        .nav-tab.tab-premio { color: #fde047; }
+        .nav-tab.tab-premio.active { border-bottom-color: #eab308; background-color: rgba(234, 179, 8, 0.15); }
 
-        .nav-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap;}
-        .global-date-container { display: flex; align-items: center; gap: 10px; background-color: rgba(255,255,255,0.1); padding: 8px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
-        .global-date-container label { font-weight: 800; color: #cbd5e1; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
-        .global-date-container input { border: none; background: transparent; font-weight: 900; font-size: 14px; outline: none; color: white; cursor: pointer; font-family: 'Inter', sans-serif; pointer-events: none; width: 50px; text-align: center;}
+        .nav-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap;}
         
-        .auth-container { display: flex; align-items: center; gap: 6px; background-color: rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; border: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; font-weight: 700; font-size: 12px;}
-        .auth-container:hover { background-color: rgba(255,255,255,0.2); color: white; }
-        .auth-icon { font-size: 14px; }
+        .search-box-container { position: relative; display: flex; align-items: center; }
+        .search-box-container input {
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 8px 12px 8px 32px;
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            outline: none;
+            width: 160px;
+            transition: 0.3s;
+        }
+        .search-box-container input:focus {
+            width: 210px;
+            background-color: rgba(255,255,255,0.2);
+            border-color: var(--randon-blue);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.3);
+        }
+        .search-box-container i { position: absolute; left: 10px; color: #94a3b8; font-size: 12px; pointer-events: none; }
 
-        .btn { padding: 9px 15px; border: none; border-radius: 6px; font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .net-badge { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .net-badge.online { background-color: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+        .net-badge.syncing { background-color: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+        .net-badge.offline { background-color: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+
+        .global-date-container { display: flex; align-items: center; gap: 8px; background-color: rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
+        .global-date-container label { font-weight: 800; color: #cbd5e1; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+        .global-date-container input { border: none; background: transparent; font-weight: 900; font-size: 13px; outline: none; color: white; cursor: pointer; font-family: 'Inter', sans-serif; pointer-events: none; width: 45px; text-align: center;}
+        
+        .auth-container { display: flex; align-items: center; gap: 6px; background-color: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; border: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; font-weight: 700; font-size: 11px;}
+        .auth-container:hover { background-color: rgba(255,255,255,0.2); color: white; }
+        .auth-icon { font-size: 13px; }
+
+        .btn { padding: 8px 12px; border: none; border-radius: 6px; font-weight: 800; font-size: 11px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-pdf { background-color: #475569; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); } .btn-pdf:hover { background-color: #334155; transform: translateY(-1px); }
+        .btn-excel { background-color: #047857; color: white; box-shadow: 0 4px 6px rgba(4,120,87,0.3); } .btn-excel:hover { background-color: #065f46; transform: translateY(-1px); }
         .btn-tv { background-color: white; color: var(--randon-black); box-shadow: 0 4px 6px rgba(0,0,0,0.1); } .btn-tv:hover { background-color: #f1f5f9; transform: translateY(-1px); }
         .btn-pcp { background-color: var(--status-green); color: white; box-shadow: 0 4px 10px rgba(16,185,129,0.3); } .btn-pcp:hover { filter: brightness(0.9); transform: translateY(-2px); }
         .btn-limpar { background-color: var(--randon-red); color: white; box-shadow: 0 4px 10px rgba(227,33,40,0.3); } .btn-limpar:hover { background-color: #b91c1c; transform: translateY(-2px); }
@@ -92,6 +125,32 @@
 
         #toast { position: fixed; bottom: 35px; right: 35px; background-color: var(--randon-dark); color: #fff; padding: 18px 30px; border-radius: 10px; transition: 0.3s; transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; display: flex; align-items: center; gap: 12px; border-left: 6px solid var(--status-green); box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
         #toast.show { transform: translateY(0); opacity: 1; }
+
+        /* =========================================================
+           TIMELINE / GENEALOGIA DA OP
+        ========================================================= */
+        .op-timeline { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; max-height: 400px; overflow-y: auto; padding-right: 10px; }
+        .timeline-step { display: flex; align-items: flex-start; gap: 15px; position: relative; }
+        .timeline-step::before { content: ''; position: absolute; left: 19px; top: 35px; bottom: -20px; width: 2px; background: #e2e8f0; }
+        .timeline-step:last-child::before { display: none; }
+        .timeline-icon { width: 40px; height: 40px; border-radius: 50%; background: #f1f5f9; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--randon-grey); z-index: 2; flex-shrink: 0; }
+        .timeline-step.completed .timeline-icon { background: var(--status-green); border-color: #047857; color: white; }
+        .timeline-step.in-progress .timeline-icon { background: var(--randon-blue); border-color: #1e40af; color: white; animation: pulseBlue 1.5s infinite; }
+        .timeline-content { background: #f8fafc; border: 1px solid var(--border-light); border-radius: 8px; padding: 12px 18px; flex: 1; }
+        .timeline-title { font-weight: 900; font-size: 14px; text-transform: uppercase; color: var(--randon-dark); display: flex; justify-content: space-between; }
+        .timeline-dates { display: flex; gap: 20px; font-size: 11px; color: var(--randon-grey); font-weight: 700; margin-top: 6px; }
+
+        @keyframes pulseBlue {
+            0% { box-shadow: 0 0 0 0 rgba(59,130,246,0.6); }
+            70% { box-shadow: 0 0 0 10px rgba(59,130,246,0); }
+            100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+        }
+
+        .highlight-row { animation: highlightPulse 2s ease-in-out 3; }
+        @keyframes highlightPulse {
+            0%, 100% { background-color: transparent; }
+            50% { background-color: #fef08a !important; }
+        }
 
         /* =========================================================
            TABELAS E COMPONENTES
@@ -142,6 +201,9 @@
         .ct-badge { font-size: 10px; color: #064e3b; background: #34d399; padding: 5px 10px; border-radius: 6px; margin-left: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
         .data-badge { font-size: 10px; color: #1e40af; background: #bfdbfe; padding: 5px 10px; border-radius: 6px; margin-left: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
         
+        .op-clickable { cursor: pointer; text-decoration: underline; text-decoration-style: dotted; }
+        .op-clickable:hover { color: var(--randon-blue) !important; }
+
         .ver-mais-container { background-color: #f8fafc; padding: 10px; text-align: center; border-top: 1px solid var(--border-light); }
         .btn-expandir { background-color: white; border: 1px solid #cbd5e1; color: var(--randon-blue); padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); text-transform: uppercase;}
         .btn-expandir:hover { background-color: var(--randon-blue); color: white; }
@@ -151,6 +213,99 @@
         .estamparia-table th { color: var(--randon-dark); font-size: 13px; }
         .estamparia-table td input { font-size: 15px; font-weight: 900; color: var(--randon-blue); width: 100%; text-align: center; border: none; background: transparent; outline: none; }
         .estamparia-table td input:focus { background-color: #f1f5f9; }
+
+        /* =========================================================
+           ESTILOS: ABA DE PRÊMIO E PINOS PROGRAMADOS
+        ========================================================= */
+        .premio-header-card {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 16px;
+            padding: 30px;
+            color: white;
+            border: 2px solid #334155;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .premio-header-card::after {
+            content: '\f091';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 140px;
+            color: rgba(255,255,255,0.03);
+            pointer-events: none;
+        }
+        .premio-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px; }
+        .premio-title-row h2 { font-size: 24px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; gap: 12px; letter-spacing: 0.5px; }
+        
+        .termometro-container {
+            background: rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 20px 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .termometro-labels { display: flex; justify-content: space-between; font-weight: 800; font-size: 12px; margin-bottom: 10px; text-transform: uppercase; color: #cbd5e1; }
+        .termometro-bar-bg { height: 28px; background: rgba(0,0,0,0.4); border-radius: 14px; overflow: hidden; position: relative; border: 2px solid rgba(255,255,255,0.15); }
+        .termometro-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 85%, #3b82f6 100%); border-radius: 14px; transition: width 0.8s ease-in-out; position: relative; }
+        .termometro-fill::after { content: ''; position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shine 2s infinite; }
+        @keyframes shine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+        .termometro-markers { display: flex; justify-content: space-between; margin-top: 12px; font-size: 11px; font-weight: 900; text-transform: uppercase; }
+        .marker-tag { padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.1); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); }
+        .marker-tag.unlocked { background: #10b981; color: white; border-color: #059669; box-shadow: 0 0 10px rgba(16,185,129,0.5); }
+
+        .premio-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 25px; }
+        .premio-kpi-card { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 15px 20px; border: 1px solid rgba(255,255,255,0.08); text-align: center; }
+        .premio-kpi-card span { font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 800; display: block; margin-bottom: 6px; }
+        .premio-kpi-card strong { font-size: 30px; font-weight: 900; color: white; line-height: 1; }
+
+        .pinos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 5px; }
+        .pinos-col-card { background: white; border-radius: 12px; border: 1px solid var(--border-light); overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .pinos-col-header { background: #0f172a; color: white; padding: 15px 20px; font-size: 16px; font-weight: 900; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--randon-blue); }
+        
+        .pinos-table { width: 100%; border-collapse: collapse; }
+        .pinos-table th { background: #f8fafc; font-size: 11px; padding: 10px 12px; text-align: left; text-transform: uppercase; color: var(--randon-grey); border-bottom: 2px solid #cbd5e1; }
+        .pinos-table td { padding: 6px 12px; border-bottom: 1px solid var(--border-light); font-size: 13px; font-weight: 700; height: 46px; }
+        .pinos-table tr:hover td { background-color: #f1f5f9; }
+        
+        .pino-val-input {
+            width: 100%;
+            height: 32px;
+            border: 1px dashed #cbd5e1;
+            border-radius: 6px;
+            background: #f8fafc;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 900;
+            outline: none;
+            transition: 0.2s;
+        }
+        .pino-val-input:focus {
+            border-color: var(--randon-blue);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        .pinos-table .badge-saldo { font-size: 14px; font-weight: 900; padding: 4px 10px; border-radius: 6px; text-align: center; display: inline-block; min-width: 45px; }
+        .badge-saldo.pendente { background-color: #fee2e2; color: #991b1b; }
+        .badge-saldo.zerado { background-color: #d1fae5; color: #065f46; font-size: 12px; }
+
+        .lider-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            border-radius: 12px;
+            padding: 20px 25px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border: 2px solid #3b82f6;
+            box-shadow: 0 10px 20px rgba(59,130,246,0.2);
+        }
 
         /* Analytics */
         .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 30px; border-radius: 12px; border: 1px solid var(--border-light); border-left: 6px solid var(--randon-red); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
@@ -168,9 +323,13 @@
         .chart-box h3 { font-size: 16px; font-weight: 900; margin-bottom: 20px; border-bottom: 2px solid var(--border-light); padding-bottom: 12px; text-transform: uppercase; color: var(--randon-dark); }
         .chart-container-bi { position: relative; height: 280px; width: 100%; }
 
+        /* MODO ANDON / TV */
         body.tv-mode .navbar { display: none !important; }
         body.tv-mode { overflow: hidden !important; background-color: var(--bg-body); }
         body.tv-mode .view-container { padding: 15px; pointer-events: none; }
+        #tv-bar-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 6px; background: rgba(0,0,0,0.2); z-index: 9998; }
+        #tv-progress-bar { width: 0%; height: 100%; background: var(--randon-blue); transition: width 0.1s linear; }
+        body.tv-mode #tv-bar-container { display: block; }
         #btn-exit-tv { display: none; position: fixed; top: 25px; right: 25px; z-index: 9999; background: var(--status-red); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-weight: 900; cursor: pointer; box-shadow: 0 15px 30px rgba(0,0,0,0.3); text-transform: uppercase; letter-spacing: 1px;}
         body.tv-mode #btn-exit-tv { display: flex; align-items: center; gap: 10px; pointer-events: auto; }
 
@@ -179,7 +338,7 @@
 
         @media print {
             body { background-color: white !important; font-size: 12px; overflow: visible !important; }
-            .navbar, #toast, #btn-exit-tv, .btn-pdf, .btn-tv, .btn-pcp, .btn-limpar, .ver-mais-container, .auth-container, .admin-only { display: none !important; }
+            .navbar, #toast, #btn-exit-tv, .btn-pdf, .btn-excel, .btn-tv, .btn-pcp, .btn-limpar, .ver-mais-container, .auth-container, .admin-only, .search-box-container, .net-badge { display: none !important; }
             .analytics-header { border: none !important; box-shadow: none !important; padding: 0 !important; }
             table { border: 1px solid black; } th, td { border: 1px solid black; }
             .macro-badge { -webkit-print-color-adjust: exact; background-color: black !important; color: white !important; }
@@ -189,6 +348,9 @@
     </style>
 </head>
 <body class="readonly-mode">
+
+    <!-- BARRA DE PROGRESSO DO MODO TV -->
+    <div id="tv-bar-container"><div id="tv-progress-bar"></div></div>
 
     <!-- ==========================================
          NAVBAR E CONTROLES
@@ -207,6 +369,7 @@
                 </svg>
             </div>
             <div class="nav-tabs">
+                <div class="nav-tab tab-premio" onclick="switchTab('premio')" id="tab-btn-premio"><i class="fa-solid fa-trophy"></i> Prêmio & Metas</div>
                 <div class="nav-tab active" onclick="switchTab('estamparia')" id="tab-btn-estamparia">Estamparia</div>
                 <div class="nav-tab" onclick="switchTab('solda')" id="tab-btn-solda">Linha Solda</div>
                 <div class="nav-tab" onclick="switchTab('pintura')" id="tab-btn-pintura">Pintura</div>
@@ -217,6 +380,17 @@
             </div>
         </div>
         <div class="nav-right">
+            <!-- BUSCA RÁPIDA DE OP -->
+            <div class="search-box-container" title="Buscar OP em qualquer setor (Ctrl + K)">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="global-op-search" placeholder="Buscar OP..." onkeyup="handleGlobalSearch(event)">
+            </div>
+
+            <!-- STATUS NUVEM -->
+            <div class="net-badge online" id="net-status-badge" title="Status de Sincronização em Nuvem">
+                <i class="fa-solid fa-circle-dot"></i> <span id="net-status-text">Online</span>
+            </div>
+
             <div class="global-date-container">
                 <label>Data</label>
                 <input type="text" id="global-date" readonly>
@@ -231,6 +405,7 @@
             <button class="btn btn-limpar admin-only" style="background-color: #7f1d1d;" onclick="apagarTablet()" title="Apagar Histórico do Tablet"><i class="fa-solid fa-tablet"></i> Zerar Tablet</button>
             <button class="btn btn-limpar admin-only" onclick="apagarProgramacaoPCP()" title="Zerar programação inteira do Mês"><i class="fa-solid fa-trash-can"></i> Zerar PCP</button>
             <button class="btn btn-pcp admin-only" onclick="abrirModalPCP()"><i class="fa-solid fa-bolt"></i> Carga PCP</button>
+            <button class="btn btn-excel" onclick="exportarExcelProducao()" title="Exportar dados para Excel (.CSV UTF-8)"><i class="fa-solid fa-file-excel"></i> Excel</button>
             <button class="btn btn-pdf" onclick="gerarPDFExecutivo()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
             <button class="btn btn-tv" onclick="iniciarModoTV()"><i class="fa-solid fa-tv"></i> TV</button>
         </div>
@@ -276,9 +451,152 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         </div>
     </div>
 
+    <div class="modal-overlay" id="modal-timeline">
+        <div class="modal-content" style="width: 700px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-route" style="color: var(--randon-blue); margin-right: 8px;"></i> Rastreabilidade da OP: <span id="timeline-op-title" style="color: var(--randon-blue);"></span></h3>
+                <button class="close-btn" onclick="fecharModalTimeline()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="timeline-body" class="op-timeline"></div>
+        </div>
+    </div>
+
     <!-- ==========================================
          VIEWS
     =========================================== -->
+    <!-- VIEW: PRÊMIO DE PRODUTIVIDADE & PINOS PROGRAMADOS -->
+    <div id="view-premio" class="view-container">
+        <div class="premio-header-card">
+            <div class="premio-title-row">
+                <div>
+                    <h2><i class="fa-solid fa-trophy" style="color: #fde047;"></i> Termômetro do Prêmio de Produtividade</h2>
+                    <p style="color: #94a3b8; font-size: 13px; font-weight: 700; text-transform: uppercase; margin-top: 4px;">
+                        Acompanhamento em Tempo Real dos Pinos Apontados no Mês
+                    </p>
+                </div>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 8px; font-weight: 800; font-size: 12px; display: flex; align-items: center; gap: 8px;">
+                        <span style="color:#94a3b8;">META BASE (PTVO):</span>
+                        <input type="number" id="premio-meta-base-input" class="premio-config-input" value="78" style="width: 50px; background: transparent; border: 1px dashed rgba(255,255,255,0.4); color: white; text-align: center; font-size: 16px; font-weight: 900; outline: none; border-radius: 4px;">
+                    </div>
+                    <div style="background: rgba(239,68,68,0.2); padding: 6px 14px; border-radius: 8px; font-weight: 800; font-size: 12px; border: 1px solid rgba(239,68,68,0.3); display: flex; align-items: center; gap: 8px;">
+                        <span style="color:#fca5a5;">ATRASO:</span>
+                        <input type="number" id="premio-atraso-input" class="premio-config-input" value="12" style="width: 50px; background: transparent; border: 1px dashed rgba(255,255,255,0.4); color: #fca5a5; text-align: center; font-size: 16px; font-weight: 900; outline: none; border-radius: 4px;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- TERMÔMETRO VISUAL -->
+            <div class="termometro-container">
+                <div class="termometro-labels">
+                    <span>Progresso Atual: <strong id="termometro-pct" style="color: #60a5fa; font-size: 15px;">0%</strong></span>
+                    <span id="termometro-status-msg" style="color: #fde047; font-weight: 900;">Faltam 71 pinos para R$ 150,00</span>
+                </div>
+                <div class="termometro-bar-bg">
+                    <div id="termometro-bar-fill" class="termometro-fill"></div>
+                </div>
+                <div class="termometro-markers">
+                    <div class="marker-tag" id="marker-90"><i class="fa-solid fa-medal"></i> 90% (<span id="txt-meta-90">70</span> pinos) ➔ <strong>R$ 150,00</strong></div>
+                    <div class="marker-tag" id="marker-100"><i class="fa-solid fa-award"></i> 100% (<span id="txt-meta-100">78</span> pinos) ➔ <strong>R$ 200,00</strong></div>
+                    <div class="marker-tag" id="marker-110"><i class="fa-solid fa-crown"></i> &gt; 110% (<span id="txt-meta-110">86</span> pinos) ➔ <strong>R$ 260,00</strong></div>
+                </div>
+            </div>
+
+            <!-- GRID DE KPIs GERAIS -->
+            <div class="premio-kpi-grid">
+                <div class="premio-kpi-card">
+                    <span>Pinos Programados</span>
+                    <strong id="kpi-premio-prog">90</strong>
+                </div>
+                <div class="premio-kpi-card" style="border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.1);">
+                    <span style="color: #6ee7b7;">Apontados (Total OK)</span>
+                    <strong id="kpi-premio-real" style="color: #34d399;">0</strong>
+                </div>
+                <div class="premio-kpi-card" style="border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.1);">
+                    <span style="color: #fca5a5;">Saldo Restante</span>
+                    <strong id="kpi-premio-saldo" style="color: #f87171;">90</strong>
+                </div>
+                <div class="premio-kpi-card" style="border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.15);">
+                    <span style="color: #fde047;">Prêmio Garantido</span>
+                    <strong id="kpi-premio-valor" style="color: #fde047; font-size: 26px;">R$ 0,00</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- LINHA LÍDER -->
+        <div class="lider-card">
+            <div>
+                <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 800;"><i class="fa-solid fa-bolt"></i> Linha Mais Próxima da Meta:</span>
+                <h3 id="linha-lider-nome" style="font-size: 20px; font-weight: 900; margin-top: 4px; text-transform: uppercase;">Carregando dados...</h3>
+            </div>
+            <div style="text-align: right;">
+                <span style="font-size: 11px; text-transform: uppercase; color: #93c5fd; font-weight: 800;">Conclusão da Linha:</span>
+                <h2 id="linha-lider-pct" style="font-size: 28px; font-weight: 900; color: #fde047;">0%</h2>
+            </div>
+        </div>
+
+        <!-- MATRIZ DE PINOS PROGRAMADOS (SUBDIVISÕES COM INPUTS MANUAIS) -->
+        <div class="pinos-grid">
+            <!-- COLUNA BASES -->
+            <div class="pinos-col-card">
+                <div class="pinos-col-header">
+                    <span><i class="fa-solid fa-truck-ramp-box" style="margin-right:8px; color:var(--randon-blue);"></i> BASES</span>
+                    <span id="saldo-total-bases" class="badge-saldo pendente">0 Restantes</span>
+                </div>
+                <table class="pinos-table">
+                    <thead>
+                        <tr>
+                            <th>Modelo</th>
+                            <th style="width:75px; text-align:center;">Prog.</th>
+                            <th style="width:75px; text-align:center;">OK</th>
+                            <th style="width:85px; text-align:center;">Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-pinos-bases"></tbody>
+                </table>
+            </div>
+
+            <!-- COLUNA ESPECIAIS -->
+            <div class="pinos-col-card">
+                <div class="pinos-col-header">
+                    <span><i class="fa-solid fa-star" style="margin-right:8px; color:#f59e0b;"></i> ESPECIAIS</span>
+                    <span id="saldo-total-especiais" class="badge-saldo pendente">0 Restantes</span>
+                </div>
+                <table class="pinos-table">
+                    <thead>
+                        <tr>
+                            <th>Modelo</th>
+                            <th style="width:75px; text-align:center;">Prog.</th>
+                            <th style="width:75px; text-align:center;">OK</th>
+                            <th style="width:85px; text-align:center;">Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-pinos-especiais"></tbody>
+                </table>
+            </div>
+
+            <!-- COLUNA TANQUES -->
+            <div class="pinos-col-card">
+                <div class="pinos-col-header">
+                    <span><i class="fa-solid fa-oil-well" style="margin-right:8px; color:#10b981;"></i> TANQUES</span>
+                    <span id="saldo-total-tanques" class="badge-saldo pendente">0 Restantes</span>
+                </div>
+                <table class="pinos-table">
+                    <thead>
+                        <tr>
+                            <th>Modelo</th>
+                            <th style="width:75px; text-align:center;">Prog.</th>
+                            <th style="width:75px; text-align:center;">OK</th>
+                            <th style="width:85px; text-align:center;">Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-pinos-tanques"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEWS OPERACIONAIS PADRÃO -->
     <div id="view-estamparia" class="view-container active">
         <div class="section-card">
             <div class="section-header" style="background: var(--randon-dark);">
@@ -287,8 +605,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 </div>
             </div>
             <div style="padding: 20px; background: white; overflow-x: auto;">
-                <table class="estamparia-table" id="tabela-estamparia-matriz">
-                </table>
+                <table class="estamparia-table" id="tabela-estamparia-matriz"></table>
             </div>
         </div>
         
@@ -407,16 +724,38 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
     <div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Sincronizado!</span></div>
 
     <!-- ==========================================
-         LÓGICA JAVASCRIPT (VERSÃO FINAL)
+         LÓGICA JAVASCRIPT
     =========================================== -->
     <script>
-        // ==========================================
-        // CONFIGURAÇÕES GLOBAIS
-        // ==========================================
         const MOTIVOS_GARGALO = ["Falta de Material", "Manutenção / Quebra", "Qualidade / Retrabalho", "Engenharia / Projeto", "Atraso Cliente / Chassi", "Falta de Efetivo (RH)", "Logística / Movimentação", "Outros"];
         const SENHA_ADMIN = "Randon123";
         let isAdmin = false;
         let isTVMode = false;
+
+        const TABELA_PINOS_DEFAULT = {
+            bases: [
+                { modelo: "AUTOPORTANTE", prog: 7, ok: 0 },
+                { modelo: "SUINOS", prog: 4, ok: 0 },
+                { modelo: "GRANELEIRO", prog: 1, ok: 0 },
+                { modelo: "CARREGA TUDO", prog: 19, ok: 0 },
+                { modelo: "SILO CILINDRICO", prog: 17, ok: 0 }
+            ],
+            especiais: [
+                { modelo: "ALGODOEIRO", prog: 4, ok: 0 },
+                { modelo: "CARREGA TUDO", prog: 2, ok: 0 },
+                { modelo: "PISO MOVEL", prog: 4, ok: 0 }
+            ],
+            tanques: [
+                { modelo: "6 C", prog: 3, ok: 0 },
+                { modelo: "7C", prog: 4, ok: 0 },
+                { modelo: "ISOTERMICO", prog: 1, ok: 0 },
+                { modelo: "BASCULANTE", prog: 18, ok: 0 },
+                { modelo: "29 M³ 2C", prog: 1, ok: 0 },
+                { modelo: "30M³ 1C", prog: 2, ok: 0 },
+                { modelo: "40M³ 1C", prog: 2, ok: 0 },
+                { modelo: "39M³ 3C", prog: 1, ok: 0 }
+            ]
+        };
 
         const configuracaoSetores = [
             { id: 'tq', view: 'solda', title: 'TANQUES (TQ)', rows: 21, metaDef: 5 },
@@ -442,10 +781,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             'Especiais': 'esp_box1', 'Pintura': 'pintura', 'OP1': 'op1_bases', 'OP2': 'op2_geral'
         };
 
-        // Siglas/abreviações aceitas para cada setor, usadas quando a planilha do PCP
-        // vem com o código curto em vez do nome completo da linha (ex: "TQ" em vez de
-        // "Tanque"). Comparação é sempre exata e sem diferenciar maiúsculas/minúsculas,
-        // para não gerar falso-positivo por coincidência de substring.
         const siglaParaSetor = {
             'TQ': 'tq', 'TANQUE': 'tq', 'TANQUES': 'tq',
             'CT': 'ct', 'CARREGA TUDO': 'ct',
@@ -462,19 +797,18 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             "Dobra", "PRM - Carbo", "115 - CDL", "160 - Externo"
         ];
 
-        // ==========================================
-        // ESTRUTURA DE DADOS
-        // ==========================================
         let db = { 
             globalDate: '', 
             data: {}, 
             meta: {}, 
             estampariaMatriz: { datas: [], valores: {} },
-            basePCP: {}
+            basePCP: {},
+            premioConfig: { metaBase: 78, atraso: 12, diasUteis: 21 },
+            pinosManual: null
         };
         
         let chartsObj = { pareto: null, pie: null, line: null, aderencia: null, estamparia: null };
-        let saveTimeout, tvInterval;
+        let saveTimeout, tvInterval, tvTabRotationInterval;
         let firebaseDB = null, dbRef = null;
         let firebaseRegistrosTablet = {}; 
 
@@ -492,9 +826,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             };
         }
 
-        // ==========================================
-        // FUNÇÕES UTILITÁRIAS
-        // ==========================================
         function getDataAtualFormatada() {
             const hoje = new Date();
             return `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}`;
@@ -508,19 +839,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         function formatarDataEstamparia(dateObj) {
             const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
             return `${String(dateObj.getDate()).padStart(2, '0')}/${mesesAbreviados[dateObj.getMonth()]}`;
-        }
-
-        function formatPcpDate(dStr) {
-            if(!dStr) return '';
-            dStr = dStr.trim();
-            const parts = dStr.split(/[\/\.]/); 
-            if(parts.length >= 2) {
-                const dia = parts[0].padStart(2, '0');
-                const mes = parts[1].padStart(2, '0');
-                const ano = parts[2] ? parts[2] : '2026';
-                return `${dia}/${mes}/${ano}`;
-            }
-            return dStr;
         }
 
         function adicionarUmDia(dataStr) {
@@ -559,14 +877,13 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
         function extrairNumeroOrdem(texto) {
             if (!texto) return '';
-            const match = texto.match(/(\d{8,})/);
-            return match ? match[1] : texto.replace(/[^0-9]/g, '');
+            const match = String(texto).match(/(\d{8,})/);
+            return match ? match[1] : String(texto).replace(/[^0-9]/g, '');
         }
 
         function normalizarDataParaComparacao(dataStr) {
             if (!dataStr) return '';
-            let limpo = dataStr.trim();
-            limpo = limpo.replace(/[.\-]/g, '/');
+            let limpo = dataStr.trim().replace(/[.\-]/g, '/');
             const parts = limpo.split('/');
             if (parts.length >= 2) {
                 const dia = parts[0].padStart(2, '0');
@@ -580,12 +897,10 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             if(!planStr || planStr.trim() === '') return { atraso: '', status: '' };
             let diaR, mesR, anoR;
             const year = new Date().getFullYear();
-            if (!realStr || realStr.trim() === '') {
-                return { atraso: '', status: '' };
-            } else {
-                [diaR, mesR, anoR] = realStr.split('/');
-                if(!anoR) anoR = year;
-            }
+            if (!realStr || realStr.trim() === '') return { atraso: '', status: '' };
+            
+            [diaR, mesR, anoR] = realStr.split('/');
+            if(!anoR) anoR = year;
 
             const [diaP, mesP, anoP] = planStr.split('/');
             if(!diaP) return { atraso: 0, status: 'green' };
@@ -603,17 +918,23 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         function sanearParaFirebase(obj) {
-            if (Array.isArray(obj)) {
-                return obj.map(item => sanearParaFirebase(item));
-            } else if (obj !== null && typeof obj === 'object') {
+            if (Array.isArray(obj)) return obj.map(item => sanearParaFirebase(item));
+            if (obj !== null && typeof obj === 'object') {
                 let novoObj = {};
-                for (let key in obj) {
-                    novoObj[key] = sanearParaFirebase(obj[key]);
-                }
+                for (let key in obj) novoObj[key] = sanearParaFirebase(obj[key]);
                 return novoObj;
-            } else {
-                return (obj === null || obj === undefined) ? '' : obj;
             }
+            return (obj === null || obj === undefined) ? '' : obj;
+        }
+
+        function setStatusConexao(estado) {
+            const badge = document.getElementById('net-status-badge');
+            const txt = document.getElementById('net-status-text');
+            if(!badge || !txt) return;
+            badge.className = `net-badge ${estado}`;
+            if(estado === 'online') { txt.innerText = 'Online'; }
+            else if(estado === 'syncing') { txt.innerText = 'Gravando...'; }
+            else { txt.innerText = 'Offline'; }
         }
 
         function mostrarToast(msg, icon = "fa-circle-check") {
@@ -626,14 +947,369 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // CÁLCULO DE ATRASOS E A MÁGICA (VERSÃO CORRIGIDA)
+        // CÁLCULO E RENDERIZAÇÃO: PRÊMIO & PINOS (EDITÁVEL)
         // ==========================================
+        function recalcularPainelPremio() {
+            if (!db.pinosManual) {
+                db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
+            }
 
+            const metaBase = parseInt(document.getElementById('premio-meta-base-input') ? document.getElementById('premio-meta-base-input').value : (db.premioConfig.metaBase || 78)) || 78;
+            const atraso = parseInt(document.getElementById('premio-atraso-input') ? document.getElementById('premio-atraso-input').value : (db.premioConfig.atraso || 12)) || 12;
+            
+            db.premioConfig.metaBase = metaBase;
+            db.premioConfig.atraso = atraso;
+
+            // Sincroniza contagem automática de OP2 caso o usuário não tenha sobrescrito
+            const linhasOP2 = db.data['op2_geral'] || [];
+            let apontamentosPorTexto = [];
+            linhasOP2.forEach(r => {
+                if (r.aponta === 'OK') {
+                    const txtCompleto = `${r.ordem_sai || ''} ${r.ordem_ent || ''} ${r.real_sai || ''} ${r.real_ent || ''}`.toUpperCase();
+                    apontamentosPorTexto.push(txtCompleto);
+                }
+            });
+
+            // Renderiza as 3 tabelas com inputs
+            renderColunaPinosEditavel('bases', apontamentosPorTexto);
+            renderColunaPinosEditavel('especiais', apontamentosPorTexto);
+            renderColunaPinosEditavel('tanques', apontamentosPorTexto);
+
+            // Soma total dos pinos de todas as colunas
+            let totalProgGeral = 0;
+            let totalOkGeral = 0;
+
+            ['bases', 'especiais', 'tanques'].forEach(cat => {
+                const itens = db.pinosManual[cat] || [];
+                itens.forEach(item => {
+                    totalProgGeral += parseInt(item.prog) || 0;
+                    totalOkGeral += parseInt(item.ok) || 0;
+                });
+            });
+
+            const metaTotal = metaBase + atraso;
+
+            // Metas de Faixas do Prêmio
+            const qtd90 = Math.ceil(metaBase * 0.90);
+            const qtd100 = metaBase;
+            const qtd110 = Math.ceil(metaBase * 1.10);
+
+            const elMeta90 = document.getElementById('txt-meta-90');
+            const elMeta100 = document.getElementById('txt-meta-100');
+            const elMeta110 = document.getElementById('txt-meta-110');
+            if (elMeta90) elMeta90.innerText = qtd90;
+            if (elMeta100) elMeta100.innerText = qtd100;
+            if (elMeta110) elMeta110.innerText = qtd110;
+
+            document.getElementById('kpi-premio-prog').innerText = totalProgGeral || metaTotal;
+            document.getElementById('kpi-premio-real').innerText = totalOkGeral;
+            const saldoGeral = Math.max(0, (totalProgGeral || metaTotal) - totalOkGeral);
+            document.getElementById('kpi-premio-saldo').innerText = saldoGeral;
+
+            const pctAtingido = metaBase > 0 ? ((totalOkGeral / metaBase) * 100).toFixed(1) : 0;
+            document.getElementById('termometro-pct').innerText = `${pctAtingido}%`;
+
+            const fillWidth = Math.min(100, Math.max(0, (totalOkGeral / qtd110) * 100));
+            const barFill = document.getElementById('termometro-bar-fill');
+            if (barFill) barFill.style.width = `${fillWidth}%`;
+
+            let valorPremio = "R$ 0,00";
+            let statusMsg = "";
+            const m90 = document.getElementById('marker-90');
+            const m100 = document.getElementById('marker-100');
+            const m110 = document.getElementById('marker-110');
+
+            if (m90) m90.classList.remove('unlocked');
+            if (m100) m100.classList.remove('unlocked');
+            if (m110) m110.classList.remove('unlocked');
+
+            if (totalOkGeral >= qtd110) {
+                valorPremio = "R$ 260,00";
+                statusMsg = "🏆 PARABÉNS! Prêmio Máximo de R$ 260,00 Atingido!";
+                if (m90) m90.classList.add('unlocked');
+                if (m100) m100.classList.add('unlocked');
+                if (m110) m110.classList.add('unlocked');
+            } else if (totalOkGeral >= qtd100) {
+                valorPremio = "R$ 200,00";
+                const faltam = qtd110 - totalOkGeral;
+                statusMsg = `🔥 100% Garantido! Faltam apenas ${faltam} pinos para R$ 260,00`;
+                if (m90) m90.classList.add('unlocked');
+                if (m100) m100.classList.add('unlocked');
+            } else if (totalOkGeral >= qtd90) {
+                valorPremio = "R$ 150,00";
+                const faltam = qtd100 - totalOkGeral;
+                statusMsg = `✅ 90% Atingido! Faltam ${faltam} pinos para R$ 200,00`;
+                if (m90) m90.classList.add('unlocked');
+            } else {
+                const faltam = qtd90 - totalOkGeral;
+                statusMsg = `🎯 Faltam ${faltam} pinos para destravar R$ 150,00`;
+            }
+
+            document.getElementById('termometro-status-msg').innerText = statusMsg;
+            document.getElementById('kpi-premio-valor').innerText = valorPremio;
+
+            calcularLinhaLider();
+        }
+
+        function renderColunaPinosEditavel(categoria, apontamentosTexto) {
+            const tbody = document.getElementById(`tbody-pinos-${categoria}`);
+            const badgeTotal = document.getElementById(`saldo-total-${categoria}`);
+            if (!tbody) return;
+
+            let itens = db.pinosManual[categoria] || [];
+            if (itens.length === 0) {
+                itens = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT[categoria]));
+                db.pinosManual[categoria] = itens;
+            }
+
+            let html = '';
+            let totalSaldoCat = 0;
+
+            itens.forEach((item, idx) => {
+                const modNome = item.modelo.toUpperCase();
+                
+                // Se o usuário ainda não editou manualmente o OK, puxa automático de OP2
+                if (item.okManual === undefined || item.okManual === false) {
+                    let countAuto = 0;
+                    apontamentosTexto.forEach(txt => {
+                        if (txt.includes(modNome) || (modNome === "CARREGA TUDO" && txt.includes("CT")) || (modNome === "SILO CILINDRICO" && txt.includes("SILO"))) {
+                            countAuto++;
+                        }
+                    });
+                    if (countAuto > 0) item.ok = countAuto;
+                }
+
+                const progNum = parseInt(item.prog) || 0;
+                const okNum = parseInt(item.ok) || 0;
+                const saldo = Math.max(0, progNum - okNum);
+                totalSaldoCat += saldo;
+
+                const badgeClass = saldo === 0 ? 'badge-saldo zerado' : 'badge-saldo pendente';
+                const badgeTxt = saldo === 0 ? '✔ CONCLUÍDO' : `${saldo} REST.`;
+
+                html += `
+                    <tr>
+                        <td style="color: var(--randon-dark); font-weight:800;">${item.modelo}</td>
+                        <td style="text-align:center;">
+                            <input type="number" class="pino-val-input" data-cat="${categoria}" data-idx="${idx}" data-type="prog" value="${progNum}">
+                        </td>
+                        <td style="text-align:center;">
+                            <input type="number" class="pino-val-input" style="color: var(--status-green);" data-cat="${categoria}" data-idx="${idx}" data-type="ok" value="${okNum}">
+                        </td>
+                        <td style="text-align:center;"><span class="${badgeClass}">${badgeTxt}</span></td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+            if (badgeTotal) {
+                badgeTotal.innerText = `${totalSaldoCat} Restantes`;
+                badgeTotal.className = totalSaldoCat === 0 ? 'badge-saldo zerado' : 'badge-saldo pendente';
+            }
+        }
+
+        function calcularLinhaLider() {
+            const categorias = ['bases', 'especiais', 'tanques'];
+            const nomes = { bases: 'Linha de Bases (Chassi)', especiais: 'Linha de Especiais', tanques: 'Linha de Tanques' };
+            
+            let melhorNome = 'Linhas Empatadas';
+            let melhorPct = -1;
+
+            categorias.forEach(cat => {
+                const itens = db.pinosManual[cat] || [];
+                let totProg = 0;
+                let totOk = 0;
+                itens.forEach(i => {
+                    totProg += parseInt(i.prog) || 0;
+                    totOk += parseInt(i.ok) || 0;
+                });
+
+                let pct = totProg > 0 ? (totOk / totProg) * 100 : 0;
+                if (pct > melhorPct) {
+                    melhorPct = pct;
+                    melhorNome = nomes[cat];
+                }
+            });
+
+            const elNome = document.getElementById('linha-lider-nome');
+            const elPct = document.getElementById('linha-lider-pct');
+            if (elNome) elNome.innerText = melhorNome;
+            if (elPct) elPct.innerText = `${melhorPct.toFixed(0)}% Concluído`;
+        }
+
+        // ==========================================
+        // BUSCA GLOBAL DE OP & TIMELINE
+        // ==========================================
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                const sInput = document.getElementById('global-op-search');
+                if (sInput) { sInput.focus(); sInput.select(); }
+            }
+        });
+
+        function handleGlobalSearch(e) {
+            const termo = e.target.value.trim().toUpperCase();
+            if (e.key === 'Enter' && termo.length >= 3) {
+                buscarEDestacarOP(termo);
+            }
+        }
+
+        function buscarEDestacarOP(termo) {
+            const num = extrairNumeroOrdem(termo);
+            let encontrou = false;
+
+            for (let sec of configuracaoSetores) {
+                const linhas = db.data[sec.id] || [];
+                for (let i = 0; i < linhas.length; i++) {
+                    const r = linhas[i];
+                    const numEnt = extrairNumeroOrdem(r.ordem_ent || r.real_ent);
+                    const numSai = extrairNumeroOrdem(r.ordem_sai || r.real_sai);
+
+                    if (numEnt.includes(num) || numSai.includes(num)) {
+                        expandedSections[sec.id] = true;
+                        switchTab(sec.view);
+                        renderizarViews();
+                        
+                        setTimeout(() => {
+                            const inputElem = document.querySelector(`[data-sec="${sec.id}"][data-row="${i}"][data-field="ordem_ent"]`) ||
+                                              document.querySelector(`[data-sec="${sec.id}"][data-row="${i}"][data-field="real_ent"]`);
+                            if (inputElem) {
+                                const tr = inputElem.closest('tr');
+                                if (tr) {
+                                    tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    tr.classList.add('highlight-row');
+                                    setTimeout(() => tr.classList.remove('highlight-row'), 6000);
+                                }
+                            }
+                        }, 200);
+
+                        mostrarToast(`OP encontrada no setor: ${sec.title}`, 'fa-magnifying-glass-location');
+                        encontrou = true;
+                        break;
+                    }
+                }
+                if (encontrou) break;
+            }
+
+            if (!encontrou) {
+                mostrarToast(`OP "${termo}" não encontrada nas linhas ativas.`, 'fa-triangle-exclamation');
+            }
+        }
+
+        function abrirTimelineOP(numeroOrdem) {
+            const num = extrairNumeroOrdem(numeroOrdem);
+            if (!num) return;
+
+            document.getElementById('timeline-op-title').innerText = num;
+            const container = document.getElementById('timeline-body');
+            let steps = [];
+
+            let pcpInfo = null;
+            Object.keys(db.basePCP || {}).forEach(secId => {
+                const f = (db.basePCP[secId] || []).find(p => extrairNumeroOrdem(p.ov) === num);
+                if (f) pcpInfo = { ...f, sec: secId };
+            });
+
+            if (pcpInfo) {
+                steps.push({
+                    setor: `PCP / Programação (${pcpInfo.sec.toUpperCase()})`,
+                    status: 'completed',
+                    icon: 'fa-calendar-check',
+                    detalhes: `Produto: ${pcpInfo.prod || 'N/D'} | Plan Ent: ${pcpInfo.plan_ent || '-'} | Plan Saí: ${pcpInfo.plan_sai || '-'}`
+                });
+            }
+
+            configuracaoSetores.forEach(sec => {
+                const linhas = db.data[sec.id] || [];
+                linhas.forEach(r => {
+                    const ent = extrairNumeroOrdem(r.real_ent || r.ordem_ent);
+                    const sai = extrairNumeroOrdem(r.real_sai || r.ordem_sai);
+                    if (ent === num || sai === num) {
+                        let st = 'completed';
+                        let desc = '';
+                        if (r.aponta === 'OK') desc = '🟢 Concluído e Liberado';
+                        else if (r.aponta === 'COGI') desc = `🔴 Gargalo Ativo: ${r.impactos || 'Sem motivo'}`;
+                        else { desc = '⏳ Em Produção'; st = 'in-progress'; }
+
+                        steps.push({
+                            setor: sec.title,
+                            status: st,
+                            icon: st === 'completed' ? 'fa-check' : 'fa-gear fa-spin',
+                            detalhes: `Entrada: ${r.data_real_ent || r.data_pcp || '-'} | Saída: ${r.data_real_sai || '-'} | Status: ${desc}`
+                        });
+                    }
+                });
+            });
+
+            if (steps.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--randon-grey); font-weight:700;">Nenhum registro histórico estruturado para a OP ${num}.</div>`;
+            } else {
+                container.innerHTML = steps.map(s => `
+                    <div class="timeline-step ${s.status}">
+                        <div class="timeline-icon"><i class="fa-solid ${s.icon}"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title"><span>${s.setor}</span></div>
+                            <div class="timeline-dates">${s.detalhes}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('modal-timeline').classList.add('active');
+        }
+
+        function fecharModalTimeline() {
+            document.getElementById('modal-timeline').classList.remove('active');
+        }
+
+        // ==========================================
+        // EXPORTAÇÃO EXCEL (.CSV UTF-8 BOM)
+        // ==========================================
+        function exportarExcelProducao() {
+            let csvContent = "\uFEFF";
+            csvContent += "Macro Setor;Setor;Data Referencia;OP Entrada;Real Entrada;Atraso Ent (Dias);OP Saida;Real Saida;Atraso Sai (Dias);Status Apontamento;Motivo Gargalo;Acoes Corretivas / Observacoes\n";
+
+            configuracaoSetores.forEach(sec => {
+                const linhas = db.data[sec.id] || [];
+                linhas.forEach(r => {
+                    const temDado = r.ordem_ent || r.ordem_sai || r.real_ent || r.real_sai || r.data_pcp;
+                    if (temDado) {
+                        const rowCsv = [
+                            sec.view.toUpperCase(),
+                            `"${sec.title}"`,
+                            `"${r.data_pcp || ''}"`,
+                            `"${r.ordem_ent || ''}"`,
+                            `"${r.real_ent || ''}"`,
+                            `"${r.atr_ent || 0}"`,
+                            `"${r.ordem_sai || ''}"`,
+                            `"${r.real_sai || ''}"`,
+                            `"${r.atr_sai || 0}"`,
+                            `"${r.aponta || 'PENDENTE'}"`,
+                            `"${r.impactos || ''}"`,
+                            `"${(r.acoes || '').replace(/"/g, '""')}"`
+                        ];
+                        csvContent += rowCsv.join(";") + "\n";
+                    }
+                });
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Producao_Randon_${getDataAtualFormatada().replace('/','-')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            mostrarToast("Planilha Excel (.CSV) Gerada!", "fa-file-excel");
+        }
+
+        // ==========================================
+        // CÁLCULO E MAGIA DE DADOS
+        // ==========================================
         function buscarOrdemPorNumero(secId, numeroOrdem) {
             if (db.basePCP && db.basePCP[secId]) {
-                // Percorre do fim para o início: se a mesma ordem foi reprogramada (datas
-                // diferentes) e ficou mais de uma vez no cofre, a entrada mais recente
-                // (última carregada) é sempre a que vale — não a primeira que aparecer.
                 const cofre = db.basePCP[secId];
                 for (let i = cofre.length - 1; i >= 0; i--) {
                     const p = cofre[i];
@@ -645,19 +1321,11 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             return null;
         }
 
-        // Busca comparando apenas dia e mês (ignora o ano)
         function buscarOrdemParaData(secId, dataApontamento, tipo) {
             const cofrePCP = db.basePCP[secId];
-            if (!cofrePCP) {
-                console.log(`[buscarOrdemParaData] Cofre vazio para ${secId}`);
-                return null;
-            }
+            if (!cofrePCP) return null;
             const dataNormalizada = normalizarDataParaComparacao(dataApontamento);
-            if (!dataNormalizada) {
-                console.log(`[buscarOrdemParaData] Data inválida: ${dataApontamento}`);
-                return null;
-            }
-            console.log(`[buscarOrdemParaData] Procurando ${tipo} para data ${dataNormalizada} em ${secId}`);
+            if (!dataNormalizada) return null;
 
             const partes = dataNormalizada.split('/');
             const dia = parseInt(partes[0]);
@@ -669,13 +1337,10 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 let planNorm = normalizarDataParaComparacao(planDate);
                 let partesPlan = planNorm.split('/');
                 if (partesPlan.length < 2) return false;
-                let diaPlan = parseInt(partesPlan[0]);
-                let mesPlan = parseInt(partesPlan[1]);
-                return diaPlan === dia && mesPlan === mes;
+                return parseInt(partesPlan[0]) === dia && parseInt(partesPlan[1]) === mes;
             });
 
             if (match) {
-                console.log(`[buscarOrdemParaData] Encontrou:`, match);
                 return {
                     ordem: `${match.ov}${match.prod ? ' - ' + match.prod : ''}`,
                     plan_ent: match.plan_ent,
@@ -683,45 +1348,27 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     ov: match.ov,
                     prod: match.prod || ''
                 };
-            } else {
-                console.log(`[buscarOrdemParaData] Nenhuma ordem encontrada para ${tipo} na data ${dataNormalizada}`);
-                return null;
             }
+            return null;
         }
 
         function aplicarMagia(secId, row) {
             if (!row.data_pcp || row.data_pcp.trim() === '') return;
             const dataVal = row.data_pcp;
-            console.log(`[aplicarMagia] Aplicando magia para ${secId} com data ${dataVal}`);
 
             if (!row.lock_ent && !row.real_ent) {
                 const fEnt = buscarOrdemParaData(secId, dataVal, 'ent');
-                if (fEnt) {
-                    row.ordem_ent = fEnt.ordem;
-                    row.plan_ent = fEnt.plan_ent;
-                    console.log(`[aplicarMagia] Preencheu entrada: ${fEnt.ordem}`);
-                } else {
-                    console.log(`[aplicarMagia] Nenhuma ordem de entrada para ${dataVal}`);
-                }
+                if (fEnt) { row.ordem_ent = fEnt.ordem; row.plan_ent = fEnt.plan_ent; }
             }
             if (!row.lock_sai && !row.real_sai) {
                 const fSai = buscarOrdemParaData(secId, dataVal, 'sai');
-                if (fSai) {
-                    row.ordem_sai = fSai.ordem;
-                    row.plan_sai = fSai.plan_sai;
-                    console.log(`[aplicarMagia] Preencheu saída: ${fSai.ordem}`);
-                } else {
-                    console.log(`[aplicarMagia] Nenhuma ordem de saída para ${dataVal}`);
-                }
+                if (fSai) { row.ordem_sai = fSai.ordem; row.plan_sai = fSai.plan_sai; }
             }
         }
 
         function aplicarMagiaPorNumero(secId, row, numeroOrdem, tipo) {
             if (!db.basePCP || !db.basePCP[secId]) return false;
             const cofre = db.basePCP[secId];
-            // Mesma correção de buscarOrdemPorNumero: usa a versão mais recente da ordem
-            // no cofre (última carregada), não a primeira, para não puxar uma data de
-            // plano antiga que já foi substituída por uma reprogramação.
             let match = null;
             for (let i = cofre.length - 1; i >= 0; i--) {
                 if (extrairNumeroOrdem(cofre[i].ov) === numeroOrdem) { match = cofre[i]; break; }
@@ -769,7 +1416,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     if (row.real_ent && row.real_ent.trim() !== '') {
                         const ordemReal = extrairNumeroOrdem(row.real_ent);
                         const ordemPlan = extrairNumeroOrdem(row.ordem_ent);
-                        
                         let planEntReal = row.plan_ent;
                         
                         if (!planEntReal || (ordemReal !== ordemPlan && ordemPlan !== '')) {
@@ -785,14 +1431,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                             row.atr_ent = ''; row.stat_ent = '';
                         }
 
-                        // CONFLITO REAL: a ordem que chegou é diferente da que estava programada
-                        // para essa linha — isso sim é um problema e deve ficar vermelho.
                         const conflitoDeOrdem = (ordemReal !== ordemPlan && ordemPlan !== '');
-                        // SEM PROGRAMAÇÃO: a ordem foi digitada manualmente e não tinha nada no
-                        // PCP para comparar (tag "(AUTO)"). Isso NÃO é um atraso nem um erro — só
-                        // não há data de referência. Não deve ficar vermelho nem ganhar "0" de
-                        // atraso inventado, pois isso mascarava apontamentos manuais válidos como
-                        // se estivessem atrasados.
                         const semProgramacao = row.ordem_ent && row.ordem_ent.includes('(AUTO)') && !conflitoDeOrdem;
 
                         if (conflitoDeOrdem) {
@@ -808,7 +1447,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     if (row.real_sai && row.real_sai.trim() !== '') {
                         const ordemReal = extrairNumeroOrdem(row.real_sai);
                         const ordemPlan = extrairNumeroOrdem(row.ordem_sai);
-                        
                         let planSaiReal = row.plan_sai;
                         
                         if (!planSaiReal || (ordemReal !== ordemPlan && ordemPlan !== '')) {
@@ -824,8 +1462,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                             row.atr_sai = ''; row.stat_sai = '';
                         }
 
-                        // Mesma lógica do lado da entrada: só força vermelho em conflito real
-                        // de ordem; ordem "(AUTO)" sem programação não é tratada como atraso.
                         const conflitoDeOrdemSai = (ordemReal !== ordemPlan && ordemPlan !== '');
                         const semProgramacaoSai = row.ordem_sai && row.ordem_sai.includes('(AUTO)') && !conflitoDeOrdemSai;
 
@@ -843,7 +1479,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // TABLET - INTEGRAÇÃO COM CT (ISOLADA)
+        // TABLET - INTEGRAÇÃO COM CT
         // ==========================================
         function alocarNoPainelCT(ovTablet, tipo, dataCarimbo, dataCarimboCompleta) {
             if(!db.data['ct']) db.data['ct'] = [];
@@ -854,15 +1490,9 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             if (tipo === 'entrada') {
                 if (tabelaCT.find(r => extrairNumeroOrdem(r.real_ent) === numOvTablet)) return false;
                 
-                // Prioridade de busca (evita entrada/saída da MESMA ordem em linhas diferentes):
-                // 1) Já existe uma linha com a SAÍDA real dessa mesma ordem aguardando a entrada
-                //    (acontece quando os postos são lidos fora da ordem cronológica esperada)
                 let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_sai) === numOvTablet && r.real_ent === '');
-                // 2) Linha programada (ordem_ent já bate com essa ordem) e ainda sem entrada real
                 if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_ent) === numOvTablet && r.real_ent === '');
-                // 3) Linha com a mesma data prevista e ainda sem entrada real
                 if (idx === -1) idx = tabelaCT.findIndex(r => r.data_pcp === dataCarimbo && r.real_ent === '');
-                // 4) Primeira linha totalmente vazia
                 if (idx === -1) idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
                 if (idx === -1) {
                     tabelaCT.push(getEmptyRow());
@@ -870,20 +1500,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 }
                 
                 const row = tabelaCT[idx];
-                
                 if (!row.lock_ent) {
                     if (!row.data_pcp) row.data_pcp = dataCarimbo;
                     row.real_ent = ovTablet;
-                    // CORREÇÃO: usa a data REAL do carimbo do tablet (dia em que o posto
-                    // efetivamente leu a ordem), e não a data de "hoje". A reconstrução dos
-                    // dados do tablet pode rodar dias depois do evento físico — se usasse
-                    // "hoje" aqui, o cálculo de atraso comparava o plano com a data errada
-                    // e gerava atraso "fantasma" (ex: 3 dias) mesmo sem atraso real.
                     if (!row.data_real_ent) row.data_real_ent = dataCarimboCompleta || getDataCompleta();
                     
                     if (!row.ordem_ent) {
-                        // Antes de marcar como AUTO, tenta achar a ordem que
-                        // estava REALMENTE programada para esta data no cofre PCP
                         const fEnt = buscarOrdemParaData('ct', row.data_pcp, 'ent');
                         if (fEnt) {
                             row.ordem_ent = fEnt.ordem;
@@ -898,16 +1520,9 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             else if (tipo === 'saida') {
                 if (tabelaCT.find(r => extrairNumeroOrdem(r.real_sai) === numOvTablet)) return false;
                 
-                // Prioridade de busca (mesma lógica da entrada, espelhada):
-                // 1) Já existe uma linha com a ENTRADA real dessa mesma ordem aguardando a saída
-                //    — este é o caso mais comum e é o que garante que entrada e saída fiquem
-                //    sempre juntas na mesma linha
                 let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_ent) === numOvTablet && r.real_sai === '');
-                // 2) Linha programada (ordem_sai já bate com essa ordem) e ainda sem saída real
                 if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_sai) === numOvTablet && r.real_sai === '');
-                // 3) Linha com a mesma data prevista, que já teve entrada registrada, e sem saída real
                 if (idx === -1) idx = tabelaCT.findIndex(r => r.data_pcp === dataCarimbo && r.real_sai === '' && r.real_ent !== '');
-                // 4) Primeira linha totalmente vazia
                 if (idx === -1) idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
                 if (idx === -1) {
                     tabelaCT.push(getEmptyRow());
@@ -915,16 +1530,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 }
                 
                 const row = tabelaCT[idx];
-                
                 if (!row.lock_sai) {
                     if (!row.data_pcp) row.data_pcp = dataCarimbo;
                     row.real_sai = ovTablet;
-                    // CORREÇÃO: mesma lógica da entrada — usa a data real do carimbo, não "hoje".
                     if (!row.data_real_sai) row.data_real_sai = dataCarimboCompleta || getDataCompleta();
                     
                     if (!row.ordem_sai) {
-                        // Antes de marcar como AUTO, tenta achar a ordem que
-                        // estava REALMENTE programada para esta data no cofre PCP
                         const fSai = buscarOrdemParaData('ct', row.data_pcp, 'sai');
                         if (fSai) {
                             row.ordem_sai = fSai.ordem;
@@ -936,14 +1547,9 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     atualizou = true;
                 }
             }
-            
             return atualizou;
         }
 
-        // Corrige o caso em que a entrada (Posto 3) e a saída (Posto 7) da MESMA ordem
-        // acabaram registradas em linhas diferentes da tabela do CT (bug de alocação antigo,
-        // ou dados que já ficaram divididos antes desta correção). Sempre que encontra esse
-        // padrão, junta tudo na linha da entrada e esvazia a linha "órfã" da saída.
         function mesclarLinhasDivididasCT() {
             if (!db.data || !db.data['ct']) return false;
             const tabela = db.data['ct'];
@@ -959,10 +1565,9 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     if (i === j) continue;
                     const rowSai = tabela[j];
                     if (!rowSai.real_sai || rowSai.real_sai.trim() === '') continue;
-                    if (rowSai.real_ent && rowSai.real_ent.trim() !== '') continue; // já tem própria entrada, não é uma linha "órfã"
+                    if (rowSai.real_ent && rowSai.real_ent.trim() !== '') continue;
                     if (extrairNumeroOrdem(rowSai.real_sai) !== numEnt) continue;
 
-                    // Encontrou: a saída dessa ordem está numa linha separada. Junta na linha da entrada.
                     rowEnt.real_sai = rowSai.real_sai;
                     rowEnt.data_real_sai = rowSai.data_real_sai || rowEnt.data_real_sai;
                     if (!rowEnt.ordem_sai) rowEnt.ordem_sai = rowSai.ordem_sai;
@@ -972,7 +1577,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     if (rowSai.impactos && !rowEnt.impactos) rowEnt.impactos = rowSai.impactos;
                     if (rowSai.acoes && !rowEnt.acoes) rowEnt.acoes = rowSai.acoes;
 
-                    // Esvazia a linha "órfã" (será removida automaticamente no expurgo de linhas fantasmas)
                     tabela[j] = getEmptyRow();
                     mesclou = true;
                     break;
@@ -994,11 +1598,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 
                 const partes = dataIso.split('-'); 
                 const dataCarimbo = `${partes[2]}/${partes[1]}`; 
-                // Data completa (com ano) do dia realmente registrado no tablet. Usada para
-                // preencher "Entrada/Saída Real" com a data verdadeira do evento, mesmo que
-                // a reconstrução rode dias depois (evita atraso "fantasma" no cálculo).
                 const dataCarimboCompleta = `${partes[2]}/${partes[1]}/${partes[0]}`;
-                
                 const dadosDia = firebaseRegistrosTablet[key];
                 
                 let extraidos = [];
@@ -1008,7 +1608,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     let ov = String(nodo.ov || (nodo.tarde && nodo.tarde.ov) || (nodo.manha && nodo.manha.ov) || (nodo.noite && nodo.noite.ov) || '').replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
 
                     if (!ov) {
-                        // Fallback: procura qualquer campo do nó que pareça um número de OV
                         for (let k in nodo) {
                             if (/ov/i.test(k) && typeof nodo[k] === 'string' && /\d{3,}/.test(nodo[k])) {
                                 ov = nodo[k].replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
@@ -1017,20 +1616,13 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         }
                     }
 
-                    // Extrai o número do posto de forma tolerante: "posto 3", "posto03",
-                    // "Posto_07", "P7", só "3", etc.
                     let numPosto = null;
                     const mPosto = nome.match(/posto\D*0*(\d+)/) || nome.match(/^p\D*0*(\d+)$/);
                     if (mPosto) numPosto = parseInt(mPosto[1], 10);
                     else if (/^\d+$/.test(nome)) numPosto = parseInt(nome, 10);
 
-                    if (ov.length >= 3 && numPosto === 3) {
-                        extraidos.push({ ov: ov, tipo: 'entrada' });
-                    }
-                    if (ov.length >= 3 && numPosto === 7) {
-                        console.log('[reconstruirDadosTablet] Posto 7 (saída) detectado:', nome, '-> OV', ov);
-                        extraidos.push({ ov: ov, tipo: 'saida' });
-                    }
+                    if (ov.length >= 3 && numPosto === 3) extraidos.push({ ov: ov, tipo: 'entrada' });
+                    if (ov.length >= 3 && numPosto === 7) extraidos.push({ ov: ov, tipo: 'saida' });
                     
                     Object.values(nodo).forEach(filho => {
                         if (typeof filho === 'object') percorrer(filho);
@@ -1039,9 +1631,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 percorrer(dadosDia);
                 
                 extraidos.forEach(scan => {
-                    if(alocarNoPainelCT(scan.ov, scan.tipo, dataCarimbo, dataCarimboCompleta)) {
-                        atualizouGeral = true;
-                    }
+                    if(alocarNoPainelCT(scan.ov, scan.tipo, dataCarimbo, dataCarimboCompleta)) atualizouGeral = true;
                 });
             });
 
@@ -1049,18 +1639,14 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // RENDERIZAÇÃO (MESMO DE ANTES)
+        // RENDERIZAÇÃO
         // ==========================================
         function renderizarEstampariaMatriz() {
             const container = document.getElementById('tabela-estamparia-matriz');
             if(!container) return;
             
-            if (!db.estampariaMatriz) {
-                db.estampariaMatriz = { datas: [], valores: {} };
-            }
-            if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
-                atualizarDiasEstamparia();
-            }
+            if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
+            if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) atualizarDiasEstamparia();
             
             const datas = db.estampariaMatriz.datas || ['','','','',''];
             
@@ -1083,24 +1669,17 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
             let tbody = '';
             estampariaLinhas.forEach((linha) => {
-                if (!db.estampariaMatriz.valores[linha]) {
-                    db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                }
+                if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
                 
-                tbody += `<tr>`;
-                tbody += `<td style="font-weight: 900; padding-left: 20px; color: var(--randon-dark); font-size: 14px; border-right: 2px solid var(--randon-black);">${linha}</td>`;
+                tbody += `<tr><td style="font-weight: 900; padding-left: 20px; color: var(--randon-dark); font-size: 14px; border-right: 2px solid var(--randon-black);">${linha}</td>`;
                 
                 datas.forEach((d, cIdx) => {
-                    const val = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx] !== undefined) 
-                        ? db.estampariaMatriz.valores[linha][cIdx] 
-                        : '';
+                    const val = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx] !== undefined) ? db.estampariaMatriz.valores[linha][cIdx] : '';
                     let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : '';
                     let colorStyle = 'color: var(--randon-blue);'; 
                     
                     if (cIdx > 0 && val !== '') {
-                        const prevVal = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx - 1]) 
-                            ? db.estampariaMatriz.valores[linha][cIdx - 1] 
-                            : '';
+                        const prevVal = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx - 1]) ? db.estampariaMatriz.valores[linha][cIdx - 1] : '';
                         if (prevVal !== '') {
                             const numVal = parseFloat(val);
                             const numPrev = parseFloat(prevVal);
@@ -1161,6 +1740,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     else if (row.ordem_sai) clsSai = 'ordem-programada';
                     
                     let dataClass = row.data_pcp ? 'data-input' : '';
+                    const opEntNum = extrairNumeroOrdem(row.real_ent || row.ordem_ent);
+                    const opSaiNum = extrairNumeroOrdem(row.real_sai || row.ordem_sai);
                     
                     tbody += `
                         <tr style="${displayStyle}">
@@ -1170,16 +1751,16 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                             </td>
                             
                             <td class="${clsEnt}">
-                                <input type="text" class="cell-input" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_ent" value="${row.ordem_ent || ''}" placeholder="Prog Ent">
+                                <input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_ent" value="${row.ordem_ent || ''}" placeholder="Prog Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}">
                             </td>
-                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}" placeholder="Real Ent"></td>
+                            <td><input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}" placeholder="Real Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
                             <td><input type="text" class="cell-input" readonly style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent || ''}"></td>
                             <td><div class="status-btn"><div class="circle ${row.stat_ent || ''}"></div></div></td>
                             
                             <td class="${clsSai}">
-                                <input type="text" class="cell-input" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_sai" value="${row.ordem_sai || ''}" placeholder="Prog Sai">
+                                <input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_sai" value="${row.ordem_sai || ''}" placeholder="Prog Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}">
                             </td>
-                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="real_sai" value="${row.real_sai || ''}" placeholder="Real Sai"></td>
+                            <td><input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" data-sec="${sec.id}" data-row="${i}" data-field="real_sai" value="${row.real_sai || ''}" placeholder="Real Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
                             <td><input type="text" class="cell-input" readonly style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_sai" value="${row.atr_sai || ''}"></td>
                             <td><div class="status-btn"><div class="circle ${row.stat_sai || ''}"></div></div></td>
                             
@@ -1267,9 +1848,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 let target = document.querySelector(`[data-sec="${focusSec}"][data-row="${focusRow}"][data-field="${focusField}"]`);
                 if (target) {
                     target.focus();
-                    if(target.tagName === 'INPUT') {
-                        target.setSelectionRange(cursorStart, cursorEnd);
-                    }
+                    if(target.tagName === 'INPUT') target.setSelectionRange(cursorStart, cursorEnd);
                 }
             }
         }
@@ -1289,9 +1868,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         if (!isNaN(aEnt) && aEnt > 0) sumAtrEnt += aEnt;
                         if (!isNaN(aSai) && aSai > 0) sumAtrSai += aSai;
                         
-                        // Conta como "programada" tanto a ordem puxada automaticamente do PCP (plan_ent/plan_sai)
-                        // quanto a ordem digitada manualmente pelo apontador (ordem_ent/ordem_sai) quando não
-                        // havia nada no cofre para aquela data. As duas formas de preenchimento são válidas.
                         const temProgramacao = (row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '') ||
                                                 (row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '');
                         if(temProgramacao) totalProgMes++;
@@ -1315,6 +1891,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     }
                 } catch(e) {}
             });
+
+            recalcularPainelPremio();
         }
 
         function forceRenderTodasTabelas() {
@@ -1326,6 +1904,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             recalcularDashboard(); 
             renderResumoApontamento();
             renderPainelGargalos();
+            recalcularPainelPremio();
         }
 
         function expurgarLinhasFantasmas() {
@@ -1334,32 +1913,22 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 if(!db.data[sec.id]) db.data[sec.id] = [];
                 let validas = db.data[sec.id].filter(r => {
                     if (!r) return false;
-                    // IMPORTANTE: data_pcp, aponta e impactos também contam como conteúdo válido.
-                    // Antes, uma linha com APENAS a data digitada (sem nenhuma ordem encontrada
-                    // automaticamente no PCP) era tratada como "vazia" e descartada no próprio
-                    // instante em que a pessoa digitava — apagando a data e embaralhando as
-                    // linhas seguintes (o que também distorcia o cálculo de atraso).
                     let textConcat = (r.ordem_ent || '') + (r.ordem_sai || '') + (r.plan_ent || '') + (r.real_ent || '') + (r.plan_sai || '') + (r.real_sai || '') + (r.acoes || '') + (r.data_pcp || '') + (r.aponta || '') + (r.impactos || '');
                     let limpo = textConcat.replace(/[^a-zA-Z0-9]/g, '');
                     return limpo.length > 0;
                 });
-                while (validas.length < sec.rows) {
-                    validas.push(getEmptyRow());
-                }
+                while (validas.length < sec.rows) validas.push(getEmptyRow());
                 validas.push(getEmptyRow()); validas.push(getEmptyRow()); validas.push(getEmptyRow());
                 db.data[sec.id] = validas;
             });
         }
 
         function atualizarDiasEstamparia() {
-            if (!db.estampariaMatriz) {
-                db.estampariaMatriz = { datas: [], valores: {} };
-            }
+            if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
             if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
                 let novasDatas = [];
                 for(let i=4; i>=0; i--) {
-                    let d = new Date(); 
-                    d.setDate(d.getDate() - i);
+                    let d = new Date(); d.setDate(d.getDate() - i);
                     novasDatas.push(formatarDataEstamparia(d));
                 }
                 db.estampariaMatriz.datas = novasDatas;
@@ -1395,9 +1964,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                             let count = 0;
                             Object.values(oldDb.estampariaMatriz.valores).forEach(arr => {
                                 if(Array.isArray(arr)) {
-                                    arr.forEach(val => { 
-                                        if (val && String(val).trim() !== '') count++; 
-                                    });
+                                    arr.forEach(val => { if (val && String(val).trim() !== '') count++; });
                                 }
                             });
                             if (count > maxPreenchidos) {
@@ -1436,10 +2003,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // CARGA PCP NO COFRE (PARSER ROBUSTO)
+        // CARGA PCP NO COFRE
         // ==========================================
-        // Regex que reconhece datas soltas dentro da linha, em qualquer
-        // posição, no formato DD.MM.AAAA, DD/MM/AAAA ou DD-MM-AAAA (ano opcional).
         const REGEX_DATA_SOLTA = /\b(\d{1,2})[\.\/\-](\d{1,2})(?:[\.\/\-](\d{2,4}))?\b/g;
 
         function extrairDatasDaLinha(linha) {
@@ -1462,27 +2027,18 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
             linhasOriginais.forEach(linha => {
                 const primeiraColTeste = linha.trim().split(/\t|\s{2,}/)[0].toLowerCase();
-                if (primeiraColTeste.includes('linha') || primeiraColTeste.includes('ordem') || primeiraColTeste.includes('venda')) {
-                    return;
-                }
+                if (primeiraColTeste.includes('linha') || primeiraColTeste.includes('ordem') || primeiraColTeste.includes('venda')) return;
 
-                // 1) Localiza as DUAS datas da linha (entrada e saída), não importa
-                //    a posição/coluna em que caíram — isso corrige o caso em que a
-                //    quebra por tab/espaço desalinhava a coluna de DATA ENTRADA.
                 const datasEncontradas = extrairDatasDaLinha(linha);
-                if (datasEncontradas.length < 2) {
-                    erros++; return;
-                }
-                // A primeira data que aparece na linha é a de ENTRADA, a segunda é a de SAÍDA
+                if (datasEncontradas.length < 2) { erros++; return; }
+
                 const dataEntradaInfo = datasEncontradas[0];
                 const dataSaidaInfo = datasEncontradas[datasEncontradas.length > 1 ? 1 : 0];
 
                 const dataEntrada = `${dataEntradaInfo.dia.padStart(2,'0')}/${dataEntradaInfo.mes.padStart(2,'0')}/${dataEntradaInfo.ano.length === 2 ? '20'+dataEntradaInfo.ano : dataEntradaInfo.ano}`;
                 const dataSaida = `${dataSaidaInfo.dia.padStart(2,'0')}/${dataSaidaInfo.mes.padStart(2,'0')}/${dataSaidaInfo.ano.length === 2 ? '20'+dataSaidaInfo.ano : dataSaidaInfo.ano}`;
 
-                // 2) Tudo que vem ANTES da primeira data é LINHA + OV + PRODUTO.
                 let cabecalho = linha.substring(0, dataEntradaInfo.index).trim();
-                // separa por tab se houver, senão por 2+ espaços, senão por espaço simples
                 let col = cabecalho.split('\t').map(c => c.trim()).filter(c => c !== '');
                 if (col.length < 2) col = cabecalho.split(/\s{2,}/).map(c => c.trim()).filter(c => c !== '');
                 if (col.length < 2) col = cabecalho.split(/\s+/).map(c => c.trim()).filter(c => c !== '');
@@ -1495,14 +2051,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
                 if (ov === '' || ov.length < 3) { erros++; return; }
 
-                let destino = mapaLinhaParaSetor[linhaAlvo] || null;
-                if (!destino) {
-                    // Tenta primeiro por sigla exata (ex: "TQ", "CT", "CHASSI"), sem
-                    // diferenciar maiúsculas/minúsculas nem espaços nas pontas — é o caso
-                    // do Tanque quando a planilha do PCP usa o código curto em vez de
-                    // "Tanque" por extenso.
-                    destino = siglaParaSetor[linhaAlvo.trim().toUpperCase()] || null;
-                }
+                let destino = mapaLinhaParaSetor[linhaAlvo] || siglaParaSetor[linhaAlvo.trim().toUpperCase()] || null;
                 if (!destino) {
                     const lowerLinha = linhaAlvo.toLowerCase();
                     if (lowerLinha.includes('tanque')) destino = 'tq';
@@ -1518,12 +2067,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 if (destino) {
                     if (!db.basePCP[destino]) db.basePCP[destino] = [];
 
-                    // Só é tratado como duplicata se a OV E as DUAS datas forem
-                    // idênticas a um registro já existente. Se a mesma OV aparece
-                    // com uma janela de entrada/saída diferente (reprogramação),
-                    // isso é um NOVO registro — não pode sobrescrever o antigo,
-                    // senão a data anterior "some" do cofre e a Mágica Dupla
-                    // deixa de encontrar a ordem para a data original.
                     let existing = db.basePCP[destino].find(r =>
                         extrairNumeroOrdem(r.ov) === extrairNumeroOrdem(ov) &&
                         r.plan_ent === dataEntrada &&
@@ -1532,9 +2075,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     if (existing) {
                         existing.prod = prod;
                     } else {
-                        db.basePCP[destino].push({
-                            ov: ov, prod: prod, plan_ent: dataEntrada, plan_sai: dataSaida
-                        });
+                        db.basePCP[destino].push({ ov: ov, prod: prod, plan_ent: dataEntrada, plan_sai: dataSaida });
                     }
                     count++;
                 } else {
@@ -1554,7 +2095,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // BOTÕES DE LIMPEZA (MESMO DE ANTES)
+        // BOTÕES DE LIMPEZA
         // ==========================================
         function apagarTablet() {
             if(!isAdmin) return toggleAdmin();
@@ -1635,7 +2176,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // GUIAS DE APONTAMENTO (MESMO)
+        // GUIAS DE APONTAMENTO
         // ==========================================
         function renderResumoApontamento() {
             const tbodySaidas = document.getElementById('tbody-saidas-linha');
@@ -1655,13 +2196,14 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         const dataExec = row.data_pcp || '';
                         if (dateMatches(plan, db.globalDate) || dateMatches(dataExec, db.globalDate) || dateMatches(real, db.globalDate) || (real.trim() !== '' && row.aponta === '')) {
                             hasSaidas = true;
+                            const opNum = extrairNumeroOrdem(row.ordem_sai || row.ordem_ent || real);
                             htmlSaidas += `
                                 <tr>
                                     <td style="font-weight:900; color: var(--randon-black); padding-left: 20px; font-size: 13px;">
                                         <span class="macro-badge">SOLDA</span><br>${sec.title}
                                     </td>
-                                    <td style="font-weight:900; font-size:14px; text-align: center; color: var(--randon-blue);">${row.ordem_sai || row.ordem_ent || '-'}</td>
-                                    <td style="font-size: 16px; font-weight: 900; text-align: center; color: var(--status-green);">${real || '-'}</td>
+                                    <td style="font-weight:900; font-size:14px; text-align: center; color: var(--randon-blue); cursor:pointer;" ondblclick="abrirTimelineOP('${opNum}')">${row.ordem_sai || row.ordem_ent || '-'}</td>
+                                    <td style="font-size: 16px; font-weight: 900; text-align: center; color: var(--status-green); cursor:pointer;" ondblclick="abrirTimelineOP('${opNum}')">${real || '-'}</td>
                                     <td class="center-text ${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' ? 'bg-cogi' : '')}" style="border-radius: 6px; margin: 4px; display: table-cell;">
                                         <div style="text-align: center; font-weight: 900; font-size: 13px;">${row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' ? '🔴 COGI' : '⏳ PENDENTE')}</div>
                                     </td>
@@ -1681,11 +2223,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                             hasEspelho = true;
                             let statusText = row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' ? '🔴 COGI' : '⏳ EM ANDAMENTO');
                             let gargalo = row.impactos ? ` | Gargalo: ${row.impactos}` : '';
+                            const opNum = extrairNumeroOrdem(row.ordem_sai || row.ordem_ent);
                             
                             htmlEspelho += `
                                 <tr>
                                     <td style="font-weight:900; color: var(--randon-black); padding-left: 20px; font-size: 13px;">${sec.title}</td>
-                                    <td style="font-weight:900; font-size:14px; text-align: center; color: var(--randon-blue);">${row.ordem_sai || row.ordem_ent}</td>
+                                    <td style="font-weight:900; font-size:14px; text-align: center; color: var(--randon-blue); cursor:pointer;" ondblclick="abrirTimelineOP('${opNum}')">${row.ordem_sai || row.ordem_ent}</td>
                                     <td style="font-weight: 900; font-size: 14px; text-align: center; color: var(--randon-dark);">${row.real_ent || '-'}</td>
                                     <td style="font-weight: 900; font-size: 14px; text-align: center; color: var(--status-green);">${row.real_sai || '-'}</td>
                                     <td style="padding-left: 20px; font-weight:800; font-size: 13px; color: ${row.aponta === 'COGI' ? 'var(--status-red)' : 'var(--randon-grey)'};">
@@ -1706,7 +2249,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // PAINEL DE GARGALOS (NOVO)
+        // PAINEL DE GARGALOS
         // ==========================================
         function renderPainelGargalos() {
             const tbody = document.getElementById('tbody-painel-gargalos');
@@ -1730,11 +2273,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                             const ordem = row.ordem_sai || row.ordem_ent || '-';
                             const data = row.data_pcp || '-';
                             const apontaTxt = row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' ? '🔴 COGI' : '⏳ Pendente');
+                            const opNum = extrairNumeroOrdem(ordem);
 
                             html += `
                                 <tr>
                                     <td style="font-weight:900; padding-left:20px; font-size:13px; text-align:left;">${sec.title}</td>
-                                    <td style="font-weight:900; text-align:center; color: var(--randon-blue); font-size: 13px;">${ordem}</td>
+                                    <td style="font-weight:900; text-align:center; color: var(--randon-blue); font-size: 13px; cursor:pointer;" ondblclick="abrirTimelineOP('${opNum}')">${ordem}</td>
                                     <td style="text-align:center; font-weight:800;">${data}</td>
                                     <td style="text-align:center; font-weight:800; color: var(--status-red); font-size: 12px;">${row.impactos}</td>
                                     <td style="text-align:center; font-weight:800; font-size: 12px;">${apontaTxt}</td>
@@ -1762,11 +2306,40 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // MANIPULAÇÃO DE DADOS (CHANGE EVENT) – CORRIGIDO
+        // MANIPULAÇÃO DE DADOS (CHANGE EVENT)
         // ==========================================
         document.addEventListener('change', function(e) {
             const target = e.target;
             
+            // Edição manual na tabela de pinos (prog / ok)
+            if (target.classList.contains('pino-val-input')) {
+                const cat = target.dataset.cat;
+                const idx = parseInt(target.dataset.idx);
+                const type = target.dataset.type; // 'prog' ou 'ok'
+                const val = parseInt(target.value) || 0;
+
+                if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
+                if (db.pinosManual[cat] && db.pinosManual[cat][idx]) {
+                    db.pinosManual[cat][idx][type] = val;
+                    if (type === 'ok') db.pinosManual[cat][idx].okManual = true;
+                    recalcularPainelPremio();
+                    autoSaveCloud();
+                    mostrarToast("Pinos atualizados!", "fa-trophy");
+                }
+                return;
+            }
+
+            // Edição manual de Meta Base e Atraso
+            if (target.id === 'premio-meta-base-input' || target.id === 'premio-atraso-input') {
+                if (!db.premioConfig) db.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
+                db.premioConfig.metaBase = parseInt(document.getElementById('premio-meta-base-input').value) || 78;
+                db.premioConfig.atraso = parseInt(document.getElementById('premio-atraso-input').value) || 12;
+                recalcularPainelPremio();
+                autoSaveCloud();
+                mostrarToast("Meta do mês atualizada!", "fa-bullseye");
+                return;
+            }
+
             if(target.classList.contains('estamparia-val-input')) {
                 const linha = target.dataset.rowName;
                 const cIdx = parseInt(target.dataset.colIdx);
@@ -1798,10 +2371,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 if (!secId || rowIdx === undefined || !field) return;
                 const row = db.data[secId] && db.data[secId][rowIdx];
                 if (!row) return;
-                // CORREÇÃO: <select> (ex: Gargalo/Impactos e Aponta) não pode ser
-                // convertido para maiúsculas, pois isso quebra a comparação com
-                // as opções originais (ex: "Falta de Material" vs "FALTA DE MATERIAL"),
-                // fazendo o dropdown "esquecer" a seleção após o re-render.
                 const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
                 const oldAponta = row.aponta;
                 
@@ -1823,11 +2392,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         if (row.ordem_ent || row.ordem_sai) {
                             mostrarToast(`📦 Ordens puxadas para ${valNormalizado}`, 'fa-wand-magic-sparkles');
                         } else {
-                            // Não há nada no cofre do PCP para essa data — não é um erro,
-                            // apenas significa que essa ordem não foi carregada via planilha.
-                            // O apontador pode (e deve) preencher "Prog Ent" / "Prog Sai" manualmente
-                            // aqui do lado, e o sistema vai considerar esse apontamento normalmente
-                            // nos indicadores de Prog. Mês e Aderência.
                             mostrarToast(`⚠️ Sem ordem no PCP p/ ${valNormalizado} — pode preencher Prog Ent/Sai manualmente`, 'fa-pen');
                         }
                     }
@@ -1956,11 +2520,18 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 }
                 firebaseDB = firebase.database();
                 dbRef = firebaseDB.ref('dashboard_reuniao'); 
+                
+                firebaseDB.ref('.info/connected').on('value', snap => {
+                    if (snap.val() === true) setStatusConexao('online');
+                    else setStatusConexao('offline');
+                });
+
                 dbRef.on('value', (snapshot) => {
                     const nuvemDb = snapshot.val();
                     if(nuvemDb) { 
                         if (!nuvemDb.data) nuvemDb.data = {}; 
                         if (!nuvemDb.basePCP) nuvemDb.basePCP = {};
+                        if (!nuvemDb.premioConfig) nuvemDb.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
                         db = nuvemDb; 
                         expurgarLinhasFantasmas(); 
                         atualizarDiasEstamparia();
@@ -1974,6 +2545,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 });
             } catch (e) {
                 console.log("Modo Offline Ativado.");
+                setStatusConexao('offline');
                 let rIdx = parseInt(localStorage.getItem('rolling_idx') || '2') - 1;
                 if (rIdx === 0) rIdx = 60;
                 const local = localStorage.getItem('erp_randon_v' + rIdx) || localStorage.getItem('erp_randon_v49'); 
@@ -1986,6 +2558,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         function autoSaveCloud(exibirAviso = true) {
+            setStatusConexao('syncing');
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
                 let dbLimpo = sanearParaFirebase(db);
@@ -1994,10 +2567,14 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 localStorage.setItem('rolling_idx', rIdx >= 60 ? 1 : rIdx + 1);
                 if(dbRef) {
                     dbRef.set(dbLimpo).then(() => {
+                        setStatusConexao('online');
                         if(exibirAviso) mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up");
                     }).catch(err => {
                         console.error("ERRO FIREBASE:", err);
+                        setStatusConexao('offline');
                     });
+                } else {
+                    setStatusConexao('offline');
                 }
             }, 800);
         }
@@ -2088,9 +2665,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         function updateEstampariaChart() {
             if(!chartsObj.estamparia) return;
             if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-            if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
-                atualizarDiasEstamparia();
-            }
+            if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) atualizarDiasEstamparia();
+            
             const datas = db.estampariaMatriz.datas || ['','','','',''];
             chartsObj.estamparia.data.labels = datas;
             const datasets = [];
@@ -2130,6 +2706,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             let aderenciaLabels = [], aderenciaPlan = [], aderenciaReal = [];
             let diaAcessoMap = {}; 
             if(!db.data) return;
+            
             configuracaoSetores.forEach(sec => {
                 let secPlan = 0, secReal = 0;
                 if(db.data[sec.id]) {
@@ -2143,10 +2720,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         if (!isNaN(aEnt) && aEnt > 0) totAtrasos += aEnt;
                         if (!isNaN(aSai) && aSai > 0) totAtrasos += aSai;
 
-                        // Igual ao KPI de "Prog. Mês": conta tanto o que veio do PCP (plan_ent/plan_sai)
-                        // quanto o que foi digitado manualmente pelo apontador (ordem_ent/ordem_sai),
-                        // para que a Aderência reflita o trabalho real da linha e não só o que estava
-                        // previamente carregado na planilha do PCP.
                         const temProgramacaoBI = (row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '') ||
                                                   (row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '');
                         if(temProgramacaoBI) {
@@ -2220,17 +2793,30 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             if (container) container.classList.add('active');
             const btn = document.getElementById(`tab-btn-${tabId}`);
             if (btn) btn.classList.add('active');
+            if (tabId === 'premio') recalcularPainelPremio();
             if (tabId === 'analytics') updateAnalytics();
             if (tabId === 'apontamento') renderResumoApontamento();
             if (tabId === 'estamparia') updateEstampariaChart();
         }
 
+        // ==========================================
+        // MODO TV / ANDON DINÂMICO
+        // ==========================================
+        const TABS_ANDON = ['premio', 'solda', 'pintura', 'op1', 'op2', 'analytics'];
+        let currentAndonIndex = 0;
+        let progressVal = 0;
+
         function iniciarModoTV() {
             isTVMode = true; 
             document.body.classList.add('tv-mode');
             if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
-            switchTab('solda'); 
-            clearInterval(tvInterval); 
+            
+            currentAndonIndex = 0;
+            switchTab(TABS_ANDON[currentAndonIndex]); 
+            
+            clearInterval(tvInterval);
+            clearInterval(tvTabRotationInterval);
+            
             let wait = 0;
             tvInterval = setInterval(() => {
                 if(!isTVMode) return clearInterval(tvInterval);
@@ -2243,12 +2829,31 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     window.scrollBy(0, 1.5); 
                 }
             }, 30);
+
+            // Rotação de Abas a cada 20s
+            const pBar = document.getElementById('tv-progress-bar');
+            progressVal = 0;
+            tvTabRotationInterval = setInterval(() => {
+                if(!isTVMode) return clearInterval(tvTabRotationInterval);
+                progressVal += 0.5;
+                if (pBar) pBar.style.width = `${progressVal}%`;
+
+                if (progressVal >= 100) {
+                    progressVal = 0;
+                    currentAndonIndex = (currentAndonIndex + 1) % TABS_ANDON.length;
+                    switchTab(TABS_ANDON[currentAndonIndex]);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }, 100);
         }
 
         function sairModoTV() { 
             isTVMode = false; 
             document.body.classList.remove('tv-mode'); 
             clearInterval(tvInterval); 
+            clearInterval(tvTabRotationInterval);
+            const pBar = document.getElementById('tv-progress-bar');
+            if (pBar) pBar.style.width = '0%';
             if (document.exitFullscreen) document.exitFullscreen(); 
         }
 
@@ -2265,12 +2870,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             }, 1000); 
         }
 
-        function numOrdem(texto) {
-            if (!texto) return '';
-            const match = texto.match(/(\d{8,})/);
-            return match ? match[1] : texto.replace(/[^0-9]/g, '');
-        }
-
         function init() {
             configuracaoSetores.forEach(sec => {
                 expandedSections[sec.id] = false;
@@ -2280,6 +2879,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
             if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
             if (!db.basePCP) db.basePCP = {};
+            if (!db.premioConfig) db.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
+            if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
             
             atualizarDiasEstamparia();
 
@@ -2291,6 +2892,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             initFirebase(); 
             initCharts();
             updateEstampariaChart();
+            recalcularPainelPremio();
         }
 
         window.onload = init;
