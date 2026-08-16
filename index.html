@@ -442,6 +442,21 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             'Especiais': 'esp_box1', 'Pintura': 'pintura', 'OP1': 'op1_bases', 'OP2': 'op2_geral'
         };
 
+        // Siglas/abreviações aceitas para cada setor, usadas quando a planilha do PCP
+        // vem com o código curto em vez do nome completo da linha (ex: "TQ" em vez de
+        // "Tanque"). Comparação é sempre exata e sem diferenciar maiúsculas/minúsculas,
+        // para não gerar falso-positivo por coincidência de substring.
+        const siglaParaSetor = {
+            'TQ': 'tq', 'TANQUE': 'tq', 'TANQUES': 'tq',
+            'CT': 'ct', 'CARREGA TUDO': 'ct',
+            'BASES': 'bases', 'CHASSI': 'bases',
+            'SILO': 'silo', 'SILOS': 'silo',
+            'ESPECIAIS': 'esp_box1',
+            'PINTURA': 'pintura',
+            'OP1': 'op1_bases',
+            'OP2': 'op2_geral'
+        };
+
         const estampariaLinhas = [
             "Atraso Programação", "Estamparia Geral", "Laser", "Linea", 
             "Dobra", "PRM - Carbo", "115 - CDL", "160 - Externo"
@@ -616,7 +631,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
         function buscarOrdemPorNumero(secId, numeroOrdem) {
             if (db.basePCP && db.basePCP[secId]) {
-                for (let p of db.basePCP[secId]) {
+                // Percorre do fim para o início: se a mesma ordem foi reprogramada (datas
+                // diferentes) e ficou mais de uma vez no cofre, a entrada mais recente
+                // (última carregada) é sempre a que vale — não a primeira que aparecer.
+                const cofre = db.basePCP[secId];
+                for (let i = cofre.length - 1; i >= 0; i--) {
+                    const p = cofre[i];
                     if (extrairNumeroOrdem(p.ov) === numeroOrdem) {
                         return { plan_ent: p.plan_ent, plan_sai: p.plan_sai, ov: p.ov, prod: p.prod || '' };
                     }
@@ -699,7 +719,13 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         function aplicarMagiaPorNumero(secId, row, numeroOrdem, tipo) {
             if (!db.basePCP || !db.basePCP[secId]) return false;
             const cofre = db.basePCP[secId];
-            let match = cofre.find(p => extrairNumeroOrdem(p.ov) === numeroOrdem);
+            // Mesma correção de buscarOrdemPorNumero: usa a versão mais recente da ordem
+            // no cofre (última carregada), não a primeira, para não puxar uma data de
+            // plano antiga que já foi substituída por uma reprogramação.
+            let match = null;
+            for (let i = cofre.length - 1; i >= 0; i--) {
+                if (extrairNumeroOrdem(cofre[i].ov) === numeroOrdem) { match = cofre[i]; break; }
+            }
             if (!match) return false;
 
             if (tipo === 'ent' && !row.lock_ent) {
@@ -759,9 +785,21 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                             row.atr_ent = ''; row.stat_ent = '';
                         }
 
-                        if ((ordemReal !== ordemPlan && ordemPlan !== '') || (row.ordem_ent && row.ordem_ent.includes('(AUTO)'))) {
+                        // CONFLITO REAL: a ordem que chegou é diferente da que estava programada
+                        // para essa linha — isso sim é um problema e deve ficar vermelho.
+                        const conflitoDeOrdem = (ordemReal !== ordemPlan && ordemPlan !== '');
+                        // SEM PROGRAMAÇÃO: a ordem foi digitada manualmente e não tinha nada no
+                        // PCP para comparar (tag "(AUTO)"). Isso NÃO é um atraso nem um erro — só
+                        // não há data de referência. Não deve ficar vermelho nem ganhar "0" de
+                        // atraso inventado, pois isso mascarava apontamentos manuais válidos como
+                        // se estivessem atrasados.
+                        const semProgramacao = row.ordem_ent && row.ordem_ent.includes('(AUTO)') && !conflitoDeOrdem;
+
+                        if (conflitoDeOrdem) {
                             row.stat_ent = 'red';
                             if (row.atr_ent === '') row.atr_ent = '0';
+                        } else if (semProgramacao && row.atr_ent === '') {
+                            row.stat_ent = '';
                         }
                     } else {
                         row.atr_ent = ''; row.stat_ent = '';
@@ -786,9 +824,16 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                             row.atr_sai = ''; row.stat_sai = '';
                         }
 
-                        if ((ordemReal !== ordemPlan && ordemPlan !== '') || (row.ordem_sai && row.ordem_sai.includes('(AUTO)'))) {
+                        // Mesma lógica do lado da entrada: só força vermelho em conflito real
+                        // de ordem; ordem "(AUTO)" sem programação não é tratada como atraso.
+                        const conflitoDeOrdemSai = (ordemReal !== ordemPlan && ordemPlan !== '');
+                        const semProgramacaoSai = row.ordem_sai && row.ordem_sai.includes('(AUTO)') && !conflitoDeOrdemSai;
+
+                        if (conflitoDeOrdemSai) {
                             row.stat_sai = 'red';
                             if (row.atr_sai === '') row.atr_sai = '0';
+                        } else if (semProgramacaoSai && row.atr_sai === '') {
+                            row.stat_sai = '';
                         }
                     } else {
                         row.atr_sai = ''; row.stat_sai = '';
@@ -800,7 +845,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         // ==========================================
         // TABLET - INTEGRAÇÃO COM CT (ISOLADA)
         // ==========================================
-        function alocarNoPainelCT(ovTablet, tipo, dataCarimbo) {
+        function alocarNoPainelCT(ovTablet, tipo, dataCarimbo, dataCarimboCompleta) {
             if(!db.data['ct']) db.data['ct'] = [];
             let tabelaCT = db.data['ct'];
             let atualizou = false;
@@ -829,7 +874,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 if (!row.lock_ent) {
                     if (!row.data_pcp) row.data_pcp = dataCarimbo;
                     row.real_ent = ovTablet;
-                    if (!row.data_real_ent) row.data_real_ent = getDataCompleta();
+                    // CORREÇÃO: usa a data REAL do carimbo do tablet (dia em que o posto
+                    // efetivamente leu a ordem), e não a data de "hoje". A reconstrução dos
+                    // dados do tablet pode rodar dias depois do evento físico — se usasse
+                    // "hoje" aqui, o cálculo de atraso comparava o plano com a data errada
+                    // e gerava atraso "fantasma" (ex: 3 dias) mesmo sem atraso real.
+                    if (!row.data_real_ent) row.data_real_ent = dataCarimboCompleta || getDataCompleta();
                     
                     if (!row.ordem_ent) {
                         // Antes de marcar como AUTO, tenta achar a ordem que
@@ -869,7 +919,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 if (!row.lock_sai) {
                     if (!row.data_pcp) row.data_pcp = dataCarimbo;
                     row.real_sai = ovTablet;
-                    if (!row.data_real_sai) row.data_real_sai = getDataCompleta();
+                    // CORREÇÃO: mesma lógica da entrada — usa a data real do carimbo, não "hoje".
+                    if (!row.data_real_sai) row.data_real_sai = dataCarimboCompleta || getDataCompleta();
                     
                     if (!row.ordem_sai) {
                         // Antes de marcar como AUTO, tenta achar a ordem que
@@ -943,6 +994,10 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 
                 const partes = dataIso.split('-'); 
                 const dataCarimbo = `${partes[2]}/${partes[1]}`; 
+                // Data completa (com ano) do dia realmente registrado no tablet. Usada para
+                // preencher "Entrada/Saída Real" com a data verdadeira do evento, mesmo que
+                // a reconstrução rode dias depois (evita atraso "fantasma" no cálculo).
+                const dataCarimboCompleta = `${partes[2]}/${partes[1]}/${partes[0]}`;
                 
                 const dadosDia = firebaseRegistrosTablet[key];
                 
@@ -984,7 +1039,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 percorrer(dadosDia);
                 
                 extraidos.forEach(scan => {
-                    if(alocarNoPainelCT(scan.ov, scan.tipo, dataCarimbo)) {
+                    if(alocarNoPainelCT(scan.ov, scan.tipo, dataCarimbo, dataCarimboCompleta)) {
                         atualizouGeral = true;
                     }
                 });
@@ -1279,8 +1334,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 if(!db.data[sec.id]) db.data[sec.id] = [];
                 let validas = db.data[sec.id].filter(r => {
                     if (!r) return false;
-                    // Correção: Agora incluímos data_pcp, aponta e impactos para garantir que linhas preenchidas apenas parcialmente não desapareçam
-                    let textConcat = (r.data_pcp || '') + (r.ordem_ent || '') + (r.ordem_sai || '') + (r.plan_ent || '') + (r.real_ent || '') + (r.plan_sai || '') + (r.real_sai || '') + (r.acoes || '') + (r.aponta || '') + (r.impactos || '');
+                    // IMPORTANTE: data_pcp, aponta e impactos também contam como conteúdo válido.
+                    // Antes, uma linha com APENAS a data digitada (sem nenhuma ordem encontrada
+                    // automaticamente no PCP) era tratada como "vazia" e descartada no próprio
+                    // instante em que a pessoa digitava — apagando a data e embaralhando as
+                    // linhas seguintes (o que também distorcia o cálculo de atraso).
+                    let textConcat = (r.ordem_ent || '') + (r.ordem_sai || '') + (r.plan_ent || '') + (r.real_ent || '') + (r.plan_sai || '') + (r.real_sai || '') + (r.acoes || '') + (r.data_pcp || '') + (r.aponta || '') + (r.impactos || '');
                     let limpo = textConcat.replace(/[^a-zA-Z0-9]/g, '');
                     return limpo.length > 0;
                 });
@@ -1437,6 +1496,13 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 if (ov === '' || ov.length < 3) { erros++; return; }
 
                 let destino = mapaLinhaParaSetor[linhaAlvo] || null;
+                if (!destino) {
+                    // Tenta primeiro por sigla exata (ex: "TQ", "CT", "CHASSI"), sem
+                    // diferenciar maiúsculas/minúsculas nem espaços nas pontas — é o caso
+                    // do Tanque quando a planilha do PCP usa o código curto em vez de
+                    // "Tanque" por extenso.
+                    destino = siglaParaSetor[linhaAlvo.trim().toUpperCase()] || null;
+                }
                 if (!destino) {
                     const lowerLinha = linhaAlvo.toLowerCase();
                     if (lowerLinha.includes('tanque')) destino = 'tq';
