@@ -397,7 +397,8 @@
                 <span id="auth-label">Visualização</span>
             </div>
             
-            <button class="btn btn-orange admin-only" onclick="abrirModalBackups()" title="Ver Histórico de Backups Salvos"><i class="fa-solid fa-clock-rotate-left"></i> Histórico de Backups</button>
+            <button class="btn btn-orange admin-only" onclick="restaurarTudoUltimoPreenchimento()" title="Restaurar o melhor ponto salvo com todas as linhas e estamparia"><i class="fa-solid fa-wand-magic-sparkles"></i> Restaurar Tudo (Último Completo)</button>
+            <button class="btn btn-tv admin-only" onclick="abrirModalBackups()" title="Ver Lista de Backups Salvos"><i class="fa-solid fa-clock-rotate-left"></i> Histórico Backups</button>
             <button class="btn btn-limpar admin-only" style="background-color: #7f1d1d;" onclick="apagarTablet()" title="Apagar Histórico do Tablet"><i class="fa-solid fa-tablet"></i> Zerar Tablet</button>
             <button class="btn btn-limpar admin-only" onclick="apagarProgramacaoPCP()" title="Zerar programação inteira do Mês"><i class="fa-solid fa-trash-can"></i> Zerar PCP</button>
             <button class="btn btn-pcp admin-only" onclick="abrirModalPCP()"><i class="fa-solid fa-bolt"></i> Carga PCP</button>
@@ -447,14 +448,17 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
     <!-- MODAL DE HISTÓRICO DE BACKUPS -->
     <div class="modal-overlay" id="modal-backups">
-        <div class="modal-content" style="width: 800px;">
+        <div class="modal-content" style="width: 850px;">
             <div class="modal-header">
                 <h3><i class="fa-solid fa-clock-rotate-left" style="color: var(--status-orange); margin-right: 8px;"></i> Central de Recuperação de Backups</h3>
                 <button class="close-btn" onclick="fecharModalBackups()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p style="font-size: 13px; color: var(--randon-grey); font-weight: 600; margin-bottom: 15px;">
-                Selecione abaixo uma das versões salvas no armazenamento local deste navegador. Verifique a quantidade de <b>células preenchidas</b> antes de restaurar.
-            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                <p style="font-size: 13px; color: var(--randon-grey); font-weight: 600; margin: 0;">
+                    Selecione uma das versões salvas no armazenamento local deste computador ou use o botão para restaurar a mais completa.
+                </p>
+                <button class="btn btn-orange" onclick="restaurarTudoUltimoPreenchimento()"><i class="fa-solid fa-wand-magic-sparkles"></i> Restaurar Melhor Versão Completa</button>
+            </div>
             <div id="lista-backups-container" style="max-height: 400px; overflow-y: auto;"></div>
             <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
                 <button class="btn btn-tv" onclick="fecharModalBackups()">Fechar</button>
@@ -1224,7 +1228,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     row.aponta = statusVal;
                     count++;
 
-                    // Avanço automático se for OK
                     if (statusVal === 'OK' && oldAponta !== 'OK' && secConfig) {
                         let targetId = null;
                         if (secConfig.view === 'solda') targetId = 'pintura';
@@ -1638,6 +1641,88 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
+        // RESTAURAÇÃO TOTAL INTELIGENTE
+        // ==========================================
+        function restaurarTudoUltimoPreenchimento() {
+            if (!isAdmin) {
+                toggleAdmin();
+                return;
+            }
+
+            let melhorSlot = null;
+            let maxCampos = -1;
+            let chaveMelhor = '';
+
+            for (let i = 1; i <= 60; i++) {
+                const k = 'erp_randon_v' + i;
+                const raw = localStorage.getItem(k);
+                if (raw) {
+                    try {
+                        const parsed = JSON.parse(raw);
+                        let total = contarCamposPreenchidos(parsed);
+                        if (total > maxCampos) {
+                            maxCampos = total;
+                            melhorSlot = parsed;
+                            chaveMelhor = k;
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            const v49Raw = localStorage.getItem('erp_randon_v49');
+            if (v49Raw) {
+                try {
+                    const parsed49 = JSON.parse(v49Raw);
+                    let total49 = contarCamposPreenchidos(parsed49);
+                    if (total49 > maxCampos) {
+                        maxCampos = total49;
+                        melhorSlot = parsed49;
+                        chaveMelhor = 'erp_randon_v49';
+                    }
+                } catch(e) {}
+            }
+
+            if (melhorSlot && maxCampos > 0) {
+                if (confirm(`Encontrado ponto de restauração com ${maxCampos} campos preenchidos (${chaveMelhor}).\n\nDeseja restaurar TODAS as linhas e a estamparia agora?`)) {
+                    db = melhorSlot;
+                    expurgarLinhasFantasmas();
+                    atualizarDiasEstamparia();
+                    forceRenderTodasTabelas();
+                    autoSaveCloud(true);
+                    fecharModalBackups();
+                    mostrarToast(`Sucesso! ${maxCampos} campos restaurados em todas as linhas!`, 'fa-wand-magic-sparkles');
+                }
+            } else {
+                alert("Nenhum backup com dados preenchidos foi encontrado neste navegador.");
+            }
+        }
+
+        function contarCamposPreenchidos(dataObj) {
+            if (!dataObj) return 0;
+            let count = 0;
+            if (dataObj.data) {
+                Object.keys(dataObj.data).forEach(secId => {
+                    const rows = dataObj.data[secId];
+                    if (Array.isArray(rows)) {
+                        rows.forEach(r => {
+                            if (r && (r.real_ent || r.real_sai || r.ordem_ent || r.ordem_sai || r.acoes || r.impactos || r.aponta || r.atr_ent || r.atr_sai)) {
+                                count++;
+                            }
+                        });
+                    }
+                });
+            }
+            if (dataObj.estampariaMatriz && dataObj.estampariaMatriz.valores) {
+                Object.values(dataObj.estampariaMatriz.valores).forEach(arr => {
+                    if (Array.isArray(arr)) {
+                        arr.forEach(val => { if (val && String(val).trim() !== '') count++; });
+                    }
+                });
+            }
+            return count;
+        }
+
+        // ==========================================
         // GERENCIADOR DE BACKUPS COM PRÉVIA
         // ==========================================
         function abrirModalBackups() {
@@ -1652,19 +1737,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 if (raw) {
                     try {
                         const parsed = JSON.parse(raw);
-                        let totalPreenchidos = 0;
-                        if (parsed && parsed.data) {
-                            Object.keys(parsed.data).forEach(secId => {
-                                const rows = parsed.data[secId];
-                                if (Array.isArray(rows)) {
-                                    rows.forEach(r => {
-                                        if (r && (r.real_ent || r.real_sai || r.ordem_ent || r.ordem_sai || r.acoes || r.impactos || r.aponta || r.atr_ent || r.atr_sai)) {
-                                            totalPreenchidos++;
-                                        }
-                                    });
-                                }
-                            });
-                        }
+                        let totalPreenchidos = contarCamposPreenchidos(parsed);
                         if (totalPreenchidos > 0) {
                             backupsEncontrados.push({
                                 key: key,
@@ -1681,17 +1754,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             if (v49Raw) {
                 try {
                     const parsed49 = JSON.parse(v49Raw);
-                    let count49 = 0;
-                    if (parsed49 && parsed49.data) {
-                        Object.keys(parsed49.data).forEach(secId => {
-                            const rows = parsed49.data[secId];
-                            if (Array.isArray(rows)) {
-                                rows.forEach(r => {
-                                    if (r && (r.real_ent || r.real_sai || r.ordem_ent || r.ordem_sai || r.acoes || r.impactos || r.aponta)) count49++;
-                                });
-                            }
-                        });
-                    }
+                    let count49 = contarCamposPreenchidos(parsed49);
                     if (count49 > 0) {
                         backupsEncontrados.push({ key: 'erp_randon_v49', slot: 49, preenchidos: count49, dataReferencia: parsed49.globalDate || 'N/D' });
                     }
@@ -1709,7 +1772,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                             <tr>
                                 <th>Slot / Memória</th>
                                 <th>Data Referência</th>
-                                <th>Células com Dados</th>
+                                <th>Campos com Dados (Linhas + Estamparia)</th>
                                 <th style="text-align:center;">Ação</th>
                             </tr>
                         </thead>
@@ -1773,9 +1836,11 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             if (tipo === 'entrada') {
                 if (tabelaCT.find(r => extrairNumeroOrdem(r.real_ent) === numOvTablet)) return false;
                 
+                // 1. Vincula se já houver a mesma OP em saída ou programado de entrada
                 let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_sai) === numOvTablet && (!r.real_ent || r.real_ent.trim() === ''));
                 if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_ent) === numOvTablet && (!r.real_ent || r.real_ent.trim() === ''));
                 
+                // 2. Se não encontrou, aloca EXCLUSIVAMENTE em uma linha livre (sem ordem_ent diferente!)
                 if (idx === -1) {
                     idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
                 }
@@ -1806,9 +1871,11 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             else if (tipo === 'saida') {
                 if (tabelaCT.find(r => extrairNumeroOrdem(r.real_sai) === numOvTablet)) return false;
                 
+                // 1. Vincula se já houver a mesma OP em entrada ou programado de saída
                 let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_ent) === numOvTablet && (!r.real_sai || r.real_sai.trim() === ''));
                 if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_sai) === numOvTablet && (!r.real_sai || r.real_sai.trim() === ''));
                 
+                // 2. Se não encontrou, aloca EXCLUSIVAMENTE em uma linha livre
                 if (idx === -1) {
                     idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
                 }
@@ -2545,8 +2612,30 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // MANIPULAÇÃO DE DADOS (CHANGE EVENT)
+        // MANIPULAÇÃO DE DADOS (INPUT & CHANGE EVENTS)
         // ==========================================
+        document.addEventListener('input', function(e) {
+            const target = e.target;
+            if (target.classList.contains('cell-input')) {
+                const secId = target.dataset.sec, rowIdx = target.dataset.row, field = target.dataset.field;
+                if (!secId || rowIdx === undefined || !field) return;
+                const row = db.data[secId] && db.data[secId][rowIdx];
+                if (!row) return;
+                
+                const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
+                row[field] = val;
+
+                if (field === 'ordem_ent') row.lock_ent = (val.trim() !== '');
+                if (field === 'ordem_sai') row.lock_sai = (val.trim() !== '');
+                if (field === 'real_ent') row.lock_ent = (val.trim() !== '');
+                if (field === 'real_sai') row.lock_sai = (val.trim() !== '');
+                if (field === 'atr_ent') row.manual_atr_ent = (val.trim() !== '');
+                if (field === 'atr_sai') row.manual_atr_sai = (val.trim() !== '');
+
+                autoSaveCloud(false);
+            }
+        });
+
         document.addEventListener('change', function(e) {
             const target = e.target;
             
@@ -2672,7 +2761,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 row[field] = val;
                 
                 if (field === 'ordem_ent') {
-                    row.lock_ent = true;
+                    row.lock_ent = (val.trim() !== '');
                     const num = extrairNumeroOrdem(val);
                     if (num) {
                         const pcp = buscarOrdemPorNumero(secId, num);
@@ -2690,7 +2779,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 }
                 
                 if (field === 'ordem_sai') {
-                    row.lock_sai = true;
+                    row.lock_sai = (val.trim() !== '');
                     const num = extrairNumeroOrdem(val);
                     if (num) {
                         const pcp = buscarOrdemPorNumero(secId, num);
@@ -2874,7 +2963,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 } else {
                     setStatusConexao('offline');
                 }
-            }, 400);
+            }, 300);
         }
 
         // ==========================================
