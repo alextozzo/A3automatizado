@@ -108,9 +108,7 @@
         .btn-auth { background-color: var(--randon-blue); color: white; box-shadow: 0 4px 10px rgba(59,130,246,0.3); } .btn-auth:hover { filter: brightness(0.9); transform: translateY(-2px); }
         .btn-orange { background-color: var(--status-orange); color: white; box-shadow: 0 4px 10px rgba(245,158,11,0.3); } .btn-orange:hover { filter: brightness(0.9); transform: translateY(-2px); }
 
-        /* =========================================================
-           MODAIS E TOAST
-        ========================================================= */
+        /* MODAIS E TOAST */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
         .modal-content { background: white; padding: 35px; border-radius: 16px; width: 850px; max-width: 95%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border-top: 6px solid var(--status-green); }
@@ -126,9 +124,7 @@
         #toast { position: fixed; bottom: 35px; right: 35px; background-color: var(--randon-dark); color: #fff; padding: 18px 30px; border-radius: 10px; transition: 0.3s; transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; display: flex; align-items: center; gap: 12px; border-left: 6px solid var(--status-green); box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
         #toast.show { transform: translateY(0); opacity: 1; }
 
-        /* =========================================================
-           TIMELINE / GENEALOGIA DA OP
-        ========================================================= */
+        /* TIMELINE DA OP */
         .op-timeline { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; max-height: 400px; overflow-y: auto; padding-right: 10px; }
         .timeline-step { display: flex; align-items: flex-start; gap: 15px; position: relative; }
         .timeline-step::before { content: ''; position: absolute; left: 19px; top: 35px; bottom: -20px; width: 2px; background: #e2e8f0; }
@@ -152,9 +148,7 @@
             50% { background-color: #fef08a !important; }
         }
 
-        /* =========================================================
-           TABELAS E COMPONENTES
-        ========================================================= */
+        /* TABELAS E COMPONENTES */
         .view-container { padding: 25px; display: none; flex-direction: column; gap: 30px; animation: fadeIn 0.3s; }
         .view-container.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -178,7 +172,7 @@
         tr:nth-child(even) td { background-color: #f8fafc; }
         tr:hover td { background-color: #f1f5f9; }
 
-        .cell-input { width: 100%; height: 100%; border: 1px solid transparent; background: transparent; padding: 0 6px; font-size: 12px; outline: none; color: var(--randon-dark); font-weight: 700; text-align: center; border-radius: 6px; transition: 0.2s; }
+        .cell-input { width: 100%; height: 100%; border: 1px solid transparent; background: transparent; padding: 0 4px; font-size: 12px; outline: none; color: var(--randon-dark); font-weight: 700; text-align: center; border-radius: 6px; transition: 0.2s; }
         .cell-input:hover { background-color: #e2e8f0; }
         .cell-input:focus { background-color: white; border-color: var(--randon-blue); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
         select.cell-input { cursor: pointer; text-align-last: center; }
@@ -214,9 +208,7 @@
         .estamparia-table td input { font-size: 15px; font-weight: 900; color: var(--randon-blue); width: 100%; text-align: center; border: none; background: transparent; outline: none; }
         .estamparia-table td input:focus { background-color: #f1f5f9; }
 
-        /* =========================================================
-           ESTILOS: ABA DE PRÊMIO E PINOS PROGRAMADOS
-        ========================================================= */
+        /* ABA PRÊMIO */
         .premio-header-card {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             border-radius: 16px;
@@ -352,9 +344,7 @@
     <!-- BARRA DE PROGRESSO DO MODO TV -->
     <div id="tv-bar-container"><div id="tv-progress-bar"></div></div>
 
-    <!-- ==========================================
-         NAVBAR E CONTROLES
-    =========================================== -->
+    <!-- NAVBAR E CONTROLES -->
     <nav class="navbar" id="navbar">
         <div class="nav-left">
             <div class="logo-container">
@@ -401,6 +391,7 @@
                 <span id="auth-label">Visualização</span>
             </div>
             
+            <button class="btn btn-orange admin-only" onclick="forcarResgateGeral()" title="Recuperar Backup de Todas as Linhas"><i class="fa-solid fa-clock-rotate-left"></i> Resgatar Backup Geral</button>
             <button class="btn btn-orange admin-only" onclick="forcarResgateEstamparia()" title="Recuperar Estamparia Antiga"><i class="fa-solid fa-life-ring"></i></button>
             <button class="btn btn-limpar admin-only" style="background-color: #7f1d1d;" onclick="apagarTablet()" title="Apagar Histórico do Tablet"><i class="fa-solid fa-tablet"></i> Zerar Tablet</button>
             <button class="btn btn-limpar admin-only" onclick="apagarProgramacaoPCP()" title="Zerar programação inteira do Mês"><i class="fa-solid fa-trash-can"></i> Zerar PCP</button>
@@ -413,9 +404,7 @@
 
     <button id="btn-exit-tv" onclick="sairModoTV()"><i class="fa-solid fa-power-off"></i> Sair do Modo TV</button>
 
-    <!-- ==========================================
-         MODAIS
-    =========================================== -->
+    <!-- MODAIS -->
     <div class="modal-overlay" id="modal-auth">
         <div class="modal-content" style="width: 400px; text-align: center; padding: 40px 30px;">
             <div class="modal-header" style="justify-content: center; margin-bottom: 20px;">
@@ -461,15 +450,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         </div>
     </div>
 
-    <!-- ==========================================
-         VIEWS
-    =========================================== -->
-    <!-- VIEW: PRÊMIO DE PRODUTIVIDADE & PINOS PROGRAMADOS -->
+    <!-- VIEWS -->
     <div id="view-premio" class="view-container">
         <div class="premio-header-card">
             <div class="premio-title-row">
                 <div>
-                    <h2><i class="fa-solid fa-trophy" style="color: #fde047;"></i> Termômetro do Prêmio de Produtividade</h2>
+                    <h2><i class="fa-solid fa-trophy" style="color: #fde047;"></i> Termômetro do Prêmio de Produtividade Randon Triel HT</h2>
                     <p style="color: #94a3b8; font-size: 13px; font-weight: 700; text-transform: uppercase; margin-top: 4px;">
                         Acompanhamento em Tempo Real dos Pinos Apontados no Mês
                     </p>
@@ -490,7 +476,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             <div class="termometro-container">
                 <div class="termometro-labels">
                     <span>Progresso Atual: <strong id="termometro-pct" style="color: #60a5fa; font-size: 15px;">0%</strong></span>
-                    <span id="termometro-status-msg" style="color: #fde047; font-weight: 900;">Faltam 71 pinos para R$ 150,00</span>
+                    <span id="termometro-status-msg" style="color: #fde047; font-weight: 900;">Calculando...</span>
                 </div>
                 <div class="termometro-bar-bg">
                     <div id="termometro-bar-fill" class="termometro-fill"></div>
@@ -535,9 +521,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             </div>
         </div>
 
-        <!-- MATRIZ DE PINOS PROGRAMADOS (SUBDIVISÕES COM INPUTS MANUAIS) -->
+        <!-- MATRIZ DE PINOS -->
         <div class="pinos-grid">
-            <!-- COLUNA BASES -->
             <div class="pinos-col-card">
                 <div class="pinos-col-header">
                     <span><i class="fa-solid fa-truck-ramp-box" style="margin-right:8px; color:var(--randon-blue);"></i> BASES</span>
@@ -556,7 +541,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 </table>
             </div>
 
-            <!-- COLUNA ESPECIAIS -->
             <div class="pinos-col-card">
                 <div class="pinos-col-header">
                     <span><i class="fa-solid fa-star" style="margin-right:8px; color:#f59e0b;"></i> ESPECIAIS</span>
@@ -575,7 +559,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 </table>
             </div>
 
-            <!-- COLUNA TANQUES -->
             <div class="pinos-col-card">
                 <div class="pinos-col-header">
                     <span><i class="fa-solid fa-oil-well" style="margin-right:8px; color:#10b981;"></i> TANQUES</span>
@@ -642,7 +625,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             <div class="dash-card card-blue"><div class="dash-title">Aderência Plano <i class="fa-solid fa-bullseye"></i></div><div class="dash-value" id="dash-aderencia" style="color: var(--randon-blue);">0%</div></div>
             <div class="dash-card card-green"><div class="dash-title">Qualidade (OK) <i class="fa-solid fa-award"></i></div><div class="dash-value" id="dash-ok" style="color: var(--status-green);">0%</div></div>
             <div class="dash-card card-red"><div class="dash-title">Gargalos (COGI) <i class="fa-solid fa-triangle-exclamation"></i></div><div class="dash-value" id="dash-cogi" style="color: var(--status-red);">0</div></div>
-            <div class="dash-card card-red"><div class="dash-title">Atrasos Totais (Dias) <i class="fa-solid fa-clock"></i></div><div class="dash-value" id="dash-atrasos" style="color: var(--status-red);">0</div></div>
+            <div class="dash-card card-red"><div class="dash-title">Atrasos Totais (Dias Úteis) <i class="fa-solid fa-clock"></i></div><div class="dash-value" id="dash-atrasos" style="color: var(--status-red);">0</div></div>
         </div>
 
         <div class="charts-grid">
@@ -723,12 +706,10 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
     <div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Sincronizado!</span></div>
 
-    <!-- ==========================================
-         LÓGICA JAVASCRIPT
-    =========================================== -->
+    <!-- SCRIPT DE LÓGICA E CÁLCULOS -->
     <script>
         const MOTIVOS_GARGALO = ["Falta de Material", "Manutenção / Quebra", "Qualidade / Retrabalho", "Engenharia / Projeto", "Atraso Cliente / Chassi", "Falta de Efetivo (RH)", "Logística / Movimentação", "Outros"];
-        const SENHA_ADMIN = "Randon123";
+        const SENHA_ADMIN = "Randon123@";
         let isAdmin = false;
         let isTVMode = false;
 
@@ -818,8 +799,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         function getEmptyRow() {
             return { 
                 data_pcp: '', 
-                ordem_ent: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', 
-                ordem_sai: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', 
+                ordem_ent: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', manual_atr_ent: false,
+                ordem_sai: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', manual_atr_sai: false,
                 aponta: '', impactos: '', acoes: '', origem: '', 
                 data_real_ent: '', data_real_sai: '',
                 lock_ent: false, lock_sai: false
@@ -841,13 +822,82 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             return `${String(dateObj.getDate()).padStart(2, '0')}/${mesesAbreviados[dateObj.getMonth()]}`;
         }
 
-        function adicionarUmDia(dataStr) {
+        function extrairAnoDeData(dataStr) {
+            if (!dataStr) return new Date().getFullYear();
+            let parts = String(dataStr).trim().replace(/[.\-]/g, '/').split('/');
+            if (parts.length === 3) {
+                let y = parseInt(parts[2].length === 4 ? parts[2] : parts[0], 10);
+                if (!isNaN(y) && y > 2000) return y;
+            }
+            return new Date().getFullYear();
+        }
+
+        function parseDataComAnoRef(dataStr, anoRef) {
+            if (!dataStr || typeof dataStr !== 'string') return null;
+            let s = dataStr.trim().replace(/[.\-]/g, '/');
+            let parts = s.split('/');
+            let ano = anoRef || new Date().getFullYear();
+            if (parts.length === 2) {
+                let d = parseInt(parts[0], 10);
+                let m = parseInt(parts[1], 10) - 1;
+                if (isNaN(d) || isNaN(m)) return null;
+                return new Date(ano, m, d, 12, 0, 0);
+            } else if (parts.length === 3) {
+                let d, m, y;
+                if (parts[0].length === 4) {
+                    y = parseInt(parts[0], 10);
+                    m = parseInt(parts[1], 10) - 1;
+                    d = parseInt(parts[2], 10);
+                } else {
+                    d = parseInt(parts[0], 10);
+                    m = parseInt(parts[1], 10) - 1;
+                    y = parseInt(parts[2], 10);
+                    if (y < 100) y += 2000;
+                }
+                if (isNaN(d) || isNaN(m) || isNaN(y)) return null;
+                return new Date(y, m, d, 12, 0, 0);
+            }
+            return null;
+        }
+
+        function calcularDiasUteis(dInicio, dFim) {
+            if (!dInicio || !dFim) return 0;
+            let start = new Date(dInicio.getFullYear(), dInicio.getMonth(), dInicio.getDate());
+            let end = new Date(dFim.getFullYear(), dFim.getMonth(), dFim.getDate());
+            
+            if (start.getTime() === end.getTime()) return 0;
+
+            let sinal = 1;
+            if (start > end) {
+                sinal = -1;
+                let tmp = start;
+                start = end;
+                end = tmp;
+            }
+
+            let businessDays = 0;
+            let cur = new Date(start);
+            cur.setDate(cur.getDate() + 1);
+
+            while (cur <= end) {
+                let dayOfWeek = cur.getDay();
+                if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                    businessDays++;
+                }
+                cur.setDate(cur.getDate() + 1);
+            }
+
+            return businessDays * sinal;
+        }
+
+        function adicionarUmDiaUtil(dataStr) {
             if(!dataStr || dataStr.trim() === '') return '';
-            const partes = dataStr.split('/');
-            if(partes.length < 2) return dataStr;
-            const year = parseInt(partes[2]) || new Date().getFullYear();
-            const d = new Date(year, parseInt(partes[1]) - 1, parseInt(partes[0]));
+            const d = parseDataComAnoRef(dataStr);
+            if (!d) return dataStr;
             d.setDate(d.getDate() + 1);
+            while (d.getDay() === 0 || d.getDay() === 6) {
+                d.setDate(d.getDate() + 1);
+            }
             return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
         }
 
@@ -877,7 +927,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
         function extrairNumeroOrdem(texto) {
             if (!texto) return '';
-            const match = String(texto).match(/(\d{8,})/);
+            const match = String(texto).match(/(\d{6,})/);
             return match ? match[1] : String(texto).replace(/[^0-9]/g, '');
         }
 
@@ -894,27 +944,27 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         function calcularAtraso(planStr, realStr) {
-            if(!planStr || planStr.trim() === '') return { atraso: '', status: '' };
-            let diaR, mesR, anoR;
-            const year = new Date().getFullYear();
-            if (!realStr || realStr.trim() === '') return { atraso: '', status: '' };
-            
-            [diaR, mesR, anoR] = realStr.split('/');
-            if(!anoR) anoR = year;
+            if (!planStr || !realStr || String(planStr).trim() === '' || String(realStr).trim() === '') {
+                return { atraso: '', status: '' };
+            }
 
-            const [diaP, mesP, anoP] = planStr.split('/');
-            if(!diaP) return { atraso: 0, status: 'green' };
+            const anoPlan = extrairAnoDeData(planStr);
+            const dPlan = parseDataComAnoRef(planStr, anoPlan);
+            const dReal = parseDataComAnoRef(realStr, anoPlan);
 
-            const dPlan = new Date(anoP || year, parseInt(mesP) - 1, parseInt(diaP));
-            const dReal = new Date(anoR, parseInt(mesR) - 1, parseInt(diaR));
-            
-            const diffDays = Math.ceil((dReal - dPlan) / (1000 * 60 * 60 * 24));
+            if (!dPlan || !dReal) return { atraso: '', status: '' };
+
+            const diffDiasUteis = calcularDiasUteis(dPlan, dReal);
 
             let status = 'green';
-            if(diffDays === 1) status = 'orange';
-            if(diffDays >= 2) status = 'red';
-            
-            return { atraso: diffDays !== 0 ? diffDays : '', status: status };
+            if (diffDiasUteis === 1) status = 'orange';
+            else if (diffDiasUteis >= 2) status = 'red';
+            else if (diffDiasUteis < 0) status = 'green';
+
+            return { 
+                atraso: diffDiasUteis !== 0 ? diffDiasUteis : '0', 
+                status: status 
+            };
         }
 
         function sanearParaFirebase(obj) {
@@ -947,7 +997,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // CÁLCULO E RENDERIZAÇÃO: PRÊMIO & PINOS (EDITÁVEL)
+        // CÁLCULO E RENDERIZAÇÃO: PRÊMIO & PINOS
         // ==========================================
         function recalcularPainelPremio() {
             if (!db.pinosManual) {
@@ -960,7 +1010,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             db.premioConfig.metaBase = metaBase;
             db.premioConfig.atraso = atraso;
 
-            // Sincroniza contagem automática de OP2 caso o usuário não tenha sobrescrito
             const linhasOP2 = db.data['op2_geral'] || [];
             let apontamentosPorTexto = [];
             linhasOP2.forEach(r => {
@@ -970,12 +1019,10 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 }
             });
 
-            // Renderiza as 3 tabelas com inputs
             renderColunaPinosEditavel('bases', apontamentosPorTexto);
             renderColunaPinosEditavel('especiais', apontamentosPorTexto);
             renderColunaPinosEditavel('tanques', apontamentosPorTexto);
 
-            // Soma total dos pinos de todas as colunas
             let totalProgGeral = 0;
             let totalOkGeral = 0;
 
@@ -989,7 +1036,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
             const metaTotal = metaBase + atraso;
 
-            // Metas de Faixas do Prêmio
             const qtd90 = Math.ceil(metaBase * 0.90);
             const qtd100 = metaBase;
             const qtd110 = Math.ceil(metaBase * 1.10);
@@ -1068,7 +1114,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             itens.forEach((item, idx) => {
                 const modNome = item.modelo.toUpperCase();
                 
-                // Se o usuário ainda não editou manualmente o OK, puxa automático de OP2
                 if (item.okManual === undefined || item.okManual === false) {
                     let countAuto = 0;
                     apontamentosTexto.forEach(txt => {
@@ -1205,15 +1250,11 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             const container = document.getElementById('timeline-body');
             let steps = [];
 
-            let pcpInfo = null;
-            Object.keys(db.basePCP || {}).forEach(secId => {
-                const f = (db.basePCP[secId] || []).find(p => extrairNumeroOrdem(p.ov) === num);
-                if (f) pcpInfo = { ...f, sec: secId };
-            });
+            let pcpInfo = buscarOrdemPorNumero(null, num);
 
             if (pcpInfo) {
                 steps.push({
-                    setor: `PCP / Programação (${pcpInfo.sec.toUpperCase()})`,
+                    setor: `PCP / Programação (${(pcpInfo.sec || 'GERAL').toUpperCase()})`,
                     status: 'completed',
                     icon: 'fa-calendar-check',
                     detalhes: `Produto: ${pcpInfo.prod || 'N/D'} | Plan Ent: ${pcpInfo.plan_ent || '-'} | Plan Saí: ${pcpInfo.plan_sai || '-'}`
@@ -1268,12 +1309,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         // ==========================================
         function exportarExcelProducao() {
             let csvContent = "\uFEFF";
-            csvContent += "Macro Setor;Setor;Data Referencia;OP Entrada;Real Entrada;Atraso Ent (Dias);OP Saida;Real Saida;Atraso Sai (Dias);Status Apontamento;Motivo Gargalo;Acoes Corretivas / Observacoes\n";
+            csvContent += "Macro Setor;Setor;Data Referencia;OP Entrada;Real Entrada;Atraso Ent (Dias Uteis);OP Saida;Real Saida;Atraso Sai (Dias Uteis);Status Apontamento;Motivo Gargalo;Acoes Corretivas / Observacoes\n";
 
             configuracaoSetores.forEach(sec => {
                 const linhas = db.data[sec.id] || [];
                 linhas.forEach(r => {
-                    const temDado = r.ordem_ent || r.ordem_sai || r.real_ent || r.real_sai || r.data_pcp;
+                    const temDado = r.ordem_ent || r.ordem_sai || r.real_ent || r.real_sai || r.data_pcp || r.atr_ent || r.atr_sai;
                     if (temDado) {
                         const rowCsv = [
                             sec.view.toUpperCase(),
@@ -1306,15 +1347,34 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // CÁLCULO E MAGIA DE DADOS
+        // BUSCA ROBUSTA NO PCP E CÁLCULO GERAL
         // ==========================================
         function buscarOrdemPorNumero(secId, numeroOrdem) {
-            if (db.basePCP && db.basePCP[secId]) {
+            if (!db.basePCP || !numeroOrdem) return null;
+            const numBuscado = extrairNumeroOrdem(numeroOrdem);
+            if (!numBuscado || numBuscado.length < 3) return null;
+
+            if (secId && db.basePCP[secId] && Array.isArray(db.basePCP[secId])) {
                 const cofre = db.basePCP[secId];
                 for (let i = cofre.length - 1; i >= 0; i--) {
                     const p = cofre[i];
-                    if (extrairNumeroOrdem(p.ov) === numeroOrdem) {
-                        return { plan_ent: p.plan_ent, plan_sai: p.plan_sai, ov: p.ov, prod: p.prod || '' };
+                    const numP = extrairNumeroOrdem(p.ov);
+                    if (numP === numBuscado || (numP.length >= 5 && numBuscado.length >= 5 && (numBuscado.includes(numP) || numP.includes(numBuscado)))) {
+                        return { plan_ent: p.plan_ent, plan_sai: p.plan_sai, ov: p.ov, prod: p.prod || '', sec: secId };
+                    }
+                }
+            }
+
+            for (let sId in db.basePCP) {
+                if (sId === secId) continue;
+                const cofre = db.basePCP[sId];
+                if (Array.isArray(cofre)) {
+                    for (let i = cofre.length - 1; i >= 0; i--) {
+                        const p = cofre[i];
+                        const numP = extrairNumeroOrdem(p.ov);
+                        if (numP === numBuscado || (numP.length >= 5 && numBuscado.length >= 5 && (numBuscado.includes(numP) || numP.includes(numBuscado)))) {
+                            return { plan_ent: p.plan_ent, plan_sai: p.plan_sai, ov: p.ov, prod: p.prod || '', sec: sId };
+                        }
                     }
                 }
             }
@@ -1356,126 +1416,165 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             if (!row.data_pcp || row.data_pcp.trim() === '') return;
             const dataVal = row.data_pcp;
 
-            if (!row.lock_ent && !row.real_ent) {
+            if (!row.lock_ent && !row.real_ent && !row.ordem_ent) {
                 const fEnt = buscarOrdemParaData(secId, dataVal, 'ent');
                 if (fEnt) { row.ordem_ent = fEnt.ordem; row.plan_ent = fEnt.plan_ent; }
             }
-            if (!row.lock_sai && !row.real_sai) {
+            if (!row.lock_sai && !row.real_sai && !row.ordem_sai) {
                 const fSai = buscarOrdemParaData(secId, dataVal, 'sai');
                 if (fSai) { row.ordem_sai = fSai.ordem; row.plan_sai = fSai.plan_sai; }
             }
         }
 
-        function aplicarMagiaPorNumero(secId, row, numeroOrdem, tipo) {
-            if (!db.basePCP || !db.basePCP[secId]) return false;
-            const cofre = db.basePCP[secId];
-            let match = null;
-            for (let i = cofre.length - 1; i >= 0; i--) {
-                if (extrairNumeroOrdem(cofre[i].ov) === numeroOrdem) { match = cofre[i]; break; }
+        function obterDataExecucaoLinha(row, tipo) {
+            if (row.data_pcp && String(row.data_pcp).trim() !== '') {
+                return String(row.data_pcp).trim();
             }
-            if (!match) return false;
-
-            if (tipo === 'ent' && !row.lock_ent) {
-                row.ordem_ent = match.ov + (match.prod ? ' - ' + match.prod : '');
-                row.plan_ent = match.plan_ent;
-                row.data_pcp = match.plan_ent ? normalizarDataParaComparacao(match.plan_ent) : '';
-                if (!row.data_real_ent) row.data_real_ent = getDataCompleta();
-                return true;
+            if (tipo === 'ent' && row.data_real_ent && String(row.data_real_ent).trim() !== '') {
+                return String(row.data_real_ent).trim();
             }
-            if (tipo === 'sai' && !row.lock_sai) {
-                row.ordem_sai = match.ov + (match.prod ? ' - ' + match.prod : '');
-                row.plan_sai = match.plan_sai;
-                row.data_pcp = match.plan_sai ? normalizarDataParaComparacao(match.plan_sai) : '';
-                if (!row.data_real_sai) row.data_real_sai = getDataCompleta();
-                return true;
+            if (tipo === 'sai' && row.data_real_sai && String(row.data_real_sai).trim() !== '') {
+                return String(row.data_real_sai).trim();
             }
-            return false;
+            return getDataAtualFormatada();
         }
 
         function atualizarAtrasosGlobais() {
             if (!db.data) return;
-            const hojeStr = getDataCompleta();
             
             Object.keys(db.data).forEach(secId => {
                 const tabela = db.data[secId];
                 if (!tabela) return;
                 
                 tabela.forEach(row => {
-                    if (row.ordem !== undefined) {
-                        row.ordem_ent = row.ordem;
-                        row.ordem_sai = row.ordem;
-                        delete row.ordem;
-                    }
+                    const dataExecEnt = obterDataExecucaoLinha(row, 'ent');
+                    const dataExecSai = obterDataExecucaoLinha(row, 'sai');
 
-                    if (!row.ordem_ent && !row.ordem_sai && !row.plan_ent && !row.plan_sai && !row.real_ent && !row.real_sai) {
-                        row.atr_ent = ''; row.stat_ent = '';
-                        row.atr_sai = ''; row.stat_sai = '';
-                        return;
-                    }
-
-                    if (row.real_ent && row.real_ent.trim() !== '') {
+                    // 1. AVALIAÇÃO DE ENTRADA
+                    if (row.manual_atr_ent) {
+                        let numAtr = parseInt(row.atr_ent, 10);
+                        if (!isNaN(numAtr)) {
+                            if (numAtr <= 0) row.stat_ent = 'green';
+                            else if (numAtr === 1) row.stat_ent = 'orange';
+                            else row.stat_ent = 'red';
+                        }
+                    } else if (row.real_ent && String(row.real_ent).trim() !== '') {
                         const ordemReal = extrairNumeroOrdem(row.real_ent);
                         const ordemPlan = extrairNumeroOrdem(row.ordem_ent);
                         let planEntReal = row.plan_ent;
                         
-                        if (!planEntReal || (ordemReal !== ordemPlan && ordemPlan !== '')) {
-                            const pcpData = buscarOrdemPorNumero(secId, ordemReal);
-                            if (pcpData && pcpData.plan_ent) planEntReal = pcpData.plan_ent;
+                        const pcpData = buscarOrdemPorNumero(secId, ordemReal);
+                        if (pcpData && pcpData.plan_ent) {
+                            planEntReal = pcpData.plan_ent;
                         }
 
-                        if (planEntReal && planEntReal.trim() !== '') {
-                            const cEnt = calcularAtraso(planEntReal, row.data_real_ent || hojeStr);
+                        if (planEntReal && String(planEntReal).trim() !== '') {
+                            const cEnt = calcularAtraso(planEntReal, dataExecEnt);
                             row.atr_ent = cEnt.atraso;
                             row.stat_ent = cEnt.status;
                         } else {
-                            row.atr_ent = ''; row.stat_ent = '';
+                            if (!row.manual_atr_ent && !row.atr_ent) {
+                                row.atr_ent = ''; 
+                                row.stat_ent = '';
+                            }
                         }
 
                         const conflitoDeOrdem = (ordemReal !== ordemPlan && ordemPlan !== '');
-                        const semProgramacao = row.ordem_ent && row.ordem_ent.includes('(AUTO)') && !conflitoDeOrdem;
-
-                        if (conflitoDeOrdem) {
+                        if (conflitoDeOrdem && !row.stat_ent) {
                             row.stat_ent = 'red';
-                            if (row.atr_ent === '') row.atr_ent = '0';
-                        } else if (semProgramacao && row.atr_ent === '') {
-                            row.stat_ent = '';
                         }
-                    } else {
-                        row.atr_ent = ''; row.stat_ent = '';
+                    } else if (!row.manual_atr_ent && !row.atr_ent) {
+                        row.atr_ent = ''; 
+                        row.stat_ent = '';
                     }
 
-                    if (row.real_sai && row.real_sai.trim() !== '') {
-                        const ordemReal = extrairNumeroOrdem(row.real_sai);
-                        const ordemPlan = extrairNumeroOrdem(row.ordem_sai);
+                    // 2. AVALIAÇÃO DE SAÍDA
+                    if (row.manual_atr_sai) {
+                        let numAtr = parseInt(row.atr_sai, 10);
+                        if (!isNaN(numAtr)) {
+                            if (numAtr <= 0) row.stat_sai = 'green';
+                            else if (numAtr === 1) row.stat_sai = 'orange';
+                            else row.stat_sai = 'red';
+                        }
+                    } else if (row.real_sai && String(row.real_sai).trim() !== '') {
+                        const ordemRealSai = extrairNumeroOrdem(row.real_sai);
+                        const ordemPlanSai = extrairNumeroOrdem(row.ordem_sai);
                         let planSaiReal = row.plan_sai;
                         
-                        if (!planSaiReal || (ordemReal !== ordemPlan && ordemPlan !== '')) {
-                            const pcpData = buscarOrdemPorNumero(secId, ordemReal);
-                            if (pcpData && pcpData.plan_sai) planSaiReal = pcpData.plan_sai;
+                        const pcpDataSai = buscarOrdemPorNumero(secId, ordemRealSai);
+                        if (pcpDataSai && pcpDataSai.plan_sai) {
+                            planSaiReal = pcpDataSai.plan_sai;
                         }
 
-                        if (planSaiReal && planSaiReal.trim() !== '') {
-                            const cSai = calcularAtraso(planSaiReal, row.data_real_sai || hojeStr);
+                        if (planSaiReal && String(planSaiReal).trim() !== '') {
+                            const cSai = calcularAtraso(planSaiReal, dataExecSai);
                             row.atr_sai = cSai.atraso;
                             row.stat_sai = cSai.status;
                         } else {
-                            row.atr_sai = ''; row.stat_sai = '';
+                            if (!row.manual_atr_sai && !row.atr_sai) {
+                                row.atr_sai = ''; 
+                                row.stat_sai = '';
+                            }
                         }
 
-                        const conflitoDeOrdemSai = (ordemReal !== ordemPlan && ordemPlan !== '');
-                        const semProgramacaoSai = row.ordem_sai && row.ordem_sai.includes('(AUTO)') && !conflitoDeOrdemSai;
-
-                        if (conflitoDeOrdemSai) {
+                        const conflitoDeOrdemSai = (ordemRealSai !== ordemPlanSai && ordemPlanSai !== '');
+                        if (conflitoDeOrdemSai && !row.stat_sai) {
                             row.stat_sai = 'red';
-                            if (row.atr_sai === '') row.atr_sai = '0';
-                        } else if (semProgramacaoSai && row.atr_sai === '') {
-                            row.stat_sai = '';
                         }
-                    } else {
-                        row.atr_sai = ''; row.stat_sai = '';
+                    } else if (!row.manual_atr_sai && !row.atr_sai) {
+                        row.atr_sai = ''; 
+                        row.stat_sai = '';
                     }
                 });
             });
+        }
+
+        // ==========================================
+        // RESGATE GERAL DE TODAS AS LINHAS
+        // ==========================================
+        function forcarResgateGeral() {
+            let melhorSlot = null;
+            let maxCamposPreenchidos = -1;
+
+            for (let i = 1; i <= 60; i++) {
+                let storageData = localStorage.getItem('erp_randon_v' + i);
+                if (storageData) {
+                    try {
+                        let parsed = JSON.parse(storageData);
+                        if (parsed && parsed.data) {
+                            let count = 0;
+                            Object.keys(parsed.data).forEach(secId => {
+                                const rows = parsed.data[secId];
+                                if (Array.isArray(rows)) {
+                                    rows.forEach(r => {
+                                        if (r.real_ent || r.real_sai || r.ordem_ent || r.ordem_sai || r.acoes || r.impactos || r.aponta || r.atr_ent || r.atr_sai) {
+                                            count++;
+                                        }
+                                    });
+                                }
+                            });
+                            if (count > maxCamposPreenchidos) {
+                                maxCamposPreenchidos = count;
+                                melhorSlot = parsed;
+                            }
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            if (maxCamposPreenchidos > 0 && melhorSlot) {
+                db.data = melhorSlot.data;
+                if (melhorSlot.meta) db.meta = melhorSlot.meta;
+                if (melhorSlot.premioConfig) db.premioConfig = melhorSlot.premioConfig;
+                if (melhorSlot.pinosManual) db.pinosManual = melhorSlot.pinosManual;
+                if (melhorSlot.estampariaMatriz) db.estampariaMatriz = melhorSlot.estampariaMatriz;
+
+                forceRenderTodasTabelas();
+                autoSaveCloud(true);
+                mostrarToast(`SUCESSO! ${maxCamposPreenchidos} apontamentos de todas as linhas foram restaurados!`, 'fa-clock-rotate-left');
+            } else {
+                alert("Nenhum backup com dados manuais anteriores foi encontrado no armazenamento deste navegador.");
+            }
         }
 
         // ==========================================
@@ -1711,9 +1810,9 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             let focusField = activeInput ? activeInput.dataset.field : null;
             let cursorStart = 0, cursorEnd = 0;
             
-            if (activeInput && activeInput.tagName === 'INPUT') {
-                cursorStart = activeInput.selectionStart;
-                cursorEnd = activeInput.selectionEnd;
+            if (activeInput && (activeInput.tagName === 'INPUT' || activeInput.tagName === 'SELECT')) {
+                cursorStart = activeInput.selectionStart || 0;
+                cursorEnd = activeInput.selectionEnd || 0;
             }
 
             let htmlViews = { solda: '', pintura: '', op1: '', op2: '' };
@@ -1754,14 +1853,14 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                                 <input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_ent" value="${row.ordem_ent || ''}" placeholder="Prog Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}">
                             </td>
                             <td><input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}" placeholder="Real Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
-                            <td><input type="text" class="cell-input" readonly style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent || ''}"></td>
+                            <td><input type="number" class="cell-input" style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent !== undefined ? row.atr_ent : ''}" placeholder="0" title="Atraso manual ou calculado"></td>
                             <td><div class="status-btn"><div class="circle ${row.stat_ent || ''}"></div></div></td>
                             
                             <td class="${clsSai}">
                                 <input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_sai" value="${row.ordem_sai || ''}" placeholder="Prog Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}">
                             </td>
                             <td><input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" data-sec="${sec.id}" data-row="${i}" data-field="real_sai" value="${row.real_sai || ''}" placeholder="Real Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
-                            <td><input type="text" class="cell-input" readonly style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_sai" value="${row.atr_sai || ''}"></td>
+                            <td><input type="number" class="cell-input" style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_sai" value="${row.atr_sai !== undefined ? row.atr_sai : ''}" placeholder="0" title="Atraso manual ou calculado"></td>
                             <td><div class="status-btn"><div class="circle ${row.stat_sai || ''}"></div></div></td>
                             
                             <td class="${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' ? 'bg-cogi' : '')}">
@@ -1823,13 +1922,13 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                                     <th style="width:7%">📅 Data</th>
                                     <th style="width:12%">📦 Prog. Ent</th>
                                     <th style="width:9%">✅ Real Ent</th>
-                                    <th style="width:3%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
+                                    <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
                                     <th style="width:12%">📦 Prog. Sai</th>
                                     <th style="width:9%">✅ Real Sai</th>
-                                    <th style="width:3%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
+                                    <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
                                     <th style="width:10%">📋 Aponta</th>
                                     <th style="width:12%">⚠️ Gargalo</th>
-                                    <th style="width:17%; text-align: left; padding-left: 10px;">🛠️ Ações Corretivas</th>
+                                    <th style="width:15%; text-align: left; padding-left: 10px;">🛠️ Ações Corretivas</th>
                                 </tr>
                             </thead>
                             <tbody>${tbody}</tbody>
@@ -1848,7 +1947,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 let target = document.querySelector(`[data-sec="${focusSec}"][data-row="${focusRow}"][data-field="${focusField}"]`);
                 if (target) {
                     target.focus();
-                    if(target.tagName === 'INPUT') target.setSelectionRange(cursorStart, cursorEnd);
+                    if(target.tagName === 'INPUT' && target.type !== 'number') target.setSelectionRange(cursorStart, cursorEnd);
                 }
             }
         }
@@ -1863,8 +1962,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 let sumAtrEnt = 0, sumAtrSai = 0, totalProgMes = 0, apontados = 0;
                 if(db.data[sec.id]) {
                     db.data[sec.id].forEach(row => {
-                        let aEnt = parseInt(row.atr_ent);
-                        let aSai = parseInt(row.atr_sai);
+                        let aEnt = parseInt(row.atr_ent, 10);
+                        let aSai = parseInt(row.atr_sai, 10);
                         if (!isNaN(aEnt) && aEnt > 0) sumAtrEnt += aEnt;
                         if (!isNaN(aSai) && aSai > 0) sumAtrSai += aSai;
                         
@@ -1911,15 +2010,9 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             if (!db.data) db.data = {}; 
             configuracaoSetores.forEach(sec => {
                 if(!db.data[sec.id]) db.data[sec.id] = [];
-                let validas = db.data[sec.id].filter(r => {
-                    if (!r) return false;
-                    let textConcat = (r.ordem_ent || '') + (r.ordem_sai || '') + (r.plan_ent || '') + (r.real_ent || '') + (r.plan_sai || '') + (r.real_sai || '') + (r.acoes || '') + (r.data_pcp || '') + (r.aponta || '') + (r.impactos || '');
-                    let limpo = textConcat.replace(/[^a-zA-Z0-9]/g, '');
-                    return limpo.length > 0;
-                });
-                while (validas.length < sec.rows) validas.push(getEmptyRow());
-                validas.push(getEmptyRow()); validas.push(getEmptyRow()); validas.push(getEmptyRow());
-                db.data[sec.id] = validas;
+                while (db.data[sec.id].length < sec.rows) {
+                    db.data[sec.id].push(getEmptyRow());
+                }
             });
         }
 
@@ -2121,7 +2214,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 configuracaoSetores.forEach(sec => {
                     db.data[sec.id] = [];
                     for(let i=0; i<sec.rows; i++) { db.data[sec.id].push(getEmptyRow()); }
-                    db.data[sec.id].push(getEmptyRow()); db.data[sec.id].push(getEmptyRow()); db.data[sec.id].push(getEmptyRow());
                 });
                 atualizarAtrasosGlobais(); renderizarViews(); recalcularDashboard(); renderResumoApontamento();
                 
@@ -2150,11 +2242,13 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 Object.keys(db.data).forEach(tabelaKey => {
                     db.data[tabelaKey].forEach(row => {
                         row.aponta = ''; row.impactos = ''; row.acoes = '';
+                        row.atr_ent = ''; row.atr_sai = ''; row.manual_atr_ent = false; row.manual_atr_sai = false;
+                        row.stat_ent = ''; row.stat_sai = '';
                         if(tabelaKey !== 'ct') {
                             row.real_ent = ''; row.real_sai = ''; row.data_pcp = '';
                             row.data_real_ent = ''; row.data_real_sai = '';
                             row.ordem_ent = ''; row.ordem_sai = '';
-                            row.ordem_programada = ''; row.data_apontamento = '';
+                            row.lock_ent = false; row.lock_sai = false;
                         }
                     });
                 });
@@ -2311,11 +2405,10 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         document.addEventListener('change', function(e) {
             const target = e.target;
             
-            // Edição manual na tabela de pinos (prog / ok)
             if (target.classList.contains('pino-val-input')) {
                 const cat = target.dataset.cat;
                 const idx = parseInt(target.dataset.idx);
-                const type = target.dataset.type; // 'prog' ou 'ok'
+                const type = target.dataset.type;
                 const val = parseInt(target.value) || 0;
 
                 if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
@@ -2329,7 +2422,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 return;
             }
 
-            // Edição manual de Meta Base e Atraso
             if (target.id === 'premio-meta-base-input' || target.id === 'premio-atraso-input') {
                 if (!db.premioConfig) db.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
                 db.premioConfig.metaBase = parseInt(document.getElementById('premio-meta-base-input').value) || 78;
@@ -2374,10 +2466,43 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
                 const oldAponta = row.aponta;
                 
+                if (field === 'atr_ent') {
+                    row.manual_atr_ent = (val.trim() !== '');
+                    row.atr_ent = val;
+                    let numAtr = parseInt(val, 10);
+                    if (!isNaN(numAtr)) {
+                        if (numAtr <= 0) row.stat_ent = 'green';
+                        else if (numAtr === 1) row.stat_ent = 'orange';
+                        else row.stat_ent = 'red';
+                    } else {
+                        row.stat_ent = '';
+                    }
+                    atualizarAtrasosGlobais();
+                    forceRenderTodasTabelas();
+                    autoSaveCloud(true);
+                    return;
+                }
+
+                if (field === 'atr_sai') {
+                    row.manual_atr_sai = (val.trim() !== '');
+                    row.atr_sai = val;
+                    let numAtr = parseInt(val, 10);
+                    if (!isNaN(numAtr)) {
+                        if (numAtr <= 0) row.stat_sai = 'green';
+                        else if (numAtr === 1) row.stat_sai = 'orange';
+                        else row.stat_sai = 'red';
+                    } else {
+                        row.stat_sai = '';
+                    }
+                    atualizarAtrasosGlobais();
+                    forceRenderTodasTabelas();
+                    autoSaveCloud(true);
+                    return;
+                }
+
                 if (field === 'data_pcp') {
                     if (val.trim() === '') {
                         row.data_pcp = '';
-                        row.data_apontamento = '';
                     } else {
                         let parts = val.split(/[\/\.]/);
                         let valNormalizado = val;
@@ -2386,13 +2511,11 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         }
                         
                         row.data_pcp = valNormalizado;
-                        row.data_apontamento = valNormalizado;
-                        
                         aplicarMagia(secId, row);
                         if (row.ordem_ent || row.ordem_sai) {
                             mostrarToast(`📦 Ordens puxadas para ${valNormalizado}`, 'fa-wand-magic-sparkles');
                         } else {
-                            mostrarToast(`⚠️ Sem ordem no PCP p/ ${valNormalizado} — pode preencher Prog Ent/Sai manualmente`, 'fa-pen');
+                            mostrarToast(`⚠️ Sem ordem no PCP p/ ${valNormalizado}`, 'fa-pen');
                         }
                     }
                     atualizarAtrasosGlobais();
@@ -2412,14 +2535,12 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     }
                     const numOv = extrairNumeroOrdem(val);
                     if (numOv) {
-                        const encontrou = aplicarMagiaPorNumero(secId, row, numOv, 'ent');
-                        if (encontrou) {
-                            mostrarToast(`📦 Ordem ${numOv} encontrada no PCP (Entrada)!`, 'fa-magic');
+                        const pcpAchado = buscarOrdemPorNumero(secId, numOv);
+                        if (pcpAchado) {
+                            mostrarToast(`📦 Ordem ${numOv} localizada no PCP! Plan: ${pcpAchado.plan_ent}`, 'fa-magic');
                         } else {
-                            if (!row.ordem_ent) {
-                                row.ordem_ent = val + " (AUTO)";
-                                mostrarToast(`⚠️ Ordem ${numOv} não programada para este setor.`, 'fa-triangle-exclamation');
-                            }
+                            if (!row.ordem_ent) row.ordem_ent = val + " (AUTO)";
+                            mostrarToast(`⚠️ Ordem ${numOv} não programada para este setor.`, 'fa-triangle-exclamation');
                         }
                     }
                 }
@@ -2432,22 +2553,21 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     }
                     const numOv = extrairNumeroOrdem(val);
                     if (numOv) {
-                        const encontrou = aplicarMagiaPorNumero(secId, row, numOv, 'sai');
-                        if (encontrou) {
-                            mostrarToast(`📦 Ordem ${numOv} encontrada no PCP (Saída)!`, 'fa-magic');
+                        const pcpAchado = buscarOrdemPorNumero(secId, numOv);
+                        if (pcpAchado) {
+                            mostrarToast(`📦 Ordem ${numOv} localizada no PCP! Saída Plan: ${pcpAchado.plan_sai}`, 'fa-magic');
                         } else {
-                            if (!row.ordem_sai) {
-                                row.ordem_sai = val + " (AUTO)";
-                                mostrarToast(`⚠️ Ordem ${numOv} não programada para este setor.`, 'fa-triangle-exclamation');
-                            }
+                            if (!row.ordem_sai) row.ordem_sai = val + " (AUTO)";
+                            mostrarToast(`⚠️ Ordem ${numOv} não programada para este setor.`, 'fa-triangle-exclamation');
                         }
                     }
                 }
-                if (field === 'ordem_ent') row.lock_ordem = true;
-                if (field === 'ordem_sai') row.lock_ordem = true;
+                if (field === 'ordem_ent') row.lock_ent = true;
+                if (field === 'ordem_sai') row.lock_sai = true;
 
                 atualizarAtrasosGlobais();
 
+                // AVANÇO AUTOMÁTICO PARA A PRÓXIMA ETAPA
                 if (field === 'aponta' && val === 'OK' && oldAponta !== 'OK') {
                     const secConfig = configuracaoSetores.find(c => c.id === secId);
                     let targetId = null;
@@ -2473,20 +2593,18 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         const ovAvanco = extrairNumeroOrdem(row.real_sai || row.real_ent);
                         
                         let planSaiOrig = null;
-                        if (db.basePCP && db.basePCP[secId]) {
-                            const pcpRow = db.basePCP[secId].find(p => extrairNumeroOrdem(p.ov) === ovAvanco);
-                            if (pcpRow) planSaiOrig = pcpRow.plan_sai;
-                        }
+                        const pcpInfo = buscarOrdemPorNumero(secId, ovAvanco);
+                        if (pcpInfo && pcpInfo.plan_sai) planSaiOrig = pcpInfo.plan_sai;
+                        
                         if (!planSaiOrig) {
                             const orig = db.data[secId].find(r => (extrairNumeroOrdem(r.ordem_sai) === ovAvanco || extrairNumeroOrdem(r.ordem_ent) === ovAvanco));
                             if (orig && orig.plan_sai) planSaiOrig = orig.plan_sai;
                         }
                         
-                        const planEntDest = planSaiOrig ? adicionarUmDia(planSaiOrig) : '';
+                        const planEntDest = planSaiOrig ? adicionarUmDiaUtil(planSaiOrig) : '';
                         
                         tbDest[freeIdx].ordem_ent = row.ordem_sai || row.ordem_ent;
                         tbDest[freeIdx].ordem_sai = row.ordem_sai || row.ordem_ent;
-                        tbDest[freeIdx].ordem_programada = row.ordem_sai || row.ordem_ent;
                         tbDest[freeIdx].plan_ent = planEntDest; 
                         tbDest[freeIdx].real_ent = ovAvanco;
                         tbDest[freeIdx].data_pcp = getDataAtualFormatada();
@@ -2507,7 +2625,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         });
 
         // ==========================================
-        // FIREBASE E BACKUP CONTÍNUO
+        // FIREBASE E SINCRONIZAÇÃO
         // ==========================================
         function initFirebase() {
             try {
@@ -2614,7 +2732,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 mostrarToast('Modo Administrador ativado!', 'fa-shield-halved');
                 forceRenderTodasTabelas();
             } else {
-                alert('Senha incorreta! Tente novamente.');
+                alert('Senha incorreta! Tente novamente. Fale com Alexsandro Tozzo');
                 document.getElementById('senha-admin').value = '';
                 document.getElementById('senha-admin').focus();
             }
@@ -2715,8 +2833,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         if(ap === 'OK') { totApont++; totOk++; }
                         if(ap === 'COGI') { totApont++; totCogi++; }
                         
-                        let aEnt = parseInt(row.atr_ent);
-                        let aSai = parseInt(row.atr_sai);
+                        let aEnt = parseInt(row.atr_ent, 10);
+                        let aSai = parseInt(row.atr_sai, 10);
                         if (!isNaN(aEnt) && aEnt > 0) totAtrasos += aEnt;
                         if (!isNaN(aSai) && aSai > 0) totAtrasos += aSai;
 
@@ -2830,7 +2948,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 }
             }, 30);
 
-            // Rotação de Abas a cada 20s
             const pBar = document.getElementById('tv-progress-bar');
             progressVal = 0;
             tvTabRotationInterval = setInterval(() => {
