@@ -1205,6 +1205,86 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
+        // OPÇÃO MARCAR TODAS COMO OK
+        // ==========================================
+        function marcarTodosSetor(secId, statusVal = 'OK') {
+            if (!isAdmin) {
+                toggleAdmin();
+                return;
+            }
+            if (!db.data || !db.data[secId]) return;
+            
+            let count = 0;
+            const secConfig = configuracaoSetores.find(c => c.id === secId);
+
+            db.data[secId].forEach(row => {
+                const temDado = row.ordem_ent || row.ordem_sai || row.real_ent || row.real_sai || row.data_pcp;
+                if (temDado && row.aponta !== statusVal) {
+                    const oldAponta = row.aponta;
+                    row.aponta = statusVal;
+                    count++;
+
+                    // Avanço automático se for OK
+                    if (statusVal === 'OK' && oldAponta !== 'OK' && secConfig) {
+                        let targetId = null;
+                        if (secConfig.view === 'solda') targetId = 'pintura';
+                        else if (secConfig.view === 'pintura') {
+                            const info = (row.ordem_sai || row.ordem_ent || row.origem || '').toUpperCase();
+                            if (info.includes('TQ')) targetId = 'op1_tq1'; 
+                            else if (info.includes('CT')) targetId = 'op1_ct'; 
+                            else if (info.includes('SILO')) targetId = 'op1_silo';
+                            else targetId = 'op1_bases'; 
+                        }
+                        else if (secConfig.view === 'op1') targetId = 'op2_geral';
+
+                        if (targetId && db.data[targetId]) {
+                            const tbDest = db.data[targetId];
+                            let freeIdx = tbDest.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
+                            if (freeIdx === -1) {
+                                tbDest.push(getEmptyRow());
+                                freeIdx = tbDest.length - 1;
+                            }
+                            
+                            const hojeDataCompleta = getDataCompleta();
+                            const ovAvanco = extrairNumeroOrdem(row.real_sai || row.real_ent);
+                            
+                            let planSaiOrig = null;
+                            const pcpInfo = buscarOrdemPorNumero(secId, ovAvanco);
+                            if (pcpInfo && pcpInfo.plan_sai) planSaiOrig = pcpInfo.plan_sai;
+                            
+                            if (!planSaiOrig) {
+                                const orig = db.data[secId].find(r => (extrairNumeroOrdem(r.ordem_sai) === ovAvanco || extrairNumeroOrdem(r.ordem_ent) === ovAvanco));
+                                if (orig && orig.plan_sai) planSaiOrig = orig.plan_sai;
+                            }
+                            
+                            const planEntDest = planSaiOrig ? adicionarUmDiaUtil(planSaiOrig) : '';
+                            
+                            tbDest[freeIdx].ordem_ent = row.ordem_sai || row.ordem_ent;
+                            tbDest[freeIdx].ordem_sai = row.ordem_sai || row.ordem_ent;
+                            tbDest[freeIdx].plan_ent = planEntDest; 
+                            tbDest[freeIdx].real_ent = ovAvanco;
+                            tbDest[freeIdx].data_pcp = getDataAtualFormatada();
+                            tbDest[freeIdx].data_real_ent = hojeDataCompleta;
+                            tbDest[freeIdx].origem = secConfig.title;
+                            
+                            let calc = calcularAtraso(planEntDest, hojeDataCompleta);
+                            tbDest[freeIdx].atr_ent = calc.atraso;
+                            tbDest[freeIdx].stat_ent = calc.status;
+                        }
+                    }
+                }
+            });
+
+            if (count > 0) {
+                forceRenderTodasTabelas();
+                autoSaveCloud(true);
+                mostrarToast(`${count} OPs marcadas como ${statusVal}!`, 'fa-check-double');
+            } else {
+                mostrarToast(`Nenhuma OP pendente para marcar neste setor.`, 'fa-circle-info');
+            }
+        }
+
+        // ==========================================
         // BUSCA GLOBAL DE OP & TIMELINE
         // ==========================================
         document.addEventListener('keydown', function(e) {
@@ -1693,11 +1773,9 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             if (tipo === 'entrada') {
                 if (tabelaCT.find(r => extrairNumeroOrdem(r.real_ent) === numOvTablet)) return false;
                 
-                // 1. Vincula se já houver a mesma OP em saída ou programado de entrada
                 let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_sai) === numOvTablet && (!r.real_ent || r.real_ent.trim() === ''));
                 if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_ent) === numOvTablet && (!r.real_ent || r.real_ent.trim() === ''));
                 
-                // 2. Se não encontrou, aloca EXCLUSIVAMENTE em uma linha livre (sem ordem_ent diferente!)
                 if (idx === -1) {
                     idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
                 }
@@ -1728,11 +1806,9 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             else if (tipo === 'saida') {
                 if (tabelaCT.find(r => extrairNumeroOrdem(r.real_sai) === numOvTablet)) return false;
                 
-                // 1. Vincula se já houver a mesma OP em entrada ou programado de saída
                 let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_ent) === numOvTablet && (!r.real_sai || r.real_sai.trim() === ''));
                 if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_sai) === numOvTablet && (!r.real_sai || r.real_sai.trim() === ''));
                 
-                // 2. Se não encontrou, aloca EXCLUSIVAMENTE em uma linha livre
                 if (idx === -1) {
                     idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
                 }
@@ -1997,6 +2073,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
                 let badgeCT = sec.id === 'ct' ? `<div class="ct-badge"><i class="fa-solid fa-satellite-dish fa-beat"></i> Integração Tablet On</div>` : '';
                 let badgeData = `<div class="data-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Mágica Dupla</div>`;
+                let btnMarcarTodos = `<button class="btn btn-pcp admin-only" onclick="marcarTodosSetor('${sec.id}', 'OK')" style="padding: 4px 10px; font-size: 10px; margin-left: 10px;" title="Marcar todas as OPs deste setor como OK"><i class="fa-solid fa-check-double"></i> Todos OK</button>`;
                 
                 let btnVerMais = '';
                 if (totalRows > limit) {
@@ -2011,6 +2088,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                                 <h2>${sec.title}</h2>
                                 ${badgeCT}
                                 ${badgeData}
+                                ${btnMarcarTodos}
                             </div>
                             <div class="kpi-row-header">
                                 <div class="kpi-box"><span>Prog. Mês</span><strong id="kpi-mes-${sec.id}">0</strong></div>
@@ -2040,7 +2118,10 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                                     <th style="width:12%">📦 Prog. Sai</th>
                                     <th style="width:9%">✅ Real Sai</th>
                                     <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
-                                    <th style="width:10%">📋 Aponta</th>
+                                    <th style="width:10%">
+                                        📋 Aponta 
+                                        <span class="admin-only" style="cursor:pointer; font-size:9px; background:#10b981; color:white; padding:2px 6px; border-radius:4px; margin-left:4px; font-weight:800; display:inline-block;" onclick="marcarTodosSetor('${sec.id}', 'OK')" title="Marcar todas como OK">✓ Todos</span>
+                                    </th>
                                     <th style="width:12%">⚠️ Gargalo</th>
                                     <th style="width:15%; text-align: left; padding-left: 10px;">🛠️ Ações Corretivas</th>
                                 </tr>
