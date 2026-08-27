@@ -417,7 +417,7 @@
                 <h3 style="font-size: 24px;"><i class="fa-solid fa-shield-halved" style="color: var(--randon-blue); margin-right: 10px;"></i> Acesso Restrito</h3>
             </div>
             <p style="margin-bottom: 25px; color: var(--randon-grey); font-weight: 600; font-size: 14px;">Digite a senha de administrador para liberar a edição do painel e controle de PCP.</p>
-            <input type="password" id="senha-admin" class="input-senha" placeholder="••••••••">
+            <input type="password" id="senha-admin" class="input-senha" placeholder="••••••••" onkeyup="if(event.key === 'Enter') verificarSenha()">
             <div style="display: flex; gap: 10px;">
                 <button class="btn btn-tv" style="flex: 1; justify-content: center;" onclick="fecharModalAuth()">Cancelar</button>
                 <button class="btn btn-auth" style="flex: 2; justify-content: center; font-size: 14px;" onclick="verificarSenha()"><i class="fa-solid fa-unlock"></i> Desbloquear</button>
