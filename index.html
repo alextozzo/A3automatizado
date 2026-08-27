@@ -109,9 +109,9 @@
         .btn-orange { background-color: var(--status-orange); color: white; box-shadow: 0 4px 10px rgba(245,158,11,0.3); } .btn-orange:hover { filter: brightness(0.9); transform: translateY(-2px); }
 
         /* MODAIS E TOAST */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.8); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
-        .modal-content { background: white; padding: 35px; border-radius: 16px; width: 850px; max-width: 95%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border-top: 6px solid var(--status-green); }
+        .modal-content { background: white; padding: 35px; border-radius: 16px; width: 850px; max-width: 95%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border-top: 6px solid var(--status-green); max-height: 90vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .modal-header h3 { font-size: 20px; color: var(--randon-dark); font-weight: 900; text-transform: uppercase; }
         .close-btn { cursor: pointer; font-size: 24px; color: #94a3b8; background: none; border: none; outline: none; transition: 0.2s; }
@@ -123,6 +123,12 @@
 
         #toast { position: fixed; bottom: 35px; right: 35px; background-color: var(--randon-dark); color: #fff; padding: 18px 30px; border-radius: 10px; transition: 0.3s; transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; display: flex; align-items: center; gap: 12px; border-left: 6px solid var(--status-green); box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
         #toast.show { transform: translateY(0); opacity: 1; }
+
+        /* LISTA DE BACKUPS NO MODAL */
+        .backup-list-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .backup-list-table th { background: #0f172a; color: white; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; }
+        .backup-list-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); font-size: 13px; font-weight: 600; }
+        .backup-list-table tr:hover td { background-color: #f8fafc; }
 
         /* TIMELINE DA OP */
         .op-timeline { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; max-height: 400px; overflow-y: auto; padding-right: 10px; }
@@ -391,8 +397,7 @@
                 <span id="auth-label">Visualização</span>
             </div>
             
-            <button class="btn btn-orange admin-only" onclick="forcarResgateGeral()" title="Recuperar Backup de Todas as Linhas"><i class="fa-solid fa-clock-rotate-left"></i> Resgatar Backup Geral</button>
-            <button class="btn btn-orange admin-only" onclick="forcarResgateEstamparia()" title="Recuperar Estamparia Antiga"><i class="fa-solid fa-life-ring"></i></button>
+            <button class="btn btn-orange admin-only" onclick="abrirModalBackups()" title="Ver Histórico de Backups Salvos"><i class="fa-solid fa-clock-rotate-left"></i> Histórico de Backups</button>
             <button class="btn btn-limpar admin-only" style="background-color: #7f1d1d;" onclick="apagarTablet()" title="Apagar Histórico do Tablet"><i class="fa-solid fa-tablet"></i> Zerar Tablet</button>
             <button class="btn btn-limpar admin-only" onclick="apagarProgramacaoPCP()" title="Zerar programação inteira do Mês"><i class="fa-solid fa-trash-can"></i> Zerar PCP</button>
             <button class="btn btn-pcp admin-only" onclick="abrirModalPCP()"><i class="fa-solid fa-bolt"></i> Carga PCP</button>
@@ -436,6 +441,23 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
                 <button class="btn btn-tv" onclick="fecharModalPCP()">Cancelar</button>
                 <button class="btn btn-pcp" onclick="processarBasePCP()"><i class="fa-solid fa-check-double"></i> Injetar Programação</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE HISTÓRICO DE BACKUPS -->
+    <div class="modal-overlay" id="modal-backups">
+        <div class="modal-content" style="width: 800px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-clock-rotate-left" style="color: var(--status-orange); margin-right: 8px;"></i> Central de Recuperação de Backups</h3>
+                <button class="close-btn" onclick="fecharModalBackups()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p style="font-size: 13px; color: var(--randon-grey); font-weight: 600; margin-bottom: 15px;">
+                Selecione abaixo uma das versões salvas no armazenamento local deste navegador. Verifique a quantidade de <b>células preenchidas</b> antes de restaurar.
+            </p>
+            <div id="lista-backups-container" style="max-height: 400px; overflow-y: auto;"></div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                <button class="btn btn-tv" onclick="fecharModalBackups()">Fechar</button>
             </div>
         </div>
     </div>
@@ -1418,11 +1440,17 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
             if (!row.lock_ent && !row.real_ent && !row.ordem_ent) {
                 const fEnt = buscarOrdemParaData(secId, dataVal, 'ent');
-                if (fEnt) { row.ordem_ent = fEnt.ordem; row.plan_ent = fEnt.plan_ent; }
+                if (fEnt) { 
+                    row.ordem_ent = fEnt.ordem; 
+                    row.plan_ent = fEnt.plan_ent; 
+                }
             }
             if (!row.lock_sai && !row.real_sai && !row.ordem_sai) {
                 const fSai = buscarOrdemParaData(secId, dataVal, 'sai');
-                if (fSai) { row.ordem_sai = fSai.ordem; row.plan_sai = fSai.plan_sai; }
+                if (fSai) { 
+                    row.ordem_sai = fSai.ordem; 
+                    row.plan_sai = fSai.plan_sai; 
+                }
             }
         }
 
@@ -1530,69 +1558,150 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // RESGATE GERAL DE TODAS AS LINHAS
+        // GERENCIADOR DE BACKUPS COM PRÉVIA
         // ==========================================
-        function forcarResgateGeral() {
-            let melhorSlot = null;
-            let maxCamposPreenchidos = -1;
+        function abrirModalBackups() {
+            const container = document.getElementById('lista-backups-container');
+            if (!container) return;
+
+            let backupsEncontrados = [];
 
             for (let i = 1; i <= 60; i++) {
-                let storageData = localStorage.getItem('erp_randon_v' + i);
-                if (storageData) {
+                const key = 'erp_randon_v' + i;
+                const raw = localStorage.getItem(key);
+                if (raw) {
                     try {
-                        let parsed = JSON.parse(storageData);
+                        const parsed = JSON.parse(raw);
+                        let totalPreenchidos = 0;
                         if (parsed && parsed.data) {
-                            let count = 0;
                             Object.keys(parsed.data).forEach(secId => {
                                 const rows = parsed.data[secId];
                                 if (Array.isArray(rows)) {
                                     rows.forEach(r => {
-                                        if (r.real_ent || r.real_sai || r.ordem_ent || r.ordem_sai || r.acoes || r.impactos || r.aponta || r.atr_ent || r.atr_sai) {
-                                            count++;
+                                        if (r && (r.real_ent || r.real_sai || r.ordem_ent || r.ordem_sai || r.acoes || r.impactos || r.aponta || r.atr_ent || r.atr_sai)) {
+                                            totalPreenchidos++;
                                         }
                                     });
                                 }
                             });
-                            if (count > maxCamposPreenchidos) {
-                                maxCamposPreenchidos = count;
-                                melhorSlot = parsed;
-                            }
+                        }
+                        if (totalPreenchidos > 0) {
+                            backupsEncontrados.push({
+                                key: key,
+                                slot: i,
+                                preenchidos: totalPreenchidos,
+                                dataReferencia: parsed.globalDate || 'N/D'
+                            });
                         }
                     } catch(e) {}
                 }
             }
 
-            if (maxCamposPreenchidos > 0 && melhorSlot) {
-                db.data = melhorSlot.data;
-                if (melhorSlot.meta) db.meta = melhorSlot.meta;
-                if (melhorSlot.premioConfig) db.premioConfig = melhorSlot.premioConfig;
-                if (melhorSlot.pinosManual) db.pinosManual = melhorSlot.pinosManual;
-                if (melhorSlot.estampariaMatriz) db.estampariaMatriz = melhorSlot.estampariaMatriz;
+            const v49Raw = localStorage.getItem('erp_randon_v49');
+            if (v49Raw) {
+                try {
+                    const parsed49 = JSON.parse(v49Raw);
+                    let count49 = 0;
+                    if (parsed49 && parsed49.data) {
+                        Object.keys(parsed49.data).forEach(secId => {
+                            const rows = parsed49.data[secId];
+                            if (Array.isArray(rows)) {
+                                rows.forEach(r => {
+                                    if (r && (r.real_ent || r.real_sai || r.ordem_ent || r.ordem_sai || r.acoes || r.impactos || r.aponta)) count49++;
+                                });
+                            }
+                        });
+                    }
+                    if (count49 > 0) {
+                        backupsEncontrados.push({ key: 'erp_randon_v49', slot: 49, preenchidos: count49, dataReferencia: parsed49.globalDate || 'N/D' });
+                    }
+                } catch(e) {}
+            }
 
-                forceRenderTodasTabelas();
-                autoSaveCloud(true);
-                mostrarToast(`SUCESSO! ${maxCamposPreenchidos} apontamentos de todas as linhas foram restaurados!`, 'fa-clock-rotate-left');
+            backupsEncontrados.sort((a,b) => b.preenchidos - a.preenchidos);
+
+            if (backupsEncontrados.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--randon-grey); font-weight:700;">Nenhum backup com dados preenchidos foi encontrado neste navegador.</div>`;
             } else {
-                alert("Nenhum backup com dados manuais anteriores foi encontrado no armazenamento deste navegador.");
+                let html = `
+                    <table class="backup-list-table">
+                        <thead>
+                            <tr>
+                                <th>Slot / Memória</th>
+                                <th>Data Referência</th>
+                                <th>Células com Dados</th>
+                                <th style="text-align:center;">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                backupsEncontrados.forEach(b => {
+                    html += `
+                        <tr>
+                            <td><strong style="color:var(--randon-blue);">${b.key}</strong></td>
+                            <td>${b.dataReferencia}</td>
+                            <td><span style="color:var(--status-green); font-weight:900;">${b.preenchidos} campos</span></td>
+                            <td style="text-align:center;">
+                                <button class="btn btn-pcp" style="display:inline-flex; padding:6px 12px;" onclick="restaurarSlotEspecifico('${b.key}')">
+                                    <i class="fa-solid fa-rotate-left"></i> Restaurar Este
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table>`;
+                container.innerHTML = html;
+            }
+
+            document.getElementById('modal-backups').classList.add('active');
+        }
+
+        function fecharModalBackups() {
+            document.getElementById('modal-backups').classList.remove('active');
+        }
+
+        function restaurarSlotEspecifico(slotKey) {
+            const raw = localStorage.getItem(slotKey);
+            if (!raw) return alert("Slot de memória não encontrado.");
+            
+            try {
+                const parsed = JSON.parse(raw);
+                if (confirm(`Tem certeza que deseja restaurar a versão do backup "${slotKey}"? Ela substituirá a tela atual e sincronizará com a nuvem.`)) {
+                    db = parsed;
+                    expurgarLinhasFantasmas();
+                    atualizarDiasEstamparia();
+                    forceRenderTodasTabelas();
+                    autoSaveCloud(true);
+                    fecharModalBackups();
+                    mostrarToast(`Versão ${slotKey} restaurada com sucesso!`, 'fa-check');
+                }
+            } catch(e) {
+                alert("Erro ao ler o backup: " + e.message);
             }
         }
 
         // ==========================================
-        // TABLET - INTEGRAÇÃO COM CT
+        // TABLET - INTEGRAÇÃO COM CT (PROTEGIDA)
         // ==========================================
         function alocarNoPainelCT(ovTablet, tipo, dataCarimbo, dataCarimboCompleta) {
             if(!db.data['ct']) db.data['ct'] = [];
             let tabelaCT = db.data['ct'];
             let atualizou = false;
             let numOvTablet = extrairNumeroOrdem(ovTablet);
+            if (!numOvTablet) return false;
 
             if (tipo === 'entrada') {
                 if (tabelaCT.find(r => extrairNumeroOrdem(r.real_ent) === numOvTablet)) return false;
                 
-                let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_sai) === numOvTablet && r.real_ent === '');
-                if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_ent) === numOvTablet && r.real_ent === '');
-                if (idx === -1) idx = tabelaCT.findIndex(r => r.data_pcp === dataCarimbo && r.real_ent === '');
-                if (idx === -1) idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
+                // 1. Vincula se já houver a mesma OP em saída ou programado de entrada
+                let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_sai) === numOvTablet && (!r.real_ent || r.real_ent.trim() === ''));
+                if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_ent) === numOvTablet && (!r.real_ent || r.real_ent.trim() === ''));
+                
+                // 2. Se não encontrou, aloca EXCLUSIVAMENTE em uma linha livre (sem ordem_ent diferente!)
+                if (idx === -1) {
+                    idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
+                }
+                
                 if (idx === -1) {
                     tabelaCT.push(getEmptyRow());
                     idx = tabelaCT.length - 1;
@@ -1605,10 +1714,10 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     if (!row.data_real_ent) row.data_real_ent = dataCarimboCompleta || getDataCompleta();
                     
                     if (!row.ordem_ent) {
-                        const fEnt = buscarOrdemParaData('ct', row.data_pcp, 'ent');
-                        if (fEnt) {
-                            row.ordem_ent = fEnt.ordem;
-                            row.plan_ent = fEnt.plan_ent;
+                        const pcpAchado = buscarOrdemPorNumero('ct', numOvTablet);
+                        if (pcpAchado) {
+                            row.ordem_ent = `${pcpAchado.ov}${pcpAchado.prod ? ' - ' + pcpAchado.prod : ''}`;
+                            row.plan_ent = pcpAchado.plan_ent;
                         } else {
                             row.ordem_ent = ovTablet + " (AUTO)";
                         }
@@ -1619,10 +1728,15 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             else if (tipo === 'saida') {
                 if (tabelaCT.find(r => extrairNumeroOrdem(r.real_sai) === numOvTablet)) return false;
                 
-                let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_ent) === numOvTablet && r.real_sai === '');
-                if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_sai) === numOvTablet && r.real_sai === '');
-                if (idx === -1) idx = tabelaCT.findIndex(r => r.data_pcp === dataCarimbo && r.real_sai === '' && r.real_ent !== '');
-                if (idx === -1) idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
+                // 1. Vincula se já houver a mesma OP em entrada ou programado de saída
+                let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_ent) === numOvTablet && (!r.real_sai || r.real_sai.trim() === ''));
+                if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_sai) === numOvTablet && (!r.real_sai || r.real_sai.trim() === ''));
+                
+                // 2. Se não encontrou, aloca EXCLUSIVAMENTE em uma linha livre
+                if (idx === -1) {
+                    idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
+                }
+                
                 if (idx === -1) {
                     tabelaCT.push(getEmptyRow());
                     idx = tabelaCT.length - 1;
@@ -1635,10 +1749,10 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     if (!row.data_real_sai) row.data_real_sai = dataCarimboCompleta || getDataCompleta();
                     
                     if (!row.ordem_sai) {
-                        const fSai = buscarOrdemParaData('ct', row.data_pcp, 'sai');
-                        if (fSai) {
-                            row.ordem_sai = fSai.ordem;
-                            row.plan_sai = fSai.plan_sai;
+                        const pcpAchado = buscarOrdemPorNumero('ct', numOvTablet);
+                        if (pcpAchado) {
+                            row.ordem_sai = `${pcpAchado.ov}${pcpAchado.prod ? ' - ' + pcpAchado.prod : ''}`;
+                            row.plan_sai = pcpAchado.plan_sai;
                         } else {
                             row.ordem_sai = ovTablet + " (AUTO)";
                         }
@@ -2042,56 +2156,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     db.estampariaMatriz.valores[linha].push('');
                 });
                 autoSaveCloud(false);
-            }
-        }
-
-        function forcarResgateEstamparia() {
-            let melhorVersao = null;
-            let maxPreenchidos = -1;
-            for (let i = 1; i <= 60; i++) {
-                let oldStorage = localStorage.getItem('erp_randon_v' + i);
-                if (oldStorage) {
-                    try {
-                        let oldDb = JSON.parse(oldStorage);
-                        if (oldDb && oldDb.estampariaMatriz && oldDb.estampariaMatriz.valores) {
-                            let count = 0;
-                            Object.values(oldDb.estampariaMatriz.valores).forEach(arr => {
-                                if(Array.isArray(arr)) {
-                                    arr.forEach(val => { if (val && String(val).trim() !== '') count++; });
-                                }
-                            });
-                            if (count > maxPreenchidos) {
-                                maxPreenchidos = count;
-                                melhorVersao = oldDb.estampariaMatriz;
-                            }
-                        }
-                    } catch(e) {}
-                }
-            }
-            if (maxPreenchidos > 0 && melhorVersao) {
-                if (melhorVersao.datas && melhorVersao.datas.length === 5) {
-                    db.estampariaMatriz.datas = melhorVersao.datas;
-                } else {
-                    let novasDatas = [];
-                    for(let i=4; i>=0; i--) {
-                        let d = new Date(); d.setDate(d.getDate() - i);
-                        novasDatas.push(formatarDataEstamparia(d));
-                    }
-                    db.estampariaMatriz.datas = novasDatas;
-                }
-                db.estampariaMatriz.valores = {};
-                estampariaLinhas.forEach(linha => {
-                    if (melhorVersao.valores && melhorVersao.valores[linha]) {
-                        db.estampariaMatriz.valores[linha] = melhorVersao.valores[linha].slice();
-                    } else {
-                        db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                    }
-                });
-                renderizarEstampariaMatriz();
-                autoSaveCloud(true);
-                mostrarToast("SUCESSO! O Robô encontrou " + maxPreenchidos + " células antigas e restaurou a tela!", "fa-life-ring");
-            } else {
-                alert("Ops, não encontramos nenhum dado antigo salvo no cache deste navegador.");
             }
         }
 
@@ -2526,6 +2590,42 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 
                 row[field] = val;
                 
+                if (field === 'ordem_ent') {
+                    row.lock_ent = true;
+                    const num = extrairNumeroOrdem(val);
+                    if (num) {
+                        const pcp = buscarOrdemPorNumero(secId, num);
+                        if (pcp) {
+                            row.plan_ent = pcp.plan_ent || row.plan_ent;
+                            if (pcp.prod && !val.includes(pcp.prod)) {
+                                row.ordem_ent = `${pcp.ov} - ${pcp.prod}`;
+                            }
+                            if (!row.data_pcp && pcp.plan_ent) {
+                                row.data_pcp = normalizarDataParaComparacao(pcp.plan_ent);
+                            }
+                            mostrarToast(`Prog. Entrada: OP ${num} localizada no PCP!`, 'fa-calendar-check');
+                        }
+                    }
+                }
+                
+                if (field === 'ordem_sai') {
+                    row.lock_sai = true;
+                    const num = extrairNumeroOrdem(val);
+                    if (num) {
+                        const pcp = buscarOrdemPorNumero(secId, num);
+                        if (pcp) {
+                            row.plan_sai = pcp.plan_sai || row.plan_sai;
+                            if (pcp.prod && !val.includes(pcp.prod)) {
+                                row.ordem_sai = `${pcp.ov} - ${pcp.prod}`;
+                            }
+                            if (!row.data_pcp && pcp.plan_sai) {
+                                row.data_pcp = normalizarDataParaComparacao(pcp.plan_sai);
+                            }
+                            mostrarToast(`Prog. Saída: OP ${num} localizada no PCP!`, 'fa-calendar-check');
+                        }
+                    }
+                }
+
                 if (field === 'real_ent') {
                     row.lock_ent = true;
                     if (!row.data_real_ent) row.data_real_ent = getDataCompleta();
@@ -2544,6 +2644,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         }
                     }
                 }
+                
                 if (field === 'real_sai') {
                     row.lock_sai = true;
                     if (!row.data_real_sai) row.data_real_sai = getDataCompleta();
@@ -2562,8 +2663,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         }
                     }
                 }
-                if (field === 'ordem_ent') row.lock_ent = true;
-                if (field === 'ordem_sai') row.lock_sai = true;
 
                 atualizarAtrasosGlobais();
 
@@ -2694,7 +2793,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 } else {
                     setStatusConexao('offline');
                 }
-            }, 800);
+            }, 400);
         }
 
         // ==========================================
