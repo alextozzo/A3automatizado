@@ -198,7 +198,6 @@
         .data-input { background-color: #fffbeb !important; font-weight: 900 !important; color: #92400e !important; }
 
         .auto-tag { font-size: 9px; background: var(--status-orange); color: white; padding: 3px 6px; border-radius: 4px; position: absolute; top: 2px; left: 4px; pointer-events: none; font-weight: 900; letter-spacing: 0.5px;}
-        .ct-badge { font-size: 10px; color: #064e3b; background: #34d399; padding: 5px 10px; border-radius: 6px; margin-left: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
         .data-badge { font-size: 10px; color: #1e40af; background: #bfdbfe; padding: 5px 10px; border-radius: 6px; margin-left: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
         
         .op-clickable { cursor: pointer; text-decoration: underline; text-decoration-style: dotted; }
@@ -397,9 +396,8 @@
                 <span id="auth-label">Visualização</span>
             </div>
             
-            <button class="btn btn-orange admin-only" onclick="restaurarTudoUltimoPreenchimento()" title="Restaurar o melhor ponto salvo com todas as linhas e estamparia"><i class="fa-solid fa-wand-magic-sparkles"></i> Restaurar Tudo (Último Completo)</button>
+            <button class="btn btn-orange admin-only" onclick="restaurarTudoUltimoPreenchimento()" title="Restaurar o melhor ponto salvo com todas as linhas e estamparia"><i class="fa-solid fa-wand-magic-sparkles"></i> Restaurar Tudo</button>
             <button class="btn btn-tv admin-only" onclick="abrirModalBackups()" title="Ver Lista de Backups Salvos"><i class="fa-solid fa-clock-rotate-left"></i> Histórico Backups</button>
-            <button class="btn btn-limpar admin-only" style="background-color: #7f1d1d;" onclick="apagarTablet()" title="Apagar Histórico do Tablet"><i class="fa-solid fa-tablet"></i> Zerar Tablet</button>
             <button class="btn btn-limpar admin-only" onclick="apagarProgramacaoPCP()" title="Zerar programação inteira do Mês"><i class="fa-solid fa-trash-can"></i> Zerar PCP</button>
             <button class="btn btn-pcp admin-only" onclick="abrirModalPCP()"><i class="fa-solid fa-bolt"></i> Carga PCP</button>
             <button class="btn btn-excel" onclick="exportarExcelProducao()" title="Exportar dados para Excel (.CSV UTF-8)"><i class="fa-solid fa-file-excel"></i> Excel</button>
@@ -433,7 +431,7 @@
             </div>
             <p style="font-size: 14px; color: var(--randon-grey); font-weight: 600; margin-bottom: 15px; line-height: 1.5;">
                 <b>Instrução de Carga:</b> Copie do seu Excel exatamente as colunas na ordem do arquivo: <br><strong style="color: var(--randon-blue);">LINHA | ORDEM E VENDA | PRODUTO | DATA ENTRADA | DATA SAÍDA</strong> e cole abaixo.<br>
-                <span style="color: var(--status-orange);">⚠️ As Ordens ficarão ocultas no Cofre e aparecerão quando o apontador digitar a data na linha.</span>
+                <span style="color: var(--status-orange);">⚠️ As Ordens ficarão no cofre do sistema e serão preenchidas automaticamente ao digitar a data na linha.</span>
             </p>
             <textarea id="pcp-dados" class="pcp-textarea" placeholder="Cole os dados do Excel aqui... Ex:
 CARREGA TUDO	1003088021	MTG BS CT PD...	29.07.2026	05.08.2026
@@ -692,7 +690,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 <p style="color: var(--randon-grey); font-size: 14px; font-weight: 700; text-transform: uppercase;">Espelho de Saídas de Linha e Fila Atual (Pintura, OP1 e OP2).</p>
             </div>
             <div style="display: flex; gap: 10px;">
-                <button class="btn btn-orange admin-only" onclick="zerarApontamentos()"><i class="fa-solid fa-eraser"></i> Limpar Apontamentos (Mantém PCP e Tablet)</button>
+                <button class="btn btn-orange admin-only" onclick="zerarApontamentos()"><i class="fa-solid fa-eraser"></i> Limpar Apontamentos (Mantém PCP)</button>
                 <button class="btn btn-tv" onclick="window.print()" style="padding: 12px 20px; font-size: 14px;"><i class="fa-solid fa-print"></i> Imprimir Guia Físico</button>
             </div>
         </div>
@@ -817,7 +815,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         let chartsObj = { pareto: null, pie: null, line: null, aderencia: null, estamparia: null };
         let saveTimeout, tvInterval, tvTabRotationInterval;
         let firebaseDB = null, dbRef = null;
-        let firebaseRegistrosTablet = {}; 
 
         const DEFAULT_VISIBLES_ROWS = 15;
         let expandedSections = {};
@@ -936,19 +933,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             const mNome = mesesAbreviados[parseInt(mNum) - 1];
             const s = dateStr.toLowerCase();
             return s.includes(`${d}/${mNum}`) || s.includes(`${d}/${mNome}`) || (s.includes(d) && (s.includes(mNum) || s.includes(mNome)));
-        }
-
-        function normalizarDataISO(key) {
-            const k = String(key).trim();
-            const parts = k.split(/[-/]/);
-            if (parts.length === 3) {
-                let y, m, d;
-                if (parts[0].length === 4) { y = parts[0]; m = parts[1]; d = parts[2]; } 
-                else if (parts[2].length === 4) { d = parts[0]; m = parts[1]; y = parts[2]; } 
-                else { return null; }
-                return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-            }
-            return null;
         }
 
         function extrairNumeroOrdem(texto) {
@@ -1486,55 +1470,74 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             return null;
         }
 
-        function buscarOrdemParaData(secId, dataApontamento, tipo) {
+        function buscarTodasOrdensParaData(secId, dataApontamento) {
             const cofrePCP = db.basePCP[secId];
-            if (!cofrePCP) return null;
+            if (!cofrePCP) return [];
             const dataNormalizada = normalizarDataParaComparacao(dataApontamento);
-            if (!dataNormalizada) return null;
+            if (!dataNormalizada) return [];
 
             const partes = dataNormalizada.split('/');
-            const dia = parseInt(partes[0]);
-            const mes = parseInt(partes[1]);
+            const dia = parseInt(partes[0], 10);
+            const mes = parseInt(partes[1], 10);
 
-            let match = cofrePCP.find(p => {
-                let planDate = tipo === 'ent' ? p.plan_ent : p.plan_sai;
-                if (!planDate) return false;
-                let planNorm = normalizarDataParaComparacao(planDate);
-                let partesPlan = planNorm.split('/');
-                if (partesPlan.length < 2) return false;
-                return parseInt(partesPlan[0]) === dia && parseInt(partesPlan[1]) === mes;
+            let matches = cofrePCP.filter(p => {
+                let planEntNorm = normalizarDataParaComparacao(p.plan_ent);
+                let planSaiNorm = normalizarDataParaComparacao(p.plan_sai);
+
+                let partesEnt = planEntNorm.split('/');
+                let partesSai = planSaiNorm.split('/');
+
+                let matchEnt = partesEnt.length >= 2 && parseInt(partesEnt[0], 10) === dia && parseInt(partesEnt[1], 10) === mes;
+                let matchSai = partesSai.length >= 2 && parseInt(partesSai[0], 10) === dia && parseInt(partesSai[1], 10) === mes;
+
+                return matchEnt || matchSai;
             });
 
-            if (match) {
-                return {
-                    ordem: `${match.ov}${match.prod ? ' - ' + match.prod : ''}`,
-                    plan_ent: match.plan_ent,
-                    plan_sai: match.plan_sai,
-                    ov: match.ov,
-                    prod: match.prod || ''
-                };
-            }
-            return null;
+            return matches.map(match => ({
+                ordem_ent: `${match.ov}${match.prod ? ' - ' + match.prod : ''}`,
+                ordem_sai: `${match.ov}${match.prod ? ' - ' + match.prod : ''}`,
+                plan_ent: match.plan_ent,
+                plan_sai: match.plan_sai,
+                ov: match.ov,
+                prod: match.prod || ''
+            }));
         }
 
-        function aplicarMagia(secId, row) {
-            if (!row.data_pcp || row.data_pcp.trim() === '') return;
-            const dataVal = row.data_pcp;
+        function aplicarMagiaMultipla(secId, startRowIdx, dataVal) {
+            if (!dataVal || dataVal.trim() === '') return 0;
+            const matches = buscarTodasOrdensParaData(secId, dataVal);
+            if (matches.length === 0) return 0;
 
-            if (!row.lock_ent && !row.real_ent && !row.ordem_ent) {
-                const fEnt = buscarOrdemParaData(secId, dataVal, 'ent');
-                if (fEnt) { 
-                    row.ordem_ent = fEnt.ordem; 
-                    row.plan_ent = fEnt.plan_ent; 
+            if (!db.data[secId]) db.data[secId] = [];
+            const tabela = db.data[secId];
+
+            let rowCurrent = startRowIdx;
+
+            matches.forEach((item, idx) => {
+                while (rowCurrent < tabela.length && idx > 0 && (tabela[rowCurrent].lock_ent || tabela[rowCurrent].lock_sai || (tabela[rowCurrent].data_pcp && tabela[rowCurrent].data_pcp !== dataVal))) {
+                    rowCurrent++;
                 }
-            }
-            if (!row.lock_sai && !row.real_sai && !row.ordem_sai) {
-                const fSai = buscarOrdemParaData(secId, dataVal, 'sai');
-                if (fSai) { 
-                    row.ordem_sai = fSai.ordem; 
-                    row.plan_sai = fSai.plan_sai; 
+
+                if (rowCurrent >= tabela.length) {
+                    tabela.push(getEmptyRow());
                 }
-            }
+
+                const r = tabela[rowCurrent];
+                r.data_pcp = dataVal;
+
+                if (!r.lock_ent && !r.real_ent) {
+                    r.ordem_ent = item.ordem_ent;
+                    r.plan_ent = item.plan_ent;
+                }
+                if (!r.lock_sai && !r.real_sai) {
+                    r.ordem_sai = item.ordem_sai;
+                    r.plan_sai = item.plan_sai;
+                }
+
+                rowCurrent++;
+            });
+
+            return matches.length;
         }
 
         function obterDataExecucaoLinha(row, tipo) {
@@ -1824,177 +1827,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // TABLET - INTEGRAÇÃO COM CT (PROTEGIDA)
-        // ==========================================
-        function alocarNoPainelCT(ovTablet, tipo, dataCarimbo, dataCarimboCompleta) {
-            if(!db.data['ct']) db.data['ct'] = [];
-            let tabelaCT = db.data['ct'];
-            let atualizou = false;
-            let numOvTablet = extrairNumeroOrdem(ovTablet);
-            if (!numOvTablet) return false;
-
-            if (tipo === 'entrada') {
-                if (tabelaCT.find(r => extrairNumeroOrdem(r.real_ent) === numOvTablet)) return false;
-                
-                // 1. Vincula se já houver a mesma OP em saída ou programado de entrada
-                let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_sai) === numOvTablet && (!r.real_ent || r.real_ent.trim() === ''));
-                if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_ent) === numOvTablet && (!r.real_ent || r.real_ent.trim() === ''));
-                
-                // 2. Se não encontrou, aloca EXCLUSIVAMENTE em uma linha livre (sem ordem_ent diferente!)
-                if (idx === -1) {
-                    idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
-                }
-                
-                if (idx === -1) {
-                    tabelaCT.push(getEmptyRow());
-                    idx = tabelaCT.length - 1;
-                }
-                
-                const row = tabelaCT[idx];
-                if (!row.lock_ent) {
-                    if (!row.data_pcp) row.data_pcp = dataCarimbo;
-                    row.real_ent = ovTablet;
-                    if (!row.data_real_ent) row.data_real_ent = dataCarimboCompleta || getDataCompleta();
-                    
-                    if (!row.ordem_ent) {
-                        const pcpAchado = buscarOrdemPorNumero('ct', numOvTablet);
-                        if (pcpAchado) {
-                            row.ordem_ent = `${pcpAchado.ov}${pcpAchado.prod ? ' - ' + pcpAchado.prod : ''}`;
-                            row.plan_ent = pcpAchado.plan_ent;
-                        } else {
-                            row.ordem_ent = ovTablet + " (AUTO)";
-                        }
-                    }
-                    atualizou = true;
-                }
-            } 
-            else if (tipo === 'saida') {
-                if (tabelaCT.find(r => extrairNumeroOrdem(r.real_sai) === numOvTablet)) return false;
-                
-                // 1. Vincula se já houver a mesma OP em entrada ou programado de saída
-                let idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.real_ent) === numOvTablet && (!r.real_sai || r.real_sai.trim() === ''));
-                if (idx === -1) idx = tabelaCT.findIndex(r => extrairNumeroOrdem(r.ordem_sai) === numOvTablet && (!r.real_sai || r.real_sai.trim() === ''));
-                
-                // 2. Se não encontrou, aloca EXCLUSIVAMENTE em uma linha livre
-                if (idx === -1) {
-                    idx = tabelaCT.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
-                }
-                
-                if (idx === -1) {
-                    tabelaCT.push(getEmptyRow());
-                    idx = tabelaCT.length - 1;
-                }
-                
-                const row = tabelaCT[idx];
-                if (!row.lock_sai) {
-                    if (!row.data_pcp) row.data_pcp = dataCarimbo;
-                    row.real_sai = ovTablet;
-                    if (!row.data_real_sai) row.data_real_sai = dataCarimboCompleta || getDataCompleta();
-                    
-                    if (!row.ordem_sai) {
-                        const pcpAchado = buscarOrdemPorNumero('ct', numOvTablet);
-                        if (pcpAchado) {
-                            row.ordem_sai = `${pcpAchado.ov}${pcpAchado.prod ? ' - ' + pcpAchado.prod : ''}`;
-                            row.plan_sai = pcpAchado.plan_sai;
-                        } else {
-                            row.ordem_sai = ovTablet + " (AUTO)";
-                        }
-                    }
-                    atualizou = true;
-                }
-            }
-            return atualizou;
-        }
-
-        function mesclarLinhasDivididasCT() {
-            if (!db.data || !db.data['ct']) return false;
-            const tabela = db.data['ct'];
-            let mesclou = false;
-
-            for (let i = 0; i < tabela.length; i++) {
-                const rowEnt = tabela[i];
-                if (!rowEnt.real_ent || rowEnt.real_ent.trim() === '' || (rowEnt.real_sai && rowEnt.real_sai.trim() !== '')) continue;
-                const numEnt = extrairNumeroOrdem(rowEnt.real_ent);
-                if (!numEnt) continue;
-
-                for (let j = 0; j < tabela.length; j++) {
-                    if (i === j) continue;
-                    const rowSai = tabela[j];
-                    if (!rowSai.real_sai || rowSai.real_sai.trim() === '') continue;
-                    if (rowSai.real_ent && rowSai.real_ent.trim() !== '') continue;
-                    if (extrairNumeroOrdem(rowSai.real_sai) !== numEnt) continue;
-
-                    rowEnt.real_sai = rowSai.real_sai;
-                    rowEnt.data_real_sai = rowSai.data_real_sai || rowEnt.data_real_sai;
-                    if (!rowEnt.ordem_sai) rowEnt.ordem_sai = rowSai.ordem_sai;
-                    if (!rowEnt.plan_sai) rowEnt.plan_sai = rowSai.plan_sai;
-                    rowEnt.lock_sai = rowSai.lock_sai || rowEnt.lock_sai;
-                    if (rowSai.aponta && !rowEnt.aponta) rowEnt.aponta = rowSai.aponta;
-                    if (rowSai.impactos && !rowEnt.impactos) rowEnt.impactos = rowSai.impactos;
-                    if (rowSai.acoes && !rowEnt.acoes) rowEnt.acoes = rowSai.acoes;
-
-                    tabela[j] = getEmptyRow();
-                    mesclou = true;
-                    break;
-                }
-            }
-            return mesclou;
-        }
-
-        function reconstruirDadosTablet() {
-            if (!firebaseRegistrosTablet) return;
-            let atualizouGeral = false;
-            if (!db.data) db.data = {};
-            
-            const chavesOrdenadas = Object.keys(firebaseRegistrosTablet).sort();
-            
-            chavesOrdenadas.forEach(key => {
-                const dataIso = normalizarDataISO(key);
-                if (!dataIso || dataIso < "2026-08-03") return;
-                
-                const partes = dataIso.split('-'); 
-                const dataCarimbo = `${partes[2]}/${partes[1]}`; 
-                const dataCarimboCompleta = `${partes[2]}/${partes[1]}/${partes[0]}`;
-                const dadosDia = firebaseRegistrosTablet[key];
-                
-                let extraidos = [];
-                const percorrer = (nodo) => {
-                    if (!nodo || typeof nodo !== 'object') return;
-                    let nome = String(nodo.nome || nodo.posto || '').toLowerCase().trim();
-                    let ov = String(nodo.ov || (nodo.tarde && nodo.tarde.ov) || (nodo.manha && nodo.manha.ov) || (nodo.noite && nodo.noite.ov) || '').replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
-
-                    if (!ov) {
-                        for (let k in nodo) {
-                            if (/ov/i.test(k) && typeof nodo[k] === 'string' && /\d{3,}/.test(nodo[k])) {
-                                ov = nodo[k].replace(/[^0-9a-zA-Z]/g, '').toUpperCase();
-                                break;
-                            }
-                        }
-                    }
-
-                    let numPosto = null;
-                    const mPosto = nome.match(/posto\D*0*(\d+)/) || nome.match(/^p\D*0*(\d+)$/);
-                    if (mPosto) numPosto = parseInt(mPosto[1], 10);
-                    else if (/^\d+$/.test(nome)) numPosto = parseInt(nome, 10);
-
-                    if (ov.length >= 3 && numPosto === 3) extraidos.push({ ov: ov, tipo: 'entrada' });
-                    if (ov.length >= 3 && numPosto === 7) extraidos.push({ ov: ov, tipo: 'saida' });
-                    
-                    Object.values(nodo).forEach(filho => {
-                        if (typeof filho === 'object') percorrer(filho);
-                    });
-                };
-                percorrer(dadosDia);
-                
-                extraidos.forEach(scan => {
-                    if(alocarNoPainelCT(scan.ov, scan.tipo, dataCarimbo, dataCarimboCompleta)) atualizouGeral = true;
-                });
-            });
-
-            if (atualizouGeral) autoSaveCloud(false); 
-        }
-
-        // ==========================================
         // RENDERIZAÇÃO
         // ==========================================
         function renderizarEstampariaMatriz() {
@@ -2138,7 +1970,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     `;
                 }
 
-                let badgeCT = sec.id === 'ct' ? `<div class="ct-badge"><i class="fa-solid fa-satellite-dish fa-beat"></i> Integração Tablet On</div>` : '';
                 let badgeData = `<div class="data-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Mágica Dupla</div>`;
                 let btnMarcarTodos = `<button class="btn btn-pcp admin-only" onclick="marcarTodosSetor('${sec.id}', 'OK')" style="padding: 4px 10px; font-size: 10px; margin-left: 10px;" title="Marcar todas as OPs deste setor como OK"><i class="fa-solid fa-check-double"></i> Todos OK</button>`;
                 
@@ -2153,7 +1984,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         <div class="section-header">
                             <div class="section-title-box">
                                 <h2>${sec.title}</h2>
-                                ${badgeCT}
                                 ${badgeData}
                                 ${btnMarcarTodos}
                             </div>
@@ -2257,7 +2087,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         function forceRenderTodasTabelas() {
-            mesclarLinhasDivididasCT();
             expurgarLinhasFantasmas();
             atualizarAtrasosGlobais(); 
             renderizarEstampariaMatriz();
@@ -2390,7 +2219,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             
             fecharModalPCP();
             if (count > 0) {
-                reconstruirDadosTablet();
                 forceRenderTodasTabelas(); 
                 autoSaveCloud(true);
                 mostrarToast(`${count} Ordens injetadas no cofre oculto! ${erros > 0 ? `(${erros} ignoradas)` : ''}`, 'fa-bolt');
@@ -2402,24 +2230,9 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         // ==========================================
         // BOTÕES DE LIMPEZA
         // ==========================================
-        function apagarTablet() {
-            if(!isAdmin) return toggleAdmin();
-            const confirmacao = confirm("ATENÇÃO: Deseja apagar a memória do TABLET?\n\n⚠️ A programação do PCP NÃO será afetada!");
-            if (confirmacao) {
-                firebaseRegistrosTablet = {};
-                if(firebaseDB) {
-                    firebaseDB.ref('linhaCT/registros').remove().then(() => {
-                        mostrarToast("Memória do Tablet Zerada! (PCP mantido)", "fa-mobile-screen-button");
-                    }).catch(e => alert("Erro ao limpar tablet: " + e.message));
-                } else {
-                    mostrarToast("Memória do Tablet Zerada (Offline)!", "fa-mobile-screen-button");
-                }
-            }
-        }
-
         function apagarProgramacaoPCP() {
             if(!isAdmin) return toggleAdmin();
-            const confirmacao = confirm("ATENÇÃO: Deseja apagar TODAS as Ordens, Datas e Programações da fábrica inteira para iniciar um NOVO MÊS?\n\n⚠️ O Tablet NÃO será afetado!");
+            const confirmacao = confirm("ATENÇÃO: Deseja apagar TODAS as Ordens, Datas e Programações da fábrica inteira para iniciar um NOVO MÊS?");
             if (confirmacao) {
                 db.basePCP = {};
                 if(!db.data) db.data = {};
@@ -2435,7 +2248,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 
                 if(firebaseDB) {
                     dbRef.set(dbLimpo).then(() => {
-                        mostrarToast("Programação PCP Zerada! (Tablet mantido)", "fa-trash-can");
+                        mostrarToast("Programação PCP Zerada!", "fa-trash-can");
                     }).catch(e => {
                         console.error("Erro no Firebase:", e);
                         mostrarToast("Erro ao salvar. Tela limpa localmente.", "fa-triangle-exclamation");
@@ -2448,7 +2261,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
         function zerarApontamentos() {
             if(!isAdmin) return toggleAdmin();
-            const confirmacao = confirm("Deseja LIMPAR os apontamentos manuais (OK/COGI, Ações, Gargalos) para iniciar a reunião de hoje? A programação do PCP e do Tablet NÃO serão afetadas.");
+            const confirmacao = confirm("Deseja LIMPAR os apontamentos manuais (OK/COGI, Ações, Gargalos) para iniciar a reunião de hoje? A programação do PCP NÃO será afetada.");
             if (confirmacao) {
                 if(!db.data) db.data = {};
                 Object.keys(db.data).forEach(tabelaKey => {
@@ -2456,15 +2269,13 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         row.aponta = ''; row.impactos = ''; row.acoes = '';
                         row.atr_ent = ''; row.atr_sai = ''; row.manual_atr_ent = false; row.manual_atr_sai = false;
                         row.stat_ent = ''; row.stat_sai = '';
-                        if(tabelaKey !== 'ct') {
-                            row.real_ent = ''; row.real_sai = ''; row.data_pcp = '';
-                            row.data_real_ent = ''; row.data_real_sai = '';
-                            row.ordem_ent = ''; row.ordem_sai = '';
-                            row.lock_ent = false; row.lock_sai = false;
-                        }
+                        row.real_ent = ''; row.real_sai = ''; row.data_pcp = '';
+                        row.data_real_ent = ''; row.data_real_sai = '';
+                        row.ordem_ent = ''; row.ordem_sai = '';
+                        row.lock_ent = false; row.lock_sai = false;
                     });
                 });
-                reconstruirDadosTablet(); atualizarAtrasosGlobais(); renderizarViews(); recalcularDashboard(); renderResumoApontamento();
+                atualizarAtrasosGlobais(); renderizarViews(); recalcularDashboard(); renderResumoApontamento();
                 
                 clearTimeout(saveTimeout);
                 let dbLimpo = sanearParaFirebase(db);
@@ -2693,8 +2504,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             }
 
             if(target.classList.contains('cell-input')) {
-                const secId = target.dataset.sec, rowIdx = target.dataset.row, field = target.dataset.field;
-                if (!secId || rowIdx === undefined || !field) return;
+                const secId = target.dataset.sec, rowIdx = parseInt(target.dataset.row), field = target.dataset.field;
+                if (!secId || rowIdx === undefined || isNaN(rowIdx) || !field) return;
                 const row = db.data[secId] && db.data[secId][rowIdx];
                 if (!row) return;
                 const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
@@ -2745,9 +2556,10 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         }
                         
                         row.data_pcp = valNormalizado;
-                        aplicarMagia(secId, row);
-                        if (row.ordem_ent || row.ordem_sai) {
-                            mostrarToast(`📦 Ordens puxadas para ${valNormalizado}`, 'fa-wand-magic-sparkles');
+                        const qtdPuxadas = aplicarMagiaMultipla(secId, rowIdx, valNormalizado);
+                        
+                        if (qtdPuxadas > 0) {
+                            mostrarToast(`📦 ${qtdPuxadas} Ordem(ns) carregada(s) para ${valNormalizado}`, 'fa-wand-magic-sparkles');
                         } else {
                             mostrarToast(`⚠️ Sem ordem no PCP p/ ${valNormalizado}`, 'fa-pen');
                         }
@@ -2801,7 +2613,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     if (!row.data_real_ent) row.data_real_ent = getDataCompleta();
                     if (!row.data_pcp || row.data_pcp.trim() === '') {
                         row.data_pcp = getDataAtualFormatada();
-                        aplicarMagia(secId, row);
+                        aplicarMagiaMultipla(secId, rowIdx, row.data_pcp);
                     }
                     const numOv = extrairNumeroOrdem(val);
                     if (numOv) {
@@ -2809,7 +2621,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         if (pcpAchado) {
                             mostrarToast(`📦 Ordem ${numOv} localizada no PCP! Plan: ${pcpAchado.plan_ent}`, 'fa-magic');
                         } else {
-                            if (!row.ordem_ent) row.ordem_ent = val + " (AUTO)";
+                            if (!row.ordem_ent) row.ordem_ent = val;
                             mostrarToast(`⚠️ Ordem ${numOv} não programada para este setor.`, 'fa-triangle-exclamation');
                         }
                     }
@@ -2820,7 +2632,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     if (!row.data_real_sai) row.data_real_sai = getDataCompleta();
                     if (!row.data_pcp || row.data_pcp.trim() === '') {
                         row.data_pcp = getDataAtualFormatada();
-                        aplicarMagia(secId, row);
+                        aplicarMagiaMultipla(secId, rowIdx, row.data_pcp);
                     }
                     const numOv = extrairNumeroOrdem(val);
                     if (numOv) {
@@ -2828,7 +2640,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         if (pcpAchado) {
                             mostrarToast(`📦 Ordem ${numOv} localizada no PCP! Saída Plan: ${pcpAchado.plan_sai}`, 'fa-magic');
                         } else {
-                            if (!row.ordem_sai) row.ordem_sai = val + " (AUTO)";
+                            if (!row.ordem_sai) row.ordem_sai = val;
                             mostrarToast(`⚠️ Ordem ${numOv} não programada para este setor.`, 'fa-triangle-exclamation');
                         }
                     }
@@ -2924,11 +2736,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         atualizarDiasEstamparia();
                         forceRenderTodasTabelas();
                     }
-                });
-                firebaseDB.ref('linhaCT/registros').on('value', snap => {
-                    firebaseRegistrosTablet = snap.val() || {};
-                    reconstruirDadosTablet();
-                    forceRenderTodasTabelas();
                 });
             } catch (e) {
                 console.log("Modo Offline Ativado.");
