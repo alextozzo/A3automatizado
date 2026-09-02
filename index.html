@@ -44,6 +44,7 @@
         body.readonly-mode .estamparia-val-input,
         body.readonly-mode .premio-config-input,
         body.readonly-mode .pino-val-input,
+        body.readonly-mode .pino-nome-input,
         body.readonly-mode .btn-flow-action,
         body.readonly-mode .btn-apontar-rapido { 
             pointer-events: none; 
@@ -93,7 +94,6 @@
         .net-badge.syncing { background-color: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
         .net-badge.offline { background-color: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
 
-        /* SELETOR DE DATA DINÂMICO */
         .global-date-container { 
             display: flex; 
             align-items: center; 
@@ -141,7 +141,7 @@
         .btn-auth { background-color: var(--randon-blue); color: white; box-shadow: 0 4px 10px rgba(59,130,246,0.3); } .btn-auth:hover { filter: brightness(0.9); transform: translateY(-2px); }
         .btn-orange { background-color: var(--status-orange); color: white; box-shadow: 0 4px 10px rgba(245,158,11,0.3); } .btn-orange:hover { filter: brightness(0.9); transform: translateY(-2px); }
 
-        /* MODAIS E TOAST */
+        /* MODAIS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
         .modal-content { background: white; padding: 35px; border-radius: 16px; width: 850px; max-width: 95%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border-top: 6px solid var(--status-green); max-height: 90vh; overflow-y: auto; }
@@ -156,11 +156,6 @@
 
         #toast { position: fixed; bottom: 35px; right: 35px; background-color: var(--randon-dark); color: #fff; padding: 18px 30px; border-radius: 10px; transition: 0.3s; transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; display: flex; align-items: center; gap: 12px; border-left: 6px solid var(--status-green); box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
         #toast.show { transform: translateY(0); opacity: 1; }
-
-        .backup-list-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .backup-list-table th { background: #0f172a; color: white; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; }
-        .backup-list-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); font-size: 13px; font-weight: 600; }
-        .backup-list-table tr:hover td { background-color: #f8fafc; }
 
         .op-timeline { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; max-height: 400px; overflow-y: auto; padding-right: 10px; }
         .timeline-step { display: flex; align-items: flex-start; gap: 15px; position: relative; }
@@ -292,14 +287,31 @@
         .premio-kpi-card strong { font-size: 30px; font-weight: 900; color: white; line-height: 1; }
 
         .pinos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 5px; }
-        .pinos-col-card { background: white; border-radius: 12px; border: 1px solid var(--border-light); overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .pinos-col-card { background: white; border-radius: 12px; border: 1px solid var(--border-light); overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
         .pinos-col-header { background: #0f172a; color: white; padding: 15px 20px; font-size: 16px; font-weight: 900; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--randon-blue); }
         
         .pinos-table { width: 100%; border-collapse: collapse; }
-        .pinos-table th { background: #f8fafc; font-size: 11px; padding: 10px 12px; text-align: left; text-transform: uppercase; color: var(--randon-grey); border-bottom: 2px solid #cbd5e1; }
-        .pinos-table td { padding: 6px 12px; border-bottom: 1px solid var(--border-light); font-size: 13px; font-weight: 700; height: 46px; }
+        .pinos-table th { background: #f8fafc; font-size: 11px; padding: 10px 8px; text-align: left; text-transform: uppercase; color: var(--randon-grey); border-bottom: 2px solid #cbd5e1; }
+        .pinos-table td { padding: 4px 6px; border-bottom: 1px solid var(--border-light); font-size: 13px; font-weight: 700; height: 46px; }
         .pinos-table tr:hover td { background-color: #f1f5f9; }
         
+        .pino-nome-input {
+            width: 100%;
+            height: 32px;
+            border: 1px solid transparent;
+            background: transparent;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--randon-dark);
+            text-transform: uppercase;
+            outline: none;
+            border-radius: 4px;
+            padding: 0 6px;
+            transition: 0.2s;
+        }
+        .pino-nome-input:hover { background-color: #e2e8f0; }
+        .pino-nome-input:focus { background-color: white; border-color: var(--randon-blue); box-shadow: 0 0 0 2px rgba(59,130,246,0.2); }
+
         .pino-val-input {
             width: 100%;
             height: 32px;
@@ -318,9 +330,21 @@
             box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
         }
 
-        .pinos-table .badge-saldo { font-size: 14px; font-weight: 900; padding: 4px 10px; border-radius: 6px; text-align: center; display: inline-block; min-width: 45px; }
+        .pinos-table .badge-saldo { font-size: 12px; font-weight: 900; padding: 4px 8px; border-radius: 6px; text-align: center; display: inline-block; min-width: 40px; }
         .badge-saldo.pendente { background-color: #fee2e2; color: #991b1b; }
-        .badge-saldo.zerado { background-color: #d1fae5; color: #065f46; font-size: 12px; }
+        .badge-saldo.zerado { background-color: #d1fae5; color: #065f46; }
+
+        .btn-del-pino {
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .btn-del-pino:hover { color: var(--status-red); background-color: #fee2e2; }
 
         .lider-card {
             background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
@@ -366,7 +390,6 @@
         .resumo-dia-count { font-size: 32px; font-weight: 900; color: var(--randon-dark); line-height: 1; }
         .resumo-dia-sub { font-size: 11px; font-weight: 700; color: #64748b; }
         
-        /* Lista Executiva de OPs no Dashboard com Cores Atualizadas */
         .resumo-dia-list { 
             max-height: 260px; 
             overflow-y: auto; 
@@ -534,18 +557,15 @@
             </div>
         </div>
         <div class="nav-right">
-            <!-- BUSCA RÁPIDA DE OP -->
             <div class="search-box-container" title="Buscar OP em qualquer setor (Ctrl + K)">
                 <i class="fa-solid fa-magnifying-glass"></i>
                 <input type="text" id="global-op-search" placeholder="Buscar OP..." onkeyup="handleGlobalSearch(event)">
             </div>
 
-            <!-- STATUS NUVEM -->
             <div class="net-badge online" id="net-status-badge" title="Status de Sincronização em Nuvem">
                 <i class="fa-solid fa-circle-dot"></i> <span id="net-status-text">Online</span>
             </div>
 
-            <!-- SELETOR DINÂMICO DE DATA PARA NAVEGAR ENTRE OS 3 MESES -->
             <div class="global-date-container" title="Navegue em qualquer dia do PCP (3 meses)">
                 <button class="btn-date-nav" onclick="alterarDiaReferencia(-1)" title="Dia Anterior"><i class="fa-solid fa-chevron-left"></i></button>
                 <label>Data</label>
@@ -559,9 +579,8 @@
                 <span id="auth-label">Visualização</span>
             </div>
             
-            <button class="btn btn-orange admin-only" onclick="restaurarTudoUltimoPreenchimento()" title="Restaurar o melhor ponto salvo com todas as linhas e estamparia"><i class="fa-solid fa-wand-magic-sparkles"></i> Restaurar Tudo</button>
-            <button class="btn btn-tv admin-only" onclick="abrirModalBackups()" title="Ver Lista de Backups Salvos"><i class="fa-solid fa-clock-rotate-left"></i> Histórico Backups</button>
-            <button class="btn btn-limpar admin-only" onclick="apagarProgramacaoPCP()" title="Zerar programação inteira do Mês"><i class="fa-solid fa-trash-can"></i> Zerar PCP</button>
+            <button class="btn btn-orange admin-only" onclick="restaurarTudoUltimoPreenchimento()" title="Restaurar o melhor ponto salvo"><i class="fa-solid fa-wand-magic-sparkles"></i> Restaurar Tudo</button>
+            <button class="btn btn-limpar admin-only" onclick="apagarProgramacaoPCP()" title="Zerar programação inteira"><i class="fa-solid fa-trash-can"></i> Zerar PCP</button>
             <button class="btn btn-pcp admin-only" onclick="abrirModalPCP()"><i class="fa-solid fa-bolt"></i> Carga PCP</button>
             <button class="btn btn-excel" onclick="exportarExcelProducao()" title="Exportar dados para Excel (.CSV UTF-8)"><i class="fa-solid fa-file-excel"></i> Excel</button>
             <button class="btn btn-pdf" onclick="gerarPDFExecutivo()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
@@ -571,7 +590,7 @@
 
     <button id="btn-exit-tv" onclick="sairModoTV()"><i class="fa-solid fa-power-off"></i> Sair do Modo TV</button>
 
-    <!-- MODAIS -->
+    <!-- MODAL DE SENHA -->
     <div class="modal-overlay" id="modal-auth">
         <div class="modal-content" style="width: 400px; text-align: center; padding: 40px 30px;">
             <div class="modal-header" style="justify-content: center; margin-bottom: 20px;">
@@ -586,6 +605,7 @@
         </div>
     </div>
 
+    <!-- MODAL DE CARGA PCP -->
     <div class="modal-overlay" id="modal-pcp">
         <div class="modal-content">
             <div class="modal-header">
@@ -607,26 +627,35 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         </div>
     </div>
 
-    <!-- MODAL DE HISTÓRICO DE BACKUPS -->
-    <div class="modal-overlay" id="modal-backups">
-        <div class="modal-content" style="width: 850px;">
+    <!-- MODAL DE CARGA RÁPIDA DE METAS DE PINOS (EXCEL) -->
+    <div class="modal-overlay" id="modal-carga-pinos">
+        <div class="modal-content" style="width: 750px;">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-clock-rotate-left" style="color: var(--status-orange); margin-right: 8px;"></i> Central de Recuperação de Backups</h3>
-                <button class="close-btn" onclick="fecharModalBackups()"><i class="fa-solid fa-xmark"></i></button>
+                <h3><i class="fa-solid fa-bullseye" style="color: var(--randon-blue); margin-right: 8px;"></i> Carga em Lote: Produtos e Metas de Pinos</h3>
+                <button class="close-btn" onclick="fecharModalCargaPinos()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                <p style="font-size: 13px; color: var(--randon-grey); font-weight: 600; margin: 0;">
-                    Selecione uma das versões salvas no armazenamento local deste computador ou use o botão para restaurar a mais completa.
-                </p>
-                <button class="btn btn-orange" onclick="restaurarTudoUltimoPreenchimento()"><i class="fa-solid fa-wand-magic-sparkles"></i> Restaurar Melhor Versão Completa</button>
-            </div>
-            <div id="lista-backups-container" style="max-height: 400px; overflow-y: auto;"></div>
-            <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
-                <button class="btn btn-tv" onclick="fecharModalBackups()">Fechar</button>
+            <p style="font-size: 13px; color: var(--randon-grey); font-weight: 600; margin-bottom: 15px; line-height: 1.5;">
+                Copie do Excel as 3 colunas da sua planilha: <br>
+                <strong style="color: var(--randon-blue);">CATEGORIA | PRODUTO/MODELO | META PROGRAMADA</strong><br>
+                <span style="font-size: 11px; color: var(--status-orange);">Categorias aceitas: <b>BASES</b>, <b>ESPECIAIS</b> ou <b>TANQUES</b>. As metas e modelos serão atualizados instantaneamente!</span>
+            </p>
+            <textarea id="pinos-carga-textarea" class="pcp-textarea" style="height: 250px;" placeholder="Exemplo colado do Excel:
+BASES	AUTOPORTANTE	7
+BASES	SUINOS	4
+BASES	CARREGA TUDO	19
+ESPECIAIS	ALGODOEIRO	4
+ESPECIAIS	PISO MOVEL	4
+TANQUES	6 C	3
+TANQUES	BASCULANTE	18"></textarea>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
+                <button class="btn btn-tv" onclick="fecharModalCargaPinos()">Cancelar</button>
+                <button class="btn btn-pcp" onclick="processarCargaPinosExcel()"><i class="fa-solid fa-file-import"></i> Carregar Metas do Mês</button>
             </div>
         </div>
     </div>
 
+    <!-- MODAL DE TIMELINE -->
     <div class="modal-overlay" id="modal-timeline">
         <div class="modal-content" style="width: 700px;">
             <div class="modal-header">
@@ -647,7 +676,9 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                         Acompanhamento em Tempo Real dos Pinos Apontados no Mês
                     </p>
                 </div>
-                <div style="display: flex; gap: 15px; align-items: center;">
+                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-pcp admin-only" onclick="abrirModalCargaPinos()" title="Carregar produtos e metas direto do Excel"><i class="fa-solid fa-file-import"></i> Carga Metas (Excel)</button>
+                    
                     <div style="background: rgba(255,255,255,0.1); padding: 6px 14px; border-radius: 8px; font-weight: 800; font-size: 12px; display: flex; align-items: center; gap: 8px;">
                         <span style="color:#94a3b8;">META BASE (PTVO):</span>
                         <input type="number" id="premio-meta-base-input" class="premio-config-input" value="78" style="width: 50px; background: transparent; border: 1px dashed rgba(255,255,255,0.4); color: white; text-align: center; font-size: 16px; font-weight: 900; outline: none; border-radius: 4px;">
@@ -708,7 +739,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             </div>
         </div>
 
-        <!-- MATRIZ DE PINOS -->
+        <!-- MATRIZ DE PINOS (EDITÁVEL + CARGA RÁPIDA) -->
         <div class="pinos-grid">
             <div class="pinos-col-card">
                 <div class="pinos-col-header">
@@ -718,14 +749,18 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                 <table class="pinos-table">
                     <thead>
                         <tr>
-                            <th>Modelo</th>
-                            <th style="width:75px; text-align:center;">Prog.</th>
-                            <th style="width:75px; text-align:center;">OK</th>
-                            <th style="width:85px; text-align:center;">Saldo</th>
+                            <th>Modelo / Produto</th>
+                            <th style="width:65px; text-align:center;">Prog.</th>
+                            <th style="width:65px; text-align:center;">OK</th>
+                            <th style="width:80px; text-align:center;">Saldo</th>
+                            <th style="width:30px; text-align:center;" class="admin-only">Ação</th>
                         </tr>
                     </thead>
                     <tbody id="tbody-pinos-bases"></tbody>
                 </table>
+                <div style="padding: 10px; text-align: center; border-top: 1px solid var(--border-light); background: #f8fafc;" class="admin-only">
+                    <button class="btn btn-tv" style="margin: 0 auto; padding: 4px 12px; font-size: 10px;" onclick="adicionarModeloPino('bases')"><i class="fa-solid fa-plus"></i> Adicionar Modelo</button>
+                </div>
             </div>
 
             <div class="pinos-col-card">
@@ -736,14 +771,18 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                 <table class="pinos-table">
                     <thead>
                         <tr>
-                            <th>Modelo</th>
-                            <th style="width:75px; text-align:center;">Prog.</th>
-                            <th style="width:75px; text-align:center;">OK</th>
-                            <th style="width:85px; text-align:center;">Saldo</th>
+                            <th>Modelo / Produto</th>
+                            <th style="width:65px; text-align:center;">Prog.</th>
+                            <th style="width:65px; text-align:center;">OK</th>
+                            <th style="width:80px; text-align:center;">Saldo</th>
+                            <th style="width:30px; text-align:center;" class="admin-only">Ação</th>
                         </tr>
                     </thead>
                     <tbody id="tbody-pinos-especiais"></tbody>
                 </table>
+                <div style="padding: 10px; text-align: center; border-top: 1px solid var(--border-light); background: #f8fafc;" class="admin-only">
+                    <button class="btn btn-tv" style="margin: 0 auto; padding: 4px 12px; font-size: 10px;" onclick="adicionarModeloPino('especiais')"><i class="fa-solid fa-plus"></i> Adicionar Modelo</button>
+                </div>
             </div>
 
             <div class="pinos-col-card">
@@ -754,19 +793,23 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                 <table class="pinos-table">
                     <thead>
                         <tr>
-                            <th>Modelo</th>
-                            <th style="width:75px; text-align:center;">Prog.</th>
-                            <th style="width:75px; text-align:center;">OK</th>
-                            <th style="width:85px; text-align:center;">Saldo</th>
+                            <th>Modelo / Produto</th>
+                            <th style="width:65px; text-align:center;">Prog.</th>
+                            <th style="width:65px; text-align:center;">OK</th>
+                            <th style="width:80px; text-align:center;">Saldo</th>
+                            <th style="width:30px; text-align:center;" class="admin-only">Ação</th>
                         </tr>
                     </thead>
                     <tbody id="tbody-pinos-tanques"></tbody>
                 </table>
+                <div style="padding: 10px; text-align: center; border-top: 1px solid var(--border-light); background: #f8fafc;" class="admin-only">
+                    <button class="btn btn-tv" style="margin: 0 auto; padding: 4px 12px; font-size: 10px;" onclick="adicionarModeloPino('tanques')"><i class="fa-solid fa-plus"></i> Adicionar Modelo</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- VIEWS OPERACIONAIS PADRÃO -->
+    <!-- DEMAIS VIEWS -->
     <div id="view-estamparia" class="view-container active">
         <div class="section-card">
             <div class="section-header" style="background: var(--randon-dark);">
@@ -807,7 +850,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             <button class="btn btn-tv" onclick="updateAnalytics()" style="padding: 12px 20px; font-size: 14px;"><i class="fa-solid fa-rotate"></i> Atualizar Dados</button>
         </div>
 
-        <!-- QUADRO RESUMO EXECUTIVO DO DIA -->
         <div class="resumo-dia-container">
             <div class="resumo-dia-header">
                 <h3><i class="fa-solid fa-calendar-day" style="color: var(--randon-blue);"></i> Resumo Executivo do Dia (<span id="resumo-data-label">--/--/----</span>)</h3>
@@ -1135,7 +1177,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             return match ? match[1] : String(texto).replace(/[^0-9]/g, '');
         }
 
-        // Normalização robusta preservando mês e ano para cargas de 3 meses
         function normalizarDataParaComparacao(dataStr) {
             if (!dataStr) return '';
             let limpo = String(dataStr).trim().replace(/[.\-]/g, '/');
@@ -1155,14 +1196,12 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             return limpo;
         }
 
-        // Compara datas aceitando tanto DD/MM quanto DD/MM/AAAA entre diferentes meses
         function dateMatches(dateStr, globalDateStr) {
             if(!dateStr || !globalDateStr) return false;
             const norm1 = normalizarDataParaComparacao(dateStr);
             const norm2 = normalizarDataParaComparacao(globalDateStr);
             if (norm1 === norm2) return true;
 
-            // Se um tiver ano e outro não, compara dia e mês
             const p1 = norm1.split('/');
             const p2 = norm2.split('/');
             if (p1.length >= 2 && p2.length >= 2) {
@@ -1247,7 +1286,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         }
 
         // =========================================================================
-        // NAVEGAÇÃO DE DATA GLOBAL (3 MESES)
+        // NAVEGAÇÃO DE DATA GLOBAL
         // =========================================================================
         function alterarDiaReferencia(offsetDias) {
             let ref = parseDataComAnoRef(db.globalDate, 2026) || new Date();
@@ -1257,7 +1296,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             const el = document.getElementById('global-date');
             if (el) el.value = novaDataCompleta;
             forceRenderTodasTabelas();
-            mostrarToast(`Exibindo Programação do Dia: ${novaDataCompleta}`, 'fa-calendar-day');
+            mostrarToast(`Programação: ${novaDataCompleta}`, 'fa-calendar-day');
         }
 
         function irParaHoje() {
@@ -1266,7 +1305,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             const el = document.getElementById('global-date');
             if (el) el.value = hoje;
             forceRenderTodasTabelas();
-            mostrarToast(`Programação de Hoje: ${hoje}`, 'fa-calendar-check');
+            mostrarToast(`Hoje: ${hoje}`, 'fa-calendar-check');
         }
 
         function definirDataManual(valor) {
@@ -1278,7 +1317,98 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         }
 
         // =========================================================================
-        // INDEXADOR ULTRA RÁPIDO DO PCP (SUPORTA 10.000+ LINHAS EM HASH MAP O(1))
+        // CARGA RÁPIDA DE METAS E PINOS (EXCEL)
+        // =========================================================================
+        function abrirModalCargaPinos() {
+            if (!isAdmin) { toggleAdmin(); return; }
+            document.getElementById('modal-carga-pinos').classList.add('active');
+        }
+
+        function fecharModalCargaPinos() {
+            document.getElementById('modal-carga-pinos').classList.remove('active');
+        }
+
+        function processarCargaPinosExcel() {
+            const text = document.getElementById('pinos-carga-textarea').value;
+            if (!text.trim()) return mostrarToast("Cole a tabela do Excel primeiro!", "fa-triangle-exclamation");
+
+            let linhas = text.split(/\r?\n/).filter(l => l.trim() !== '');
+            let novosPinos = { bases: [], especiais: [], tanques: [] };
+            let count = 0;
+
+            linhas.forEach(l => {
+                let cols = l.split('\t').map(c => c.trim()).filter(c => c !== '');
+                if (cols.length < 2) cols = l.split(/\s{2,}/).map(c => c.trim()).filter(c => c !== '');
+                if (cols.length < 2) return;
+
+                let categoria = '', modelo = '', prog = 0;
+
+                if (cols.length >= 3) {
+                    categoria = cols[0].toUpperCase();
+                    modelo = cols[1].toUpperCase();
+                    prog = parseInt(cols[2]) || 0;
+                } else {
+                    modelo = cols[0].toUpperCase();
+                    prog = parseInt(cols[1]) || 0;
+                }
+
+                let catKey = 'bases';
+                if (categoria.includes('ESP')) catKey = 'especiais';
+                else if (categoria.includes('TANQ') || categoria.includes('TQ')) catKey = 'tanques';
+                else if (categoria.includes('BASE') || categoria.includes('CHASSI')) catKey = 'bases';
+
+                novosPinos[catKey].push({
+                    modelo: modelo,
+                    prog: prog,
+                    ok: 0,
+                    okManual: false
+                });
+                count++;
+            });
+
+            if (count > 0) {
+                db.pinosManual = novosPinos;
+                fecharModalCargaPinos();
+                recalcularPainelPremio();
+                autoSaveCloud(true);
+                mostrarToast(`${count} produtos e metas atualizados com sucesso!`, 'fa-trophy');
+            } else {
+                mostrarToast("Formato inválido. Use: CATEGORIA | MODELO | META", "fa-triangle-exclamation");
+            }
+        }
+
+        function adicionarModeloPino(categoria) {
+            if (!isAdmin) { toggleAdmin(); return; }
+            if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
+            if (!db.pinosManual[categoria]) db.pinosManual[categoria] = [];
+
+            db.pinosManual[categoria].push({
+                modelo: "NOVO MODELO",
+                prog: 1,
+                ok: 0,
+                okManual: true
+            });
+
+            recalcularPainelPremio();
+            autoSaveCloud(true);
+            mostrarToast("Novo modelo adicionado!", "fa-plus");
+        }
+
+        function removerModeloPino(categoria, idx) {
+            if (!isAdmin) { toggleAdmin(); return; }
+            if (!db.pinosManual || !db.pinosManual[categoria]) return;
+
+            const mod = db.pinosManual[categoria][idx].modelo;
+            if (confirm(`Deseja remover o modelo "${mod}"?`)) {
+                db.pinosManual[categoria].splice(idx, 1);
+                recalcularPainelPremio();
+                autoSaveCloud(true);
+                mostrarToast(`Modelo "${mod}" removido!`, 'fa-trash-can');
+            }
+        }
+
+        // =========================================================================
+        // INDEXADOR ULTRA RÁPIDO DO PCP
         // =========================================================================
         function reconstruirIndicesPCP() {
             pcpIndex.bySectorAndDate = {};
@@ -1305,7 +1435,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                     const dEntNorm = normalizarDataParaComparacao(item.plan_ent);
                     const dSaiNorm = normalizarDataParaComparacao(item.plan_sai);
 
-                    // Indexa tanto pela data completa DD/MM/AAAA quanto por DD/MM para busca instantânea
                     const keysEnt = [dEntNorm, dEntNorm.substring(0, 5)];
                     const keysSai = [dSaiNorm, dSaiNorm.substring(0, 5)];
 
@@ -1340,7 +1469,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             return null;
         }
 
-        // Distribui com fidelidade matemática o que entra e o que sai
         function aplicarMagiaMultipla(secId, startRowIdx, dataVal) {
             if (!dataVal || dataVal.trim() === '') return 0;
             const dataNorm = normalizarDataParaComparacao(dataVal);
@@ -1358,7 +1486,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             if (!db.data[secId]) db.data[secId] = [];
             const tabela = db.data[secId];
 
-            // Casamento inteligente: se a mesma OP entra e sai no mesmo dia, alinha na mesma linha
             let pares = [];
             let entradasRestantes = [...listaEntradas];
             let saidasRestantes = [...listaSaidas];
@@ -1421,7 +1548,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         }
 
         // =========================================================================
-        // DESTINAÇÃO NA LINHA DE SOLDA (AP, N/P, PINTURA, OP1, OP2)
+        // DESTINAÇÃO NA LINHA DE SOLDA
         // =========================================================================
         function encaminharOrdemManual(secOrigemId, rowIdx, destino) {
             if (!isAdmin) { toggleAdmin(); return; }
@@ -1442,7 +1569,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             rowOrigem.destino_fluxo = destino;
             if (!rowOrigem.data_pcp) rowOrigem.data_pcp = db.globalDate || hojeDataCompleta;
 
-            // 1. Saída de Linha APONTADA (Fica Verde)
             if (destino === 'SAIDA_LINHA_AP') {
                 rowOrigem.aponta = 'OK';
                 if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
@@ -1453,7 +1579,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                 return;
             }
 
-            // 2. Saída de Linha NÃO APONTADA (Fica Neutro/Normal)
             if (destino === 'SAIDA_LINHA_NP') {
                 rowOrigem.aponta = 'NP';
                 if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
@@ -1464,19 +1589,15 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                 return;
             }
 
-            // 3. Encaminhamento para Pintura, OP1 ou OP2
             let targetId = null;
-            if (destino === 'PINTURA') {
-                targetId = 'pintura';
-            } else if (destino === 'OP1') {
+            if (destino === 'PINTURA') targetId = 'pintura';
+            else if (destino === 'OP1') {
                 const info = (rowOrigem.ordem_sai || rowOrigem.ordem_ent || '').toUpperCase();
                 if (info.includes('TQ') || info.includes('TANQUE')) targetId = 'op1_tq1';
                 else if (info.includes('CT') || info.includes('CARREGA')) targetId = 'op1_ct';
                 else if (info.includes('SILO')) targetId = 'op1_silo';
                 else targetId = 'op1_bases';
-            } else if (destino === 'OP2') {
-                targetId = 'op2_geral';
-            }
+            } else if (destino === 'OP2') targetId = 'op2_geral';
 
             if (targetId && db.data[targetId]) {
                 const tbDest = db.data[targetId];
@@ -1500,7 +1621,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
 
                 forceRenderTodasTabelas();
                 autoSaveCloud(true);
-                mostrarToast(`OP ${opNumero} enviada com sucesso para ${destino}!`, 'fa-truck-fast');
+                mostrarToast(`OP ${opNumero} enviada para ${destino}!`, 'fa-truck-fast');
             }
         }
 
@@ -1538,7 +1659,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         }
 
         // ==========================================
-        // CARGA PCP DE ALTA PERFORMANCE (3 MESES)
+        // CARGA PCP DE ALTA PERFORMANCE
         // ==========================================
         const REGEX_DATA_SOLTA = /\b(\d{1,2})[\.\/\-](\d{1,2})(?:[\.\/\-](\d{2,4}))?\b/g;
 
@@ -1562,7 +1683,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             let linhasOriginais = text.split(/\r?\n/).filter(l => l.trim() !== '');
             if(!db.basePCP) db.basePCP = {};
 
-            // Hash Map para deduplicação O(1) instantânea mesmo com 10.000 linhas
             const existingKeys = new Set();
             Object.keys(db.basePCP).forEach(sec => {
                 db.basePCP[sec].forEach(r => {
@@ -1630,7 +1750,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                 autoSaveCloud(true);
                 mostrarToast(`⚡ ${count} ordens integradas! Suporte a 3 meses ativado.`, 'fa-bolt');
             } else {
-                mostrarToast(`Nenhuma nova ordem adicionada (podem já existir no cofre).`, 'fa-circle-info');
+                mostrarToast(`Nenhuma nova ordem adicionada.`, 'fa-circle-info');
             }
         }
 
@@ -1641,7 +1761,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             configuracaoSetores.forEach(sec => {
                 let totalProgMes = 0, apontados = 0;
 
-                // Contabilização fiel do Programado Total vindo do cofre do PCP
                 if (db.basePCP && db.basePCP[sec.id] && db.basePCP[sec.id].length > 0) {
                     totalProgMes = db.basePCP[sec.id].length;
                 } else if(db.data[sec.id]) {
@@ -1773,6 +1892,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             calcularLinhaLider();
         }
 
+        // Renderiza a matriz de pinos com inputs de modelo e botões de ação
         function renderColunaPinosEditavel(categoria, apontamentosTexto) {
             const tbody = document.getElementById(`tbody-pinos-${categoria}`);
             const badgeTotal = document.getElementById(`saldo-total-${categoria}`);
@@ -1788,12 +1908,12 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             let totalSaldoCat = 0;
 
             itens.forEach((item, idx) => {
-                const modNome = item.modelo.toUpperCase();
+                const modNome = (item.modelo || '').toUpperCase();
                 
                 if (item.okManual === undefined || item.okManual === false) {
                     let countAuto = 0;
                     apontamentosTexto.forEach(txt => {
-                        if (txt.includes(modNome) || (modNome === "CARREGA TUDO" && txt.includes("CT")) || (modNome === "SILO CILINDRICO" && txt.includes("SILO"))) {
+                        if (modNome && (txt.includes(modNome) || (modNome === "CARREGA TUDO" && txt.includes("CT")) || (modNome === "SILO CILINDRICO" && txt.includes("SILO")))) {
                             countAuto++;
                         }
                     });
@@ -1806,11 +1926,13 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                 totalSaldoCat += saldo;
 
                 const badgeClass = saldo === 0 ? 'badge-saldo zerado' : 'badge-saldo pendente';
-                const badgeTxt = saldo === 0 ? '✔ CONCLUÍDO' : `${saldo} REST.`;
+                const badgeTxt = saldo === 0 ? '✔ OK' : `${saldo}`;
 
                 html += `
                     <tr>
-                        <td style="color: var(--randon-dark); font-weight:800;">${item.modelo}</td>
+                        <td>
+                            <input type="text" class="cell-input pino-nome-input" data-cat="${categoria}" data-idx="${idx}" value="${item.modelo}">
+                        </td>
                         <td style="text-align:center;">
                             <input type="number" class="pino-val-input" data-cat="${categoria}" data-idx="${idx}" data-type="prog" value="${progNum}">
                         </td>
@@ -1818,6 +1940,9 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                             <input type="number" class="pino-val-input" style="color: var(--status-green);" data-cat="${categoria}" data-idx="${idx}" data-type="ok" value="${okNum}">
                         </td>
                         <td style="text-align:center;"><span class="${badgeClass}">${badgeTxt}</span></td>
+                        <td style="text-align:center;" class="admin-only">
+                            <button class="btn-del-pino" onclick="removerModeloPino('${categoria}', ${idx})" title="Remover este modelo"><i class="fa-solid fa-xmark"></i></button>
+                        </td>
                     </tr>
                 `;
             });
@@ -1859,7 +1984,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         }
 
         // ==========================================
-        // RENDERIZAÇÃO DE TABELAS E TELAS
+        // RENDERIZAÇÃO DE TABELAS
         // ==========================================
         function renderizarViews() {
             let activeInput = document.activeElement;
@@ -1969,7 +2094,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                     btnVerMais = `<div class="ver-mais-container"><button class="btn-expandir" onclick="toggleRows('${sec.id}')">${btnText}</button></div>`;
                 }
 
-                // Cabeçalho da Linha de Solda com Programado Total Exclusivo
                 let kpiHeaderHtml = '';
                 if (isSolda) {
                     kpiHeaderHtml = `
@@ -2146,9 +2270,9 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             }
         }
 
-        // =========================================================================
-        // RESUMO EXECUTIVO DO DIA COM SUPORTE TOTAL À NAVEGAÇÃO DE 3 MESES
-        // =========================================================================
+        // ==========================================
+        // RESUMO DO DIA
+        // ==========================================
         function updateAnalytics() {
             let totApont = 0, totOk = 0, totCogi = 0, totAtrasos = 0, totalPlan = 0, totalReal = 0;
             let impactosContagem = {}; 
@@ -2169,7 +2293,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             const setoresSolda = ['tq', 'ct', 'bases', 'silo', 'esp_box1', 'esp_box2', 'esp_box3', 'extra'];
             const setoresOP1 = ['op1_tq1', 'op1_tq2', 'op1_tq3', 'op1_silo', 'op1_ct', 'op1_bases'];
 
-            // Varrer tabelas ativas
             configuracaoSetores.forEach(sec => {
                 let secPlan = 0, secReal = 0;
                 if(db.data[sec.id]) {
@@ -2201,7 +2324,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                         }
                         if(row.impactos && impactosContagem[row.impactos] !== undefined) impactosContagem[row.impactos]++;
 
-                        // Identificação precisa para a data selecionada no seletor
                         const matchData = dateMatches(row.data_pcp, dataHojeRef) || 
                                           dateMatches(row.plan_sai, dataHojeRef) || 
                                           dateMatches(row.data_real_sai, dataHojeRef) ||
@@ -2253,7 +2375,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                 }
             });
 
-            // Varrer o PCP para carregar o que ainda não entrou nas telas mas está agendado para o dia selecionado
             const dataNormHoje = normalizarDataParaComparacao(dataHojeRef);
             const dataCurtaHoje = dataNormHoje.substring(0, 5);
 
@@ -2313,7 +2434,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                 `).join('');
             }
 
-            // Atualização dos Cards
             const elSoldaCount = document.getElementById('resumo-count-solda');
             const elSoldaSub = document.getElementById('resumo-sub-solda');
             const elSoldaList = document.getElementById('resumo-list-solda');
@@ -2507,25 +2627,20 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         }
 
         // ==========================================
-        // AUTO-SAVE COM GESTÃO INTELIGENTE DE COTA LOCAL
+        // AUTO-SAVE E LOCALSTORAGE
         // ==========================================
         function autoSaveCloud(exibirAviso = true) {
             setStatusConexao('syncing');
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
                 let dbLimpo = sanearParaFirebase(db);
-                
-                // Salva localmente com rotação segura de 5 slots para evitar QuotaExceededError
                 try {
                     let rIdx = parseInt(localStorage.getItem('rolling_idx') || '1');
                     localStorage.setItem('erp_randon_v' + rIdx, JSON.stringify(dbLimpo));
                     localStorage.setItem('rolling_idx', rIdx >= 5 ? 1 : rIdx + 1);
                 } catch(e) {
-                    console.warn("Liberando espaço no LocalStorage...");
                     for(let i=6; i<=60; i++) { localStorage.removeItem('erp_randon_v' + i); }
-                    try {
-                        localStorage.setItem('erp_randon_v1', JSON.stringify(dbLimpo));
-                    } catch(err){}
+                    try { localStorage.setItem('erp_randon_v1', JSON.stringify(dbLimpo)); } catch(err){}
                 }
 
                 if(dbRef) {
@@ -2584,9 +2699,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             }
         }
 
-        // ==========================================
-        // DEMAIS FUNÇÕES DE SUPORTE
-        // ==========================================
         function toggleAdmin() {
             const modal = document.getElementById('modal-auth');
             if (isAdmin) {
@@ -2910,8 +3022,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         }
 
         function fecharModalTimeline() { document.getElementById('modal-timeline').classList.remove('active'); }
-        function abrirModalBackups() { document.getElementById('modal-backups').classList.add('active'); }
-        function fecharModalBackups() { document.getElementById('modal-backups').classList.remove('active'); }
 
         function restaurarTudoUltimoPreenchimento() {
             for (let i = 1; i <= 5; i++) {
@@ -2923,7 +3033,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                         forceRenderTodasTabelas();
                         autoSaveCloud(true);
                         mostrarToast("Versão recuperada com sucesso!", "fa-wand-magic-sparkles");
-                        fecharModalBackups();
                         return;
                     } catch(e){}
                 }
@@ -2957,6 +3066,18 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         document.addEventListener('change', function(e) {
             const target = e.target;
             
+            // Edição inline de modelo de pino
+            if (target.classList.contains('pino-nome-input')) {
+                const cat = target.dataset.cat, idx = parseInt(target.dataset.idx);
+                if (db.pinosManual && db.pinosManual[cat] && db.pinosManual[cat][idx]) {
+                    db.pinosManual[cat][idx].modelo = target.value.toUpperCase();
+                    autoSaveCloud(false);
+                    mostrarToast("Modelo alterado!", "fa-pen");
+                }
+                return;
+            }
+
+            // Edição de metas e apontamentos de pinos
             if (target.classList.contains('pino-val-input')) {
                 const cat = target.dataset.cat, idx = parseInt(target.dataset.idx), type = target.dataset.type;
                 const val = parseInt(target.value) || 0;
