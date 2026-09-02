@@ -43,7 +43,9 @@
         body.readonly-mode .meta-input, 
         body.readonly-mode .estamparia-val-input,
         body.readonly-mode .premio-config-input,
-        body.readonly-mode .pino-val-input { 
+        body.readonly-mode .pino-val-input,
+        body.readonly-mode .btn-flow-action,
+        body.readonly-mode .btn-apontar-rapido { 
             pointer-events: none; 
             background-color: transparent !important;
         }
@@ -75,11 +77,11 @@
             font-size: 12px;
             font-weight: 700;
             outline: none;
-            width: 160px;
+            width: 150px;
             transition: 0.3s;
         }
         .search-box-container input:focus {
-            width: 210px;
+            width: 190px;
             background-color: rgba(255,255,255,0.2);
             border-color: var(--randon-blue);
             box-shadow: 0 0 0 3px rgba(59,130,246,0.3);
@@ -91,9 +93,40 @@
         .net-badge.syncing { background-color: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
         .net-badge.offline { background-color: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
 
-        .global-date-container { display: flex; align-items: center; gap: 8px; background-color: rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); }
-        .global-date-container label { font-weight: 800; color: #cbd5e1; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
-        .global-date-container input { border: none; background: transparent; font-weight: 900; font-size: 13px; outline: none; color: white; cursor: pointer; font-family: 'Inter', sans-serif; pointer-events: none; width: 45px; text-align: center;}
+        /* SELETOR DE DATA DINÂMICO */
+        .global-date-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            background-color: rgba(255,255,255,0.1); 
+            padding: 6px 10px; 
+            border-radius: 8px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+        }
+        .global-date-container label { font-weight: 800; color: #94a3b8; text-transform: uppercase; font-size: 10px; }
+        .global-date-container input { 
+            border: none; 
+            background: transparent; 
+            font-weight: 900; 
+            font-size: 13px; 
+            outline: none; 
+            color: #60a5fa; 
+            cursor: pointer; 
+            font-family: 'Inter', sans-serif; 
+            width: 90px; 
+            text-align: center;
+        }
+        .btn-date-nav {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            border-radius: 4px;
+            padding: 4px 6px;
+            cursor: pointer;
+            font-size: 10px;
+            transition: 0.2s;
+        }
+        .btn-date-nav:hover { background: var(--randon-blue); }
         
         .auth-container { display: flex; align-items: center; gap: 6px; background-color: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; border: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; font-weight: 700; font-size: 11px;}
         .auth-container:hover { background-color: rgba(255,255,255,0.2); color: white; }
@@ -116,7 +149,7 @@
         .modal-header h3 { font-size: 20px; color: var(--randon-dark); font-weight: 900; text-transform: uppercase; }
         .close-btn { cursor: pointer; font-size: 24px; color: #94a3b8; background: none; border: none; outline: none; transition: 0.2s; }
         .close-btn:hover { color: var(--status-red); transform: scale(1.1); }
-        .pcp-textarea { width: 100%; height: 250px; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 15px; font-family: monospace; font-size: 13px; outline: none; resize: none; background-color: #f8fafc; color: var(--randon-dark); font-weight: 600; transition: 0.3s; white-space: pre; overflow: scroll;}
+        .pcp-textarea { width: 100%; height: 250px; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 15px; font-family: monospace; font-size: 12px; outline: none; resize: none; background-color: #f8fafc; color: var(--randon-dark); font-weight: 600; transition: 0.3s; white-space: pre; overflow: scroll;}
         .pcp-textarea:focus { border-color: var(--randon-blue); background-color: white; box-shadow: 0 0 0 4px rgba(59,130,246,0.1); }
         .input-senha { padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; width: 100%; font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 20px; outline: none; transition: 0.2s;}
         .input-senha:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,0.15); }
@@ -124,13 +157,11 @@
         #toast { position: fixed; bottom: 35px; right: 35px; background-color: var(--randon-dark); color: #fff; padding: 18px 30px; border-radius: 10px; transition: 0.3s; transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; display: flex; align-items: center; gap: 12px; border-left: 6px solid var(--status-green); box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
         #toast.show { transform: translateY(0); opacity: 1; }
 
-        /* LISTA DE BACKUPS NO MODAL */
         .backup-list-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .backup-list-table th { background: #0f172a; color: white; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; }
         .backup-list-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); font-size: 13px; font-weight: 600; }
         .backup-list-table tr:hover td { background-color: #f8fafc; }
 
-        /* TIMELINE DA OP */
         .op-timeline { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; max-height: 400px; overflow-y: auto; padding-right: 10px; }
         .timeline-step { display: flex; align-items: flex-start; gap: 15px; position: relative; }
         .timeline-step::before { content: ''; position: absolute; left: 19px; top: 35px; bottom: -20px; width: 2px; background: #e2e8f0; }
@@ -161,13 +192,13 @@
 
         .section-card { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-light); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); overflow: hidden; }
         .section-header { display: flex; justify-content: space-between; align-items: stretch; background: var(--randon-black); border-bottom: 3px solid var(--randon-blue); }
-        .section-title-box { display: flex; align-items: center; gap: 15px; padding: 15px 25px; width: 45%; }
+        .section-title-box { display: flex; align-items: center; gap: 15px; padding: 15px 25px; }
         .section-title-box h2 { font-size: 18px; font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .kpi-row-header { display: flex; background: rgba(255,255,255,0.05); width: 55%; justify-content: flex-end; }
-        .kpi-box { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 5px 15px; border-left: 1px solid rgba(255,255,255,0.08); min-width: 95px; }
+        .kpi-row-header { display: flex; background: rgba(255,255,255,0.05); justify-content: flex-end; }
+        .kpi-box { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 5px 20px; border-left: 1px solid rgba(255,255,255,0.08); min-width: 110px; }
         .kpi-box span { font-size: 10px; text-transform: uppercase; color: #94a3b8; font-weight: 800; margin-bottom: 4px; letter-spacing: 0.5px; }
-        .kpi-box strong { font-size: 22px; color: white; font-weight: 900; line-height: 1; }
+        .kpi-box strong { font-size: 24px; color: white; font-weight: 900; line-height: 1; }
         .status-box-giant { width: 80px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white; transition: 0.3s; border-left: 2px solid rgba(255,255,255,0.1); }
         .status-box-giant.red { background-color: var(--status-red); }
         .status-box-giant.green { background-color: var(--status-green); }
@@ -304,8 +335,117 @@
             box-shadow: 0 10px 20px rgba(59,130,246,0.2);
         }
 
-        /* Analytics */
+        /* Analytics & Resumo Executivo */
         .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 30px; border-radius: 12px; border: 1px solid var(--border-light); border-left: 6px solid var(--randon-red); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
+        
+        .resumo-dia-container {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            border-top: 5px solid var(--randon-blue);
+            padding: 25px;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05);
+        }
+        .resumo-dia-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .resumo-dia-header h3 { font-size: 18px; font-weight: 900; text-transform: uppercase; color: var(--randon-dark); display: flex; align-items: center; gap: 10px; }
+        .resumo-dia-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .resumo-dia-card {
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .resumo-dia-card.card-saida { border-left: 5px solid var(--status-green); }
+        .resumo-dia-card.card-pintura { border-left: 5px solid var(--randon-blue); }
+        .resumo-dia-card.card-op1 { border-left: 5px solid var(--status-orange); }
+        .resumo-dia-card.card-op2 { border-left: 5px solid #8b5cf6; }
+        .resumo-dia-title { font-size: 12px; font-weight: 900; text-transform: uppercase; color: var(--randon-grey); display: flex; justify-content: space-between; }
+        .resumo-dia-count { font-size: 32px; font-weight: 900; color: var(--randon-dark); line-height: 1; }
+        .resumo-dia-sub { font-size: 11px; font-weight: 700; color: #64748b; }
+        
+        /* Lista Executiva de OPs no Dashboard com Cores Atualizadas */
+        .resumo-dia-list { 
+            max-height: 260px; 
+            overflow-y: auto; 
+            border-top: 1px dashed var(--border-light); 
+            padding-top: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+        }
+        .resumo-dia-item { 
+            background: white; 
+            padding: 8px 10px; 
+            border-radius: 8px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 4px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03); 
+        }
+        .resumo-dia-item.item-ok {
+            background: #f0fdf4 !important;
+            border: 1.5px solid #bbf7d0 !important;
+            border-left: 6px solid var(--status-green) !important;
+        }
+        .resumo-dia-item.item-np {
+            background: #ffffff !important;
+            border: 1px solid var(--border-light) !important;
+            border-left: 6px solid #64748b !important;
+        }
+
+        .resumo-dia-item-top { display: flex; justify-content: space-between; align-items: center; }
+        .resumo-dia-item-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 2px; }
+        
+        .badge-prod-tipo { 
+            background: #0f172a; 
+            color: white; 
+            padding: 2px 7px; 
+            border-radius: 4px; 
+            font-size: 10px; 
+            font-weight: 900; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-status-ok { 
+            background: #d1fae5; 
+            color: #065f46; 
+            padding: 3px 8px; 
+            border-radius: 4px; 
+            font-size: 10px; 
+            font-weight: 900; 
+            border: 1px solid #10b981;
+        }
+        .badge-status-np { 
+            background: #f1f5f9; 
+            color: #475569; 
+            padding: 3px 8px; 
+            border-radius: 4px; 
+            font-size: 10px; 
+            font-weight: 800; 
+            border: 1px solid #cbd5e1;
+        }
+        
+        .btn-apontar-rapido { 
+            background: var(--status-green); 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            padding: 4px 10px; 
+            font-size: 10px; 
+            font-weight: 900; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            transition: 0.2s; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 4px; 
+            box-shadow: 0 2px 5px rgba(16,185,129,0.3);
+        }
+        .btn-apontar-rapido:hover { background: #059669; transform: scale(1.05); }
+
         .dashboard-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 25px; }
         .dash-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border-light); position: relative; overflow: hidden; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
         .dash-card::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 6px; background: var(--randon-black); }
@@ -332,6 +472,25 @@
 
         .apontamento-table-wrapper { background: white; border-radius: 12px; border: 1px solid var(--border-light); overflow: hidden; margin-bottom: 30px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
         .apontamento-table-wrapper h3 { background: var(--randon-black); color: white; padding: 18px 25px; font-size: 16px; text-transform: uppercase; margin: 0; font-weight: 900; }
+
+        .btn-flow-action {
+            background-color: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            color: #0f172a;
+            padding: 4px 6px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            transition: 0.2s;
+        }
+        .btn-flow-action:hover {
+            border-color: var(--randon-blue);
+            background-color: #eff6ff;
+        }
 
         @media print {
             body { background-color: white !important; font-size: 12px; overflow: visible !important; }
@@ -386,9 +545,13 @@
                 <i class="fa-solid fa-circle-dot"></i> <span id="net-status-text">Online</span>
             </div>
 
-            <div class="global-date-container">
+            <!-- SELETOR DINÂMICO DE DATA PARA NAVEGAR ENTRE OS 3 MESES -->
+            <div class="global-date-container" title="Navegue em qualquer dia do PCP (3 meses)">
+                <button class="btn-date-nav" onclick="alterarDiaReferencia(-1)" title="Dia Anterior"><i class="fa-solid fa-chevron-left"></i></button>
                 <label>Data</label>
-                <input type="text" id="global-date" readonly>
+                <input type="text" id="global-date" onchange="definirDataManual(this.value)" placeholder="DD/MM/AAAA">
+                <button class="btn-date-nav" onclick="alterarDiaReferencia(1)" title="Próximo Dia"><i class="fa-solid fa-chevron-right"></i></button>
+                <button class="btn-date-nav" onclick="irParaHoje()" title="Voltar para Hoje" style="font-weight: 800;">Hoje</button>
             </div>
             
             <div class="auth-container" onclick="toggleAdmin()" id="auth-btn" title="Desbloquear Modo Administrador">
@@ -426,20 +589,20 @@
     <div class="modal-overlay" id="modal-pcp">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-bolt" style="color: var(--status-green);"></i> Carga Base de Dados PCP</h3>
+                <h3><i class="fa-solid fa-bolt" style="color: var(--status-green);"></i> Carga Base de Dados PCP (Suporta 3 Meses / 10.000+ Linhas)</h3>
                 <button class="close-btn" onclick="fecharModalPCP()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <p style="font-size: 14px; color: var(--randon-grey); font-weight: 600; margin-bottom: 15px; line-height: 1.5;">
                 <b>Instrução de Carga:</b> Copie do seu Excel exatamente as colunas na ordem do arquivo: <br><strong style="color: var(--randon-blue);">LINHA | ORDEM E VENDA | PRODUTO | DATA ENTRADA | DATA SAÍDA</strong> e cole abaixo.<br>
-                <span style="color: var(--status-orange);">⚠️ As Ordens ficarão no cofre do sistema e serão preenchidas automaticamente ao digitar a data na linha.</span>
+                <span style="color: var(--status-orange);">⚡ O motor indexa instantaneamente milhares de linhas separando com fidelidade o que entra e o que sai em cada dia.</span>
             </p>
             <textarea id="pcp-dados" class="pcp-textarea" placeholder="Cole os dados do Excel aqui... Ex:
-CARREGA TUDO	1003088021	MTG BS CT PD...	29.07.2026	05.08.2026
-BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
+CARREGA TUDO	1003088021	MTG BS CT PD...	01.09.2026	05.09.2026
+BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
             
             <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 20px;">
                 <button class="btn btn-tv" onclick="fecharModalPCP()">Cancelar</button>
-                <button class="btn btn-pcp" onclick="processarBasePCP()"><i class="fa-solid fa-check-double"></i> Injetar Programação</button>
+                <button class="btn btn-pcp" onclick="processarBasePCP()"><i class="fa-solid fa-check-double"></i> Injetar Programação Massiva</button>
             </div>
         </div>
     </div>
@@ -644,6 +807,55 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             <button class="btn btn-tv" onclick="updateAnalytics()" style="padding: 12px 20px; font-size: 14px;"><i class="fa-solid fa-rotate"></i> Atualizar Dados</button>
         </div>
 
+        <!-- QUADRO RESUMO EXECUTIVO DO DIA -->
+        <div class="resumo-dia-container">
+            <div class="resumo-dia-header">
+                <h3><i class="fa-solid fa-calendar-day" style="color: var(--randon-blue);"></i> Resumo Executivo do Dia (<span id="resumo-data-label">--/--/----</span>)</h3>
+                <span style="font-size: 11px; font-weight: 800; color: var(--randon-grey); text-transform: uppercase;">Acompanhamento das Ordens Programadas e Apontamentos</span>
+            </div>
+            <div class="resumo-dia-grid">
+                <div class="resumo-dia-card card-saida">
+                    <div class="resumo-dia-title">
+                        <span>1. Saídas Linha Solda</span>
+                        <i class="fa-solid fa-truck-fast" style="color: var(--status-green);"></i>
+                    </div>
+                    <div class="resumo-dia-count" id="resumo-count-solda">0</div>
+                    <div class="resumo-dia-sub" id="resumo-sub-solda">0 Previstas / 0 OK</div>
+                    <div class="resumo-dia-list" id="resumo-list-solda"></div>
+                </div>
+
+                <div class="resumo-dia-card card-pintura">
+                    <div class="resumo-dia-title">
+                        <span>2. Pintura</span>
+                        <i class="fa-solid fa-fill-drip" style="color: var(--randon-blue);"></i>
+                    </div>
+                    <div class="resumo-dia-count" id="resumo-count-pintura">0</div>
+                    <div class="resumo-dia-sub" id="resumo-sub-pintura">0 em Fila / 0 Entregues</div>
+                    <div class="resumo-dia-list" id="resumo-list-pintura"></div>
+                </div>
+
+                <div class="resumo-dia-card card-op1">
+                    <div class="resumo-dia-title">
+                        <span>3. MOF OP1</span>
+                        <i class="fa-solid fa-toolbox" style="color: var(--status-orange);"></i>
+                    </div>
+                    <div class="resumo-dia-count" id="resumo-count-op1">0</div>
+                    <div class="resumo-dia-sub" id="resumo-sub-op1">0 OPs em Montagem</div>
+                    <div class="resumo-dia-list" id="resumo-list-op1"></div>
+                </div>
+
+                <div class="resumo-dia-card card-op2">
+                    <div class="resumo-dia-title">
+                        <span>4. MOF OP2 (Pinos)</span>
+                        <i class="fa-solid fa-flag-checkered" style="color: #8b5cf6;"></i>
+                    </div>
+                    <div class="resumo-dia-count" id="resumo-count-op2">0</div>
+                    <div class="resumo-dia-sub" id="resumo-sub-op2">0 Apontamentos Finais</div>
+                    <div class="resumo-dia-list" id="resumo-list-op2"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="dashboard-grid">
             <div class="dash-card"><div class="dash-title">Apontamentos <i class="fa-solid fa-clipboard-check"></i></div><div class="dash-value" id="dash-total-apontamentos">0</div></div>
             <div class="dash-card card-blue"><div class="dash-title">Aderência Plano <i class="fa-solid fa-bullseye"></i></div><div class="dash-value" id="dash-aderencia" style="color: var(--randon-blue);">0%</div></div>
@@ -812,8 +1024,13 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             pinosManual: null
         };
         
+        let pcpIndex = {
+            bySectorAndDate: {},
+            byOv: new Map()
+        };
+
         let chartsObj = { pareto: null, pie: null, line: null, aderencia: null, estamparia: null };
-        let saveTimeout, tvInterval, tvTabRotationInterval;
+        let saveTimeout, tvInterval;
         let firebaseDB = null, dbRef = null;
 
         const DEFAULT_VISIBLES_ROWS = 15;
@@ -824,7 +1041,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 data_pcp: '', 
                 ordem_ent: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', manual_atr_ent: false,
                 ordem_sai: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', manual_atr_sai: false,
-                aponta: '', impactos: '', acoes: '', origem: '', 
+                aponta: '', impactos: '', acoes: '', origem: '', destino_fluxo: '',
                 data_real_ent: '', data_real_sai: '',
                 lock_ent: false, lock_sai: false
             };
@@ -835,9 +1052,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             return `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}`;
         }
 
-        function getDataCompleta() {
-            const hoje = new Date();
-            return `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}/${hoje.getFullYear()}`;
+        function getDataCompleta(dateObj = new Date()) {
+            return `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`;
         }
 
         function formatarDataEstamparia(dateObj) {
@@ -846,20 +1062,20 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         function extrairAnoDeData(dataStr) {
-            if (!dataStr) return new Date().getFullYear();
+            if (!dataStr) return 2026;
             let parts = String(dataStr).trim().replace(/[.\-]/g, '/').split('/');
             if (parts.length === 3) {
                 let y = parseInt(parts[2].length === 4 ? parts[2] : parts[0], 10);
                 if (!isNaN(y) && y > 2000) return y;
             }
-            return new Date().getFullYear();
+            return 2026;
         }
 
         function parseDataComAnoRef(dataStr, anoRef) {
             if (!dataStr || typeof dataStr !== 'string') return null;
             let s = dataStr.trim().replace(/[.\-]/g, '/');
             let parts = s.split('/');
-            let ano = anoRef || new Date().getFullYear();
+            let ano = anoRef || 2026;
             if (parts.length === 2) {
                 let d = parseInt(parts[0], 10);
                 let m = parseInt(parts[1], 10) - 1;
@@ -913,44 +1129,68 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             return businessDays * sinal;
         }
 
-        function adicionarUmDiaUtil(dataStr) {
-            if(!dataStr || dataStr.trim() === '') return '';
-            const d = parseDataComAnoRef(dataStr);
-            if (!d) return dataStr;
-            d.setDate(d.getDate() + 1);
-            while (d.getDay() === 0 || d.getDay() === 6) {
-                d.setDate(d.getDate() + 1);
-            }
-            return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
-        }
-
-        function dateMatches(dateStr, globalDateStr) {
-            if(!dateStr || !globalDateStr) return false;
-            const parts = globalDateStr.split('-');
-            const d = parts[2] ? parts[2] : globalDateStr.split('/')[0]; 
-            const mNum = parts[1] ? parts[1] : globalDateStr.split('/')[1];
-            const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-            const mNome = mesesAbreviados[parseInt(mNum) - 1];
-            const s = dateStr.toLowerCase();
-            return s.includes(`${d}/${mNum}`) || s.includes(`${d}/${mNome}`) || (s.includes(d) && (s.includes(mNum) || s.includes(mNome)));
-        }
-
         function extrairNumeroOrdem(texto) {
             if (!texto) return '';
             const match = String(texto).match(/(\d{6,})/);
             return match ? match[1] : String(texto).replace(/[^0-9]/g, '');
         }
 
+        // Normalização robusta preservando mês e ano para cargas de 3 meses
         function normalizarDataParaComparacao(dataStr) {
             if (!dataStr) return '';
-            let limpo = dataStr.trim().replace(/[.\-]/g, '/');
+            let limpo = String(dataStr).trim().replace(/[.\-]/g, '/');
             const parts = limpo.split('/');
-            if (parts.length >= 2) {
-                const dia = parts[0].padStart(2, '0');
-                const mes = parts[1].padStart(2, '0');
-                return `${dia}/${mes}`;
+            if (parts.length === 2) {
+                return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}`;
+            } else if (parts.length === 3) {
+                let d, m, y;
+                if (parts[0].length === 4) {
+                    y = parts[0]; m = parts[1].padStart(2, '0'); d = parts[2].padStart(2, '0');
+                } else {
+                    d = parts[0].padStart(2, '0'); m = parts[1].padStart(2, '0'); y = parts[2];
+                    if (y.length === 2) y = '20' + y;
+                }
+                return `${d}/${m}/${y}`;
             }
             return limpo;
+        }
+
+        // Compara datas aceitando tanto DD/MM quanto DD/MM/AAAA entre diferentes meses
+        function dateMatches(dateStr, globalDateStr) {
+            if(!dateStr || !globalDateStr) return false;
+            const norm1 = normalizarDataParaComparacao(dateStr);
+            const norm2 = normalizarDataParaComparacao(globalDateStr);
+            if (norm1 === norm2) return true;
+
+            // Se um tiver ano e outro não, compara dia e mês
+            const p1 = norm1.split('/');
+            const p2 = norm2.split('/');
+            if (p1.length >= 2 && p2.length >= 2) {
+                return p1[0] === p2[0] && p1[1] === p2[1];
+            }
+            return false;
+        }
+
+        function identificarTipoProduto(texto, secTitle) {
+            const str = `${texto || ''} ${secTitle || ''}`.toUpperCase();
+            if (str.includes('CARREGA TUDO') || str.includes('CT')) return 'CT';
+            if (str.includes('SILO')) return 'SILO';
+            if (str.includes('BASE') || str.includes('CHASSI')) return 'BASES';
+            if (str.includes('TANQUE') || str.includes('TQ')) return 'TANQUE';
+            if (str.includes('ESPECIAL') || str.includes('ESP')) return 'ESPECIAIS';
+            if (str.includes('PINTURA')) return 'PINTURA';
+            return secTitle ? secTitle.split(' ')[0] : 'PRODUTO';
+        }
+
+        function obterDescricaoProduto(textoOuObj, opNum) {
+            if (typeof textoOuObj === 'string' && textoOuObj.includes(' - ')) {
+                return textoOuObj.split(' - ').slice(1).join(' - ').trim();
+            }
+            if (opNum && pcpIndex.byOv.has(opNum)) {
+                const info = pcpIndex.byOv.get(opNum);
+                if (info && info.prod && info.prod.trim() !== '') return info.prod.trim();
+            }
+            return '';
         }
 
         function calcularAtraso(planStr, realStr) {
@@ -1006,9 +1246,435 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
+        // =========================================================================
+        // NAVEGAÇÃO DE DATA GLOBAL (3 MESES)
+        // =========================================================================
+        function alterarDiaReferencia(offsetDias) {
+            let ref = parseDataComAnoRef(db.globalDate, 2026) || new Date();
+            ref.setDate(ref.getDate() + offsetDias);
+            const novaDataCompleta = getDataCompleta(ref);
+            db.globalDate = novaDataCompleta;
+            const el = document.getElementById('global-date');
+            if (el) el.value = novaDataCompleta;
+            forceRenderTodasTabelas();
+            mostrarToast(`Exibindo Programação do Dia: ${novaDataCompleta}`, 'fa-calendar-day');
+        }
+
+        function irParaHoje() {
+            const hoje = getDataCompleta(new Date());
+            db.globalDate = hoje;
+            const el = document.getElementById('global-date');
+            if (el) el.value = hoje;
+            forceRenderTodasTabelas();
+            mostrarToast(`Programação de Hoje: ${hoje}`, 'fa-calendar-check');
+        }
+
+        function definirDataManual(valor) {
+            if (!valor || valor.trim() === '') return;
+            const norm = normalizarDataParaComparacao(valor);
+            db.globalDate = norm;
+            forceRenderTodasTabelas();
+            mostrarToast(`Data alterada para: ${norm}`, 'fa-calendar-day');
+        }
+
+        // =========================================================================
+        // INDEXADOR ULTRA RÁPIDO DO PCP (SUPORTA 10.000+ LINHAS EM HASH MAP O(1))
+        // =========================================================================
+        function reconstruirIndicesPCP() {
+            pcpIndex.bySectorAndDate = {};
+            pcpIndex.byOv = new Map();
+
+            if (!db.basePCP) return;
+
+            Object.keys(db.basePCP).forEach(secId => {
+                const lista = db.basePCP[secId];
+                if (!Array.isArray(lista)) return;
+
+                if (!pcpIndex.bySectorAndDate[secId]) {
+                    pcpIndex.bySectorAndDate[secId] = {};
+                }
+
+                const secMap = pcpIndex.bySectorAndDate[secId];
+
+                lista.forEach(item => {
+                    const ovNum = extrairNumeroOrdem(item.ov);
+                    if (ovNum) {
+                        pcpIndex.byOv.set(ovNum, { ...item, sec: secId });
+                    }
+
+                    const dEntNorm = normalizarDataParaComparacao(item.plan_ent);
+                    const dSaiNorm = normalizarDataParaComparacao(item.plan_sai);
+
+                    // Indexa tanto pela data completa DD/MM/AAAA quanto por DD/MM para busca instantânea
+                    const keysEnt = [dEntNorm, dEntNorm.substring(0, 5)];
+                    const keysSai = [dSaiNorm, dSaiNorm.substring(0, 5)];
+
+                    keysEnt.forEach(k => {
+                        if (!k) return;
+                        if (!secMap[k]) secMap[k] = { entradas: [], saidas: [] };
+                        secMap[k].entradas.push(item);
+                    });
+
+                    keysSai.forEach(k => {
+                        if (!k) return;
+                        if (!secMap[k]) secMap[k] = { entradas: [], saidas: [] };
+                        secMap[k].saidas.push(item);
+                    });
+                });
+            });
+        }
+
+        function buscarOrdemPorNumero(secId, numeroOrdem) {
+            const numBuscado = extrairNumeroOrdem(numeroOrdem);
+            if (!numBuscado || numBuscado.length < 3) return null;
+
+            if (pcpIndex.byOv.has(numBuscado)) {
+                return pcpIndex.byOv.get(numBuscado);
+            }
+
+            for (let [ovKey, val] of pcpIndex.byOv.entries()) {
+                if (ovKey.includes(numBuscado) || numBuscado.includes(ovKey)) {
+                    return val;
+                }
+            }
+            return null;
+        }
+
+        // Distribui com fidelidade matemática o que entra e o que sai
+        function aplicarMagiaMultipla(secId, startRowIdx, dataVal) {
+            if (!dataVal || dataVal.trim() === '') return 0;
+            const dataNorm = normalizarDataParaComparacao(dataVal);
+            const dataCurta = dataNorm.substring(0, 5);
+
+            const secMap = pcpIndex.bySectorAndDate[secId];
+            if (!secMap) return 0;
+
+            const grupo = secMap[dataNorm] || secMap[dataCurta] || { entradas: [], saidas: [] };
+            const listaEntradas = grupo.entradas || [];
+            const listaSaidas = grupo.saidas || [];
+
+            if (listaEntradas.length === 0 && listaSaidas.length === 0) return 0;
+
+            if (!db.data[secId]) db.data[secId] = [];
+            const tabela = db.data[secId];
+
+            // Casamento inteligente: se a mesma OP entra e sai no mesmo dia, alinha na mesma linha
+            let pares = [];
+            let entradasRestantes = [...listaEntradas];
+            let saidasRestantes = [...listaSaidas];
+
+            for (let i = entradasRestantes.length - 1; i >= 0; i--) {
+                const ent = entradasRestantes[i];
+                const entNum = extrairNumeroOrdem(ent.ov);
+                const matchSaiIdx = saidasRestantes.findIndex(s => extrairNumeroOrdem(s.ov) === entNum);
+                if (matchSaiIdx !== -1) {
+                    pares.push({ entrada: ent, saida: saidasRestantes[matchSaiIdx] });
+                    entradasRestantes.splice(i, 1);
+                    saidasRestantes.splice(matchSaiIdx, 1);
+                }
+            }
+
+            let filasFinais = [...pares];
+            entradasRestantes.forEach(e => filasFinais.push({ entrada: e, saida: null }));
+            saidasRestantes.forEach(s => filasFinais.push({ entrada: null, saida: s }));
+
+            let rowCurrent = startRowIdx;
+
+            filasFinais.forEach((par) => {
+                while (rowCurrent < tabela.length && 
+                      (tabela[rowCurrent].lock_ent || tabela[rowCurrent].lock_sai || 
+                      (tabela[rowCurrent].data_pcp && tabela[rowCurrent].data_pcp !== dataNorm))) {
+                    rowCurrent++;
+                }
+
+                if (rowCurrent >= tabela.length) {
+                    tabela.push(getEmptyRow());
+                }
+
+                const r = tabela[rowCurrent];
+                r.data_pcp = dataNorm;
+
+                if (par.entrada) {
+                    if (!r.lock_ent && !r.real_ent) {
+                        r.ordem_ent = `${par.entrada.ov}${par.entrada.prod ? ' - ' + par.entrada.prod : ''}`;
+                        r.plan_ent = par.entrada.plan_ent;
+                    }
+                } else if (!r.lock_ent && !r.real_ent) {
+                    r.ordem_ent = '';
+                    r.plan_ent = '';
+                }
+
+                if (par.saida) {
+                    if (!r.lock_sai && !r.real_sai) {
+                        r.ordem_sai = `${par.saida.ov}${par.saida.prod ? ' - ' + par.saida.prod : ''}`;
+                        r.plan_sai = par.saida.plan_sai;
+                    }
+                } else if (!r.lock_sai && !r.real_sai) {
+                    r.ordem_sai = '';
+                    r.plan_sai = '';
+                }
+
+                rowCurrent++;
+            });
+
+            return filasFinais.length;
+        }
+
+        // =========================================================================
+        // DESTINAÇÃO NA LINHA DE SOLDA (AP, N/P, PINTURA, OP1, OP2)
+        // =========================================================================
+        function encaminharOrdemManual(secOrigemId, rowIdx, destino) {
+            if (!isAdmin) { toggleAdmin(); return; }
+            if (!db.data[secOrigemId] || !db.data[secOrigemId][rowIdx]) return;
+
+            const rowOrigem = db.data[secOrigemId][rowIdx];
+            const opNumero = extrairNumeroOrdem(rowOrigem.real_sai || rowOrigem.ordem_sai || rowOrigem.real_ent || rowOrigem.ordem_ent);
+
+            if (!opNumero) {
+                mostrarToast("Nenhuma OP válida encontrada nesta linha.", "fa-triangle-exclamation");
+                return;
+            }
+
+            const hojeDataCompleta = getDataCompleta();
+            const secConfigOrigem = configuracaoSetores.find(c => c.id === secOrigemId);
+            const descProd = obterDescricaoProduto(rowOrigem.ordem_sai || rowOrigem.ordem_ent, opNumero);
+
+            rowOrigem.destino_fluxo = destino;
+            if (!rowOrigem.data_pcp) rowOrigem.data_pcp = db.globalDate || hojeDataCompleta;
+
+            // 1. Saída de Linha APONTADA (Fica Verde)
+            if (destino === 'SAIDA_LINHA_AP') {
+                rowOrigem.aponta = 'OK';
+                if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
+                rowOrigem.data_real_sai = hojeDataCompleta;
+                forceRenderTodasTabelas();
+                autoSaveCloud(true);
+                mostrarToast(`OP ${opNumero} - Saída de Linha AP (Verde)!`, 'fa-circle-check');
+                return;
+            }
+
+            // 2. Saída de Linha NÃO APONTADA (Fica Neutro/Normal)
+            if (destino === 'SAIDA_LINHA_NP') {
+                rowOrigem.aponta = 'NP';
+                if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
+                rowOrigem.data_real_sai = hojeDataCompleta;
+                forceRenderTodasTabelas();
+                autoSaveCloud(true);
+                mostrarToast(`OP ${opNumero} - Saída de Linha N/P (Cor Normal)!`, 'fa-clock');
+                return;
+            }
+
+            // 3. Encaminhamento para Pintura, OP1 ou OP2
+            let targetId = null;
+            if (destino === 'PINTURA') {
+                targetId = 'pintura';
+            } else if (destino === 'OP1') {
+                const info = (rowOrigem.ordem_sai || rowOrigem.ordem_ent || '').toUpperCase();
+                if (info.includes('TQ') || info.includes('TANQUE')) targetId = 'op1_tq1';
+                else if (info.includes('CT') || info.includes('CARREGA')) targetId = 'op1_ct';
+                else if (info.includes('SILO')) targetId = 'op1_silo';
+                else targetId = 'op1_bases';
+            } else if (destino === 'OP2') {
+                targetId = 'op2_geral';
+            }
+
+            if (targetId && db.data[targetId]) {
+                const tbDest = db.data[targetId];
+                let freeIdx = tbDest.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
+                if (freeIdx === -1) {
+                    tbDest.push(getEmptyRow());
+                    freeIdx = tbDest.length - 1;
+                }
+
+                const textoCompleto = descProd ? `${opNumero} - ${descProd}` : (rowOrigem.ordem_sai || rowOrigem.ordem_ent || opNumero);
+                tbDest[freeIdx].ordem_ent = textoCompleto;
+                tbDest[freeIdx].ordem_sai = textoCompleto;
+                tbDest[freeIdx].real_ent = opNumero;
+                tbDest[freeIdx].data_pcp = db.globalDate || hojeDataCompleta;
+                tbDest[freeIdx].data_real_ent = hojeDataCompleta;
+                tbDest[freeIdx].origem = secConfigOrigem ? secConfigOrigem.title : 'SOLDA';
+                tbDest[freeIdx].aponta = ''; 
+
+                if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
+                rowOrigem.data_real_sai = hojeDataCompleta;
+
+                forceRenderTodasTabelas();
+                autoSaveCloud(true);
+                mostrarToast(`OP ${opNumero} enviada com sucesso para ${destino}!`, 'fa-truck-fast');
+            }
+        }
+
+        function apontarRapidoPorOp(opNum, secId) {
+            if (!isAdmin) { toggleAdmin(); return; }
+            if (!db.data[secId]) db.data[secId] = [];
+
+            const tabela = db.data[secId];
+            let rowEncontrada = tabela.find(r => extrairNumeroOrdem(r.real_sai || r.ordem_sai || r.real_ent || r.ordem_ent) === opNum);
+            const hojeDataCompleta = getDataCompleta();
+
+            if (!rowEncontrada) {
+                let freeIdx = tabela.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
+                if (freeIdx === -1) {
+                    tabela.push(getEmptyRow());
+                    freeIdx = tabela.length - 1;
+                }
+                rowEncontrada = tabela[freeIdx];
+                const pcp = buscarOrdemPorNumero(secId, opNum);
+                rowEncontrada.ordem_ent = pcp ? `${pcp.ov}${pcp.prod ? ' - ' + pcp.prod : ''}` : opNum;
+                rowEncontrada.ordem_sai = rowEncontrada.ordem_ent;
+                rowEncontrada.data_pcp = db.globalDate || hojeDataCompleta;
+            }
+
+            rowEncontrada.aponta = 'OK';
+            if (rowEncontrada.destino_fluxo === 'SAIDA_LINHA_NP') {
+                rowEncontrada.destino_fluxo = 'SAIDA_LINHA_AP';
+            }
+            if (!rowEncontrada.real_sai) rowEncontrada.real_sai = opNum;
+            rowEncontrada.data_real_sai = hojeDataCompleta;
+
+            forceRenderTodasTabelas();
+            autoSaveCloud(true);
+            mostrarToast(`OP ${opNum} Apontada com Sucesso (Verde)!`, 'fa-circle-check');
+        }
+
         // ==========================================
-        // CÁLCULO E RENDERIZAÇÃO: PRÊMIO & PINOS
+        // CARGA PCP DE ALTA PERFORMANCE (3 MESES)
         // ==========================================
+        const REGEX_DATA_SOLTA = /\b(\d{1,2})[\.\/\-](\d{1,2})(?:[\.\/\-](\d{2,4}))?\b/g;
+
+        function extrairDatasDaLinha(linha) {
+            const datas = [];
+            let m;
+            REGEX_DATA_SOLTA.lastIndex = 0;
+            while ((m = REGEX_DATA_SOLTA.exec(linha)) !== null) {
+                let ano = m[3] || '2026';
+                if (ano.length === 2) ano = '20' + ano;
+                datas.push({ raw: m[0], index: m.index, dia: m[1].padStart(2, '0'), mes: m[2].padStart(2, '0'), ano: ano });
+            }
+            return datas;
+        }
+
+        function processarBasePCP() {
+            const text = document.getElementById('pcp-dados').value;
+            if(!text.trim()) return mostrarToast('Cole os dados primeiro!', 'fa-triangle-exclamation');
+            
+            let count = 0, erros = 0;
+            let linhasOriginais = text.split(/\r?\n/).filter(l => l.trim() !== '');
+            if(!db.basePCP) db.basePCP = {};
+
+            // Hash Map para deduplicação O(1) instantânea mesmo com 10.000 linhas
+            const existingKeys = new Set();
+            Object.keys(db.basePCP).forEach(sec => {
+                db.basePCP[sec].forEach(r => {
+                    existingKeys.add(`${sec}_${extrairNumeroOrdem(r.ov)}_${r.plan_ent}_${r.plan_sai}`);
+                });
+            });
+
+            linhasOriginais.forEach(linha => {
+                const primeiraColTeste = linha.trim().split(/\t|\s{2,}/)[0].toLowerCase();
+                if (primeiraColTeste.includes('linha') || primeiraColTeste.includes('ordem') || primeiraColTeste.includes('venda')) return;
+
+                const datasEncontradas = extrairDatasDaLinha(linha);
+                if (datasEncontradas.length < 2) { erros++; return; }
+
+                const dataEntradaInfo = datasEncontradas[0];
+                const dataSaidaInfo = datasEncontradas[datasEncontradas.length > 1 ? 1 : 0];
+
+                const dataEntrada = `${dataEntradaInfo.dia}/${dataEntradaInfo.mes}/${dataEntradaInfo.ano}`;
+                const dataSaida = `${dataSaidaInfo.dia}/${dataSaidaInfo.mes}/${dataSaidaInfo.ano}`;
+
+                let cabecalho = linha.substring(0, dataEntradaInfo.index).trim();
+                let col = cabecalho.split('\t').map(c => c.trim()).filter(c => c !== '');
+                if (col.length < 2) col = cabecalho.split(/\s{2,}/).map(c => c.trim()).filter(c => c !== '');
+                if (col.length < 2) col = cabecalho.split(/\s+/).map(c => c.trim()).filter(c => c !== '');
+
+                if (col.length < 2) { erros++; return; }
+
+                const linhaAlvo = col[0];
+                const ov = col[1];
+                const prod = col.length > 2 ? col.slice(2).join(' ') : '';
+
+                if (ov === '' || ov.length < 3) { erros++; return; }
+
+                let destino = mapaLinhaParaSetor[linhaAlvo] || siglaParaSetor[linhaAlvo.trim().toUpperCase()] || null;
+                if (!destino) {
+                    const lowerLinha = linhaAlvo.toLowerCase();
+                    if (lowerLinha.includes('tanque') || lowerLinha.includes('tq')) destino = 'tq';
+                    else if (lowerLinha.includes('carrega tudo') || lowerLinha.includes('carrega') || lowerLinha.includes('ct')) destino = 'ct';
+                    else if (lowerLinha.includes('bases') || lowerLinha.includes('chassi')) destino = 'bases';
+                    else if (lowerLinha.includes('silo')) destino = 'silo';
+                    else if (lowerLinha.includes('especiais') || lowerLinha.includes('esp')) destino = 'esp_box1';
+                    else if (lowerLinha.includes('pintura')) destino = 'pintura';
+                    else if (lowerLinha.includes('op1')) destino = 'op1_bases';
+                    else if (lowerLinha.includes('op2')) destino = 'op2_geral';
+                }
+
+                if (destino) {
+                    if (!db.basePCP[destino]) db.basePCP[destino] = [];
+
+                    const chaveRegistro = `${destino}_${extrairNumeroOrdem(ov)}_${dataEntrada}_${dataSaida}`;
+                    if (!existingKeys.has(chaveRegistro)) {
+                        existingKeys.add(chaveRegistro);
+                        db.basePCP[destino].push({ ov: ov, prod: prod, plan_ent: dataEntrada, plan_sai: dataSaida });
+                        count++;
+                    }
+                } else {
+                    erros++;
+                }
+            });
+            
+            fecharModalPCP();
+            if (count > 0) {
+                reconstruirIndicesPCP();
+                forceRenderTodasTabelas(); 
+                autoSaveCloud(true);
+                mostrarToast(`⚡ ${count} ordens integradas! Suporte a 3 meses ativado.`, 'fa-bolt');
+            } else {
+                mostrarToast(`Nenhuma nova ordem adicionada (podem já existir no cofre).`, 'fa-circle-info');
+            }
+        }
+
+        // ==========================================
+        // CÁLCULOS E DASHBOARD
+        // ==========================================
+        function recalcularDashboard() {
+            configuracaoSetores.forEach(sec => {
+                let totalProgMes = 0, apontados = 0;
+
+                // Contabilização fiel do Programado Total vindo do cofre do PCP
+                if (db.basePCP && db.basePCP[sec.id] && db.basePCP[sec.id].length > 0) {
+                    totalProgMes = db.basePCP[sec.id].length;
+                } else if(db.data[sec.id]) {
+                    db.data[sec.id].forEach(row => {
+                        const temProgramacao = (row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '') ||
+                                                (row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '');
+                        if(temProgramacao) totalProgMes++;
+                    });
+                }
+
+                if (db.data[sec.id]) {
+                    db.data[sec.id].forEach(row => {
+                        if(row.aponta === 'OK') apontados++;
+                    });
+                }
+
+                try {
+                    const elMes = document.getElementById(`kpi-mes-${sec.id}`);
+                    const elApont = document.getElementById(`kpi-apontados-${sec.id}`);
+                    const box = document.getElementById(`status-box-${sec.id}`);
+                    if (elMes) elMes.innerText = totalProgMes;
+                    if (elApont) elApont.innerText = apontados;
+                    if (box) {
+                        const meta = db.meta[sec.id] || 0;
+                        if(apontados >= meta && meta > 0) { box.className = 'status-box-giant green'; box.innerText = '✅'; } 
+                        else { box.className = 'status-box-giant red'; box.innerText = '❌'; }
+                    }
+                } catch(e) {}
+            });
+
+            recalcularPainelPremio();
+        }
+
         function recalcularPainelPremio() {
             if (!db.pinosManual) {
                 db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
@@ -1193,642 +1859,216 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // OPÇÃO MARCAR TODAS COMO OK
+        // RENDERIZAÇÃO DE TABELAS E TELAS
         // ==========================================
-        function marcarTodosSetor(secId, statusVal = 'OK') {
-            if (!isAdmin) {
-                toggleAdmin();
-                return;
-            }
-            if (!db.data || !db.data[secId]) return;
+        function renderizarViews() {
+            let activeInput = document.activeElement;
+            let focusSec = activeInput ? activeInput.dataset.sec : null;
+            let focusRow = activeInput ? activeInput.dataset.row : null;
+            let focusField = activeInput ? activeInput.dataset.field : null;
+            let cursorStart = 0, cursorEnd = 0;
             
-            let count = 0;
-            const secConfig = configuracaoSetores.find(c => c.id === secId);
-
-            db.data[secId].forEach(row => {
-                const temDado = row.ordem_ent || row.ordem_sai || row.real_ent || row.real_sai || row.data_pcp;
-                if (temDado && row.aponta !== statusVal) {
-                    const oldAponta = row.aponta;
-                    row.aponta = statusVal;
-                    count++;
-
-                    if (statusVal === 'OK' && oldAponta !== 'OK' && secConfig) {
-                        let targetId = null;
-                        if (secConfig.view === 'solda') targetId = 'pintura';
-                        else if (secConfig.view === 'pintura') {
-                            const info = (row.ordem_sai || row.ordem_ent || row.origem || '').toUpperCase();
-                            if (info.includes('TQ')) targetId = 'op1_tq1'; 
-                            else if (info.includes('CT')) targetId = 'op1_ct'; 
-                            else if (info.includes('SILO')) targetId = 'op1_silo';
-                            else targetId = 'op1_bases'; 
-                        }
-                        else if (secConfig.view === 'op1') targetId = 'op2_geral';
-
-                        if (targetId && db.data[targetId]) {
-                            const tbDest = db.data[targetId];
-                            let freeIdx = tbDest.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
-                            if (freeIdx === -1) {
-                                tbDest.push(getEmptyRow());
-                                freeIdx = tbDest.length - 1;
-                            }
-                            
-                            const hojeDataCompleta = getDataCompleta();
-                            const ovAvanco = extrairNumeroOrdem(row.real_sai || row.real_ent);
-                            
-                            let planSaiOrig = null;
-                            const pcpInfo = buscarOrdemPorNumero(secId, ovAvanco);
-                            if (pcpInfo && pcpInfo.plan_sai) planSaiOrig = pcpInfo.plan_sai;
-                            
-                            if (!planSaiOrig) {
-                                const orig = db.data[secId].find(r => (extrairNumeroOrdem(r.ordem_sai) === ovAvanco || extrairNumeroOrdem(r.ordem_ent) === ovAvanco));
-                                if (orig && orig.plan_sai) planSaiOrig = orig.plan_sai;
-                            }
-                            
-                            const planEntDest = planSaiOrig ? adicionarUmDiaUtil(planSaiOrig) : '';
-                            
-                            tbDest[freeIdx].ordem_ent = row.ordem_sai || row.ordem_ent;
-                            tbDest[freeIdx].ordem_sai = row.ordem_sai || row.ordem_ent;
-                            tbDest[freeIdx].plan_ent = planEntDest; 
-                            tbDest[freeIdx].real_ent = ovAvanco;
-                            tbDest[freeIdx].data_pcp = getDataAtualFormatada();
-                            tbDest[freeIdx].data_real_ent = hojeDataCompleta;
-                            tbDest[freeIdx].origem = secConfig.title;
-                            
-                            let calc = calcularAtraso(planEntDest, hojeDataCompleta);
-                            tbDest[freeIdx].atr_ent = calc.atraso;
-                            tbDest[freeIdx].stat_ent = calc.status;
-                        }
-                    }
-                }
-            });
-
-            if (count > 0) {
-                forceRenderTodasTabelas();
-                autoSaveCloud(true);
-                mostrarToast(`${count} OPs marcadas como ${statusVal}!`, 'fa-check-double');
-            } else {
-                mostrarToast(`Nenhuma OP pendente para marcar neste setor.`, 'fa-circle-info');
-            }
-        }
-
-        // ==========================================
-        // BUSCA GLOBAL DE OP & TIMELINE
-        // ==========================================
-        document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-                e.preventDefault();
-                const sInput = document.getElementById('global-op-search');
-                if (sInput) { sInput.focus(); sInput.select(); }
-            }
-        });
-
-        function handleGlobalSearch(e) {
-            const termo = e.target.value.trim().toUpperCase();
-            if (e.key === 'Enter' && termo.length >= 3) {
-                buscarEDestacarOP(termo);
-            }
-        }
-
-        function buscarEDestacarOP(termo) {
-            const num = extrairNumeroOrdem(termo);
-            let encontrou = false;
-
-            for (let sec of configuracaoSetores) {
-                const linhas = db.data[sec.id] || [];
-                for (let i = 0; i < linhas.length; i++) {
-                    const r = linhas[i];
-                    const numEnt = extrairNumeroOrdem(r.ordem_ent || r.real_ent);
-                    const numSai = extrairNumeroOrdem(r.ordem_sai || r.real_sai);
-
-                    if (numEnt.includes(num) || numSai.includes(num)) {
-                        expandedSections[sec.id] = true;
-                        switchTab(sec.view);
-                        renderizarViews();
-                        
-                        setTimeout(() => {
-                            const inputElem = document.querySelector(`[data-sec="${sec.id}"][data-row="${i}"][data-field="ordem_ent"]`) ||
-                                              document.querySelector(`[data-sec="${sec.id}"][data-row="${i}"][data-field="real_ent"]`);
-                            if (inputElem) {
-                                const tr = inputElem.closest('tr');
-                                if (tr) {
-                                    tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                    tr.classList.add('highlight-row');
-                                    setTimeout(() => tr.classList.remove('highlight-row'), 6000);
-                                }
-                            }
-                        }, 200);
-
-                        mostrarToast(`OP encontrada no setor: ${sec.title}`, 'fa-magnifying-glass-location');
-                        encontrou = true;
-                        break;
-                    }
-                }
-                if (encontrou) break;
+            if (activeInput && (activeInput.tagName === 'INPUT' || activeInput.tagName === 'SELECT')) {
+                cursorStart = activeInput.selectionStart || 0;
+                cursorEnd = activeInput.selectionEnd || 0;
             }
 
-            if (!encontrou) {
-                mostrarToast(`OP "${termo}" não encontrada nas linhas ativas.`, 'fa-triangle-exclamation');
-            }
-        }
-
-        function abrirTimelineOP(numeroOrdem) {
-            const num = extrairNumeroOrdem(numeroOrdem);
-            if (!num) return;
-
-            document.getElementById('timeline-op-title').innerText = num;
-            const container = document.getElementById('timeline-body');
-            let steps = [];
-
-            let pcpInfo = buscarOrdemPorNumero(null, num);
-
-            if (pcpInfo) {
-                steps.push({
-                    setor: `PCP / Programação (${(pcpInfo.sec || 'GERAL').toUpperCase()})`,
-                    status: 'completed',
-                    icon: 'fa-calendar-check',
-                    detalhes: `Produto: ${pcpInfo.prod || 'N/D'} | Plan Ent: ${pcpInfo.plan_ent || '-'} | Plan Saí: ${pcpInfo.plan_sai || '-'}`
-                });
-            }
+            let htmlViews = { solda: '', pintura: '', op1: '', op2: '' };
 
             configuracaoSetores.forEach(sec => {
-                const linhas = db.data[sec.id] || [];
-                linhas.forEach(r => {
-                    const ent = extrairNumeroOrdem(r.real_ent || r.ordem_ent);
-                    const sai = extrairNumeroOrdem(r.real_sai || r.ordem_sai);
-                    if (ent === num || sai === num) {
-                        let st = 'completed';
-                        let desc = '';
-                        if (r.aponta === 'OK') desc = '🟢 Concluído e Liberado';
-                        else if (r.aponta === 'COGI') desc = `🔴 Gargalo Ativo: ${r.impactos || 'Sem motivo'}`;
-                        else { desc = '⏳ Em Produção'; st = 'in-progress'; }
+                let tbody = '';
+                const limit = DEFAULT_VISIBLES_ROWS; 
+                const totalRows = db.data[sec.id] ? Math.max(db.data[sec.id].length, sec.rows) : sec.rows;
+                const isExpanded = expandedSections[sec.id];
+                const isSolda = (sec.view === 'solda');
 
-                        steps.push({
-                            setor: sec.title,
-                            status: st,
-                            icon: st === 'completed' ? 'fa-check' : 'fa-gear fa-spin',
-                            detalhes: `Entrada: ${r.data_real_ent || r.data_pcp || '-'} | Saída: ${r.data_real_sai || '-'} | Status: ${desc}`
-                        });
-                    }
-                });
-            });
+                for(let i = 0; i < totalRows; i++) {
+                    const row = db.data[sec.id] ? (db.data[sec.id][i] || getEmptyRow()) : getEmptyRow();
+                    let displayStyle = (!isExpanded && i >= limit) ? 'display: none;' : '';
+                    
+                    let clsEnt = '';
+                    let clsSai = '';
+                    
+                    if (row.stat_ent === 'red' && row.real_ent) clsEnt = 'ordem-diferente';
+                    else if (row.real_ent && row.real_ent.trim() !== '') clsEnt = 'ordem-ok';
+                    else if (row.ordem_ent) clsEnt = 'ordem-programada';
 
-            if (steps.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--randon-grey); font-weight:700;">Nenhum registro histórico estruturado para a OP ${num}.</div>`;
-            } else {
-                container.innerHTML = steps.map(s => `
-                    <div class="timeline-step ${s.status}">
-                        <div class="timeline-icon"><i class="fa-solid ${s.icon}"></i></div>
-                        <div class="timeline-content">
-                            <div class="timeline-title"><span>${s.setor}</span></div>
-                            <div class="timeline-dates">${s.detalhes}</div>
-                        </div>
-                    </div>
-                `).join('');
-            }
+                    if (row.stat_sai === 'red' && row.real_sai) clsSai = 'ordem-diferente';
+                    else if (row.real_sai && row.real_sai.trim() !== '') clsSai = 'ordem-ok';
+                    else if (row.ordem_sai) clsSai = 'ordem-programada';
+                    
+                    let dataClass = row.data_pcp ? 'data-input' : '';
+                    const opEntNum = extrairNumeroOrdem(row.real_ent || row.ordem_ent);
+                    const opSaiNum = extrairNumeroOrdem(row.real_sai || row.ordem_sai);
 
-            document.getElementById('modal-timeline').classList.add('active');
-        }
-
-        function fecharModalTimeline() {
-            document.getElementById('modal-timeline').classList.remove('active');
-        }
-
-        // ==========================================
-        // EXPORTAÇÃO EXCEL (.CSV UTF-8 BOM)
-        // ==========================================
-        function exportarExcelProducao() {
-            let csvContent = "\uFEFF";
-            csvContent += "Macro Setor;Setor;Data Referencia;OP Entrada;Real Entrada;Atraso Ent (Dias Uteis);OP Saida;Real Saida;Atraso Sai (Dias Uteis);Status Apontamento;Motivo Gargalo;Acoes Corretivas / Observacoes\n";
-
-            configuracaoSetores.forEach(sec => {
-                const linhas = db.data[sec.id] || [];
-                linhas.forEach(r => {
-                    const temDado = r.ordem_ent || r.ordem_sai || r.real_ent || r.real_sai || r.data_pcp || r.atr_ent || r.atr_sai;
-                    if (temDado) {
-                        const rowCsv = [
-                            sec.view.toUpperCase(),
-                            `"${sec.title}"`,
-                            `"${r.data_pcp || ''}"`,
-                            `"${r.ordem_ent || ''}"`,
-                            `"${r.real_ent || ''}"`,
-                            `"${r.atr_ent || 0}"`,
-                            `"${r.ordem_sai || ''}"`,
-                            `"${r.real_sai || ''}"`,
-                            `"${r.atr_sai || 0}"`,
-                            `"${r.aponta || 'PENDENTE'}"`,
-                            `"${r.impactos || ''}"`,
-                            `"${(r.acoes || '').replace(/"/g, '""')}"`
-                        ];
-                        csvContent += rowCsv.join(";") + "\n";
-                    }
-                });
-            });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", `Producao_Randon_${getDataAtualFormatada().replace('/','-')}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            mostrarToast("Planilha Excel (.CSV) Gerada!", "fa-file-excel");
-        }
-
-        // ==========================================
-        // BUSCA ROBUSTA NO PCP E CÁLCULO GERAL
-        // ==========================================
-        function buscarOrdemPorNumero(secId, numeroOrdem) {
-            if (!db.basePCP || !numeroOrdem) return null;
-            const numBuscado = extrairNumeroOrdem(numeroOrdem);
-            if (!numBuscado || numBuscado.length < 3) return null;
-
-            if (secId && db.basePCP[secId] && Array.isArray(db.basePCP[secId])) {
-                const cofre = db.basePCP[secId];
-                for (let i = cofre.length - 1; i >= 0; i--) {
-                    const p = cofre[i];
-                    const numP = extrairNumeroOrdem(p.ov);
-                    if (numP === numBuscado || (numP.length >= 5 && numBuscado.length >= 5 && (numBuscado.includes(numP) || numP.includes(numBuscado)))) {
-                        return { plan_ent: p.plan_ent, plan_sai: p.plan_sai, ov: p.ov, prod: p.prod || '', sec: secId };
-                    }
-                }
-            }
-
-            for (let sId in db.basePCP) {
-                if (sId === secId) continue;
-                const cofre = db.basePCP[sId];
-                if (Array.isArray(cofre)) {
-                    for (let i = cofre.length - 1; i >= 0; i--) {
-                        const p = cofre[i];
-                        const numP = extrairNumeroOrdem(p.ov);
-                        if (numP === numBuscado || (numP.length >= 5 && numBuscado.length >= 5 && (numBuscado.includes(numP) || numP.includes(numBuscado)))) {
-                            return { plan_ent: p.plan_ent, plan_sai: p.plan_sai, ov: p.ov, prod: p.prod || '', sec: sId };
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-
-        function buscarTodasOrdensParaData(secId, dataApontamento) {
-            const cofrePCP = db.basePCP[secId];
-            if (!cofrePCP) return [];
-            const dataNormalizada = normalizarDataParaComparacao(dataApontamento);
-            if (!dataNormalizada) return [];
-
-            const partes = dataNormalizada.split('/');
-            const dia = parseInt(partes[0], 10);
-            const mes = parseInt(partes[1], 10);
-
-            let matches = cofrePCP.filter(p => {
-                let planEntNorm = normalizarDataParaComparacao(p.plan_ent);
-                let planSaiNorm = normalizarDataParaComparacao(p.plan_sai);
-
-                let partesEnt = planEntNorm.split('/');
-                let partesSai = planSaiNorm.split('/');
-
-                let matchEnt = partesEnt.length >= 2 && parseInt(partesEnt[0], 10) === dia && parseInt(partesEnt[1], 10) === mes;
-                let matchSai = partesSai.length >= 2 && parseInt(partesSai[0], 10) === dia && parseInt(partesSai[1], 10) === mes;
-
-                return matchEnt || matchSai;
-            });
-
-            return matches.map(match => ({
-                ordem_ent: `${match.ov}${match.prod ? ' - ' + match.prod : ''}`,
-                ordem_sai: `${match.ov}${match.prod ? ' - ' + match.prod : ''}`,
-                plan_ent: match.plan_ent,
-                plan_sai: match.plan_sai,
-                ov: match.ov,
-                prod: match.prod || ''
-            }));
-        }
-
-        function aplicarMagiaMultipla(secId, startRowIdx, dataVal) {
-            if (!dataVal || dataVal.trim() === '') return 0;
-            const matches = buscarTodasOrdensParaData(secId, dataVal);
-            if (matches.length === 0) return 0;
-
-            if (!db.data[secId]) db.data[secId] = [];
-            const tabela = db.data[secId];
-
-            let rowCurrent = startRowIdx;
-
-            matches.forEach((item, idx) => {
-                while (rowCurrent < tabela.length && idx > 0 && (tabela[rowCurrent].lock_ent || tabela[rowCurrent].lock_sai || (tabela[rowCurrent].data_pcp && tabela[rowCurrent].data_pcp !== dataVal))) {
-                    rowCurrent++;
-                }
-
-                if (rowCurrent >= tabela.length) {
-                    tabela.push(getEmptyRow());
-                }
-
-                const r = tabela[rowCurrent];
-                r.data_pcp = dataVal;
-
-                if (!r.lock_ent && !r.real_ent) {
-                    r.ordem_ent = item.ordem_ent;
-                    r.plan_ent = item.plan_ent;
-                }
-                if (!r.lock_sai && !r.real_sai) {
-                    r.ordem_sai = item.ordem_sai;
-                    r.plan_sai = item.plan_sai;
-                }
-
-                rowCurrent++;
-            });
-
-            return matches.length;
-        }
-
-        function obterDataExecucaoLinha(row, tipo) {
-            if (row.data_pcp && String(row.data_pcp).trim() !== '') {
-                return String(row.data_pcp).trim();
-            }
-            if (tipo === 'ent' && row.data_real_ent && String(row.data_real_ent).trim() !== '') {
-                return String(row.data_real_ent).trim();
-            }
-            if (tipo === 'sai' && row.data_real_sai && String(row.data_real_sai).trim() !== '') {
-                return String(row.data_real_sai).trim();
-            }
-            return getDataAtualFormatada();
-        }
-
-        function atualizarAtrasosGlobais() {
-            if (!db.data) return;
-            
-            Object.keys(db.data).forEach(secId => {
-                const tabela = db.data[secId];
-                if (!tabela) return;
-                
-                tabela.forEach(row => {
-                    const dataExecEnt = obterDataExecucaoLinha(row, 'ent');
-                    const dataExecSai = obterDataExecucaoLinha(row, 'sai');
-
-                    // 1. AVALIAÇÃO DE ENTRADA
-                    if (row.manual_atr_ent) {
-                        let numAtr = parseInt(row.atr_ent, 10);
-                        if (!isNaN(numAtr)) {
-                            if (numAtr <= 0) row.stat_ent = 'green';
-                            else if (numAtr === 1) row.stat_ent = 'orange';
-                            else row.stat_ent = 'red';
-                        }
-                    } else if (row.real_ent && String(row.real_ent).trim() !== '') {
-                        const ordemReal = extrairNumeroOrdem(row.real_ent);
-                        const ordemPlan = extrairNumeroOrdem(row.ordem_ent);
-                        let planEntReal = row.plan_ent;
-                        
-                        const pcpData = buscarOrdemPorNumero(secId, ordemReal);
-                        if (pcpData && pcpData.plan_ent) {
-                            planEntReal = pcpData.plan_ent;
-                        }
-
-                        if (planEntReal && String(planEntReal).trim() !== '') {
-                            const cEnt = calcularAtraso(planEntReal, dataExecEnt);
-                            row.atr_ent = cEnt.atraso;
-                            row.stat_ent = cEnt.status;
-                        } else {
-                            if (!row.manual_atr_ent && !row.atr_ent) {
-                                row.atr_ent = ''; 
-                                row.stat_ent = '';
-                            }
-                        }
-
-                        const conflitoDeOrdem = (ordemReal !== ordemPlan && ordemPlan !== '');
-                        if (conflitoDeOrdem && !row.stat_ent) {
-                            row.stat_ent = 'red';
-                        }
-                    } else if (!row.manual_atr_ent && !row.atr_ent) {
-                        row.atr_ent = ''; 
-                        row.stat_ent = '';
-                    }
-
-                    // 2. AVALIAÇÃO DE SAÍDA
-                    if (row.manual_atr_sai) {
-                        let numAtr = parseInt(row.atr_sai, 10);
-                        if (!isNaN(numAtr)) {
-                            if (numAtr <= 0) row.stat_sai = 'green';
-                            else if (numAtr === 1) row.stat_sai = 'orange';
-                            else row.stat_sai = 'red';
-                        }
-                    } else if (row.real_sai && String(row.real_sai).trim() !== '') {
-                        const ordemRealSai = extrairNumeroOrdem(row.real_sai);
-                        const ordemPlanSai = extrairNumeroOrdem(row.ordem_sai);
-                        let planSaiReal = row.plan_sai;
-                        
-                        const pcpDataSai = buscarOrdemPorNumero(secId, ordemRealSai);
-                        if (pcpDataSai && pcpDataSai.plan_sai) {
-                            planSaiReal = pcpDataSai.plan_sai;
-                        }
-
-                        if (planSaiReal && String(planSaiReal).trim() !== '') {
-                            const cSai = calcularAtraso(planSaiReal, dataExecSai);
-                            row.atr_sai = cSai.atraso;
-                            row.stat_sai = cSai.status;
-                        } else {
-                            if (!row.manual_atr_sai && !row.atr_sai) {
-                                row.atr_sai = ''; 
-                                row.stat_sai = '';
-                            }
-                        }
-
-                        const conflitoDeOrdemSai = (ordemRealSai !== ordemPlanSai && ordemPlanSai !== '');
-                        if (conflitoDeOrdemSai && !row.stat_sai) {
-                            row.stat_sai = 'red';
-                        }
-                    } else if (!row.manual_atr_sai && !row.atr_sai) {
-                        row.atr_sai = ''; 
-                        row.stat_sai = '';
-                    }
-                });
-            });
-        }
-
-        // ==========================================
-        // RESTAURAÇÃO TOTAL INTELIGENTE
-        // ==========================================
-        function restaurarTudoUltimoPreenchimento() {
-            if (!isAdmin) {
-                toggleAdmin();
-                return;
-            }
-
-            let melhorSlot = null;
-            let maxCampos = -1;
-            let chaveMelhor = '';
-
-            for (let i = 1; i <= 60; i++) {
-                const k = 'erp_randon_v' + i;
-                const raw = localStorage.getItem(k);
-                if (raw) {
-                    try {
-                        const parsed = JSON.parse(raw);
-                        let total = contarCamposPreenchidos(parsed);
-                        if (total > maxCampos) {
-                            maxCampos = total;
-                            melhorSlot = parsed;
-                            chaveMelhor = k;
-                        }
-                    } catch(e) {}
-                }
-            }
-
-            const v49Raw = localStorage.getItem('erp_randon_v49');
-            if (v49Raw) {
-                try {
-                    const parsed49 = JSON.parse(v49Raw);
-                    let total49 = contarCamposPreenchidos(parsed49);
-                    if (total49 > maxCampos) {
-                        maxCampos = total49;
-                        melhorSlot = parsed49;
-                        chaveMelhor = 'erp_randon_v49';
-                    }
-                } catch(e) {}
-            }
-
-            if (melhorSlot && maxCampos > 0) {
-                if (confirm(`Encontrado ponto de restauração com ${maxCampos} campos preenchidos (${chaveMelhor}).\n\nDeseja restaurar TODAS as linhas e a estamparia agora?`)) {
-                    db = melhorSlot;
-                    expurgarLinhasFantasmas();
-                    atualizarDiasEstamparia();
-                    forceRenderTodasTabelas();
-                    autoSaveCloud(true);
-                    fecharModalBackups();
-                    mostrarToast(`Sucesso! ${maxCampos} campos restaurados em todas as linhas!`, 'fa-wand-magic-sparkles');
-                }
-            } else {
-                alert("Nenhum backup com dados preenchidos foi encontrado neste navegador.");
-            }
-        }
-
-        function contarCamposPreenchidos(dataObj) {
-            if (!dataObj) return 0;
-            let count = 0;
-            if (dataObj.data) {
-                Object.keys(dataObj.data).forEach(secId => {
-                    const rows = dataObj.data[secId];
-                    if (Array.isArray(rows)) {
-                        rows.forEach(r => {
-                            if (r && (r.real_ent || r.real_sai || r.ordem_ent || r.ordem_sai || r.acoes || r.impactos || r.aponta || r.atr_ent || r.atr_sai)) {
-                                count++;
-                            }
-                        });
-                    }
-                });
-            }
-            if (dataObj.estampariaMatriz && dataObj.estampariaMatriz.valores) {
-                Object.values(dataObj.estampariaMatriz.valores).forEach(arr => {
-                    if (Array.isArray(arr)) {
-                        arr.forEach(val => { if (val && String(val).trim() !== '') count++; });
-                    }
-                });
-            }
-            return count;
-        }
-
-        // ==========================================
-        // GERENCIADOR DE BACKUPS COM PRÉVIA
-        // ==========================================
-        function abrirModalBackups() {
-            const container = document.getElementById('lista-backups-container');
-            if (!container) return;
-
-            let backupsEncontrados = [];
-
-            for (let i = 1; i <= 60; i++) {
-                const key = 'erp_randon_v' + i;
-                const raw = localStorage.getItem(key);
-                if (raw) {
-                    try {
-                        const parsed = JSON.parse(raw);
-                        let totalPreenchidos = contarCamposPreenchidos(parsed);
-                        if (totalPreenchidos > 0) {
-                            backupsEncontrados.push({
-                                key: key,
-                                slot: i,
-                                preenchidos: totalPreenchidos,
-                                dataReferencia: parsed.globalDate || 'N/D'
-                            });
-                        }
-                    } catch(e) {}
-                }
-            }
-
-            const v49Raw = localStorage.getItem('erp_randon_v49');
-            if (v49Raw) {
-                try {
-                    const parsed49 = JSON.parse(v49Raw);
-                    let count49 = contarCamposPreenchidos(parsed49);
-                    if (count49 > 0) {
-                        backupsEncontrados.push({ key: 'erp_randon_v49', slot: 49, preenchidos: count49, dataReferencia: parsed49.globalDate || 'N/D' });
-                    }
-                } catch(e) {}
-            }
-
-            backupsEncontrados.sort((a,b) => b.preenchidos - a.preenchidos);
-
-            if (backupsEncontrados.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--randon-grey); font-weight:700;">Nenhum backup com dados preenchidos foi encontrado neste navegador.</div>`;
-            } else {
-                let html = `
-                    <table class="backup-list-table">
-                        <thead>
-                            <tr>
-                                <th>Slot / Memória</th>
-                                <th>Data Referência</th>
-                                <th>Campos com Dados (Linhas + Estamparia)</th>
-                                <th style="text-align:center;">Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                backupsEncontrados.forEach(b => {
-                    html += `
-                        <tr>
-                            <td><strong style="color:var(--randon-blue);">${b.key}</strong></td>
-                            <td>${b.dataReferencia}</td>
-                            <td><span style="color:var(--status-green); font-weight:900;">${b.preenchidos} campos</span></td>
-                            <td style="text-align:center;">
-                                <button class="btn btn-pcp" style="display:inline-flex; padding:6px 12px;" onclick="restaurarSlotEspecifico('${b.key}')">
-                                    <i class="fa-solid fa-rotate-left"></i> Restaurar Este
-                                </button>
+                    let tdFluxo = '';
+                    if (isSolda) {
+                        tdFluxo = `
+                            <td>
+                                <select class="btn-flow-action" onchange="encaminharOrdemManual('${sec.id}', ${i}, this.value)">
+                                    <option value="" ${!row.destino_fluxo ? 'selected' : ''}>Destino...</option>
+                                    <option value="SAIDA_LINHA_AP" ${row.destino_fluxo === 'SAIDA_LINHA_AP' ? 'selected' : ''}>🏁 Saída Linha (AP)</option>
+                                    <option value="SAIDA_LINHA_NP" ${row.destino_fluxo === 'SAIDA_LINHA_NP' ? 'selected' : ''}>⏳ Saída Linha (N/P)</option>
+                                    <option value="PINTURA" ${row.destino_fluxo === 'PINTURA' ? 'selected' : ''}>🎨 Pintura</option>
+                                    <option value="OP1" ${row.destino_fluxo === 'OP1' ? 'selected' : ''}>🛠️ OP1</option>
+                                    <option value="OP2" ${row.destino_fluxo === 'OP2' ? 'selected' : ''}>🏁 OP2</option>
+                                </select>
                             </td>
+                        `;
+                    }
+                    
+                    tbody += `
+                        <tr style="${displayStyle}">
+                            <td>
+                                ${row.origem ? `<div class="auto-tag">AUTO: ${row.origem}</div>` : ''}
+                                <input type="text" class="cell-input ${dataClass}" style="color: var(--randon-black); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="data_pcp" value="${row.data_pcp || ''}" placeholder="DD/MM">
+                            </td>
+                            
+                            <td class="${clsEnt}">
+                                <input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_ent" value="${row.ordem_ent || ''}" placeholder="Prog Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}">
+                            </td>
+                            <td><input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}" placeholder="Real Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
+                            <td><input type="number" class="cell-input" style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent !== undefined ? row.atr_ent : ''}" placeholder="0" title="Atraso manual ou calculado"></td>
+                            <td><div class="status-btn"><div class="circle ${row.stat_ent || ''}"></div></div></td>
+                            
+                            <td class="${clsSai}">
+                                <input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_sai" value="${row.ordem_sai || ''}" placeholder="Prog Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}">
+                            </td>
+                            <td><input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" data-sec="${sec.id}" data-row="${i}" data-field="real_sai" value="${row.real_sai || ''}" placeholder="Real Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
+                            <td><input type="number" class="cell-input" style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_sai" value="${row.atr_sai !== undefined ? row.atr_sai : ''}" placeholder="0" title="Atraso manual ou calculado"></td>
+                            <td><div class="status-btn"><div class="circle ${row.stat_sai || ''}"></div></div></td>
+                            
+                            <td class="${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' || row.aponta === 'NP' ? 'bg-cogi' : '')}">
+                                <select class="cell-input" style="color: inherit;" data-sec="${sec.id}" data-row="${i}" data-field="aponta">
+                                    <option value="" ${row.aponta === '' ? 'selected' : ''}>-</option>
+                                    <option value="OK" ${row.aponta === 'OK' ? 'selected' : ''}>${sec.view === 'pintura' ? '🟢 ENTREGUE' : '🟢 OK'}</option>
+                                    <option value="NP" ${row.aponta === 'NP' ? 'selected' : ''}>🔴 NÃO APONTADO</option>
+                                    <option value="COGI" ${row.aponta === 'COGI' ? 'selected' : ''}>🔴 COGI</option>
+                                </select>
+                            </td>
+
+                            ${tdFluxo}
+
+                            <td>
+                                <select class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="impactos">
+                                    <option value="">--</option>
+                                    ${MOTIVOS_GARGALO.map(m => `<option value="${m}" ${row.impactos === m ? 'selected' : ''}>${m}</option>`).join('')}
+                                </select>
+                            </td>
+                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="acoes" value="${row.acoes || ''}" style="text-align: left; padding-left: 10px;"></td>
                         </tr>
                     `;
-                });
-                html += `</tbody></table>`;
-                container.innerHTML = html;
-            }
-
-            document.getElementById('modal-backups').classList.add('active');
-        }
-
-        function fecharModalBackups() {
-            document.getElementById('modal-backups').classList.remove('active');
-        }
-
-        function restaurarSlotEspecifico(slotKey) {
-            const raw = localStorage.getItem(slotKey);
-            if (!raw) return alert("Slot de memória não encontrado.");
-            
-            try {
-                const parsed = JSON.parse(raw);
-                if (confirm(`Tem certeza que deseja restaurar a versão do backup "${slotKey}"? Ela substituirá a tela atual e sincronizará com a nuvem.`)) {
-                    db = parsed;
-                    expurgarLinhasFantasmas();
-                    atualizarDiasEstamparia();
-                    forceRenderTodasTabelas();
-                    autoSaveCloud(true);
-                    fecharModalBackups();
-                    mostrarToast(`Versão ${slotKey} restaurada com sucesso!`, 'fa-check');
                 }
-            } catch(e) {
-                alert("Erro ao ler o backup: " + e.message);
+
+                let badgeData = `<div class="data-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Mágica Dupla</div>`;
+                let btnMarcarTodos = `<button class="btn btn-pcp admin-only" onclick="marcarTodosSetor('${sec.id}', 'OK')" style="padding: 4px 10px; font-size: 10px; margin-left: 10px;" title="Marcar todas as OPs deste setor como OK"><i class="fa-solid fa-check-double"></i> Todos OK</button>`;
+                
+                let btnVerMais = '';
+                if (totalRows > limit) {
+                    let btnText = isExpanded ? 'Ocultar Linhas Excedentes <i class="fa-solid fa-chevron-up"></i>' : `Ver Mais ${totalRows - limit} Linhas <i class="fa-solid fa-chevron-down"></i>`;
+                    btnVerMais = `<div class="ver-mais-container"><button class="btn-expandir" onclick="toggleRows('${sec.id}')">${btnText}</button></div>`;
+                }
+
+                // Cabeçalho da Linha de Solda com Programado Total Exclusivo
+                let kpiHeaderHtml = '';
+                if (isSolda) {
+                    kpiHeaderHtml = `
+                        <div class="kpi-row-header" style="width: auto;">
+                            <div class="kpi-box" style="min-width: 160px; padding: 6px 20px;">
+                                <span style="color: #94a3b8;">Programado Total (PCP)</span>
+                                <strong id="kpi-mes-${sec.id}" style="color: white; font-size: 24px;">0</strong>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    kpiHeaderHtml = `
+                        <div class="kpi-row-header" style="width: 45%;">
+                            <div class="kpi-box"><span>Prog. Mês</span><strong id="kpi-mes-${sec.id}">0</strong></div>
+                            <div class="kpi-box" style="background: rgba(16,185,129,0.2);">
+                                <span style="color: #6ee7b7;">Apontados</span><strong id="kpi-apontados-${sec.id}" style="color: #6ee7b7;">0</strong>
+                            </div>
+                            <div class="kpi-box">
+                                <span style="color: #cbd5e1;">Meta Dia</span>
+                                <input type="number" class="meta-input" data-sec="${sec.id}" value="${db.meta[sec.id] || 0}" style="width:60px; background: transparent; border: 1px dashed rgba(255,255,255,0.3); color: white; text-align: center; font-size: 20px; font-weight: 900; outline: none; border-radius: 6px;">
+                            </div>
+                            <div class="status-box-giant red" id="status-box-${sec.id}">❌</div>
+                        </div>
+                    `;
+                }
+
+                htmlViews[sec.view] += `
+                    <div class="section-card">
+                        <div class="section-header">
+                            <div class="section-title-box" style="${isSolda ? 'width: 100%;' : 'width: 55%;'}">
+                                <h2>${sec.title}</h2>
+                                ${badgeData}
+                                ${btnMarcarTodos}
+                            </div>
+                            ${kpiHeaderHtml}
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:7%">📅 Data</th>
+                                    <th style="width:12%">📦 Prog. Ent</th>
+                                    <th style="width:9%">✅ Real Ent</th>
+                                    <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
+                                    <th style="width:12%">📦 Prog. Sai</th>
+                                    <th style="width:9%">✅ Real Sai</th>
+                                    <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
+                                    <th style="width:10%">📋 Aponta</th>
+                                    ${isSolda ? '<th style="width:11%">🚀 Destino</th>' : ''}
+                                    <th style="width:10%">⚠️ Gargalo</th>
+                                    <th style="${isSolda ? 'width:14%' : 'width:18%'}; text-align: left; padding-left: 10px;">🛠️ Ações Corretivas</th>
+                                </tr>
+                            </thead>
+                            <tbody>${tbody}</tbody>
+                        </table>
+                        ${btnVerMais}
+                    </div>
+                `;
+            });
+
+            ['solda', 'pintura', 'op1', 'op2'].forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if(el) el.innerHTML = htmlViews[v];
+            });
+
+            if (focusSec && focusRow && focusField) {
+                let target = document.querySelector(`[data-sec="${focusSec}"][data-row="${focusRow}"][data-field="${focusField}"]`);
+                if (target) {
+                    target.focus();
+                    if(target.tagName === 'INPUT' && target.type !== 'number') target.setSelectionRange(cursorStart, cursorEnd);
+                }
             }
         }
 
-        // ==========================================
-        // RENDERIZAÇÃO
-        // ==========================================
+        function toggleRows(secId) {
+            expandedSections[secId] = !expandedSections[secId];
+            renderizarViews();
+        }
+
+        function forceRenderTodasTabelas() {
+            expurgarLinhasFantasmas();
+            atualizarAtrasosGlobais(); 
+            renderizarEstampariaMatriz();
+            renderizarViews(); 
+            recalcularDashboard(); 
+            renderResumoApontamento();
+            renderPainelGargalos();
+            recalcularPainelPremio();
+        }
+
+        function expurgarLinhasFantasmas() {
+            if (!db.data) db.data = {}; 
+            configuracaoSetores.forEach(sec => {
+                if(!db.data[sec.id]) db.data[sec.id] = [];
+                while (db.data[sec.id].length < sec.rows) {
+                    db.data[sec.id].push(getEmptyRow());
+                }
+            });
+        }
+
         function renderizarEstampariaMatriz() {
             const container = document.getElementById('tabela-estamparia-matriz');
             if(!container) return;
@@ -1858,7 +2098,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             let tbody = '';
             estampariaLinhas.forEach((linha) => {
                 if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                
                 tbody += `<tr><td style="font-weight: 900; padding-left: 20px; color: var(--randon-dark); font-size: 14px; border-right: 2px solid var(--randon-black);">${linha}</td>`;
                 
                 datas.forEach((d, cIdx) => {
@@ -1892,221 +2131,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             updateEstampariaChart();
         }
 
-        function renderizarViews() {
-            let activeInput = document.activeElement;
-            let focusSec = activeInput ? activeInput.dataset.sec : null;
-            let focusRow = activeInput ? activeInput.dataset.row : null;
-            let focusField = activeInput ? activeInput.dataset.field : null;
-            let cursorStart = 0, cursorEnd = 0;
-            
-            if (activeInput && (activeInput.tagName === 'INPUT' || activeInput.tagName === 'SELECT')) {
-                cursorStart = activeInput.selectionStart || 0;
-                cursorEnd = activeInput.selectionEnd || 0;
-            }
-
-            let htmlViews = { solda: '', pintura: '', op1: '', op2: '' };
-
-            configuracaoSetores.forEach(sec => {
-                let tbody = '';
-                const limit = DEFAULT_VISIBLES_ROWS; 
-                const totalRows = db.data[sec.id] ? Math.max(db.data[sec.id].length, sec.rows) : sec.rows;
-                const isExpanded = expandedSections[sec.id];
-
-                for(let i = 0; i < totalRows; i++) {
-                    const row = db.data[sec.id] ? (db.data[sec.id][i] || getEmptyRow()) : getEmptyRow();
-                    let displayStyle = (!isExpanded && i >= limit) ? 'display: none;' : '';
-                    
-                    let clsEnt = '';
-                    let clsSai = '';
-                    
-                    if (row.stat_ent === 'red' && row.real_ent) clsEnt = 'ordem-diferente';
-                    else if (row.real_ent && row.real_ent.trim() !== '') clsEnt = 'ordem-ok';
-                    else if (row.ordem_ent) clsEnt = 'ordem-programada';
-
-                    if (row.stat_sai === 'red' && row.real_sai) clsSai = 'ordem-diferente';
-                    else if (row.real_sai && row.real_sai.trim() !== '') clsSai = 'ordem-ok';
-                    else if (row.ordem_sai) clsSai = 'ordem-programada';
-                    
-                    let dataClass = row.data_pcp ? 'data-input' : '';
-                    const opEntNum = extrairNumeroOrdem(row.real_ent || row.ordem_ent);
-                    const opSaiNum = extrairNumeroOrdem(row.real_sai || row.ordem_sai);
-                    
-                    tbody += `
-                        <tr style="${displayStyle}">
-                            <td>
-                                ${row.origem ? `<div class="auto-tag">AUTO: ${row.origem}</div>` : ''}
-                                <input type="text" class="cell-input ${dataClass}" style="color: var(--randon-black); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="data_pcp" value="${row.data_pcp || ''}" placeholder="DD/MM">
-                            </td>
-                            
-                            <td class="${clsEnt}">
-                                <input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_ent" value="${row.ordem_ent || ''}" placeholder="Prog Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}">
-                            </td>
-                            <td><input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}" placeholder="Real Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
-                            <td><input type="number" class="cell-input" style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent !== undefined ? row.atr_ent : ''}" placeholder="0" title="Atraso manual ou calculado"></td>
-                            <td><div class="status-btn"><div class="circle ${row.stat_ent || ''}"></div></div></td>
-                            
-                            <td class="${clsSai}">
-                                <input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_sai" value="${row.ordem_sai || ''}" placeholder="Prog Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}">
-                            </td>
-                            <td><input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" data-sec="${sec.id}" data-row="${i}" data-field="real_sai" value="${row.real_sai || ''}" placeholder="Real Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
-                            <td><input type="number" class="cell-input" style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_sai" value="${row.atr_sai !== undefined ? row.atr_sai : ''}" placeholder="0" title="Atraso manual ou calculado"></td>
-                            <td><div class="status-btn"><div class="circle ${row.stat_sai || ''}"></div></div></td>
-                            
-                            <td class="${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' ? 'bg-cogi' : '')}">
-                                <select class="cell-input" style="color: inherit;" data-sec="${sec.id}" data-row="${i}" data-field="aponta">
-                                    <option value="" ${row.aponta === '' ? 'selected' : ''}>-</option>
-                                    <option value="OK" ${row.aponta === 'OK' ? 'selected' : ''}>${sec.view === 'pintura' ? '🟢 ENTREGUE' : '🟢 OK'}</option>
-                                    <option value="COGI" ${row.aponta === 'COGI' ? 'selected' : ''}>🔴 COGI</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="impactos">
-                                    <option value="">--</option>
-                                    ${MOTIVOS_GARGALO.map(m => `<option value="${m}" ${row.impactos === m ? 'selected' : ''}>${m}</option>`).join('')}
-                                </select>
-                            </td>
-                            <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="acoes" value="${row.acoes || ''}" style="text-align: left; padding-left: 10px;"></td>
-                        </tr>
-                    `;
-                }
-
-                let badgeData = `<div class="data-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Mágica Dupla</div>`;
-                let btnMarcarTodos = `<button class="btn btn-pcp admin-only" onclick="marcarTodosSetor('${sec.id}', 'OK')" style="padding: 4px 10px; font-size: 10px; margin-left: 10px;" title="Marcar todas as OPs deste setor como OK"><i class="fa-solid fa-check-double"></i> Todos OK</button>`;
-                
-                let btnVerMais = '';
-                if (totalRows > limit) {
-                    let btnText = isExpanded ? 'Ocultar Linhas Excedentes <i class="fa-solid fa-chevron-up"></i>' : `Ver Mais ${totalRows - limit} Linhas <i class="fa-solid fa-chevron-down"></i>`;
-                    btnVerMais = `<div class="ver-mais-container"><button class="btn-expandir" onclick="toggleRows('${sec.id}')">${btnText}</button></div>`;
-                }
-
-                htmlViews[sec.view] += `
-                    <div class="section-card">
-                        <div class="section-header">
-                            <div class="section-title-box">
-                                <h2>${sec.title}</h2>
-                                ${badgeData}
-                                ${btnMarcarTodos}
-                            </div>
-                            <div class="kpi-row-header">
-                                <div class="kpi-box"><span>Prog. Mês</span><strong id="kpi-mes-${sec.id}">0</strong></div>
-                                <div class="kpi-box" style="background: rgba(239,68,68,0.2);">
-                                    <span style="color: #fca5a5;">Atraso Ent.</span><strong id="kpi-atr-ent-${sec.id}" style="color: #fca5a5;">0</strong>
-                                </div>
-                                <div class="kpi-box" style="background: rgba(239,68,68,0.2);">
-                                    <span style="color: #fca5a5;">Atraso Saí.</span><strong id="kpi-atr-sai-${sec.id}" style="color: #fca5a5;">0</strong>
-                                </div>
-                                <div class="kpi-box" style="background: rgba(16,185,129,0.2);">
-                                    <span style="color: #6ee7b7;">Apontados</span><strong id="kpi-apontados-${sec.id}" style="color: #6ee7b7;">0</strong>
-                                </div>
-                                <div class="kpi-box">
-                                    <span style="color: #cbd5e1;">Meta Dia</span>
-                                    <input type="number" class="meta-input" data-sec="${sec.id}" value="${db.meta[sec.id] || 0}" style="width:60px; background: transparent; border: 1px dashed rgba(255,255,255,0.3); color: white; text-align: center; font-size: 20px; font-weight: 900; outline: none; border-radius: 6px;">
-                                </div>
-                                <div class="status-box-giant red" id="status-box-${sec.id}">❌</div>
-                            </div>
-                        </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="width:7%">📅 Data</th>
-                                    <th style="width:12%">📦 Prog. Ent</th>
-                                    <th style="width:9%">✅ Real Ent</th>
-                                    <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
-                                    <th style="width:12%">📦 Prog. Sai</th>
-                                    <th style="width:9%">✅ Real Sai</th>
-                                    <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
-                                    <th style="width:10%">
-                                        📋 Aponta 
-                                        <span class="admin-only" style="cursor:pointer; font-size:9px; background:#10b981; color:white; padding:2px 6px; border-radius:4px; margin-left:4px; font-weight:800; display:inline-block;" onclick="marcarTodosSetor('${sec.id}', 'OK')" title="Marcar todas como OK">✓ Todos</span>
-                                    </th>
-                                    <th style="width:12%">⚠️ Gargalo</th>
-                                    <th style="width:15%; text-align: left; padding-left: 10px;">🛠️ Ações Corretivas</th>
-                                </tr>
-                            </thead>
-                            <tbody>${tbody}</tbody>
-                        </table>
-                        ${btnVerMais}
-                    </div>
-                `;
-            });
-
-            ['solda', 'pintura', 'op1', 'op2'].forEach(v => {
-                const el = document.getElementById(`view-${v}`);
-                if(el) el.innerHTML = htmlViews[v];
-            });
-
-            if (focusSec && focusRow && focusField) {
-                let target = document.querySelector(`[data-sec="${focusSec}"][data-row="${focusRow}"][data-field="${focusField}"]`);
-                if (target) {
-                    target.focus();
-                    if(target.tagName === 'INPUT' && target.type !== 'number') target.setSelectionRange(cursorStart, cursorEnd);
-                }
-            }
-        }
-
-        function toggleRows(secId) {
-            expandedSections[secId] = !expandedSections[secId];
-            renderizarViews();
-        }
-
-        function recalcularDashboard() {
-            configuracaoSetores.forEach(sec => {
-                let sumAtrEnt = 0, sumAtrSai = 0, totalProgMes = 0, apontados = 0;
-                if(db.data[sec.id]) {
-                    db.data[sec.id].forEach(row => {
-                        let aEnt = parseInt(row.atr_ent, 10);
-                        let aSai = parseInt(row.atr_sai, 10);
-                        if (!isNaN(aEnt) && aEnt > 0) sumAtrEnt += aEnt;
-                        if (!isNaN(aSai) && aSai > 0) sumAtrSai += aSai;
-                        
-                        const temProgramacao = (row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '') ||
-                                                (row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '');
-                        if(temProgramacao) totalProgMes++;
-                        if(row.aponta && row.aponta.trim() !== '') apontados++;
-                    });
-                }
-                try {
-                    const elMes = document.getElementById(`kpi-mes-${sec.id}`);
-                    const elAtrEnt = document.getElementById(`kpi-atr-ent-${sec.id}`);
-                    const elAtrSai = document.getElementById(`kpi-atr-sai-${sec.id}`);
-                    const elApont = document.getElementById(`kpi-apontados-${sec.id}`);
-                    const box = document.getElementById(`status-box-${sec.id}`);
-                    if (elMes) elMes.innerText = totalProgMes;
-                    if (elAtrEnt) elAtrEnt.innerText = sumAtrEnt;
-                    if (elAtrSai) elAtrSai.innerText = sumAtrSai;
-                    if (elApont) elApont.innerText = apontados;
-                    if (box) {
-                        const meta = db.meta[sec.id] || 0;
-                        if(apontados >= meta && meta > 0) { box.className = 'status-box-giant green'; box.innerText = '✅'; } 
-                        else { box.className = 'status-box-giant red'; box.innerText = '❌'; }
-                    }
-                } catch(e) {}
-            });
-
-            recalcularPainelPremio();
-        }
-
-        function forceRenderTodasTabelas() {
-            expurgarLinhasFantasmas();
-            atualizarAtrasosGlobais(); 
-            renderizarEstampariaMatriz();
-            renderizarViews(); 
-            recalcularDashboard(); 
-            renderResumoApontamento();
-            renderPainelGargalos();
-            recalcularPainelPremio();
-        }
-
-        function expurgarLinhasFantasmas() {
-            if (!db.data) db.data = {}; 
-            configuracaoSetores.forEach(sec => {
-                if(!db.data[sec.id]) db.data[sec.id] = [];
-                while (db.data[sec.id].length < sec.rows) {
-                    db.data[sec.id].push(getEmptyRow());
-                }
-            });
-        }
-
         function atualizarDiasEstamparia() {
             if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
             if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
@@ -2119,182 +2143,245 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 estampariaLinhas.forEach(linha => {
                     if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
                 });
-                return;
-            }
-            const hoje = new Date();
-            const hojeFormatado = formatarDataEstamparia(hoje);
-            let datasAntigas = db.estampariaMatriz.datas;
-            if (datasAntigas[datasAntigas.length - 1] !== hojeFormatado) {
-                datasAntigas.shift();
-                datasAntigas.push(hojeFormatado);
-                estampariaLinhas.forEach(linha => {
-                    if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                    db.estampariaMatriz.valores[linha].shift();
-                    db.estampariaMatriz.valores[linha].push('');
-                });
-                autoSaveCloud(false);
             }
         }
 
-        // ==========================================
-        // CARGA PCP NO COFRE
-        // ==========================================
-        const REGEX_DATA_SOLTA = /\b(\d{1,2})[\.\/\-](\d{1,2})(?:[\.\/\-](\d{2,4}))?\b/g;
+        // =========================================================================
+        // RESUMO EXECUTIVO DO DIA COM SUPORTE TOTAL À NAVEGAÇÃO DE 3 MESES
+        // =========================================================================
+        function updateAnalytics() {
+            let totApont = 0, totOk = 0, totCogi = 0, totAtrasos = 0, totalPlan = 0, totalReal = 0;
+            let impactosContagem = {}; 
+            MOTIVOS_GARGALO.forEach(m => impactosContagem[m] = 0);
+            let aderenciaLabels = [], aderenciaPlan = [], aderenciaReal = [];
+            let diaAcessoMap = {}; 
+            if(!db.data) return;
 
-        function extrairDatasDaLinha(linha) {
-            const datas = [];
-            let m;
-            REGEX_DATA_SOLTA.lastIndex = 0;
-            while ((m = REGEX_DATA_SOLTA.exec(linha)) !== null) {
-                datas.push({ raw: m[0], index: m.index, dia: m[1], mes: m[2], ano: m[3] || '2026' });
-            }
-            return datas;
-        }
+            const dataHojeRef = db.globalDate || getDataCompleta();
+            const elDataLabel = document.getElementById('resumo-data-label');
+            if (elDataLabel) elDataLabel.innerText = dataHojeRef;
 
-        function processarBasePCP() {
-            const text = document.getElementById('pcp-dados').value;
-            if(!text.trim()) return mostrarToast('Cole os dados primeiro!', 'fa-triangle-exclamation');
-            
-            let count = 0, erros = 0;
-            let linhasOriginais = text.split('\n').filter(l => l.trim() !== '');
-            if(!db.basePCP) db.basePCP = {};
+            let soldaPrev = 0, soldaOk = 0, soldaOps = [];
+            let pinturaEmFila = 0, pinturaEntregue = 0, pinturaOps = [];
+            let op1Total = 0, op1Ok = 0, op1Ops = [];
+            let op2Total = 0, op2Ok = 0, op2Ops = [];
 
-            linhasOriginais.forEach(linha => {
-                const primeiraColTeste = linha.trim().split(/\t|\s{2,}/)[0].toLowerCase();
-                if (primeiraColTeste.includes('linha') || primeiraColTeste.includes('ordem') || primeiraColTeste.includes('venda')) return;
+            const setoresSolda = ['tq', 'ct', 'bases', 'silo', 'esp_box1', 'esp_box2', 'esp_box3', 'extra'];
+            const setoresOP1 = ['op1_tq1', 'op1_tq2', 'op1_tq3', 'op1_silo', 'op1_ct', 'op1_bases'];
 
-                const datasEncontradas = extrairDatasDaLinha(linha);
-                if (datasEncontradas.length < 2) { erros++; return; }
+            // Varrer tabelas ativas
+            configuracaoSetores.forEach(sec => {
+                let secPlan = 0, secReal = 0;
+                if(db.data[sec.id]) {
+                    db.data[sec.id].forEach((row) => {
+                        const ap = row.aponta;
+                        if(ap === 'OK') { totApont++; totOk++; }
+                        if(ap === 'COGI' || ap === 'NP') { totApont++; totCogi++; }
+                        
+                        let aEnt = parseInt(row.atr_ent, 10);
+                        let aSai = parseInt(row.atr_sai, 10);
+                        if (!isNaN(aEnt) && aEnt > 0) totAtrasos += aEnt;
+                        if (!isNaN(aSai) && aSai > 0) totAtrasos += aSai;
 
-                const dataEntradaInfo = datasEncontradas[0];
-                const dataSaidaInfo = datasEncontradas[datasEncontradas.length > 1 ? 1 : 0];
+                        const temProgramacaoBI = (row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '') ||
+                                                  (row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '');
+                        if(temProgramacaoBI) {
+                            secPlan++;
+                            if((row.real_ent && row.real_ent.trim() !== '') || (row.real_sai && row.real_sai.trim() !== '')) {
+                                secReal++;
+                            }
+                        }
+                        if(row.real_sai && row.real_sai.trim() !== '') {
+                            const d = row.data_pcp || row.real_sai;
+                            if(d && d.includes('/')) {
+                                if(!diaAcessoMap[d]) diaAcessoMap[d] = { ok: 0, cogi: 0 };
+                                if(ap === 'OK') diaAcessoMap[d].ok++;
+                                if(ap === 'COGI' || ap === 'NP') diaAcessoMap[d].cogi++;
+                            }
+                        }
+                        if(row.impactos && impactosContagem[row.impactos] !== undefined) impactosContagem[row.impactos]++;
 
-                const dataEntrada = `${dataEntradaInfo.dia.padStart(2,'0')}/${dataEntradaInfo.mes.padStart(2,'0')}/${dataEntradaInfo.ano.length === 2 ? '20'+dataEntradaInfo.ano : dataEntradaInfo.ano}`;
-                const dataSaida = `${dataSaidaInfo.dia.padStart(2,'0')}/${dataSaidaInfo.mes.padStart(2,'0')}/${dataSaidaInfo.ano.length === 2 ? '20'+dataSaidaInfo.ano : dataSaidaInfo.ano}`;
+                        // Identificação precisa para a data selecionada no seletor
+                        const matchData = dateMatches(row.data_pcp, dataHojeRef) || 
+                                          dateMatches(row.plan_sai, dataHojeRef) || 
+                                          dateMatches(row.data_real_sai, dataHojeRef) ||
+                                          Boolean(row.destino_fluxo);
+                        const rawOp = row.real_sai || row.ordem_sai || row.real_ent || row.ordem_ent;
+                        const opNum = extrairNumeroOrdem(rawOp);
 
-                let cabecalho = linha.substring(0, dataEntradaInfo.index).trim();
-                let col = cabecalho.split('\t').map(c => c.trim()).filter(c => c !== '');
-                if (col.length < 2) col = cabecalho.split(/\s{2,}/).map(c => c.trim()).filter(c => c !== '');
-                if (col.length < 2) col = cabecalho.split(/\s+/).map(c => c.trim()).filter(c => c !== '');
+                        if (matchData && opNum) {
+                            const descProd = obterDescricaoProduto(row.ordem_sai || row.ordem_ent, opNum) || 'PRODUTO NÃO ESPECIFICADO';
+                            const tipo = identificarTipoProduto(descProd, sec.title);
+                            const isOk = (ap === 'OK' || row.destino_fluxo === 'SAIDA_LINHA_AP');
 
-                if (col.length < 2) { erros++; return; }
-
-                const linhaAlvo = col[0];
-                const ov = col[1];
-                const prod = col.length > 2 ? col.slice(2).join(' ') : '';
-
-                if (ov === '' || ov.length < 3) { erros++; return; }
-
-                let destino = mapaLinhaParaSetor[linhaAlvo] || siglaParaSetor[linhaAlvo.trim().toUpperCase()] || null;
-                if (!destino) {
-                    const lowerLinha = linhaAlvo.toLowerCase();
-                    if (lowerLinha.includes('tanque')) destino = 'tq';
-                    else if (lowerLinha.includes('carrega tudo') || lowerLinha.includes('carrega')) destino = 'ct';
-                    else if (lowerLinha.includes('bases')) destino = 'bases';
-                    else if (lowerLinha.includes('silo')) destino = 'silo';
-                    else if (lowerLinha.includes('especiais')) destino = 'esp_box1';
-                    else if (lowerLinha.includes('pintura')) destino = 'pintura';
-                    else if (lowerLinha.includes('op1')) destino = 'op1_bases';
-                    else if (lowerLinha.includes('op2')) destino = 'op2_geral';
+                            if (setoresSolda.includes(sec.id)) {
+                                if (!soldaOps.some(o => o.op === opNum)) {
+                                    soldaPrev++;
+                                    if (isOk) soldaOk++;
+                                    soldaOps.push({ secId: sec.id, sec: sec.title.split(' ')[0], op: opNum, desc: descProd, tipoProd: tipo, ok: isOk });
+                                }
+                            }
+                            if (sec.id === 'pintura' || row.destino_fluxo === 'PINTURA') {
+                                if (!pinturaOps.some(o => o.op === opNum)) {
+                                    if (isOk) pinturaEntregue++;
+                                    else pinturaEmFila++;
+                                    pinturaOps.push({ secId: sec.id, sec: 'Pintura', op: opNum, desc: descProd, tipoProd: tipo, ok: isOk });
+                                }
+                            }
+                            if (setoresOP1.includes(sec.id) || row.destino_fluxo === 'OP1') {
+                                if (!op1Ops.some(o => o.op === opNum)) {
+                                    op1Total++;
+                                    if (isOk) op1Ok++;
+                                    op1Ops.push({ secId: sec.id, sec: sec.title.replace('MOF OP1:','').trim(), op: opNum, desc: descProd, tipoProd: tipo, ok: isOk });
+                                }
+                            }
+                            if (sec.id === 'op2_geral' || row.destino_fluxo === 'OP2') {
+                                if (!op2Ops.some(o => o.op === opNum)) {
+                                    op2Total++;
+                                    if (isOk) op2Ok++;
+                                    op2Ops.push({ secId: sec.id, sec: 'OP2', op: opNum, desc: descProd, tipoProd: tipo, ok: isOk });
+                                }
+                            }
+                        }
+                    });
                 }
-
-                if (destino) {
-                    if (!db.basePCP[destino]) db.basePCP[destino] = [];
-
-                    let existing = db.basePCP[destino].find(r =>
-                        extrairNumeroOrdem(r.ov) === extrairNumeroOrdem(ov) &&
-                        r.plan_ent === dataEntrada &&
-                        r.plan_sai === dataSaida
-                    );
-                    if (existing) {
-                        existing.prod = prod;
-                    } else {
-                        db.basePCP[destino].push({ ov: ov, prod: prod, plan_ent: dataEntrada, plan_sai: dataSaida });
-                    }
-                    count++;
-                } else {
-                    erros++;
+                totalPlan += secPlan; totalReal += secReal;
+                if (['tq', 'ct', 'bases', 'pintura'].includes(sec.id)) { 
+                    aderenciaLabels.push(sec.title.split(' ')[0]); 
+                    aderenciaPlan.push(secPlan); 
+                    aderenciaReal.push(secReal); 
                 }
             });
+
+            // Varrer o PCP para carregar o que ainda não entrou nas telas mas está agendado para o dia selecionado
+            const dataNormHoje = normalizarDataParaComparacao(dataHojeRef);
+            const dataCurtaHoje = dataNormHoje.substring(0, 5);
+
+            Object.keys(pcpIndex.bySectorAndDate).forEach(secId => {
+                const secMap = pcpIndex.bySectorAndDate[secId];
+                const dadosData = secMap[dataNormHoje] || secMap[dataCurtaHoje];
+                if (dadosData && dadosData.saidas) {
+                    dadosData.saidas.forEach(item => {
+                        const num = extrairNumeroOrdem(item.ov);
+                        const jaEsta = soldaOps.some(o => o.op === num) || pinturaOps.some(o => o.op === num) || op1Ops.some(o => o.op === num) || op2Ops.some(o => o.op === num);
+                        if (!jaEsta && num) {
+                            const descProd = item.prod || 'PROGRAMAÇÃO PCP';
+                            const tipo = identificarTipoProduto(descProd, secId.toUpperCase());
+                            if (setoresSolda.includes(secId)) {
+                                soldaPrev++;
+                                const secCfg = configuracaoSetores.find(c => c.id === secId);
+                                soldaOps.push({ secId: secId, sec: secCfg ? secCfg.title.split(' ')[0] : 'SOLDA', op: num, desc: descProd, tipoProd: tipo, ok: false });
+                            } else if (secId === 'pintura') {
+                                pinturaEmFila++;
+                                pinturaOps.push({ secId: secId, sec: 'Pintura', op: num, desc: descProd, tipoProd: tipo, ok: false });
+                            } else if (setoresOP1.includes(secId)) {
+                                op1Total++;
+                                const secCfg = configuracaoSetores.find(c => c.id === secId);
+                                op1Ops.push({ secId: secId, sec: secCfg ? secCfg.title.replace('MOF OP1:','').trim() : 'OP1', op: num, desc: descProd, tipoProd: tipo, ok: false });
+                            } else if (secId === 'op2_geral') {
+                                op2Total++;
+                                op2Ops.push({ secId: secId, sec: 'OP2', op: num, desc: descProd, tipoProd: tipo, ok: false });
+                            }
+                        }
+                    });
+                }
+            });
+
+            function renderListaCards(lista) {
+                if (!lista || lista.length === 0) {
+                    return '<div style="color:#94a3b8; padding:8px 0; font-size:11px; font-weight:700;">Nenhuma ordem programada para este dia.</div>';
+                }
+                return lista.map(o => `
+                    <div class="resumo-dia-item ${o.ok ? 'item-ok' : 'item-np'}">
+                        <div class="resumo-dia-item-top">
+                            <strong style="color: ${o.ok ? '#047857' : '#1e293b'}; font-size: 12px; cursor:pointer;" ondblclick="abrirTimelineOP('${o.op}')">
+                                <i class="fa-solid fa-file-invoice"></i> OP ${o.op}
+                            </strong>
+                            <span class="badge-prod-tipo">${o.tipoProd}</span>
+                        </div>
+                        <div style="font-size: 11px; font-weight: 700; color: #334155; margin: 2px 0;">
+                            ${o.desc}
+                        </div>
+                        <div class="resumo-dia-item-bottom">
+                            <span style="font-size: 10px; color: var(--randon-grey); font-weight: 800;">Linha: ${o.sec}</span>
+                            <div style="display:flex; align-items:center; gap:6px;">
+                                ${o.ok ? '<span class="badge-status-ok">✔ APONTADO</span>' : '<span class="badge-status-np">NÃO APONTADO</span>'}
+                                ${!o.ok ? `<button class="btn-apontar-rapido" onclick="apontarRapidoPorOp('${o.op}', '${o.secId}')" title="Apontar agora"><i class="fa-solid fa-check"></i> Apontar</button>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Atualização dos Cards
+            const elSoldaCount = document.getElementById('resumo-count-solda');
+            const elSoldaSub = document.getElementById('resumo-sub-solda');
+            const elSoldaList = document.getElementById('resumo-list-solda');
+            if (elSoldaCount) elSoldaCount.innerText = soldaPrev;
+            if (elSoldaSub) elSoldaSub.innerText = `${soldaOk} Apontadas (Verde) / ${soldaPrev - soldaOk} Não Apontadas (Normal)`;
+            if (elSoldaList) elSoldaList.innerHTML = renderListaCards(soldaOps);
+
+            const elPinturaCount = document.getElementById('resumo-count-pintura');
+            const elPinturaSub = document.getElementById('resumo-sub-pintura');
+            const elPinturaList = document.getElementById('resumo-list-pintura');
+            const totPintura = pinturaEntregue + pinturaEmFila;
+            if (elPinturaCount) elPinturaCount.innerText = totPintura;
+            if (elPinturaSub) elPinturaSub.innerText = `${pinturaEntregue} Apontadas (Verde) / ${pinturaEmFila} Não Apontadas (Normal)`;
+            if (elPinturaList) elPinturaList.innerHTML = renderListaCards(pinturaOps);
+
+            const elOp1Count = document.getElementById('resumo-count-op1');
+            const elOp1Sub = document.getElementById('resumo-sub-op1');
+            const elOp1List = document.getElementById('resumo-list-op1');
+            if (elOp1Count) elOp1Count.innerText = op1Total;
+            if (elOp1Sub) elOp1Sub.innerText = `${op1Ok} Apontadas (Verde) / ${op1Total - op1Ok} Não Apontadas (Normal)`;
+            if (elOp1List) elOp1List.innerHTML = renderListaCards(op1Ops);
+
+            const elOp2Count = document.getElementById('resumo-count-op2');
+            const elOp2Sub = document.getElementById('resumo-sub-op2');
+            const elOp2List = document.getElementById('resumo-list-op2');
+            if (elOp2Count) elOp2Count.innerText = op2Total;
+            if (elOp2Sub) elOp2Sub.innerText = `${op2Ok} Apontadas (Verde) / ${op2Total - op2Ok} Não Apontadas (Normal)`;
+            if (elOp2List) elOp2List.innerHTML = renderListaCards(op2Ops);
+
+            document.getElementById('dash-total-apontamentos').innerText = totApont;
+            document.getElementById('dash-ok').innerText = totApont > 0 ? ((totOk/totApont)*100).toFixed(0) + '%' : '0%';
+            let pAderencia = totalPlan > 0 ? ((totalReal / totalPlan) * 100) : 0;
+            if(pAderencia > 100) pAderencia = 100;
+            document.getElementById('dash-aderencia').innerText = pAderencia.toFixed(0) + '%';
+            document.getElementById('dash-cogi').innerText = totCogi;
+            document.getElementById('dash-atrasos').innerText = totAtrasos;
+
+            let paretoArray = Object.keys(impactosContagem).map(k => ({ m: k, c: impactosContagem[k] })).filter(x => x.c > 0).sort((a,b) => b.c - a.c);
+            chartsObj.pareto.data.labels = paretoArray.map(i => i.m.substring(0,10));
+            chartsObj.pareto.data.datasets = [{ 
+                label: 'Ocorrências', 
+                data: paretoArray.map(i => i.c), 
+                backgroundColor: '#3b82f6', 
+                borderRadius: 6 
+            }];
+            chartsObj.pareto.update();
+
+            const diasOrdenados = Object.keys(diaAcessoMap).sort();
+            chartsObj.line.data.labels = diasOrdenados;
+            chartsObj.line.data.datasets = [
+                { label: 'Entregas (OK)', data: diasOrdenados.map(d => diaAcessoMap[d].ok), borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true },
+                { label: 'Atrasos (COGI/N.P)', data: diasOrdenados.map(d => diaAcessoMap[d].cogi), borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', fill: true }
+            ];
+            chartsObj.line.update();
+
+            chartsObj.pie.data.datasets[0].data = [totOk, totCogi]; 
+            chartsObj.pie.update();
             
-            fecharModalPCP();
-            if (count > 0) {
-                forceRenderTodasTabelas(); 
-                autoSaveCloud(true);
-                mostrarToast(`${count} Ordens injetadas no cofre oculto! ${erros > 0 ? `(${erros} ignoradas)` : ''}`, 'fa-bolt');
-            } else {
-                mostrarToast(`Nenhuma ordem importada. Verifique o formato dos dados.`, 'fa-triangle-exclamation');
-            }
+            chartsObj.aderencia.data.labels = aderenciaLabels;
+            chartsObj.aderencia.data.datasets = [
+                { label: 'Plan', data: aderenciaPlan, backgroundColor: '#cbd5e1', borderRadius: 4 },
+                { label: 'Real', data: aderenciaReal, backgroundColor: '#3b82f6', borderRadius: 4 }
+            ];
+            chartsObj.aderencia.update();
+
+            renderPainelGargalos();
         }
 
-        // ==========================================
-        // BOTÕES DE LIMPEZA
-        // ==========================================
-        function apagarProgramacaoPCP() {
-            if(!isAdmin) return toggleAdmin();
-            const confirmacao = confirm("ATENÇÃO: Deseja apagar TODAS as Ordens, Datas e Programações da fábrica inteira para iniciar um NOVO MÊS?");
-            if (confirmacao) {
-                db.basePCP = {};
-                if(!db.data) db.data = {};
-                configuracaoSetores.forEach(sec => {
-                    db.data[sec.id] = [];
-                    for(let i=0; i<sec.rows; i++) { db.data[sec.id].push(getEmptyRow()); }
-                });
-                atualizarAtrasosGlobais(); renderizarViews(); recalcularDashboard(); renderResumoApontamento();
-                
-                clearTimeout(saveTimeout);
-                let dbLimpo = sanearParaFirebase(db);
-                localStorage.setItem('erp_randon_v49', JSON.stringify(dbLimpo));
-                
-                if(firebaseDB) {
-                    dbRef.set(dbLimpo).then(() => {
-                        mostrarToast("Programação PCP Zerada!", "fa-trash-can");
-                    }).catch(e => {
-                        console.error("Erro no Firebase:", e);
-                        mostrarToast("Erro ao salvar. Tela limpa localmente.", "fa-triangle-exclamation");
-                    });
-                } else {
-                    mostrarToast("Programação PCP Zerada Localmente!", "fa-trash-can");
-                }
-            }
-        }
-
-        function zerarApontamentos() {
-            if(!isAdmin) return toggleAdmin();
-            const confirmacao = confirm("Deseja LIMPAR os apontamentos manuais (OK/COGI, Ações, Gargalos) para iniciar a reunião de hoje? A programação do PCP NÃO será afetada.");
-            if (confirmacao) {
-                if(!db.data) db.data = {};
-                Object.keys(db.data).forEach(tabelaKey => {
-                    db.data[tabelaKey].forEach(row => {
-                        row.aponta = ''; row.impactos = ''; row.acoes = '';
-                        row.atr_ent = ''; row.atr_sai = ''; row.manual_atr_ent = false; row.manual_atr_sai = false;
-                        row.stat_ent = ''; row.stat_sai = '';
-                        row.real_ent = ''; row.real_sai = ''; row.data_pcp = '';
-                        row.data_real_ent = ''; row.data_real_sai = '';
-                        row.ordem_ent = ''; row.ordem_sai = '';
-                        row.lock_ent = false; row.lock_sai = false;
-                    });
-                });
-                atualizarAtrasosGlobais(); renderizarViews(); recalcularDashboard(); renderResumoApontamento();
-                
-                clearTimeout(saveTimeout);
-                let dbLimpo = sanearParaFirebase(db);
-                localStorage.setItem('erp_randon_v49', JSON.stringify(dbLimpo));
-                
-                if(firebaseDB) {
-                    dbRef.set(dbLimpo).then(() => {
-                        mostrarToast("Lousa pronta para hoje!", "fa-eraser");
-                    }).catch(e => {
-                        console.error("Erro no Firebase:", e);
-                        mostrarToast("Erro de Conexão. Limpo apenas na tela.", "fa-triangle-exclamation");
-                    });
-                }
-            }
-        }
-
-        // ==========================================
-        // GUIAS DE APONTAMENTO
-        // ==========================================
         function renderResumoApontamento() {
             const tbodySaidas = document.getElementById('tbody-saidas-linha');
             const tbodyEspelho = document.getElementById('tbody-espelho-finais');
@@ -2311,7 +2398,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         const plan = row.plan_sai || '';
                         const real = row.real_sai || '';
                         const dataExec = row.data_pcp || '';
-                        if (dateMatches(plan, db.globalDate) || dateMatches(dataExec, db.globalDate) || dateMatches(real, db.globalDate) || (real.trim() !== '' && row.aponta === '')) {
+                        if (dateMatches(plan, db.globalDate) || dateMatches(dataExec, db.globalDate) || dateMatches(real, db.globalDate) || (real.trim() !== '' && row.aponta === '') || Boolean(row.destino_fluxo)) {
                             hasSaidas = true;
                             const opNum = extrairNumeroOrdem(row.ordem_sai || row.ordem_ent || real);
                             htmlSaidas += `
@@ -2321,8 +2408,8 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                                     </td>
                                     <td style="font-weight:900; font-size:14px; text-align: center; color: var(--randon-blue); cursor:pointer;" ondblclick="abrirTimelineOP('${opNum}')">${row.ordem_sai || row.ordem_ent || '-'}</td>
                                     <td style="font-size: 16px; font-weight: 900; text-align: center; color: var(--status-green); cursor:pointer;" ondblclick="abrirTimelineOP('${opNum}')">${real || '-'}</td>
-                                    <td class="center-text ${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' ? 'bg-cogi' : '')}" style="border-radius: 6px; margin: 4px; display: table-cell;">
-                                        <div style="text-align: center; font-weight: 900; font-size: 13px;">${row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' ? '🔴 COGI' : '⏳ PENDENTE')}</div>
+                                    <td class="center-text ${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' || row.aponta === 'NP' ? 'bg-cogi' : '')}" style="border-radius: 6px; margin: 4px; display: table-cell;">
+                                        <div style="text-align: center; font-weight: 900; font-size: 13px;">${row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' || row.aponta === 'NP' ? '🔴 NÃO APONTADO' : '⏳ PENDENTE')}</div>
                                     </td>
                                     <td style="padding-left: 20px; color: var(--randon-grey); font-weight:700; font-size: 12px;">${row.acoes || '-'}</td>
                                 </tr>
@@ -2338,7 +2425,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                     db.data[secId].forEach(row => {
                         if ((row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '')) {
                             hasEspelho = true;
-                            let statusText = row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' ? '🔴 COGI' : '⏳ EM ANDAMENTO');
+                            let statusText = row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' || row.aponta === 'NP' ? '🔴 NÃO APONTADO' : '⏳ EM ANDAMENTO');
                             let gargalo = row.impactos ? ` | Gargalo: ${row.impactos}` : '';
                             const opNum = extrairNumeroOrdem(row.ordem_sai || row.ordem_ent);
                             
@@ -2348,7 +2435,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                                     <td style="font-weight:900; font-size:14px; text-align: center; color: var(--randon-blue); cursor:pointer;" ondblclick="abrirTimelineOP('${opNum}')">${row.ordem_sai || row.ordem_ent}</td>
                                     <td style="font-weight: 900; font-size: 14px; text-align: center; color: var(--randon-dark);">${row.real_ent || '-'}</td>
                                     <td style="font-weight: 900; font-size: 14px; text-align: center; color: var(--status-green);">${row.real_sai || '-'}</td>
-                                    <td style="padding-left: 20px; font-weight:800; font-size: 13px; color: ${row.aponta === 'COGI' ? 'var(--status-red)' : 'var(--randon-grey)'};">
+                                    <td style="padding-left: 20px; font-weight:800; font-size: 13px; color: ${row.aponta === 'COGI' || row.aponta === 'NP' ? 'var(--status-red)' : 'var(--randon-grey)'};">
                                         ${statusText} ${gargalo}
                                     </td>
                                 </tr>
@@ -2365,9 +2452,6 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             tbodyEspelho.innerHTML = htmlEspelho;
         }
 
-        // ==========================================
-        // PAINEL DE GARGALOS
-        // ==========================================
         function renderPainelGargalos() {
             const tbody = document.getElementById('tbody-painel-gargalos');
             const elTotal = document.getElementById('ggl-total');
@@ -2389,7 +2473,7 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
 
                             const ordem = row.ordem_sai || row.ordem_ent || '-';
                             const data = row.data_pcp || '-';
-                            const apontaTxt = row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' ? '🔴 COGI' : '⏳ Pendente');
+                            const apontaTxt = row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' || row.aponta === 'NP' ? '🔴 NÃO APONTADO' : '⏳ Pendente');
                             const opNum = extrairNumeroOrdem(ordem);
 
                             html += `
@@ -2423,291 +2507,41 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
         }
 
         // ==========================================
-        // MANIPULAÇÃO DE DADOS (INPUT & CHANGE EVENTS)
+        // AUTO-SAVE COM GESTÃO INTELIGENTE DE COTA LOCAL
         // ==========================================
-        document.addEventListener('input', function(e) {
-            const target = e.target;
-            if (target.classList.contains('cell-input')) {
-                const secId = target.dataset.sec, rowIdx = target.dataset.row, field = target.dataset.field;
-                if (!secId || rowIdx === undefined || !field) return;
-                const row = db.data[secId] && db.data[secId][rowIdx];
-                if (!row) return;
+        function autoSaveCloud(exibirAviso = true) {
+            setStatusConexao('syncing');
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                let dbLimpo = sanearParaFirebase(db);
                 
-                const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
-                row[field] = val;
-
-                if (field === 'ordem_ent') row.lock_ent = (val.trim() !== '');
-                if (field === 'ordem_sai') row.lock_sai = (val.trim() !== '');
-                if (field === 'real_ent') row.lock_ent = (val.trim() !== '');
-                if (field === 'real_sai') row.lock_sai = (val.trim() !== '');
-                if (field === 'atr_ent') row.manual_atr_ent = (val.trim() !== '');
-                if (field === 'atr_sai') row.manual_atr_sai = (val.trim() !== '');
-
-                autoSaveCloud(false);
-            }
-        });
-
-        document.addEventListener('change', function(e) {
-            const target = e.target;
-            
-            if (target.classList.contains('pino-val-input')) {
-                const cat = target.dataset.cat;
-                const idx = parseInt(target.dataset.idx);
-                const type = target.dataset.type;
-                const val = parseInt(target.value) || 0;
-
-                if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
-                if (db.pinosManual[cat] && db.pinosManual[cat][idx]) {
-                    db.pinosManual[cat][idx][type] = val;
-                    if (type === 'ok') db.pinosManual[cat][idx].okManual = true;
-                    recalcularPainelPremio();
-                    autoSaveCloud();
-                    mostrarToast("Pinos atualizados!", "fa-trophy");
-                }
-                return;
-            }
-
-            if (target.id === 'premio-meta-base-input' || target.id === 'premio-atraso-input') {
-                if (!db.premioConfig) db.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
-                db.premioConfig.metaBase = parseInt(document.getElementById('premio-meta-base-input').value) || 78;
-                db.premioConfig.atraso = parseInt(document.getElementById('premio-atraso-input').value) || 12;
-                recalcularPainelPremio();
-                autoSaveCloud();
-                mostrarToast("Meta do mês atualizada!", "fa-bullseye");
-                return;
-            }
-
-            if(target.classList.contains('estamparia-val-input')) {
-                const linha = target.dataset.rowName;
-                const cIdx = parseInt(target.dataset.colIdx);
-                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-                if (!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {};
-                if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                db.estampariaMatriz.valores[linha][cIdx] = target.value;
-                autoSaveCloud(); 
-                renderizarEstampariaMatriz();
-                return;
-            }
-            if(target.dataset && target.dataset.colDate !== undefined) {
-                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-                db.estampariaMatriz.datas[parseInt(target.dataset.colDate)] = target.value;
-                autoSaveCloud(); 
-                renderizarEstampariaMatriz();
-                return;
-            }
-
-            if(target.classList.contains('meta-input')) {
-                db.meta[target.dataset.sec] = parseInt(target.value) || 0;
-                recalcularDashboard(); 
-                autoSaveCloud(); 
-                return;
-            }
-
-            if(target.classList.contains('cell-input')) {
-                const secId = target.dataset.sec, rowIdx = parseInt(target.dataset.row), field = target.dataset.field;
-                if (!secId || rowIdx === undefined || isNaN(rowIdx) || !field) return;
-                const row = db.data[secId] && db.data[secId][rowIdx];
-                if (!row) return;
-                const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
-                const oldAponta = row.aponta;
-                
-                if (field === 'atr_ent') {
-                    row.manual_atr_ent = (val.trim() !== '');
-                    row.atr_ent = val;
-                    let numAtr = parseInt(val, 10);
-                    if (!isNaN(numAtr)) {
-                        if (numAtr <= 0) row.stat_ent = 'green';
-                        else if (numAtr === 1) row.stat_ent = 'orange';
-                        else row.stat_ent = 'red';
-                    } else {
-                        row.stat_ent = '';
-                    }
-                    atualizarAtrasosGlobais();
-                    forceRenderTodasTabelas();
-                    autoSaveCloud(true);
-                    return;
+                // Salva localmente com rotação segura de 5 slots para evitar QuotaExceededError
+                try {
+                    let rIdx = parseInt(localStorage.getItem('rolling_idx') || '1');
+                    localStorage.setItem('erp_randon_v' + rIdx, JSON.stringify(dbLimpo));
+                    localStorage.setItem('rolling_idx', rIdx >= 5 ? 1 : rIdx + 1);
+                } catch(e) {
+                    console.warn("Liberando espaço no LocalStorage...");
+                    for(let i=6; i<=60; i++) { localStorage.removeItem('erp_randon_v' + i); }
+                    try {
+                        localStorage.setItem('erp_randon_v1', JSON.stringify(dbLimpo));
+                    } catch(err){}
                 }
 
-                if (field === 'atr_sai') {
-                    row.manual_atr_sai = (val.trim() !== '');
-                    row.atr_sai = val;
-                    let numAtr = parseInt(val, 10);
-                    if (!isNaN(numAtr)) {
-                        if (numAtr <= 0) row.stat_sai = 'green';
-                        else if (numAtr === 1) row.stat_sai = 'orange';
-                        else row.stat_sai = 'red';
-                    } else {
-                        row.stat_sai = '';
-                    }
-                    atualizarAtrasosGlobais();
-                    forceRenderTodasTabelas();
-                    autoSaveCloud(true);
-                    return;
+                if(dbRef) {
+                    dbRef.set(dbLimpo).then(() => {
+                        setStatusConexao('online');
+                        if(exibirAviso) mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up");
+                    }).catch(err => {
+                        console.error("ERRO FIREBASE:", err);
+                        setStatusConexao('offline');
+                    });
+                } else {
+                    setStatusConexao('offline');
                 }
+            }, 300);
+        }
 
-                if (field === 'data_pcp') {
-                    if (val.trim() === '') {
-                        row.data_pcp = '';
-                    } else {
-                        let parts = val.split(/[\/\.]/);
-                        let valNormalizado = val;
-                        if(parts.length >= 2) {
-                            valNormalizado = `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}`;
-                        }
-                        
-                        row.data_pcp = valNormalizado;
-                        const qtdPuxadas = aplicarMagiaMultipla(secId, rowIdx, valNormalizado);
-                        
-                        if (qtdPuxadas > 0) {
-                            mostrarToast(`📦 ${qtdPuxadas} Ordem(ns) carregada(s) para ${valNormalizado}`, 'fa-wand-magic-sparkles');
-                        } else {
-                            mostrarToast(`⚠️ Sem ordem no PCP p/ ${valNormalizado}`, 'fa-pen');
-                        }
-                    }
-                    atualizarAtrasosGlobais();
-                    forceRenderTodasTabelas();
-                    autoSaveCloud(true);
-                    return;
-                }
-                
-                row[field] = val;
-                
-                if (field === 'ordem_ent') {
-                    row.lock_ent = (val.trim() !== '');
-                    const num = extrairNumeroOrdem(val);
-                    if (num) {
-                        const pcp = buscarOrdemPorNumero(secId, num);
-                        if (pcp) {
-                            row.plan_ent = pcp.plan_ent || row.plan_ent;
-                            if (pcp.prod && !val.includes(pcp.prod)) {
-                                row.ordem_ent = `${pcp.ov} - ${pcp.prod}`;
-                            }
-                            if (!row.data_pcp && pcp.plan_ent) {
-                                row.data_pcp = normalizarDataParaComparacao(pcp.plan_ent);
-                            }
-                            mostrarToast(`Prog. Entrada: OP ${num} localizada no PCP!`, 'fa-calendar-check');
-                        }
-                    }
-                }
-                
-                if (field === 'ordem_sai') {
-                    row.lock_sai = (val.trim() !== '');
-                    const num = extrairNumeroOrdem(val);
-                    if (num) {
-                        const pcp = buscarOrdemPorNumero(secId, num);
-                        if (pcp) {
-                            row.plan_sai = pcp.plan_sai || row.plan_sai;
-                            if (pcp.prod && !val.includes(pcp.prod)) {
-                                row.ordem_sai = `${pcp.ov} - ${pcp.prod}`;
-                            }
-                            if (!row.data_pcp && pcp.plan_sai) {
-                                row.data_pcp = normalizarDataParaComparacao(pcp.plan_sai);
-                            }
-                            mostrarToast(`Prog. Saída: OP ${num} localizada no PCP!`, 'fa-calendar-check');
-                        }
-                    }
-                }
-
-                if (field === 'real_ent') {
-                    row.lock_ent = true;
-                    if (!row.data_real_ent) row.data_real_ent = getDataCompleta();
-                    if (!row.data_pcp || row.data_pcp.trim() === '') {
-                        row.data_pcp = getDataAtualFormatada();
-                        aplicarMagiaMultipla(secId, rowIdx, row.data_pcp);
-                    }
-                    const numOv = extrairNumeroOrdem(val);
-                    if (numOv) {
-                        const pcpAchado = buscarOrdemPorNumero(secId, numOv);
-                        if (pcpAchado) {
-                            mostrarToast(`📦 Ordem ${numOv} localizada no PCP! Plan: ${pcpAchado.plan_ent}`, 'fa-magic');
-                        } else {
-                            if (!row.ordem_ent) row.ordem_ent = val;
-                            mostrarToast(`⚠️ Ordem ${numOv} não programada para este setor.`, 'fa-triangle-exclamation');
-                        }
-                    }
-                }
-                
-                if (field === 'real_sai') {
-                    row.lock_sai = true;
-                    if (!row.data_real_sai) row.data_real_sai = getDataCompleta();
-                    if (!row.data_pcp || row.data_pcp.trim() === '') {
-                        row.data_pcp = getDataAtualFormatada();
-                        aplicarMagiaMultipla(secId, rowIdx, row.data_pcp);
-                    }
-                    const numOv = extrairNumeroOrdem(val);
-                    if (numOv) {
-                        const pcpAchado = buscarOrdemPorNumero(secId, numOv);
-                        if (pcpAchado) {
-                            mostrarToast(`📦 Ordem ${numOv} localizada no PCP! Saída Plan: ${pcpAchado.plan_sai}`, 'fa-magic');
-                        } else {
-                            if (!row.ordem_sai) row.ordem_sai = val;
-                            mostrarToast(`⚠️ Ordem ${numOv} não programada para este setor.`, 'fa-triangle-exclamation');
-                        }
-                    }
-                }
-
-                atualizarAtrasosGlobais();
-
-                // AVANÇO AUTOMÁTICO PARA A PRÓXIMA ETAPA
-                if (field === 'aponta' && val === 'OK' && oldAponta !== 'OK') {
-                    const secConfig = configuracaoSetores.find(c => c.id === secId);
-                    let targetId = null;
-                    if (secConfig.view === 'solda') targetId = 'pintura';
-                    else if (secConfig.view === 'pintura') {
-                        const info = (row.ordem_sai || row.ordem_ent || row.origem || '').toUpperCase();
-                        if (info.includes('TQ')) targetId = 'op1_tq1'; 
-                        else if (info.includes('CT')) targetId = 'op1_ct'; 
-                        else if (info.includes('SILO')) targetId = 'op1_silo';
-                        else targetId = 'op1_bases'; 
-                    }
-                    else if (secConfig.view === 'op1') targetId = 'op2_geral';
-                    
-                    if (targetId) {
-                        const tbDest = db.data[targetId];
-                        let freeIdx = tbDest.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
-                        if (freeIdx === -1) {
-                            tbDest.push(getEmptyRow());
-                            freeIdx = tbDest.length - 1;
-                        }
-                        
-                        const hojeDataCompleta = getDataCompleta();
-                        const ovAvanco = extrairNumeroOrdem(row.real_sai || row.real_ent);
-                        
-                        let planSaiOrig = null;
-                        const pcpInfo = buscarOrdemPorNumero(secId, ovAvanco);
-                        if (pcpInfo && pcpInfo.plan_sai) planSaiOrig = pcpInfo.plan_sai;
-                        
-                        if (!planSaiOrig) {
-                            const orig = db.data[secId].find(r => (extrairNumeroOrdem(r.ordem_sai) === ovAvanco || extrairNumeroOrdem(r.ordem_ent) === ovAvanco));
-                            if (orig && orig.plan_sai) planSaiOrig = orig.plan_sai;
-                        }
-                        
-                        const planEntDest = planSaiOrig ? adicionarUmDiaUtil(planSaiOrig) : '';
-                        
-                        tbDest[freeIdx].ordem_ent = row.ordem_sai || row.ordem_ent;
-                        tbDest[freeIdx].ordem_sai = row.ordem_sai || row.ordem_ent;
-                        tbDest[freeIdx].plan_ent = planEntDest; 
-                        tbDest[freeIdx].real_ent = ovAvanco;
-                        tbDest[freeIdx].data_pcp = getDataAtualFormatada();
-                        tbDest[freeIdx].data_real_ent = hojeDataCompleta;
-                        tbDest[freeIdx].origem = secConfig.title;
-                        
-                        let calc = calcularAtraso(planEntDest, hojeDataCompleta);
-                        tbDest[freeIdx].atr_ent = calc.atraso;
-                        tbDest[freeIdx].stat_ent = calc.status;
-                        
-                        const destTitle = configuracaoSetores.find(c=>c.id===targetId).title;
-                        mostrarToast(`Avançou para: ${destTitle}`, 'fa-truck-fast');
-                    }
-                }
-                forceRenderTodasTabelas(); 
-                autoSaveCloud(true);
-            }
-        });
-
-        // ==========================================
-        // FIREBASE E SINCRONIZAÇÃO
-        // ==========================================
         function initFirebase() {
             try {
                 if (!firebase.apps.length) {
@@ -2732,49 +2566,26 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                         if (!nuvemDb.basePCP) nuvemDb.basePCP = {};
                         if (!nuvemDb.premioConfig) nuvemDb.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
                         db = nuvemDb; 
+                        reconstruirIndicesPCP();
                         expurgarLinhasFantasmas(); 
                         atualizarDiasEstamparia();
                         forceRenderTodasTabelas();
                     }
                 });
             } catch (e) {
-                console.log("Modo Offline Ativado.");
                 setStatusConexao('offline');
-                let rIdx = parseInt(localStorage.getItem('rolling_idx') || '2') - 1;
-                if (rIdx === 0) rIdx = 60;
-                const local = localStorage.getItem('erp_randon_v' + rIdx) || localStorage.getItem('erp_randon_v49'); 
+                const local = localStorage.getItem('erp_randon_v1') || localStorage.getItem('erp_randon_v49'); 
                 if(local) { 
                     db = JSON.parse(local); 
+                    reconstruirIndicesPCP();
                     atualizarDiasEstamparia(); 
                     forceRenderTodasTabelas(); 
                 }
             }
         }
 
-        function autoSaveCloud(exibirAviso = true) {
-            setStatusConexao('syncing');
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(() => {
-                let dbLimpo = sanearParaFirebase(db);
-                let rIdx = parseInt(localStorage.getItem('rolling_idx') || '1');
-                localStorage.setItem('erp_randon_v' + rIdx, JSON.stringify(dbLimpo));
-                localStorage.setItem('rolling_idx', rIdx >= 60 ? 1 : rIdx + 1);
-                if(dbRef) {
-                    dbRef.set(dbLimpo).then(() => {
-                        setStatusConexao('online');
-                        if(exibirAviso) mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up");
-                    }).catch(err => {
-                        console.error("ERRO FIREBASE:", err);
-                        setStatusConexao('offline');
-                    });
-                } else {
-                    setStatusConexao('offline');
-                }
-            }, 300);
-        }
-
         // ==========================================
-        // AUTENTICAÇÃO (CADEADO)
+        // DEMAIS FUNÇÕES DE SUPORTE
         // ==========================================
         function toggleAdmin() {
             const modal = document.getElementById('modal-auth');
@@ -2792,9 +2603,9 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             }
         }
 
-        function fecharModalAuth() {
-            document.getElementById('modal-auth').classList.remove('active');
-        }
+        function fecharModalAuth() { document.getElementById('modal-auth').classList.remove('active'); }
+        function fecharModalPCP() { document.getElementById('modal-pcp').classList.remove('active'); }
+        function abrirModalPCP() { if (!isAdmin) { toggleAdmin(); return; } document.getElementById('modal-pcp').classList.add('active'); }
 
         function verificarSenha() {
             const senha = document.getElementById('senha-admin').value;
@@ -2808,24 +2619,25 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
                 mostrarToast('Modo Administrador ativado!', 'fa-shield-halved');
                 forceRenderTodasTabelas();
             } else {
-                alert('Senha incorreta! Tente novamente. Fale com Alexsandro Tozzo');
+                alert('Senha incorreta! Tente novamente.');
                 document.getElementById('senha-admin').value = '';
                 document.getElementById('senha-admin').focus();
             }
         }
 
-        function abrirModalPCP() {
-            if (!isAdmin) { toggleAdmin(); return; }
-            document.getElementById('modal-pcp').classList.add('active');
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+            const container = document.getElementById(`view-${tabId}`);
+            if (container) container.classList.add('active');
+            const btn = document.getElementById(`tab-btn-${tabId}`);
+            if (btn) btn.classList.add('active');
+            if (tabId === 'premio') recalcularPainelPremio();
+            if (tabId === 'analytics') updateAnalytics();
+            if (tabId === 'apontamento') renderResumoApontamento();
+            if (tabId === 'estamparia') updateEstampariaChart();
         }
 
-        function fecharModalPCP() {
-            document.getElementById('modal-pcp').classList.remove('active');
-        }
-
-        // ==========================================
-        // CHART.JS E NAVEGAÇÃO
-        // ==========================================
         function initCharts() {
             Chart.defaults.font.family = "'Inter', sans-serif"; 
             Chart.defaults.color = "#94a3b8";
@@ -2893,202 +2705,382 @@ BASES	1003071122	CHASSI...	12.05.2026	26.06.2026"></textarea>
             chartsObj.estamparia.update();
         }
 
-        function updateAnalytics() {
-            let totApont = 0, totOk = 0, totCogi = 0, totAtrasos = 0, totalPlan = 0, totalReal = 0;
-            let impactosContagem = {}; 
-            MOTIVOS_GARGALO.forEach(m => impactosContagem[m] = 0);
-            let aderenciaLabels = [], aderenciaPlan = [], aderenciaReal = [];
-            let diaAcessoMap = {}; 
-            if(!db.data) return;
-            
-            configuracaoSetores.forEach(sec => {
-                let secPlan = 0, secReal = 0;
-                if(db.data[sec.id]) {
-                    db.data[sec.id].forEach(row => {
-                        const ap = row.aponta;
-                        if(ap === 'OK') { totApont++; totOk++; }
-                        if(ap === 'COGI') { totApont++; totCogi++; }
-                        
-                        let aEnt = parseInt(row.atr_ent, 10);
-                        let aSai = parseInt(row.atr_sai, 10);
-                        if (!isNaN(aEnt) && aEnt > 0) totAtrasos += aEnt;
-                        if (!isNaN(aSai) && aSai > 0) totAtrasos += aSai;
-
-                        const temProgramacaoBI = (row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '') ||
-                                                  (row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '');
-                        if(temProgramacaoBI) {
-                            secPlan++;
-                            if((row.real_ent && row.real_ent.trim() !== '') || (row.real_sai && row.real_sai.trim() !== '')) {
-                                secReal++;
-                            }
-                        }
-                        if(row.real_sai && row.real_sai.trim() !== '') {
-                            const d = row.data_pcp || row.real_sai;
-                            if(d && d.includes('/')) {
-                                if(!diaAcessoMap[d]) diaAcessoMap[d] = { ok: 0, cogi: 0 };
-                                if(ap === 'OK') diaAcessoMap[d].ok++;
-                                if(ap === 'COGI') diaAcessoMap[d].cogi++;
-                            }
-                        }
-                        if(row.impactos && impactosContagem[row.impactos] !== undefined) impactosContagem[row.impactos]++;
-                    });
-                }
-                totalPlan += secPlan; totalReal += secReal;
-                if (['tq', 'ct', 'bases', 'pintura'].includes(sec.id)) { 
-                    aderenciaLabels.push(sec.title.split(' ')[0]); 
-                    aderenciaPlan.push(secPlan); 
-                    aderenciaReal.push(secReal); 
-                }
-            });
-
-            document.getElementById('dash-total-apontamentos').innerText = totApont;
-            document.getElementById('dash-ok').innerText = totApont > 0 ? ((totOk/totApont)*100).toFixed(0) + '%' : '0%';
-            let pAderencia = totalPlan > 0 ? ((totalReal / totalPlan) * 100) : 0;
-            if(pAderencia > 100) pAderencia = 100;
-            document.getElementById('dash-aderencia').innerText = pAderencia.toFixed(0) + '%';
-            document.getElementById('dash-cogi').innerText = totCogi;
-            document.getElementById('dash-atrasos').innerText = totAtrasos;
-
-            let paretoArray = Object.keys(impactosContagem).map(k => ({ m: k, c: impactosContagem[k] })).filter(x => x.c > 0).sort((a,b) => b.c - a.c);
-            chartsObj.pareto.data.labels = paretoArray.map(i => i.m.substring(0,10));
-            chartsObj.pareto.data.datasets = [{ 
-                label: 'Ocorrências', 
-                data: paretoArray.map(i => i.c), 
-                backgroundColor: '#3b82f6', 
-                borderRadius: 6 
-            }];
-            chartsObj.pareto.update();
-
-            const diasOrdenados = Object.keys(diaAcessoMap).sort();
-            chartsObj.line.data.labels = diasOrdenados;
-            chartsObj.line.data.datasets = [
-                { label: 'Entregas (OK)', data: diasOrdenados.map(d => diaAcessoMap[d].ok), borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true },
-                { label: 'Atrasos (COGI)', data: diasOrdenados.map(d => diaAcessoMap[d].cogi), borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', fill: true }
-            ];
-            chartsObj.line.update();
-
-            chartsObj.pie.data.datasets[0].data = [totOk, totCogi]; 
-            chartsObj.pie.update();
-            
-            chartsObj.aderencia.data.labels = aderenciaLabels;
-            chartsObj.aderencia.data.datasets = [
-                { label: 'Plan', data: aderenciaPlan, backgroundColor: '#cbd5e1', borderRadius: 4 },
-                { label: 'Real', data: aderenciaReal, backgroundColor: '#3b82f6', borderRadius: 4 }
-            ];
-            chartsObj.aderencia.update();
-
-            renderPainelGargalos();
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-            const container = document.getElementById(`view-${tabId}`);
-            if (container) container.classList.add('active');
-            const btn = document.getElementById(`tab-btn-${tabId}`);
-            if (btn) btn.classList.add('active');
-            if (tabId === 'premio') recalcularPainelPremio();
-            if (tabId === 'analytics') updateAnalytics();
-            if (tabId === 'apontamento') renderResumoApontamento();
-            if (tabId === 'estamparia') updateEstampariaChart();
-        }
-
-        // ==========================================
-        // MODO TV / ANDON DINÂMICO
-        // ==========================================
-        const TABS_ANDON = ['premio', 'solda', 'pintura', 'op1', 'op2', 'analytics'];
-        let currentAndonIndex = 0;
-        let progressVal = 0;
-
         function iniciarModoTV() {
-            isTVMode = true; 
+            isTVMode = true;
             document.body.classList.add('tv-mode');
-            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+            let currentTabIdx = 0;
+            let progress = 0;
+            const TABS_ANDON = ['premio', 'solda', 'pintura', 'op1', 'op2', 'analytics'];
+            const duracaoPorTab = 15000;
+            const step = 100;
             
-            currentAndonIndex = 0;
-            switchTab(TABS_ANDON[currentAndonIndex]); 
+            switchTab(TABS_ANDON[currentTabIdx]);
             
             clearInterval(tvInterval);
-            clearInterval(tvTabRotationInterval);
-            
-            let wait = 0;
             tvInterval = setInterval(() => {
-                if(!isTVMode) return clearInterval(tvInterval);
-                if(wait > 0) { wait--; return; }
-                const maxScroll = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
-                if (window.scrollY >= maxScroll - 5) { 
-                    wait = 120; 
-                    window.scrollTo({ top: 0, behavior: 'smooth' }); 
-                } else { 
-                    window.scrollBy(0, 1.5); 
+                progress += (step / duracaoPorTab) * 100;
+                const bar = document.getElementById('tv-progress-bar');
+                if (bar) bar.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    progress = 0;
+                    currentTabIdx = (currentTabIdx + 1) % TABS_ANDON.length;
+                    switchTab(TABS_ANDON[currentTabIdx]);
                 }
-            }, 30);
-
-            const pBar = document.getElementById('tv-progress-bar');
-            progressVal = 0;
-            tvTabRotationInterval = setInterval(() => {
-                if(!isTVMode) return clearInterval(tvTabRotationInterval);
-                progressVal += 0.5;
-                if (pBar) pBar.style.width = `${progressVal}%`;
-
-                if (progressVal >= 100) {
-                    progressVal = 0;
-                    currentAndonIndex = (currentAndonIndex + 1) % TABS_ANDON.length;
-                    switchTab(TABS_ANDON[currentAndonIndex]);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            }, 100);
+            }, step);
         }
 
-        function sairModoTV() { 
-            isTVMode = false; 
-            document.body.classList.remove('tv-mode'); 
-            clearInterval(tvInterval); 
-            clearInterval(tvTabRotationInterval);
-            const pBar = document.getElementById('tv-progress-bar');
-            if (pBar) pBar.style.width = '0%';
-            if (document.exitFullscreen) document.exitFullscreen(); 
+        function sairModoTV() {
+            isTVMode = false;
+            document.body.classList.remove('tv-mode');
+            clearInterval(tvInterval);
+            const bar = document.getElementById('tv-progress-bar');
+            if (bar) bar.style.width = '0%';
         }
 
-        function gerarPDFExecutivo() { 
-            switchTab('analytics'); 
-            setTimeout(() => { 
-                html2pdf().set({ 
-                    margin: 10, 
-                    filename: `Relatorio_Randon.pdf`, 
-                    image: { type: 'jpeg', quality: 0.98 }, 
-                    html2canvas: { scale: 2 }, 
-                    jsPDF: { orientation: 'landscape' } 
-                }).from(document.getElementById('view-analytics')).save(); 
-            }, 1000); 
+        function gerarPDFExecutivo() {
+            const elemento = document.querySelector('.view-container.active') || document.body;
+            const opt = {
+                margin: 5,
+                filename: `Relatorio_Producao_Randon_${(db.globalDate || getDataAtualFormatada()).replace(/[\/\.]/g, '-')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            mostrarToast('Gerando PDF...', 'fa-file-pdf');
+            html2pdf().set(opt).from(elemento).save().then(() => {
+                mostrarToast('PDF baixado com sucesso!', 'fa-circle-check');
+            }).catch(err => {
+                console.error(err);
+                mostrarToast('Erro ao gerar PDF', 'fa-triangle-exclamation');
+            });
         }
 
-        function init() {
+        function exportarExcelProducao() {
+            let csvContent = "\uFEFF";
+            csvContent += "Macro Setor;Setor;Data Referencia;OP Entrada;Real Entrada;Atraso Ent (Dias Uteis);OP Saida;Real Saida;Atraso Sai (Dias Uteis);Status Apontamento;Destino;Motivo Gargalo;Acoes Corretivas / Observacoes\n";
+
             configuracaoSetores.forEach(sec => {
-                expandedSections[sec.id] = false;
-                if(!db.data[sec.id]) db.data[sec.id] = Array(sec.rows).fill().map(() => getEmptyRow());
-                if(db.meta[sec.id] === undefined) db.meta[sec.id] = sec.metaDef;
+                const linhas = db.data[sec.id] || [];
+                linhas.forEach(r => {
+                    const temDado = r.ordem_ent || r.ordem_sai || r.real_ent || r.real_sai || r.data_pcp || r.atr_ent || r.atr_sai;
+                    if (temDado) {
+                        const rowCsv = [
+                            sec.view.toUpperCase(),
+                            `"${sec.title}"`,
+                            `"${r.data_pcp || ''}"`,
+                            `"${r.ordem_ent || ''}"`,
+                            `"${r.real_ent || ''}"`,
+                            `"${r.atr_ent || 0}"`,
+                            `"${r.ordem_sai || ''}"`,
+                            `"${r.real_sai || ''}"`,
+                            `"${r.atr_sai || 0}"`,
+                            `"${r.aponta || 'PENDENTE'}"`,
+                            `"${r.destino_fluxo || ''}"`,
+                            `"${r.impactos || ''}"`,
+                            `"${(r.acoes || '').replace(/"/g, '""')}"`
+                        ];
+                        csvContent += rowCsv.join(";") + "\n";
+                    }
+                });
             });
 
-            if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-            if (!db.basePCP) db.basePCP = {};
-            if (!db.premioConfig) db.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
-            if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
-            
-            atualizarDiasEstamparia();
-
-            db.globalDate = getDataAtualFormatada();
-            document.getElementById('global-date').value = db.globalDate;
-            document.getElementById('titulo-guia-saidas').innerHTML = `<i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha (Data da Reunião: ${db.globalDate})`;
-
-            forceRenderTodasTabelas();
-            initFirebase(); 
-            initCharts();
-            updateEstampariaChart();
-            recalcularPainelPremio();
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Producao_Randon_${(db.globalDate || getDataAtualFormatada()).replace(/[\/\.]/g,'-')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            mostrarToast("Planilha Excel (.CSV) Gerada!", "fa-file-excel");
         }
 
-        window.onload = init;
+        function marcarTodosSetor(secId, status) {
+            if (!isAdmin) { toggleAdmin(); return; }
+            if (!db.data[secId]) return;
+            let count = 0;
+            db.data[secId].forEach(row => {
+                if (row.ordem_ent || row.ordem_sai || row.real_ent || row.real_sai) {
+                    row.aponta = status;
+                    if (!row.real_sai && row.ordem_sai) row.real_sai = extrairNumeroOrdem(row.ordem_sai);
+                    count++;
+                }
+            });
+            forceRenderTodasTabelas();
+            autoSaveCloud(true);
+            mostrarToast(`${count} itens marcados como ${status} no setor!`, 'fa-check-double');
+        }
+
+        function apagarProgramacaoPCP() {
+            if(!isAdmin) return toggleAdmin();
+            const confirmacao = confirm("ATENÇÃO: Deseja apagar TODAS as Ordens, Datas e Programações da fábrica inteira para iniciar um NOVO MÊS?");
+            if (confirmacao) {
+                db.basePCP = {};
+                reconstruirIndicesPCP();
+                if(!db.data) db.data = {};
+                configuracaoSetores.forEach(sec => {
+                    db.data[sec.id] = [];
+                    for(let i=0; i<sec.rows; i++) { db.data[sec.id].push(getEmptyRow()); }
+                });
+                forceRenderTodasTabelas();
+                autoSaveCloud(true);
+                mostrarToast("Programação PCP Zerada!", "fa-trash-can");
+            }
+        }
+
+        function zerarApontamentos() {
+            if(!isAdmin) return toggleAdmin();
+            const confirmacao = confirm("Deseja LIMPAR os apontamentos manuais (OK/COGI, Ações, Gargalos) para iniciar a reunião de hoje? A programação do PCP NÃO será afetada.");
+            if (confirmacao) {
+                if(!db.data) db.data = {};
+                Object.keys(db.data).forEach(tabelaKey => {
+                    db.data[tabelaKey].forEach(row => {
+                        row.aponta = ''; row.impactos = ''; row.acoes = '';
+                        row.destino_fluxo = '';
+                        row.atr_ent = ''; row.atr_sai = ''; row.manual_atr_ent = false; row.manual_atr_sai = false;
+                        row.stat_ent = ''; row.stat_sai = '';
+                        row.real_ent = ''; row.real_sai = ''; row.data_pcp = '';
+                        row.data_real_ent = ''; row.data_real_sai = '';
+                        row.ordem_ent = ''; row.ordem_sai = '';
+                        row.lock_ent = false; row.lock_sai = false;
+                    });
+                });
+                forceRenderTodasTabelas();
+                autoSaveCloud(true);
+                mostrarToast("Lousa de apontamentos zerada!", "fa-eraser");
+            }
+        }
+
+        function abrirTimelineOP(numeroOrdem) {
+            const num = extrairNumeroOrdem(numeroOrdem);
+            if (!num) return;
+
+            document.getElementById('timeline-op-title').innerText = num;
+            const container = document.getElementById('timeline-body');
+            let steps = [];
+
+            let pcpInfo = buscarOrdemPorNumero(null, num);
+            if (pcpInfo) {
+                steps.push({
+                    setor: `PCP / Programação (${(pcpInfo.sec || 'GERAL').toUpperCase()})`,
+                    status: 'completed',
+                    icon: 'fa-calendar-check',
+                    detalhes: `Produto: ${pcpInfo.prod || 'N/D'} | Plan Ent: ${pcpInfo.plan_ent || '-'} | Plan Saí: ${pcpInfo.plan_sai || '-'}`
+                });
+            }
+
+            configuracaoSetores.forEach(sec => {
+                const linhas = db.data[sec.id] || [];
+                linhas.forEach(r => {
+                    const ent = extrairNumeroOrdem(r.real_ent || r.ordem_ent);
+                    const sai = extrairNumeroOrdem(r.real_sai || r.ordem_sai);
+                    if (ent === num || sai === num) {
+                        let st = 'completed';
+                        let desc = '';
+                        if (r.aponta === 'OK') desc = '🟢 Concluído e Liberado';
+                        else if (r.aponta === 'COGI') desc = `🔴 Gargalo Ativo: ${r.impactos || 'Sem motivo'}`;
+                        else { desc = '⏳ Em Produção'; st = 'in-progress'; }
+
+                        steps.push({
+                            setor: sec.title,
+                            status: st,
+                            icon: st === 'completed' ? 'fa-check' : 'fa-gear fa-spin',
+                            detalhes: `Entrada: ${r.data_real_ent || r.data_pcp || '-'} | Saída: ${r.data_real_sai || '-'} | Status: ${desc}`
+                        });
+                    }
+                });
+            });
+
+            if (steps.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--randon-grey); font-weight:700;">Nenhum registro histórico estruturado para a OP ${num}.</div>`;
+            } else {
+                container.innerHTML = steps.map(s => `
+                    <div class="timeline-step ${s.status}">
+                        <div class="timeline-icon"><i class="fa-solid ${s.icon}"></i></div>
+                        <div class="timeline-content">
+                            <div class="timeline-title"><span>${s.setor}</span></div>
+                            <div class="timeline-dates">${s.detalhes}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('modal-timeline').classList.add('active');
+        }
+
+        function fecharModalTimeline() { document.getElementById('modal-timeline').classList.remove('active'); }
+        function abrirModalBackups() { document.getElementById('modal-backups').classList.add('active'); }
+        function fecharModalBackups() { document.getElementById('modal-backups').classList.remove('active'); }
+
+        function restaurarTudoUltimoPreenchimento() {
+            for (let i = 1; i <= 5; i++) {
+                const raw = localStorage.getItem('erp_randon_v' + i);
+                if (raw) {
+                    try {
+                        db = JSON.parse(raw);
+                        reconstruirIndicesPCP();
+                        forceRenderTodasTabelas();
+                        autoSaveCloud(true);
+                        mostrarToast("Versão recuperada com sucesso!", "fa-wand-magic-sparkles");
+                        fecharModalBackups();
+                        return;
+                    } catch(e){}
+                }
+            }
+            alert("Nenhum ponto local disponível para restauração.");
+        }
+
+        // ==========================================
+        // EVENTOS DE ENTRADA DE DADOS
+        // ==========================================
+        document.addEventListener('input', function(e) {
+            const target = e.target;
+            if (target.classList.contains('cell-input')) {
+                const secId = target.dataset.sec, rowIdx = target.dataset.row, field = target.dataset.field;
+                if (!secId || rowIdx === undefined || !field) return;
+                const row = db.data[secId] && db.data[secId][rowIdx];
+                if (!row) return;
+                
+                const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
+                row[field] = val;
+
+                if (field === 'ordem_ent' || field === 'real_ent') row.lock_ent = (val.trim() !== '');
+                if (field === 'ordem_sai' || field === 'real_sai') row.lock_sai = (val.trim() !== '');
+                if (field === 'atr_ent') row.manual_atr_ent = (val.trim() !== '');
+                if (field === 'atr_sai') row.manual_atr_sai = (val.trim() !== '');
+
+                autoSaveCloud(false);
+            }
+        });
+
+        document.addEventListener('change', function(e) {
+            const target = e.target;
+            
+            if (target.classList.contains('pino-val-input')) {
+                const cat = target.dataset.cat, idx = parseInt(target.dataset.idx), type = target.dataset.type;
+                const val = parseInt(target.value) || 0;
+                if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
+                if (db.pinosManual[cat] && db.pinosManual[cat][idx]) {
+                    db.pinosManual[cat][idx][type] = val;
+                    if (type === 'ok') db.pinosManual[cat][idx].okManual = true;
+                    recalcularPainelPremio();
+                    autoSaveCloud();
+                    mostrarToast("Pinos atualizados!", "fa-trophy");
+                }
+                return;
+            }
+
+            if (target.id === 'premio-meta-base-input' || target.id === 'premio-atraso-input') {
+                if (!db.premioConfig) db.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
+                db.premioConfig.metaBase = parseInt(document.getElementById('premio-meta-base-input').value) || 78;
+                db.premioConfig.atraso = parseInt(document.getElementById('premio-atraso-input').value) || 12;
+                recalcularPainelPremio();
+                autoSaveCloud();
+                return;
+            }
+
+            if(target.classList.contains('estamparia-val-input')) {
+                const linha = target.dataset.rowName, cIdx = parseInt(target.dataset.colIdx);
+                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
+                if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                db.estampariaMatriz.valores[linha][cIdx] = target.value;
+                autoSaveCloud(); 
+                renderizarEstampariaMatriz();
+                return;
+            }
+
+            if(target.dataset && target.dataset.colDate !== undefined) {
+                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
+                db.estampariaMatriz.datas[parseInt(target.dataset.colDate)] = target.value;
+                autoSaveCloud(); 
+                renderizarEstampariaMatriz();
+                return;
+            }
+
+            if(target.classList.contains('meta-input')) {
+                db.meta[target.dataset.sec] = parseInt(target.value) || 0;
+                recalcularDashboard(); 
+                autoSaveCloud(); 
+                return;
+            }
+
+            if(target.classList.contains('cell-input')) {
+                const secId = target.dataset.sec, rowIdx = parseInt(target.dataset.row), field = target.dataset.field;
+                if (!secId || rowIdx === undefined || isNaN(rowIdx) || !field) return;
+                const row = db.data[secId] && db.data[secId][rowIdx];
+                if (!row) return;
+                const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
+
+                if (field === 'data_pcp') {
+                    if (val.trim() === '') {
+                        row.data_pcp = '';
+                    } else {
+                        const valNormalizado = normalizarDataParaComparacao(val);
+                        row.data_pcp = valNormalizado;
+                        const qtdPuxadas = aplicarMagiaMultipla(secId, rowIdx, valNormalizado);
+                        if (qtdPuxadas > 0) {
+                            mostrarToast(`📦 ${qtdPuxadas} ordens sincronizadas para ${valNormalizado}`, 'fa-wand-magic-sparkles');
+                        } else {
+                            mostrarToast(`⚠️ Sem ordens programadas para ${valNormalizado}`, 'fa-pen');
+                        }
+                    }
+                    atualizarAtrasosGlobais();
+                    forceRenderTodasTabelas();
+                    autoSaveCloud(true);
+                    return;
+                }
+                
+                row[field] = val;
+                atualizarAtrasosGlobais();
+                forceRenderTodasTabelas(); 
+                autoSaveCloud(true);
+            }
+        });
+
+        function atualizarAtrasosGlobais() {
+            if (!db.data) return;
+            Object.keys(db.data).forEach(secId => {
+                const tabela = db.data[secId];
+                if (!tabela) return;
+                tabela.forEach(row => {
+                    const dataExecEnt = row.data_pcp || row.data_real_ent || db.globalDate || getDataCompleta();
+                    const dataExecSai = row.data_pcp || row.data_real_sai || db.globalDate || getDataCompleta();
+
+                    if (row.real_ent && String(row.real_ent).trim() !== '' && !row.manual_atr_ent) {
+                        const plan = row.plan_ent;
+                        if (plan) {
+                            const cEnt = calcularAtraso(plan, dataExecEnt);
+                            row.atr_ent = cEnt.atraso;
+                            row.stat_ent = cEnt.status;
+                        }
+                    }
+
+                    if (row.real_sai && String(row.real_sai).trim() !== '' && !row.manual_atr_sai) {
+                        const plan = row.plan_sai;
+                        if (plan) {
+                            const cSai = calcularAtraso(plan, dataExecSai);
+                            row.atr_sai = cSai.atraso;
+                            row.stat_sai = cSai.status;
+                        }
+                    }
+                });
+            });
+        }
+
+        // ==========================================
+        // INICIALIZAÇÃO
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', () => {
+            const dataInicial = getDataCompleta();
+            const elDate = document.getElementById('global-date');
+            if (elDate) elDate.value = dataInicial;
+            db.globalDate = dataInicial;
+
+            initCharts();
+            initFirebase();
+            forceRenderTodasTabelas();
+        });
     </script>
 </body>
 </html>
