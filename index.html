@@ -54,9 +54,32 @@
         .admin-only { display: none !important; }
         body.admin-mode .admin-only { display: flex !important; }
 
+        /* NAVBAR E LOGO MODERNA */
         .navbar { background-color: #0f172a; border-bottom: 4px solid var(--randon-blue); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; height: 80px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .nav-left { display: flex; align-items: center; gap: 20px; height: 100%; }
-        .logo-container svg { height: 50px; filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.3)); }
+        
+        .logo-card {
+            background: #ffffff;
+            padding: 5px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.22), 0 0 0 1px rgba(255,255,255,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .logo-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+        }
+        .logo-card svg {
+            height: 38px;
+            width: auto;
+            display: block;
+        }
         
         .nav-tabs { display: flex; height: 100%; overflow-x: auto; scrollbar-width: none; }
         .nav-tabs::-webkit-scrollbar { display: none; }
@@ -222,7 +245,6 @@
         .data-input { background-color: #fffbeb !important; font-weight: 900 !important; color: #92400e !important; }
 
         .auto-tag { font-size: 9px; background: var(--status-orange); color: white; padding: 3px 6px; border-radius: 4px; position: absolute; top: 2px; left: 4px; pointer-events: none; font-weight: 900; letter-spacing: 0.5px;}
-        .data-badge { font-size: 10px; color: #1e40af; background: #bfdbfe; padding: 5px 10px; border-radius: 6px; margin-left: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 6px; text-transform: uppercase; }
         
         .op-clickable { cursor: pointer; text-decoration: underline; text-decoration-style: dotted; }
         .op-clickable:hover { color: var(--randon-blue) !important; }
@@ -526,23 +548,29 @@
 </head>
 <body class="readonly-mode">
 
-    <!-- BARRA DE PROGRESSO DO MODO TV -->
     <div id="tv-bar-container"><div id="tv-progress-bar"></div></div>
 
-    <!-- NAVBAR E CONTROLES -->
+    <!-- NAVBAR COM LOGO OFICIAL VETORIAL -->
     <nav class="navbar" id="navbar">
         <div class="nav-left">
-            <div class="logo-container">
-                <svg viewBox="0 0 350 100" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="5" y="5" width="335" height="48" fill="none" stroke="#2a2a2a" stroke-width="3"/>
-                    <rect x="10" y="10" width="325" height="38" fill="#2a2a2a"/>
-                    <text x="172" y="40" fill="white" font-family="'Arial Black', Impact, sans-serif" font-size="37" font-weight="900" text-anchor="middle" letter-spacing="2">RANDON</text>
-                    <text x="5" y="88" fill="#2a2a2a" font-family="'Arial Black', Impact, sans-serif" font-size="34" font-weight="900" letter-spacing="1">TRIEL-HT</text>
-                    <polygon points="215,60 270,60 245,88 215,88" fill="#e32128"/>
-                    <polygon points="275,60 288,60 263,88 250,88" fill="#2a2a2a"/>
-                    <polygon points="293,60 340,60 340,88 268,88" fill="#2a2a2a"/>
+            <div class="logo-card" title="Randon Triel-HT - Sistema Executivo de Produção">
+                <svg viewBox="0 0 240 85" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Caixa Superior RANDON -->
+                    <rect x="2" y="2" width="220" height="42" fill="#ffffff" stroke="#111827" stroke-width="2.5" rx="1"/>
+                    <rect x="6.5" y="6.5" width="211" height="33" fill="#111827" rx="0.5"/>
+                    <text x="112" y="31.5" fill="#ffffff" font-family="'Inter', 'Arial Black', sans-serif" font-size="25" font-weight="900" letter-spacing="3" text-anchor="middle">RANDON</text>
+                    <text x="226" y="9" fill="#111827" font-family="'Inter', sans-serif" font-size="8.5" font-weight="800">®</text>
+
+                    <!-- Linha Inferior TRIEL-HT -->
+                    <text x="2" y="78" fill="#111827" font-family="'Inter', 'Arial Black', sans-serif" font-size="25" font-weight="900" letter-spacing="0.5">TRIEL-HT</text>
+                    
+                    <!-- Emblema Geométrico Oficial -->
+                    <polygon points="158,56 195,56 172,78 158,78" fill="#e32128"/>
+                    <polygon points="199,56 205,56 182,78 176,78" fill="#111827"/>
+                    <polygon points="208,56 222,56 222,78 185,78" fill="#9ca3af"/>
                 </svg>
             </div>
+
             <div class="nav-tabs">
                 <div class="nav-tab tab-premio" onclick="switchTab('premio')" id="tab-btn-premio"><i class="fa-solid fa-trophy"></i> Prêmio & Metas</div>
                 <div class="nav-tab active" onclick="switchTab('estamparia')" id="tab-btn-estamparia">Estamparia</div>
@@ -564,7 +592,6 @@
                 <i class="fa-solid fa-circle-dot"></i> <span id="net-status-text">Online</span>
             </div>
 
-            <!-- SELETOR DINÂMICO DE DATA (SUPORTE A 3 MESES) -->
             <div class="global-date-container" title="Navegue em qualquer dia do PCP">
                 <button class="btn-date-nav" onclick="alterarDiaReferencia(-1)" title="Dia Anterior"><i class="fa-solid fa-chevron-left"></i></button>
                 <label>Data</label>
@@ -625,7 +652,6 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         </div>
     </div>
 
-    <!-- MODAL DE CARGA DE METAS DE PINOS -->
     <div class="modal-overlay" id="modal-carga-pinos">
         <div class="modal-content" style="width: 750px;">
             <div class="modal-header">
@@ -803,7 +829,7 @@ TANQUES	BASCULANTE	18"></textarea>
         </div>
     </div>
 
-    <!-- DEMAIS VIEWS (SOLDA, PINTURA, OP1, OP2 PADRONIZADAS) -->
+    <!-- VIEWS OPERACIONAIS PADRONIZADAS (SOLDA, PINTURA, OP1, OP2) -->
     <div id="view-estamparia" class="view-container active">
         <div class="section-card">
             <div class="section-header" style="background: var(--randon-dark);">
@@ -1266,7 +1292,7 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         // =========================================================================
-        // NAVEGAÇÃO DE DATA GLOBAL (3 MESES)
+        // NAVEGAÇÃO DE DATA GLOBAL
         // =========================================================================
         function alterarDiaReferencia(offsetDias) {
             let ref = parseDataComAnoRef(db.globalDate, 2026) || new Date();
@@ -1548,7 +1574,6 @@ TANQUES	BASCULANTE	18"></textarea>
             rowOrigem.destino_fluxo = destino;
             if (!rowOrigem.data_pcp) rowOrigem.data_pcp = db.globalDate || hojeDataCompleta;
 
-            // 1. Saída de Linha APONTADA (Fica Verde)
             if (destino === 'SAIDA_LINHA_AP') {
                 rowOrigem.aponta = 'OK';
                 if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
@@ -1559,7 +1584,6 @@ TANQUES	BASCULANTE	18"></textarea>
                 return;
             }
 
-            // 2. Saída de Linha NÃO APONTADA (Fica Neutro/Normal)
             if (destino === 'SAIDA_LINHA_NP') {
                 rowOrigem.aponta = 'NP';
                 if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
@@ -1570,19 +1594,15 @@ TANQUES	BASCULANTE	18"></textarea>
                 return;
             }
 
-            // 3. Encaminhamento para Pintura, OP1 ou OP2
             let targetId = null;
-            if (destino === 'PINTURA') {
-                targetId = 'pintura';
-            } else if (destino === 'OP1') {
+            if (destino === 'PINTURA') targetId = 'pintura';
+            else if (destino === 'OP1') {
                 const info = (rowOrigem.ordem_sai || rowOrigem.ordem_ent || '').toUpperCase();
                 if (info.includes('TQ') || info.includes('TANQUE')) targetId = 'op1_tq1';
                 else if (info.includes('CT') || info.includes('CARREGA')) targetId = 'op1_ct';
                 else if (info.includes('SILO')) targetId = 'op1_silo';
                 else targetId = 'op1_bases';
-            } else if (destino === 'OP2') {
-                targetId = 'op2_geral';
-            }
+            } else if (destino === 'OP2') targetId = 'op2_geral';
 
             if (targetId && db.data[targetId]) {
                 const tbDest = db.data[targetId];
@@ -1947,7 +1967,7 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         // =========================================================================
-        // RENDERIZAÇÃO DAS VIEWS OPERACIONAIS (PADRÃO UNIFICADO)
+        // RENDERIZAÇÃO DE TABELAS (SEM TEXTO MÁGICA DUPLA)
         // =========================================================================
         function renderizarViews() {
             let activeInput = document.activeElement;
@@ -1988,7 +2008,6 @@ TANQUES	BASCULANTE	18"></textarea>
                     const opEntNum = extrairNumeroOrdem(row.real_ent || row.ordem_ent);
                     const opSaiNum = extrairNumeroOrdem(row.real_sai || row.ordem_sai);
 
-                    // Coluna de Destino presente em TODOS os setores operacionais
                     let tdFluxo = `
                         <td>
                             <select class="btn-flow-action" onchange="encaminharOrdemManual('${sec.id}', ${i}, this.value)">
@@ -2045,7 +2064,6 @@ TANQUES	BASCULANTE	18"></textarea>
                     `;
                 }
 
-                let badgeData = `<div class="data-badge"><i class="fa-solid fa-wand-magic-sparkles"></i> Mágica Dupla</div>`;
                 let btnMarcarTodos = `<button class="btn btn-pcp admin-only" onclick="marcarTodosSetor('${sec.id}', 'OK')" style="padding: 4px 10px; font-size: 10px; margin-left: 10px;" title="Marcar todas as OPs deste setor como OK"><i class="fa-solid fa-check-double"></i> Todos OK</button>`;
                 
                 let btnVerMais = '';
@@ -2054,7 +2072,6 @@ TANQUES	BASCULANTE	18"></textarea>
                     btnVerMais = `<div class="ver-mais-container"><button class="btn-expandir" onclick="toggleRows('${sec.id}')">${btnText}</button></div>`;
                 }
 
-                // Cabeçalho padronizado: APENAS Programado Total (PCP) para todos os setores
                 let kpiHeaderHtml = `
                     <div class="kpi-row-header" style="width: auto;">
                         <div class="kpi-box" style="padding: 6px 20px;">
@@ -2069,7 +2086,6 @@ TANQUES	BASCULANTE	18"></textarea>
                         <div class="section-header">
                             <div class="section-title-box" style="width: 100%;">
                                 <h2>${sec.title}</h2>
-                                ${badgeData}
                                 ${btnMarcarTodos}
                             </div>
                             ${kpiHeaderHtml}
@@ -2214,9 +2230,9 @@ TANQUES	BASCULANTE	18"></textarea>
             }
         }
 
-        // =========================================================================
-        // RESUMO EXECUTIVO DO DIA E SINCRONIZAÇÃO TOTAL
-        // =========================================================================
+        // ==========================================
+        // RESUMO DO DIA
+        // ==========================================
         function updateAnalytics() {
             let totApont = 0, totOk = 0, totCogi = 0, totAtrasos = 0, totalPlan = 0, totalReal = 0;
             let impactosContagem = {}; 
@@ -2268,7 +2284,6 @@ TANQUES	BASCULANTE	18"></textarea>
                         }
                         if(row.impactos && impactosContagem[row.impactos] !== undefined) impactosContagem[row.impactos]++;
 
-                        // Filtro de data rigoroso
                         const matchData = dateMatches(row.data_pcp, dataHojeRef) || 
                                           dateMatches(row.plan_sai, dataHojeRef) || 
                                           dateMatches(row.data_real_sai, dataHojeRef) ||
@@ -2320,7 +2335,6 @@ TANQUES	BASCULANTE	18"></textarea>
                 }
             });
 
-            // Varrer o PCP para carregar o que ainda não entrou nas telas mas está agendado para o dia selecionado
             const dataNormHoje = normalizarDataParaComparacao(dataHojeRef);
             const dataCurtaHoje = dataNormHoje.substring(0, 5);
 
@@ -2449,7 +2463,7 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         // =========================================================================
-        // GUIA DE APONTAMENTO TOTALMENTE ESPELHADA COM O RESUMO EXECUTIVO
+        // GUIA DE APONTAMENTO
         // =========================================================================
         function renderResumoApontamento() {
             const tbodySaidas = document.getElementById('tbody-saidas-linha');
@@ -3087,7 +3101,7 @@ TANQUES	BASCULANTE	18"></textarea>
                         row.data_pcp = valNormalizado;
                         const qtdPuxadas = aplicarMagiaMultipla(secId, rowIdx, valNormalizado);
                         if (qtdPuxadas > 0) {
-                            mostrarToast(`📦 ${qtdPuxadas} ordens sincronizadas para ${valNormalizado}`, 'fa-wand-magic-sparkles');
+                            mostrarToast(`📦 ${qtdPuxadas} ordens sincronizadas para ${valNormalizado}`, 'fa-calendar-check');
                         } else {
                             mostrarToast(`⚠️ Sem ordens programadas para ${valNormalizado}`, 'fa-pen');
                         }
