@@ -78,11 +78,11 @@
             font-size: 12px;
             font-weight: 700;
             outline: none;
-            width: 150px;
+            width: 140px;
             transition: 0.3s;
         }
         .search-box-container input:focus {
-            width: 190px;
+            width: 180px;
             background-color: rgba(255,255,255,0.2);
             border-color: var(--randon-blue);
             box-shadow: 0 0 0 3px rgba(59,130,246,0.3);
@@ -94,14 +94,15 @@
         .net-badge.syncing { background-color: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
         .net-badge.offline { background-color: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
 
+        /* SELETOR DE DATA GLOBAL */
         .global-date-container { 
             display: flex; 
             align-items: center; 
-            gap: 6px; 
+            gap: 4px; 
             background-color: rgba(255,255,255,0.1); 
-            padding: 6px 10px; 
+            padding: 5px 8px; 
             border-radius: 8px; 
-            border: 1px solid rgba(255,255,255,0.1); 
+            border: 1px solid rgba(255,255,255,0.12); 
         }
         .global-date-container label { font-weight: 800; color: #94a3b8; text-transform: uppercase; font-size: 10px; }
         .global-date-container input { 
@@ -113,7 +114,7 @@
             color: #60a5fa; 
             cursor: pointer; 
             font-family: 'Inter', sans-serif; 
-            width: 90px; 
+            width: 85px; 
             text-align: center;
         }
         .btn-date-nav {
@@ -191,12 +192,9 @@
         .section-title-box h2 { font-size: 18px; font-weight: 900; color: white; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .kpi-row-header { display: flex; background: rgba(255,255,255,0.05); justify-content: flex-end; }
-        .kpi-box { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 5px 20px; border-left: 1px solid rgba(255,255,255,0.08); min-width: 110px; }
+        .kpi-box { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 5px 20px; border-left: 1px solid rgba(255,255,255,0.08); min-width: 140px; }
         .kpi-box span { font-size: 10px; text-transform: uppercase; color: #94a3b8; font-weight: 800; margin-bottom: 4px; letter-spacing: 0.5px; }
         .kpi-box strong { font-size: 24px; color: white; font-weight: 900; line-height: 1; }
-        .status-box-giant { width: 80px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white; transition: 0.3s; border-left: 2px solid rgba(255,255,255,0.1); }
-        .status-box-giant.red { background-color: var(--status-red); }
-        .status-box-giant.green { background-color: var(--status-green); }
 
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         th { background-color: #f8fafc; color: var(--randon-grey); padding: 12px 6px; font-size: 10px; font-weight: 900; text-align: center; text-transform: uppercase; border-right: 1px solid var(--border-light); border-bottom: 2px solid #cbd5e1; letter-spacing: 0.5px; }
@@ -566,7 +564,8 @@
                 <i class="fa-solid fa-circle-dot"></i> <span id="net-status-text">Online</span>
             </div>
 
-            <div class="global-date-container" title="Navegue em qualquer dia do PCP (3 meses)">
+            <!-- SELETOR DINÂMICO DE DATA (SUPORTE A 3 MESES) -->
+            <div class="global-date-container" title="Navegue em qualquer dia do PCP">
                 <button class="btn-date-nav" onclick="alterarDiaReferencia(-1)" title="Dia Anterior"><i class="fa-solid fa-chevron-left"></i></button>
                 <label>Data</label>
                 <input type="text" id="global-date" onchange="definirDataManual(this.value)" placeholder="DD/MM/AAAA">
@@ -590,7 +589,7 @@
 
     <button id="btn-exit-tv" onclick="sairModoTV()"><i class="fa-solid fa-power-off"></i> Sair do Modo TV</button>
 
-    <!-- MODAL DE SENHA -->
+    <!-- MODAIS -->
     <div class="modal-overlay" id="modal-auth">
         <div class="modal-content" style="width: 400px; text-align: center; padding: 40px 30px;">
             <div class="modal-header" style="justify-content: center; margin-bottom: 20px;">
@@ -605,7 +604,6 @@
         </div>
     </div>
 
-    <!-- MODAL DE CARGA PCP -->
     <div class="modal-overlay" id="modal-pcp">
         <div class="modal-content">
             <div class="modal-header">
@@ -627,7 +625,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
         </div>
     </div>
 
-    <!-- MODAL DE CARGA RÁPIDA DE METAS DE PINOS (EXCEL) -->
+    <!-- MODAL DE CARGA DE METAS DE PINOS -->
     <div class="modal-overlay" id="modal-carga-pinos">
         <div class="modal-content" style="width: 750px;">
             <div class="modal-header">
@@ -635,7 +633,7 @@ BASES	1003071122	CHASSI...	01.09.2026	02.09.2026"></textarea>
                 <button class="close-btn" onclick="fecharModalCargaPinos()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <p style="font-size: 13px; color: var(--randon-grey); font-weight: 600; margin-bottom: 15px; line-height: 1.5;">
-                Copie do Excel as 3 colunas da sua planilha: <br>
+                Copie do Excel as 3 colunas: <br>
                 <strong style="color: var(--randon-blue);">CATEGORIA | PRODUTO/MODELO | META PROGRAMADA</strong><br>
                 <span style="font-size: 11px; color: var(--status-orange);">Categorias aceitas: <b>BASES</b>, <b>ESPECIAIS</b> ou <b>TANQUES</b>. As metas e modelos serão atualizados instantaneamente!</span>
             </p>
@@ -655,7 +653,6 @@ TANQUES	BASCULANTE	18"></textarea>
         </div>
     </div>
 
-    <!-- MODAL DE TIMELINE -->
     <div class="modal-overlay" id="modal-timeline">
         <div class="modal-content" style="width: 700px;">
             <div class="modal-header">
@@ -690,7 +687,6 @@ TANQUES	BASCULANTE	18"></textarea>
                 </div>
             </div>
 
-            <!-- TERMÔMETRO VISUAL -->
             <div class="termometro-container">
                 <div class="termometro-labels">
                     <span>Progresso Atual: <strong id="termometro-pct" style="color: #60a5fa; font-size: 15px;">0%</strong></span>
@@ -706,7 +702,6 @@ TANQUES	BASCULANTE	18"></textarea>
                 </div>
             </div>
 
-            <!-- GRID DE KPIs GERAIS -->
             <div class="premio-kpi-grid">
                 <div class="premio-kpi-card">
                     <span>Pinos Programados</span>
@@ -727,7 +722,6 @@ TANQUES	BASCULANTE	18"></textarea>
             </div>
         </div>
 
-        <!-- LINHA LÍDER -->
         <div class="lider-card">
             <div>
                 <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #93c5fd; font-weight: 800;"><i class="fa-solid fa-bolt"></i> Linha Mais Próxima da Meta:</span>
@@ -739,7 +733,7 @@ TANQUES	BASCULANTE	18"></textarea>
             </div>
         </div>
 
-        <!-- MATRIZ DE PINOS (EDITÁVEL + CARGA RÁPIDA) -->
+        <!-- MATRIZ DE PINOS EDITÁVEL -->
         <div class="pinos-grid">
             <div class="pinos-col-card">
                 <div class="pinos-col-header">
@@ -809,7 +803,7 @@ TANQUES	BASCULANTE	18"></textarea>
         </div>
     </div>
 
-    <!-- DEMAIS VIEWS -->
+    <!-- DEMAIS VIEWS (SOLDA, PINTURA, OP1, OP2 PADRONIZADAS) -->
     <div id="view-estamparia" class="view-container active">
         <div class="section-card">
             <div class="section-header" style="background: var(--randon-dark);">
@@ -993,46 +987,46 @@ TANQUES	BASCULANTE	18"></textarea>
 
         const TABELA_PINOS_DEFAULT = {
             bases: [
-                { modelo: "AUTOPORTANTE", prog: 7, ok: 0 },
-                { modelo: "SUINOS", prog: 4, ok: 0 },
-                { modelo: "GRANELEIRO", prog: 1, ok: 0 },
-                { modelo: "CARREGA TUDO", prog: 19, ok: 0 },
-                { modelo: "SILO CILINDRICO", prog: 17, ok: 0 }
+                { modelo: "AUTOPORTANTE", prog: 7, ok: 0, okManual: false },
+                { modelo: "SUINOS", prog: 4, ok: 0, okManual: false },
+                { modelo: "GRANELEIRO", prog: 1, ok: 0, okManual: false },
+                { modelo: "CARREGA TUDO", prog: 19, ok: 0, okManual: false },
+                { modelo: "SILO CILINDRICO", prog: 17, ok: 0, okManual: false }
             ],
             especiais: [
-                { modelo: "ALGODOEIRO", prog: 4, ok: 0 },
-                { modelo: "CARREGA TUDO", prog: 2, ok: 0 },
-                { modelo: "PISO MOVEL", prog: 4, ok: 0 }
+                { modelo: "ALGODOEIRO", prog: 4, ok: 0, okManual: false },
+                { modelo: "CARREGA TUDO", prog: 2, ok: 0, okManual: false },
+                { modelo: "PISO MOVEL", prog: 4, ok: 0, okManual: false }
             ],
             tanques: [
-                { modelo: "6 C", prog: 3, ok: 0 },
-                { modelo: "7C", prog: 4, ok: 0 },
-                { modelo: "ISOTERMICO", prog: 1, ok: 0 },
-                { modelo: "BASCULANTE", prog: 18, ok: 0 },
-                { modelo: "29 M³ 2C", prog: 1, ok: 0 },
-                { modelo: "30M³ 1C", prog: 2, ok: 0 },
-                { modelo: "40M³ 1C", prog: 2, ok: 0 },
-                { modelo: "39M³ 3C", prog: 1, ok: 0 }
+                { modelo: "6 C", prog: 3, ok: 0, okManual: false },
+                { modelo: "7C", prog: 4, ok: 0, okManual: false },
+                { modelo: "ISOTERMICO", prog: 1, ok: 0, okManual: false },
+                { modelo: "BASCULANTE", prog: 18, ok: 0, okManual: false },
+                { modelo: "29 M³ 2C", prog: 1, ok: 0, okManual: false },
+                { modelo: "30M³ 1C", prog: 2, ok: 0, okManual: false },
+                { modelo: "40M³ 1C", prog: 2, ok: 0, okManual: false },
+                { modelo: "39M³ 3C", prog: 1, ok: 0, okManual: false }
             ]
         };
 
         const configuracaoSetores = [
-            { id: 'tq', view: 'solda', title: 'TANQUES (TQ)', rows: 21, metaDef: 5 },
-            { id: 'ct', view: 'solda', title: 'CARREGA TUDO (CT)', rows: 25, metaDef: 3 },
-            { id: 'bases', view: 'solda', title: 'BASES (CHASSI)', rows: 52, metaDef: 10 },
-            { id: 'silo', view: 'solda', title: 'SILOS', rows: 5, metaDef: 2 },
-            { id: 'esp_box1', view: 'solda', title: 'ESPECIAIS - BOX 1', rows: 4, metaDef: 1 },
-            { id: 'esp_box2', view: 'solda', title: 'ESPECIAIS - BOX 2', rows: 4, metaDef: 1 },
-            { id: 'esp_box3', view: 'solda', title: 'ESPECIAIS - BOX 3', rows: 4, metaDef: 1 },
-            { id: 'extra', view: 'solda', title: 'EQUIPE EXTRA', rows: 5, metaDef: 2 },
-            { id: 'pintura', view: 'pintura', title: 'PROCESSO DE PINTURA', rows: 30, metaDef: 15 },
-            { id: 'op1_tq1', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 1)', rows: 5, metaDef: 2 },
-            { id: 'op1_tq2', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 2)', rows: 5, metaDef: 2 },
-            { id: 'op1_tq3', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 3)', rows: 5, metaDef: 2 },
-            { id: 'op1_silo', view: 'op1', title: 'MOF OP1: SILO (1 BOX)', rows: 5, metaDef: 1 },
-            { id: 'op1_ct', view: 'op1', title: 'MOF OP1: CARREGA TUDO (1 BOX)', rows: 5, metaDef: 1 },
-            { id: 'op1_bases', view: 'op1', title: 'MOF OP1: BASES (1 BOX)', rows: 5, metaDef: 3 },
-            { id: 'op2_geral', view: 'op2', title: 'MOF OP2: GERAL', rows: 15, metaDef: 10 }
+            { id: 'tq', view: 'solda', title: 'TANQUES (TQ)', rows: 21 },
+            { id: 'ct', view: 'solda', title: 'CARREGA TUDO (CT)', rows: 25 },
+            { id: 'bases', view: 'solda', title: 'BASES (CHASSI)', rows: 52 },
+            { id: 'silo', view: 'solda', title: 'SILOS', rows: 5 },
+            { id: 'esp_box1', view: 'solda', title: 'ESPECIAIS - BOX 1', rows: 4 },
+            { id: 'esp_box2', view: 'solda', title: 'ESPECIAIS - BOX 2', rows: 4 },
+            { id: 'esp_box3', view: 'solda', title: 'ESPECIAIS - BOX 3', rows: 4 },
+            { id: 'extra', view: 'solda', title: 'EQUIPE EXTRA', rows: 5 },
+            { id: 'pintura', view: 'pintura', title: 'PROCESSO DE PINTURA', rows: 30 },
+            { id: 'op1_tq1', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 1)', rows: 5 },
+            { id: 'op1_tq2', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 2)', rows: 5 },
+            { id: 'op1_tq3', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 3)', rows: 5 },
+            { id: 'op1_silo', view: 'op1', title: 'MOF OP1: SILO (1 BOX)', rows: 5 },
+            { id: 'op1_ct', view: 'op1', title: 'MOF OP1: CARREGA TUDO (1 BOX)', rows: 5 },
+            { id: 'op1_bases', view: 'op1', title: 'MOF OP1: BASES (1 BOX)', rows: 5 },
+            { id: 'op2_geral', view: 'op2', title: 'MOF OP2: GERAL', rows: 15 }
         ];
 
         const mapaLinhaParaSetor = {
@@ -1059,7 +1053,6 @@ TANQUES	BASCULANTE	18"></textarea>
         let db = { 
             globalDate: '', 
             data: {}, 
-            meta: {}, 
             estampariaMatriz: { datas: [], valores: {} },
             basePCP: {},
             premioConfig: { metaBase: 78, atraso: 12, diasUteis: 21 },
@@ -1145,9 +1138,7 @@ TANQUES	BASCULANTE	18"></textarea>
             if (!dInicio || !dFim) return 0;
             let start = new Date(dInicio.getFullYear(), dInicio.getMonth(), dInicio.getDate());
             let end = new Date(dFim.getFullYear(), dFim.getMonth(), dFim.getDate());
-            
             if (start.getTime() === end.getTime()) return 0;
-
             let sinal = 1;
             if (start > end) {
                 sinal = -1;
@@ -1155,19 +1146,14 @@ TANQUES	BASCULANTE	18"></textarea>
                 start = end;
                 end = tmp;
             }
-
             let businessDays = 0;
             let cur = new Date(start);
             cur.setDate(cur.getDate() + 1);
-
             while (cur <= end) {
                 let dayOfWeek = cur.getDay();
-                if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-                    businessDays++;
-                }
+                if (dayOfWeek !== 0 && dayOfWeek !== 6) businessDays++;
                 cur.setDate(cur.getDate() + 1);
             }
-
             return businessDays * sinal;
         }
 
@@ -1201,7 +1187,6 @@ TANQUES	BASCULANTE	18"></textarea>
             const norm1 = normalizarDataParaComparacao(dateStr);
             const norm2 = normalizarDataParaComparacao(globalDateStr);
             if (norm1 === norm2) return true;
-
             const p1 = norm1.split('/');
             const p2 = norm2.split('/');
             if (p1.length >= 2 && p2.length >= 2) {
@@ -1236,20 +1221,15 @@ TANQUES	BASCULANTE	18"></textarea>
             if (!planStr || !realStr || String(planStr).trim() === '' || String(realStr).trim() === '') {
                 return { atraso: '', status: '' };
             }
-
             const anoPlan = extrairAnoDeData(planStr);
             const dPlan = parseDataComAnoRef(planStr, anoPlan);
             const dReal = parseDataComAnoRef(realStr, anoPlan);
-
             if (!dPlan || !dReal) return { atraso: '', status: '' };
-
             const diffDiasUteis = calcularDiasUteis(dPlan, dReal);
-
             let status = 'green';
             if (diffDiasUteis === 1) status = 'orange';
             else if (diffDiasUteis >= 2) status = 'red';
             else if (diffDiasUteis < 0) status = 'green';
-
             return { 
                 atraso: diffDiasUteis !== 0 ? diffDiasUteis : '0', 
                 status: status 
@@ -1286,7 +1266,7 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         // =========================================================================
-        // NAVEGAÇÃO DE DATA GLOBAL
+        // NAVEGAÇÃO DE DATA GLOBAL (3 MESES)
         // =========================================================================
         function alterarDiaReferencia(offsetDias) {
             let ref = parseDataComAnoRef(db.globalDate, 2026) || new Date();
@@ -1342,7 +1322,6 @@ TANQUES	BASCULANTE	18"></textarea>
                 if (cols.length < 2) return;
 
                 let categoria = '', modelo = '', prog = 0;
-
                 if (cols.length >= 3) {
                     categoria = cols[0].toUpperCase();
                     modelo = cols[1].toUpperCase();
@@ -1548,7 +1527,7 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         // =========================================================================
-        // DESTINAÇÃO NA LINHA DE SOLDA
+        // DESTINAÇÃO OPERACIONAL TOTAL (SOLDA, PINTURA, OP1, OP2)
         // =========================================================================
         function encaminharOrdemManual(secOrigemId, rowIdx, destino) {
             if (!isAdmin) { toggleAdmin(); return; }
@@ -1558,7 +1537,7 @@ TANQUES	BASCULANTE	18"></textarea>
             const opNumero = extrairNumeroOrdem(rowOrigem.real_sai || rowOrigem.ordem_sai || rowOrigem.real_ent || rowOrigem.ordem_ent);
 
             if (!opNumero) {
-                mostrarToast("Nenhuma OP válida encontrada nesta linha.", "fa-triangle-exclamation");
+                mostrarToast("Nenhuma OP válida nesta linha.", "fa-triangle-exclamation");
                 return;
             }
 
@@ -1569,6 +1548,7 @@ TANQUES	BASCULANTE	18"></textarea>
             rowOrigem.destino_fluxo = destino;
             if (!rowOrigem.data_pcp) rowOrigem.data_pcp = db.globalDate || hojeDataCompleta;
 
+            // 1. Saída de Linha APONTADA (Fica Verde)
             if (destino === 'SAIDA_LINHA_AP') {
                 rowOrigem.aponta = 'OK';
                 if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
@@ -1579,6 +1559,7 @@ TANQUES	BASCULANTE	18"></textarea>
                 return;
             }
 
+            // 2. Saída de Linha NÃO APONTADA (Fica Neutro/Normal)
             if (destino === 'SAIDA_LINHA_NP') {
                 rowOrigem.aponta = 'NP';
                 if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
@@ -1589,15 +1570,19 @@ TANQUES	BASCULANTE	18"></textarea>
                 return;
             }
 
+            // 3. Encaminhamento para Pintura, OP1 ou OP2
             let targetId = null;
-            if (destino === 'PINTURA') targetId = 'pintura';
-            else if (destino === 'OP1') {
+            if (destino === 'PINTURA') {
+                targetId = 'pintura';
+            } else if (destino === 'OP1') {
                 const info = (rowOrigem.ordem_sai || rowOrigem.ordem_ent || '').toUpperCase();
                 if (info.includes('TQ') || info.includes('TANQUE')) targetId = 'op1_tq1';
                 else if (info.includes('CT') || info.includes('CARREGA')) targetId = 'op1_ct';
                 else if (info.includes('SILO')) targetId = 'op1_silo';
                 else targetId = 'op1_bases';
-            } else if (destino === 'OP2') targetId = 'op2_geral';
+            } else if (destino === 'OP2') {
+                targetId = 'op2_geral';
+            }
 
             if (targetId && db.data[targetId]) {
                 const tbDest = db.data[targetId];
@@ -1621,7 +1606,7 @@ TANQUES	BASCULANTE	18"></textarea>
 
                 forceRenderTodasTabelas();
                 autoSaveCloud(true);
-                mostrarToast(`OP ${opNumero} enviada para ${destino}!`, 'fa-truck-fast');
+                mostrarToast(`OP ${opNumero} enviada com sucesso para ${destino}!`, 'fa-truck-fast');
             }
         }
 
@@ -1748,7 +1733,7 @@ TANQUES	BASCULANTE	18"></textarea>
                 reconstruirIndicesPCP();
                 forceRenderTodasTabelas(); 
                 autoSaveCloud(true);
-                mostrarToast(`⚡ ${count} ordens integradas! Suporte a 3 meses ativado.`, 'fa-bolt');
+                mostrarToast(`⚡ ${count} ordens integradas! Suporte a 3 meses ativo.`, 'fa-bolt');
             } else {
                 mostrarToast(`Nenhuma nova ordem adicionada.`, 'fa-circle-info');
             }
@@ -1759,8 +1744,7 @@ TANQUES	BASCULANTE	18"></textarea>
         // ==========================================
         function recalcularDashboard() {
             configuracaoSetores.forEach(sec => {
-                let totalProgMes = 0, apontados = 0;
-
+                let totalProgMes = 0;
                 if (db.basePCP && db.basePCP[sec.id] && db.basePCP[sec.id].length > 0) {
                     totalProgMes = db.basePCP[sec.id].length;
                 } else if(db.data[sec.id]) {
@@ -1770,25 +1754,8 @@ TANQUES	BASCULANTE	18"></textarea>
                         if(temProgramacao) totalProgMes++;
                     });
                 }
-
-                if (db.data[sec.id]) {
-                    db.data[sec.id].forEach(row => {
-                        if(row.aponta === 'OK') apontados++;
-                    });
-                }
-
-                try {
-                    const elMes = document.getElementById(`kpi-mes-${sec.id}`);
-                    const elApont = document.getElementById(`kpi-apontados-${sec.id}`);
-                    const box = document.getElementById(`status-box-${sec.id}`);
-                    if (elMes) elMes.innerText = totalProgMes;
-                    if (elApont) elApont.innerText = apontados;
-                    if (box) {
-                        const meta = db.meta[sec.id] || 0;
-                        if(apontados >= meta && meta > 0) { box.className = 'status-box-giant green'; box.innerText = '✅'; } 
-                        else { box.className = 'status-box-giant red'; box.innerText = '❌'; }
-                    }
-                } catch(e) {}
+                const elMes = document.getElementById(`kpi-mes-${sec.id}`);
+                if (elMes) elMes.innerText = totalProgMes;
             });
 
             recalcularPainelPremio();
@@ -1892,7 +1859,6 @@ TANQUES	BASCULANTE	18"></textarea>
             calcularLinhaLider();
         }
 
-        // Renderiza a matriz de pinos com inputs de modelo e botões de ação
         function renderColunaPinosEditavel(categoria, apontamentosTexto) {
             const tbody = document.getElementById(`tbody-pinos-${categoria}`);
             const badgeTotal = document.getElementById(`saldo-total-${categoria}`);
@@ -1957,19 +1923,16 @@ TANQUES	BASCULANTE	18"></textarea>
         function calcularLinhaLider() {
             const categorias = ['bases', 'especiais', 'tanques'];
             const nomes = { bases: 'Linha de Bases (Chassi)', especiais: 'Linha de Especiais', tanques: 'Linha de Tanques' };
-            
             let melhorNome = 'Linhas Empatadas';
             let melhorPct = -1;
 
             categorias.forEach(cat => {
                 const itens = db.pinosManual[cat] || [];
-                let totProg = 0;
-                let totOk = 0;
+                let totProg = 0, totOk = 0;
                 itens.forEach(i => {
                     totProg += parseInt(i.prog) || 0;
                     totOk += parseInt(i.ok) || 0;
                 });
-
                 let pct = totProg > 0 ? (totOk / totProg) * 100 : 0;
                 if (pct > melhorPct) {
                     melhorPct = pct;
@@ -1983,9 +1946,9 @@ TANQUES	BASCULANTE	18"></textarea>
             if (elPct) elPct.innerText = `${melhorPct.toFixed(0)}% Concluído`;
         }
 
-        // ==========================================
-        // RENDERIZAÇÃO DE TABELAS
-        // ==========================================
+        // =========================================================================
+        // RENDERIZAÇÃO DAS VIEWS OPERACIONAIS (PADRÃO UNIFICADO)
+        // =========================================================================
         function renderizarViews() {
             let activeInput = document.activeElement;
             let focusSec = activeInput ? activeInput.dataset.sec : null;
@@ -2005,7 +1968,6 @@ TANQUES	BASCULANTE	18"></textarea>
                 const limit = DEFAULT_VISIBLES_ROWS; 
                 const totalRows = db.data[sec.id] ? Math.max(db.data[sec.id].length, sec.rows) : sec.rows;
                 const isExpanded = expandedSections[sec.id];
-                const isSolda = (sec.view === 'solda');
 
                 for(let i = 0; i < totalRows; i++) {
                     const row = db.data[sec.id] ? (db.data[sec.id][i] || getEmptyRow()) : getEmptyRow();
@@ -2026,21 +1988,19 @@ TANQUES	BASCULANTE	18"></textarea>
                     const opEntNum = extrairNumeroOrdem(row.real_ent || row.ordem_ent);
                     const opSaiNum = extrairNumeroOrdem(row.real_sai || row.ordem_sai);
 
-                    let tdFluxo = '';
-                    if (isSolda) {
-                        tdFluxo = `
-                            <td>
-                                <select class="btn-flow-action" onchange="encaminharOrdemManual('${sec.id}', ${i}, this.value)">
-                                    <option value="" ${!row.destino_fluxo ? 'selected' : ''}>Destino...</option>
-                                    <option value="SAIDA_LINHA_AP" ${row.destino_fluxo === 'SAIDA_LINHA_AP' ? 'selected' : ''}>🏁 Saída Linha (AP)</option>
-                                    <option value="SAIDA_LINHA_NP" ${row.destino_fluxo === 'SAIDA_LINHA_NP' ? 'selected' : ''}>⏳ Saída Linha (N/P)</option>
-                                    <option value="PINTURA" ${row.destino_fluxo === 'PINTURA' ? 'selected' : ''}>🎨 Pintura</option>
-                                    <option value="OP1" ${row.destino_fluxo === 'OP1' ? 'selected' : ''}>🛠️ OP1</option>
-                                    <option value="OP2" ${row.destino_fluxo === 'OP2' ? 'selected' : ''}>🏁 OP2</option>
-                                </select>
-                            </td>
-                        `;
-                    }
+                    // Coluna de Destino presente em TODOS os setores operacionais
+                    let tdFluxo = `
+                        <td>
+                            <select class="btn-flow-action" onchange="encaminharOrdemManual('${sec.id}', ${i}, this.value)">
+                                <option value="" ${!row.destino_fluxo ? 'selected' : ''}>Destino...</option>
+                                <option value="SAIDA_LINHA_AP" ${row.destino_fluxo === 'SAIDA_LINHA_AP' ? 'selected' : ''}>🏁 Saída Linha (AP)</option>
+                                <option value="SAIDA_LINHA_NP" ${row.destino_fluxo === 'SAIDA_LINHA_NP' ? 'selected' : ''}>⏳ Saída Linha (N/P)</option>
+                                <option value="PINTURA" ${row.destino_fluxo === 'PINTURA' ? 'selected' : ''}>🎨 Pintura</option>
+                                <option value="OP1" ${row.destino_fluxo === 'OP1' ? 'selected' : ''}>🛠️ OP1</option>
+                                <option value="OP2" ${row.destino_fluxo === 'OP2' ? 'selected' : ''}>🏁 OP2</option>
+                            </select>
+                        </td>
+                    `;
                     
                     tbody += `
                         <tr style="${displayStyle}">
@@ -2066,7 +2026,7 @@ TANQUES	BASCULANTE	18"></textarea>
                             <td class="${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' || row.aponta === 'NP' ? 'bg-cogi' : '')}">
                                 <select class="cell-input" style="color: inherit;" data-sec="${sec.id}" data-row="${i}" data-field="aponta">
                                     <option value="" ${row.aponta === '' ? 'selected' : ''}>-</option>
-                                    <option value="OK" ${row.aponta === 'OK' ? 'selected' : ''}>${sec.view === 'pintura' ? '🟢 ENTREGUE' : '🟢 OK'}</option>
+                                    <option value="OK" ${row.aponta === 'OK' ? 'selected' : ''}>🟢 OK</option>
                                     <option value="NP" ${row.aponta === 'NP' ? 'selected' : ''}>🔴 NÃO APONTADO</option>
                                     <option value="COGI" ${row.aponta === 'COGI' ? 'selected' : ''}>🔴 COGI</option>
                                 </select>
@@ -2094,36 +2054,20 @@ TANQUES	BASCULANTE	18"></textarea>
                     btnVerMais = `<div class="ver-mais-container"><button class="btn-expandir" onclick="toggleRows('${sec.id}')">${btnText}</button></div>`;
                 }
 
-                let kpiHeaderHtml = '';
-                if (isSolda) {
-                    kpiHeaderHtml = `
-                        <div class="kpi-row-header" style="width: auto;">
-                            <div class="kpi-box" style="min-width: 160px; padding: 6px 20px;">
-                                <span style="color: #94a3b8;">Programado Total (PCP)</span>
-                                <strong id="kpi-mes-${sec.id}" style="color: white; font-size: 24px;">0</strong>
-                            </div>
+                // Cabeçalho padronizado: APENAS Programado Total (PCP) para todos os setores
+                let kpiHeaderHtml = `
+                    <div class="kpi-row-header" style="width: auto;">
+                        <div class="kpi-box" style="padding: 6px 20px;">
+                            <span style="color: #94a3b8;">Programado Total (PCP)</span>
+                            <strong id="kpi-mes-${sec.id}" style="color: white; font-size: 24px;">0</strong>
                         </div>
-                    `;
-                } else {
-                    kpiHeaderHtml = `
-                        <div class="kpi-row-header" style="width: 45%;">
-                            <div class="kpi-box"><span>Prog. Mês</span><strong id="kpi-mes-${sec.id}">0</strong></div>
-                            <div class="kpi-box" style="background: rgba(16,185,129,0.2);">
-                                <span style="color: #6ee7b7;">Apontados</span><strong id="kpi-apontados-${sec.id}" style="color: #6ee7b7;">0</strong>
-                            </div>
-                            <div class="kpi-box">
-                                <span style="color: #cbd5e1;">Meta Dia</span>
-                                <input type="number" class="meta-input" data-sec="${sec.id}" value="${db.meta[sec.id] || 0}" style="width:60px; background: transparent; border: 1px dashed rgba(255,255,255,0.3); color: white; text-align: center; font-size: 20px; font-weight: 900; outline: none; border-radius: 6px;">
-                            </div>
-                            <div class="status-box-giant red" id="status-box-${sec.id}">❌</div>
-                        </div>
-                    `;
-                }
+                    </div>
+                `;
 
                 htmlViews[sec.view] += `
                     <div class="section-card">
                         <div class="section-header">
-                            <div class="section-title-box" style="${isSolda ? 'width: 100%;' : 'width: 55%;'}">
+                            <div class="section-title-box" style="width: 100%;">
                                 <h2>${sec.title}</h2>
                                 ${badgeData}
                                 ${btnMarcarTodos}
@@ -2134,16 +2078,16 @@ TANQUES	BASCULANTE	18"></textarea>
                             <thead>
                                 <tr>
                                     <th style="width:7%">📅 Data</th>
-                                    <th style="width:12%">📦 Prog. Ent</th>
-                                    <th style="width:9%">✅ Real Ent</th>
+                                    <th style="width:11%">📦 Prog. Ent</th>
+                                    <th style="width:8%">✅ Real Ent</th>
                                     <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
-                                    <th style="width:12%">📦 Prog. Sai</th>
-                                    <th style="width:9%">✅ Real Sai</th>
+                                    <th style="width:11%">📦 Prog. Sai</th>
+                                    <th style="width:8%">✅ Real Sai</th>
                                     <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
-                                    <th style="width:10%">📋 Aponta</th>
-                                    ${isSolda ? '<th style="width:11%">🚀 Destino</th>' : ''}
+                                    <th style="width:9%">📋 Aponta</th>
+                                    <th style="width:10%">🚀 Destino</th>
                                     <th style="width:10%">⚠️ Gargalo</th>
-                                    <th style="${isSolda ? 'width:14%' : 'width:18%'}; text-align: left; padding-left: 10px;">🛠️ Ações Corretivas</th>
+                                    <th style="width:12%; text-align: left; padding-left: 10px;">🛠️ Ações Corretivas</th>
                                 </tr>
                             </thead>
                             <tbody>${tbody}</tbody>
@@ -2270,9 +2214,9 @@ TANQUES	BASCULANTE	18"></textarea>
             }
         }
 
-        // ==========================================
-        // RESUMO DO DIA
-        // ==========================================
+        // =========================================================================
+        // RESUMO EXECUTIVO DO DIA E SINCRONIZAÇÃO TOTAL
+        // =========================================================================
         function updateAnalytics() {
             let totApont = 0, totOk = 0, totCogi = 0, totAtrasos = 0, totalPlan = 0, totalReal = 0;
             let impactosContagem = {}; 
@@ -2324,6 +2268,7 @@ TANQUES	BASCULANTE	18"></textarea>
                         }
                         if(row.impactos && impactosContagem[row.impactos] !== undefined) impactosContagem[row.impactos]++;
 
+                        // Filtro de data rigoroso
                         const matchData = dateMatches(row.data_pcp, dataHojeRef) || 
                                           dateMatches(row.plan_sai, dataHojeRef) || 
                                           dateMatches(row.data_real_sai, dataHojeRef) ||
@@ -2375,6 +2320,7 @@ TANQUES	BASCULANTE	18"></textarea>
                 }
             });
 
+            // Varrer o PCP para carregar o que ainda não entrou nas telas mas está agendado para o dia selecionado
             const dataNormHoje = normalizarDataParaComparacao(dataHojeRef);
             const dataCurtaHoje = dataNormHoje.substring(0, 5);
 
@@ -2502,6 +2448,9 @@ TANQUES	BASCULANTE	18"></textarea>
             renderPainelGargalos();
         }
 
+        // =========================================================================
+        // GUIA DE APONTAMENTO TOTALMENTE ESPELHADA COM O RESUMO EXECUTIVO
+        // =========================================================================
         function renderResumoApontamento() {
             const tbodySaidas = document.getElementById('tbody-saidas-linha');
             const tbodyEspelho = document.getElementById('tbody-espelho-finais');
@@ -2531,7 +2480,7 @@ TANQUES	BASCULANTE	18"></textarea>
                                     <td class="center-text ${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' || row.aponta === 'NP' ? 'bg-cogi' : '')}" style="border-radius: 6px; margin: 4px; display: table-cell;">
                                         <div style="text-align: center; font-weight: 900; font-size: 13px;">${row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' || row.aponta === 'NP' ? '🔴 NÃO APONTADO' : '⏳ PENDENTE')}</div>
                                     </td>
-                                    <td style="padding-left: 20px; color: var(--randon-grey); font-weight:700; font-size: 12px;">${row.acoes || '-'}</td>
+                                    <td style="padding-left: 20px; color: var(--randon-grey); font-weight:700; font-size: 12px;">${row.acoes || (row.destino_fluxo ? 'Encaminhado: ' + row.destino_fluxo : '-')}</td>
                                 </tr>
                             `;
                         }
@@ -2543,10 +2492,17 @@ TANQUES	BASCULANTE	18"></textarea>
                 const sec = configuracaoSetores.find(s => s.id === secId);
                 if(db.data && db.data[secId]) {
                     db.data[secId].forEach(row => {
-                        if ((row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '')) {
+                        const matchData = dateMatches(row.data_pcp, db.globalDate) || 
+                                          dateMatches(row.plan_sai, db.globalDate) || 
+                                          dateMatches(row.data_real_sai, db.globalDate) ||
+                                          Boolean(row.destino_fluxo) ||
+                                          ((row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== ''));
+                        
+                        if (matchData) {
                             hasEspelho = true;
                             let statusText = row.aponta === 'OK' ? '🟢 OK' : (row.aponta === 'COGI' || row.aponta === 'NP' ? '🔴 NÃO APONTADO' : '⏳ EM ANDAMENTO');
                             let gargalo = row.impactos ? ` | Gargalo: ${row.impactos}` : '';
+                            let fluxoTxt = row.destino_fluxo ? ` | Destino: ${row.destino_fluxo}` : '';
                             const opNum = extrairNumeroOrdem(row.ordem_sai || row.ordem_ent);
                             
                             htmlEspelho += `
@@ -2556,7 +2512,7 @@ TANQUES	BASCULANTE	18"></textarea>
                                     <td style="font-weight: 900; font-size: 14px; text-align: center; color: var(--randon-dark);">${row.real_ent || '-'}</td>
                                     <td style="font-weight: 900; font-size: 14px; text-align: center; color: var(--status-green);">${row.real_sai || '-'}</td>
                                     <td style="padding-left: 20px; font-weight:800; font-size: 13px; color: ${row.aponta === 'COGI' || row.aponta === 'NP' ? 'var(--status-red)' : 'var(--randon-grey)'};">
-                                        ${statusText} ${gargalo}
+                                        ${statusText} ${gargalo} ${fluxoTxt}
                                     </td>
                                 </tr>
                             `;
@@ -2565,8 +2521,8 @@ TANQUES	BASCULANTE	18"></textarea>
                 }
             });
 
-            if(!hasSaidas) htmlSaidas = `<tr><td colspan="5" style="text-align:center; color:var(--randon-grey); padding:30px; font-weight:800; font-size: 14px;">Nenhuma saída de linha registrada ou pendente nesta data.</td></tr>`;
-            if(!hasEspelho) htmlEspelho = `<tr><td colspan="5" style="text-align:center; color:var(--randon-grey); padding:30px; font-weight:800; font-size: 14px;">Nenhum produto em processamento no momento.</td></tr>`;
+            if(!hasSaidas) htmlSaidas = `<tr><td colspan="5" style="text-align:center; color:var(--randon-grey); padding:30px; font-weight:800; font-size: 14px;">Nenhuma saída de linha registrada para ${db.globalDate}.</td></tr>`;
+            if(!hasEspelho) htmlEspelho = `<tr><td colspan="5" style="text-align:center; color:var(--randon-grey); padding:30px; font-weight:800; font-size: 14px;">Nenhum produto em processamento em Pintura, OP1 e OP2 para ${db.globalDate}.</td></tr>`;
 
             tbodySaidas.innerHTML = htmlSaidas;
             tbodyEspelho.innerHTML = htmlEspelho;
@@ -2827,7 +2783,6 @@ TANQUES	BASCULANTE	18"></textarea>
             const step = 100;
             
             switchTab(TABS_ANDON[currentTabIdx]);
-            
             clearInterval(tvInterval);
             tvInterval = setInterval(() => {
                 progress += (step / duracaoPorTab) * 100;
@@ -3066,7 +3021,6 @@ TANQUES	BASCULANTE	18"></textarea>
         document.addEventListener('change', function(e) {
             const target = e.target;
             
-            // Edição inline de modelo de pino
             if (target.classList.contains('pino-nome-input')) {
                 const cat = target.dataset.cat, idx = parseInt(target.dataset.idx);
                 if (db.pinosManual && db.pinosManual[cat] && db.pinosManual[cat][idx]) {
@@ -3077,7 +3031,6 @@ TANQUES	BASCULANTE	18"></textarea>
                 return;
             }
 
-            // Edição de metas e apontamentos de pinos
             if (target.classList.contains('pino-val-input')) {
                 const cat = target.dataset.cat, idx = parseInt(target.dataset.idx), type = target.dataset.type;
                 const val = parseInt(target.value) || 0;
@@ -3116,13 +3069,6 @@ TANQUES	BASCULANTE	18"></textarea>
                 db.estampariaMatriz.datas[parseInt(target.dataset.colDate)] = target.value;
                 autoSaveCloud(); 
                 renderizarEstampariaMatriz();
-                return;
-            }
-
-            if(target.classList.contains('meta-input')) {
-                db.meta[target.dataset.sec] = parseInt(target.value) || 0;
-                recalcularDashboard(); 
-                autoSaveCloud(); 
                 return;
             }
 
