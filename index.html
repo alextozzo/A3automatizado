@@ -1557,14 +1557,17 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         // =========================================================================
-        // DESTINAÇÃO OPERACIONAL TOTAL (SOLDA, PINTURA, OP1, OP2)
+        // DESTINAÇÃO OPERACIONAL E PUXAR OP REAL
         // =========================================================================
         function encaminharOrdemManual(secOrigemId, rowIdx, destino) {
             if (!isAdmin) { toggleAdmin(); return; }
             if (!db.data[secOrigemId] || !db.data[secOrigemId][rowIdx]) return;
 
             const rowOrigem = db.data[secOrigemId][rowIdx];
-            const opNumero = extrairNumeroOrdem(rowOrigem.real_sai || rowOrigem.ordem_sai || rowOrigem.real_ent || rowOrigem.ordem_ent);
+            
+            // Puxa estritamente a Saída Real se houver, garantindo o rastreio correto
+            let opNumeroRaw = rowOrigem.real_sai || rowOrigem.ordem_sai || rowOrigem.real_ent || rowOrigem.ordem_ent;
+            const opNumero = extrairNumeroOrdem(opNumeroRaw);
 
             if (!opNumero) {
                 mostrarToast("Nenhuma OP válida nesta linha.", "fa-triangle-exclamation");
@@ -1578,23 +1581,13 @@ TANQUES	BASCULANTE	18"></textarea>
             rowOrigem.destino_fluxo = destino;
             if (!rowOrigem.data_pcp) rowOrigem.data_pcp = db.globalDate || hojeDataCompleta;
 
-            if (destino === 'SAIDA_LINHA_AP') {
-                rowOrigem.aponta = 'OK';
+            if (destino === 'SAIDA_LINHA_AP' || destino === 'SAIDA_LINHA_NP') {
+                rowOrigem.aponta = destino === 'SAIDA_LINHA_AP' ? 'OK' : 'NP';
                 if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
                 rowOrigem.data_real_sai = hojeDataCompleta;
                 forceRenderTodasTabelas();
                 autoSaveCloud(true);
-                mostrarToast(`OP ${opNumero} - Saída de Linha AP (Verde)!`, 'fa-circle-check');
-                return;
-            }
-
-            if (destino === 'SAIDA_LINHA_NP') {
-                rowOrigem.aponta = 'NP';
-                if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
-                rowOrigem.data_real_sai = hojeDataCompleta;
-                forceRenderTodasTabelas();
-                autoSaveCloud(true);
-                mostrarToast(`OP ${opNumero} - Saída de Linha N/P (Cor Normal)!`, 'fa-clock');
+                mostrarToast(`OP ${opNumero} - Saída de Linha registrada!`, 'fa-circle-check');
                 return;
             }
 
@@ -1616,10 +1609,12 @@ TANQUES	BASCULANTE	18"></textarea>
                     freeIdx = tbDest.length - 1;
                 }
 
-                const textoCompleto = descProd ? `${opNumero} - ${descProd}` : (rowOrigem.ordem_sai || rowOrigem.ordem_ent || opNumero);
+                // Garante que o número gravado no destino é o número Real capturado
+                const textoCompleto = descProd ? `${opNumero} - ${descProd}` : opNumero;
+                
                 tbDest[freeIdx].ordem_ent = textoCompleto;
                 tbDest[freeIdx].ordem_sai = textoCompleto;
-                tbDest[freeIdx].real_ent = opNumero;
+                tbDest[freeIdx].real_ent = opNumero; // Transfere a real_sai da Solda para real_ent do destino
                 tbDest[freeIdx].data_pcp = db.globalDate || hojeDataCompleta;
                 tbDest[freeIdx].data_real_ent = hojeDataCompleta;
                 tbDest[freeIdx].origem = secConfigOrigem ? secConfigOrigem.title : 'SOLDA';
@@ -2125,6 +2120,212 @@ TANQUES	BASCULANTE	18"></textarea>
 
             container.innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`;
             updateEstampariaChart();
+        }
+
+        // =========================================================================
+        // MOTOR DO BI (ANALYSIS) E GUIA/GARGALOS - COM EDIÇÃO DIRETA
+        // =========================================================================
+        function updateAnalytics() {
+            if (!db.data) return;
+            const hoje = db.globalDate || getDataCompleta();
+            const lblData = document.getElementById('resumo-data-label');
+            if(lblData) lblData.innerText = hoje;
+
+            let totalApontamentos = 0, totalOK = 0, totalCOGI = 0, totalAtrasos = 0, totalProg = 0;
+
+            const listas = { solda: [], pintura: [], op1: [], op2: [] };
+
+            Object.keys(db.data).forEach(secId => {
+                const config = configuracaoSetores.find(c => c.id === secId);
+                if(!config) return;
+
+                db.data[secId].forEach((row, idx) => {
+                    const temDado = row.real_ent || row.ordem_ent || row.real_sai || row.ordem_sai;
+                    if (!temDado) return;
+
+                    totalProg++;
+                    if (row.aponta) totalApontamentos++;
+                    if (row.aponta === 'OK') totalOK++;
+                    if (row.aponta === 'COGI') totalCOGI++;
+                    if (row.atr_sai > 0 || row.atr_ent > 0) totalAtrasos++;
+
+                    // Filtra itens apenas da data referenciada no painel superior
+                    const isHoje = (row.data_real_sai === hoje || row.data_pcp === hoje || row.data_real_ent === hoje);
+                    if (isHoje) {
+                        const itemData = { secId, idx, row, config };
+                        if (config.view === 'solda' && (row.destino_fluxo || row.real_sai)) listas.solda.push(itemData);
+                        else if (config.view === 'pintura') listas.pintura.push(itemData);
+                        else if (config.view === 'op1') listas.op1.push(itemData);
+                        else if (config.view === 'op2') listas.op2.push(itemData);
+                    }
+                });
+            });
+
+            // GERA HTML EDITÁVEL PARA O BI
+            const buildListHTML = (list) => {
+                return list.map(item => {
+                    const op = item.row.real_sai || item.row.real_ent || extrairNumeroOrdem(item.row.ordem_sai || item.row.ordem_ent);
+                    const prod = obterDescricaoProduto(item.row.ordem_sai || item.row.ordem_ent, op);
+                    const aponta = item.row.aponta || '';
+                    
+                    let bgClass = aponta === 'OK' ? 'item-ok' : (aponta ? 'item-np' : '');
+                    let selectColor = aponta === 'OK' ? 'color: #065f46; background: #d1fae5;' : (aponta === 'COGI' ? 'color: #991b1b; background: #fee2e2;' : 'color: var(--randon-dark);');
+
+                    return `
+                        <div class="resumo-dia-item ${bgClass}">
+                            <div class="resumo-dia-item-top">
+                                <span class="badge-prod-tipo">${item.config.title.split(' ')[0]}</span>
+                                <span style="font-size: 11px; font-weight: 900; color: var(--randon-blue);">${op}</span>
+                            </div>
+                            <div style="font-size: 10px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${prod}">${prod || 'N/D'}</div>
+                            <div class="resumo-dia-item-bottom">
+                                <select class="cell-input" style="height: 24px; border: 1px solid var(--border-light); font-size: 10px; padding: 0 4px; width: 100%; font-weight: 800; ${selectColor}"
+                                    onchange="window.alterarApontamentoBI('${item.secId}', ${item.idx}, this.value)">
+                                    <option value="">- PENDENTE -</option>
+                                    <option value="OK" ${aponta === 'OK' ? 'selected' : ''}>🟢 OK</option>
+                                    <option value="NP" ${aponta === 'NP' ? 'selected' : ''}>⏳ NÃO APONTADO</option>
+                                    <option value="COGI" ${aponta === 'COGI' ? 'selected' : ''}>🔴 COGI</option>
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            };
+
+            if(document.getElementById('resumo-list-solda')) {
+                document.getElementById('resumo-list-solda').innerHTML = buildListHTML(listas.solda);
+                document.getElementById('resumo-count-solda').innerText = listas.solda.length;
+            }
+            if(document.getElementById('resumo-list-pintura')) {
+                document.getElementById('resumo-list-pintura').innerHTML = buildListHTML(listas.pintura);
+                document.getElementById('resumo-count-pintura').innerText = listas.pintura.length;
+            }
+            if(document.getElementById('resumo-list-op1')) {
+                document.getElementById('resumo-list-op1').innerHTML = buildListHTML(listas.op1);
+                document.getElementById('resumo-count-op1').innerText = listas.op1.length;
+            }
+            if(document.getElementById('resumo-list-op2')) {
+                document.getElementById('resumo-list-op2').innerHTML = buildListHTML(listas.op2);
+                document.getElementById('resumo-count-op2').innerText = listas.op2.length;
+            }
+
+            // Atualiza Top Cards KPI
+            if(document.getElementById('dash-total-apontamentos')) document.getElementById('dash-total-apontamentos').innerText = totalApontamentos;
+            if(document.getElementById('dash-ok')) document.getElementById('dash-ok').innerText = totalProg > 0 ? ((totalOK / totalProg) * 100).toFixed(0) + '%' : '0%';
+            if(document.getElementById('dash-cogi')) document.getElementById('dash-cogi').innerText = totalCOGI;
+            if(document.getElementById('dash-atrasos')) document.getElementById('dash-atrasos').innerText = totalAtrasos;
+            if(document.getElementById('dash-aderencia')) document.getElementById('dash-aderencia').innerText = totalProg > 0 ? (((totalOK+totalCOGI) / totalProg) * 100).toFixed(0) + '%' : '0%';
+        }
+
+        // FUNÇÃO PARA ATUALIZAR STATUS DIRETO PELO BI
+        window.alterarApontamentoBI = function(secId, rowIdx, novoStatus) {
+            if (!isAdmin) {
+                toggleAdmin();
+                updateAnalytics(); // Restaura visão se cancelar login
+                return;
+            }
+            if(db.data[secId] && db.data[secId][rowIdx]) {
+                const row = db.data[secId][rowIdx];
+                row.aponta = novoStatus;
+                
+                // Automação: Se o BI marcou OK e não houver Saída Real preenchida, preenche automático.
+                if(novoStatus === 'OK' && !row.real_sai) {
+                    row.real_sai = extrairNumeroOrdem(row.ordem_sai || row.real_ent || row.ordem_ent);
+                    row.data_real_sai = getDataCompleta();
+                }
+
+                autoSaveCloud(true);
+                forceRenderTodasTabelas(); 
+                mostrarToast("Status atualizado pelo BI!", "fa-check");
+            }
+        }
+
+        function renderResumoApontamento() {
+            const tbSaidas = document.getElementById('tbody-saidas-linha');
+            const tbEspelho = document.getElementById('tbody-espelho-finais');
+            if(!tbSaidas || !tbEspelho) return;
+
+            let htmlSaidas = '', htmlEspelho = '';
+            const hoje = db.globalDate || getDataCompleta();
+
+            Object.keys(db.data).forEach(secId => {
+                const config = configuracaoSetores.find(c => c.id === secId);
+                if(!config) return;
+
+                db.data[secId].forEach(row => {
+                    const op = row.real_sai || row.real_ent || extrairNumeroOrdem(row.ordem_sai || row.ordem_ent);
+                    if(!op) return;
+
+                    const isHoje = (row.data_real_sai === hoje || row.data_pcp === hoje || row.data_real_ent === hoje);
+                    if(!isHoje) return;
+
+                    if (config.view === 'solda' && (row.destino_fluxo || row.real_sai)) {
+                        htmlSaidas += `
+                            <tr>
+                                <td style="padding-left: 20px;"><strong>${config.title}</strong></td>
+                                <td>${op} - ${obterDescricaoProduto(row.ordem_sai, op)}</td>
+                                <td>${row.data_real_sai || row.data_pcp}</td>
+                                <td><span class="badge-status-${row.aponta === 'OK' ? 'ok' : 'np'}">${row.aponta || 'PENDENTE'}</span></td>
+                                <td style="padding-left: 20px;">${row.acoes || row.destino_fluxo || '-'}</td>
+                            </tr>
+                        `;
+                    } else if (['pintura', 'op1', 'op2'].includes(config.view)) {
+                        htmlEspelho += `
+                            <tr>
+                                <td style="padding-left: 20px;"><strong>${config.title}</strong></td>
+                                <td>${op} - ${obterDescricaoProduto(row.ordem_sai, op)}</td>
+                                <td>${row.data_real_ent || '-'}</td>
+                                <td>${row.data_real_sai || '-'}</td>
+                                <td style="padding-left: 20px;"><span class="badge-status-${row.aponta === 'OK' ? 'ok' : (row.aponta === 'COGI' ? 'np' : 'np')}" style="${row.aponta==='COGI'?'background:#fee2e2;color:#991b1b;border-color:#ef4444;':''}">${row.aponta || 'EM PROCESSO'}</span> ${row.impactos ? '- ' + row.impactos : ''}</td>
+                            </tr>
+                        `;
+                    }
+                });
+            });
+
+            tbSaidas.innerHTML = htmlSaidas || '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #94a3b8;">Nenhuma saída registrada hoje.</td></tr>';
+            tbEspelho.innerHTML = htmlEspelho || '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #94a3b8;">Nenhum processo final registrado hoje.</td></tr>';
+        }
+
+        function renderPainelGargalos() {
+            const tbGargalos = document.getElementById('tbody-painel-gargalos');
+            const containerMotivos = document.getElementById('ggl-por-motivo');
+            const totalEl = document.getElementById('ggl-total');
+            if(!tbGargalos) return;
+
+            let html = '', total = 0, contagem = {};
+
+            Object.keys(db.data).forEach(secId => {
+                const config = configuracaoSetores.find(c => c.id === secId);
+                db.data[secId].forEach(row => {
+                    if (row.aponta === 'COGI') {
+                        total++;
+                        const motivo = row.impactos || 'Não Informado';
+                        contagem[motivo] = (contagem[motivo] || 0) + 1;
+                        const op = row.real_sai || row.real_ent || extrairNumeroOrdem(row.ordem_sai || row.ordem_ent);
+
+                        html += `
+                            <tr style="background-color: #fff1f2;">
+                                <td style="padding-left: 20px; color: #991b1b;"><strong>${config ? config.title : secId}</strong></td>
+                                <td style="font-weight: 900;">${op}</td>
+                                <td>${row.data_pcp || '-'}</td>
+                                <td style="color: #ef4444; font-weight: 800;">${motivo}</td>
+                                <td><span class="badge-status-np" style="background:#fee2e2;color:#991b1b;border-color:#ef4444;">COGI</span></td>
+                                <td style="padding-left: 20px;">${row.acoes || '-'}</td>
+                            </tr>
+                        `;
+                    }
+                });
+            });
+
+            tbGargalos.innerHTML = html || '<tr><td colspan="6" style="text-align:center; padding: 20px; color: #10b981; font-weight: bold;">Nenhum gargalo ativo no momento. 🎉</td></tr>';
+            if (totalEl) totalEl.innerText = total;
+
+            let htmlMotivos = '';
+            Object.entries(contagem).forEach(([m, qtd]) => {
+                htmlMotivos += `<span style="background: white; border: 1px solid #fca5a5; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; color: #b91c1c;">${m}: ${qtd}</span>`;
+            });
+            if (containerMotivos) containerMotivos.innerHTML = htmlMotivos;
         }
 
         // =========================================================================
