@@ -380,8 +380,29 @@
         }
 
         /* Analytics & Resumo Executivo */
-        .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 30px; border-radius: 12px; border: 1px solid var(--border-light); border-left: 6px solid var(--randon-red); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
+        .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 30px; border-radius: 12px; border: 1px solid var(--border-light); border-left: 6px solid var(--randon-red); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); margin-bottom: 20px;}
         
+        /* PAINEL DARK DE TRACKING MENSAL (COMPACTO) */
+        .dark-panel-container { background: linear-gradient(145deg, #0f172a, #1e293b); border: 2px solid #334155; border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); color: white; }
+        .dark-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        .dark-panel-header h3 { font-size: 16px; font-weight: 900; color: #f8fafc; text-transform: uppercase; margin:0;}
+        .days-counter { background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.05); }
+        .dark-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .dark-card { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 15px 18px; position: relative; border-top: 4px solid #475569; }
+        .dark-card.border-green { border-top-color: #10b981; }
+        .dark-card.border-purple { border-top-color: #8b5cf6; }
+        .dark-card-title { font-size: 12px; font-weight: 900; color: #cbd5e1; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 0.5px;}
+        .dark-card-value { font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 12px; display: flex; align-items: baseline; gap: 8px;}
+        .dark-card-value small { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;}
+        .dark-card-simulador { background: rgba(255,255,255,0.04); padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.08); margin-top: 10px;}
+        .dark-card-simulador label { font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase;}
+        .dark-card-simulador input { background: #0f172a; border: 1px solid #334155; color: white; padding: 4px; border-radius: 6px; width: 50px; font-weight: 900; font-size: 14px; text-align: center; outline: none; }
+        .projecao-resultado { font-size: 13px; font-weight: 900; color: #fde047; margin-left: auto; background: rgba(253, 224, 71, 0.1); padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(253, 224, 71, 0.2);}
+        .dark-card-subtotal { position: absolute; top: 15px; right: 15px; font-size: 11px; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3);}
+        
+        /* DESTAQUE DA OP NO RESUMO */
+        .badge-op-destaque { font-size: 14px; font-weight: 900; color: #1e40af; background: #eff6ff; padding: 2px 6px; border-radius: 4px; border: 1px solid #bfdbfe; letter-spacing: 0.5px; }
+
         .resumo-dia-container {
             background: white;
             border-radius: 12px;
@@ -439,8 +460,8 @@
             border-left: 6px solid #64748b !important;
         }
 
-        .resumo-dia-item-top { display: flex; justify-content: space-between; align-items: center; }
-        .resumo-dia-item-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 2px; }
+        .resumo-dia-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;}
+        .resumo-dia-item-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
         
         .badge-prod-tipo { 
             background: #0f172a; 
@@ -451,24 +472,6 @@
             font-weight: 900; 
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-        .badge-status-ok { 
-            background: #d1fae5; 
-            color: #065f46; 
-            padding: 3px 8px; 
-            border-radius: 4px; 
-            font-size: 10px; 
-            font-weight: 900; 
-            border: 1px solid #10b981;
-        }
-        .badge-status-np { 
-            background: #f1f5f9; 
-            color: #475569; 
-            padding: 3px 8px; 
-            border-radius: 4px; 
-            font-size: 10px; 
-            font-weight: 800; 
-            border: 1px solid #cbd5e1;
         }
         
         .btn-apontar-rapido { 
@@ -489,7 +492,7 @@
         }
         .btn-apontar-rapido:hover { background: #059669; transform: scale(1.05); }
 
-        .dashboard-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 25px; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 25px; margin-top: 20px;}
         .dash-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border-light); position: relative; overflow: hidden; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
         .dash-card::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 6px; background: var(--randon-black); }
         .dash-card.card-red::before { background: var(--status-red); }
@@ -538,7 +541,7 @@
         @media print {
             body { background-color: white !important; font-size: 12px; overflow: visible !important; }
             .navbar, #toast, #btn-exit-tv, .btn-pdf, .btn-excel, .btn-tv, .btn-pcp, .btn-limpar, .ver-mais-container, .auth-container, .admin-only, .search-box-container, .net-badge { display: none !important; }
-            .analytics-header { border: none !important; box-shadow: none !important; padding: 0 !important; }
+            .analytics-header, .dark-panel-container { border: none !important; box-shadow: none !important; padding: 0 !important; }
             table { border: 1px solid black; } th, td { border: 1px solid black; }
             .macro-badge { -webkit-print-color-adjust: exact; background-color: black !important; color: white !important; }
             .section-card { border: none !important; box-shadow: none !important; }
@@ -874,6 +877,38 @@ TANQUES	BASCULANTE	18"></textarea>
             <button class="btn btn-tv" onclick="updateAnalytics()" style="padding: 12px 20px; font-size: 14px;"><i class="fa-solid fa-rotate"></i> Atualizar Dados</button>
         </div>
 
+        <!-- NOVO PAINEL DE GESTÃO DE MÉDIAS MENSAL (DARK MODE COMPACTO) -->
+        <div class="dark-panel-container">
+            <div class="dark-panel-header">
+                <h3><i class="fa-solid fa-gauge-high"></i> Painel de Comando - Tracking Mensal (OKs)</h3>
+                <div class="days-counter">Dias Úteis Decorridos (Mês): <span id="lbl-dias-uteis" style="color: white;">0</span></div>
+            </div>
+            <div class="dark-grid">
+                <!-- Card Solda -->
+                <div class="dark-card border-green">
+                    <div class="dark-card-subtotal"><i class="fa-solid fa-check-double"></i> Entregues OK: <strong id="subtotal-solda">0</strong></div>
+                    <div class="dark-card-title">Média: Saídas de Linha (Solda)</div>
+                    <div class="dark-card-value" id="media-solda-atual">0.0 <small>OPs/dia</small></div>
+                    <div class="dark-card-simulador admin-only">
+                        <label>Simular apontar + OPs:</label>
+                        <input type="number" id="simula-solda" value="0" min="0" oninput="calcularProjecao()" title="Quantidade extra a apontar hoje">
+                        <span class="projecao-resultado" id="projecao-solda-res">Nova Média: 0.0</span>
+                    </div>
+                </div>
+                <!-- Card OP2 -->
+                <div class="dark-card border-purple">
+                    <div class="dark-card-subtotal"><i class="fa-solid fa-check-double"></i> Entregues OK: <strong id="subtotal-op2">0</strong></div>
+                    <div class="dark-card-title">Média: Finalizações (OP2)</div>
+                    <div class="dark-card-value" id="media-op2-atual">0.0 <small>OPs/dia</small></div>
+                    <div class="dark-card-simulador admin-only">
+                        <label>Simular apontar + OPs:</label>
+                        <input type="number" id="simula-op2" value="0" min="0" oninput="calcularProjecao()" title="Quantidade extra a apontar hoje">
+                        <span class="projecao-resultado" id="projecao-op2-res">Nova Média: 0.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="resumo-dia-container">
             <div class="resumo-dia-header">
                 <h3><i class="fa-solid fa-calendar-day" style="color: var(--randon-blue);"></i> Resumo Executivo do Dia (<span id="resumo-data-label">--/--/----</span>)</h3>
@@ -886,7 +921,7 @@ TANQUES	BASCULANTE	18"></textarea>
                         <i class="fa-solid fa-truck-fast" style="color: var(--status-green);"></i>
                     </div>
                     <div class="resumo-dia-count" id="resumo-count-solda">0</div>
-                    <div class="resumo-dia-sub" id="resumo-sub-solda">0 Previstas / 0 OK</div>
+                    <div class="resumo-dia-sub" id="resumo-sub-solda">Entregas no Dia</div>
                     <div class="resumo-dia-list" id="resumo-list-solda"></div>
                 </div>
 
@@ -896,7 +931,7 @@ TANQUES	BASCULANTE	18"></textarea>
                         <i class="fa-solid fa-fill-drip" style="color: var(--randon-blue);"></i>
                     </div>
                     <div class="resumo-dia-count" id="resumo-count-pintura">0</div>
-                    <div class="resumo-dia-sub" id="resumo-sub-pintura">0 em Fila / 0 Entregues</div>
+                    <div class="resumo-dia-sub" id="resumo-sub-pintura">Fila & Entregas</div>
                     <div class="resumo-dia-list" id="resumo-list-pintura"></div>
                 </div>
 
@@ -906,7 +941,7 @@ TANQUES	BASCULANTE	18"></textarea>
                         <i class="fa-solid fa-toolbox" style="color: var(--status-orange);"></i>
                     </div>
                     <div class="resumo-dia-count" id="resumo-count-op1">0</div>
-                    <div class="resumo-dia-sub" id="resumo-sub-op1">0 OPs em Montagem</div>
+                    <div class="resumo-dia-sub" id="resumo-sub-op1">Montagem Base</div>
                     <div class="resumo-dia-list" id="resumo-list-op1"></div>
                 </div>
 
@@ -916,7 +951,7 @@ TANQUES	BASCULANTE	18"></textarea>
                         <i class="fa-solid fa-flag-checkered" style="color: #8b5cf6;"></i>
                     </div>
                     <div class="resumo-dia-count" id="resumo-count-op2">0</div>
-                    <div class="resumo-dia-sub" id="resumo-sub-op2">0 Apontamentos Finais</div>
+                    <div class="resumo-dia-sub" id="resumo-sub-op2">Finalizações do Dia</div>
                     <div class="resumo-dia-list" id="resumo-list-op2"></div>
                 </div>
             </div>
@@ -932,7 +967,7 @@ TANQUES	BASCULANTE	18"></textarea>
 
         <div class="charts-grid">
             <div class="chart-box"><h3><i class="fa-solid fa-chart-column" style="color: var(--randon-blue); margin-right: 8px;"></i> Pareto de Impactos (Causa-Raiz)</h3><div class="chart-container-bi"><canvas id="chartPareto"></canvas></div></div>
-            <div class="chart-box"><h3><i class="fa-solid fa-chart-line" style="color: var(--status-orange); margin-right: 8px;"></i> Evolução Diária do Ritmo</h3><div class="chart-container-bi"><canvas id="chartEvolucao"></canvas></div></div>
+            <div class="chart-box"><h3><i class="fa-solid fa-chart-line" style="color: var(--status-orange); margin-right: 8px;"></i> Evolução Diária (Entregas OK)</h3><div class="chart-container-bi"><canvas id="chartEvolucao"></canvas></div></div>
         </div>
         <div class="charts-grid" style="grid-template-columns: 1fr 1fr;">
             <div class="chart-box"><h3><i class="fa-solid fa-chart-pie" style="color: var(--status-green); margin-right: 8px;"></i> Qualidade Geral</h3><div class="chart-container-bi"><canvas id="chartStatus"></canvas></div></div>
@@ -1136,6 +1171,25 @@ TANQUES	BASCULANTE	18"></textarea>
             return 2026;
         }
 
+        function normalizarDataParaComparacao(dataStr) {
+            if (!dataStr) return '';
+            let limpo = String(dataStr).trim().replace(/[.\-]/g, '/');
+            const parts = limpo.split('/');
+            if (parts.length === 2) {
+                return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}`;
+            } else if (parts.length === 3) {
+                let d, m, y;
+                if (parts[0].length === 4) {
+                    y = parts[0]; m = parts[1].padStart(2, '0'); d = parts[2].padStart(2, '0');
+                } else {
+                    d = parts[0].padStart(2, '0'); m = parts[1].padStart(2, '0'); y = parts[2];
+                    if (y.length === 2) y = '20' + y;
+                }
+                return `${d}/${m}/${y}`;
+            }
+            return limpo;
+        }
+
         function parseDataComAnoRef(dataStr, anoRef) {
             if (!dataStr || typeof dataStr !== 'string') return null;
             let s = dataStr.trim().replace(/[.\-]/g, '/');
@@ -1187,53 +1241,42 @@ TANQUES	BASCULANTE	18"></textarea>
             return businessDays * sinal;
         }
 
-        function extrairNumeroOrdem(texto) {
-            if (!texto) return '';
-            const match = String(texto).match(/(\d{6,})/);
-            return match ? match[1] : String(texto).replace(/[^0-9]/g, '');
-        }
-
-        function normalizarDataParaComparacao(dataStr) {
-            if (!dataStr) return '';
-            let limpo = String(dataStr).trim().replace(/[.\-]/g, '/');
-            const parts = limpo.split('/');
-            if (parts.length === 2) {
-                return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}`;
-            } else if (parts.length === 3) {
-                let d, m, y;
-                if (parts[0].length === 4) {
-                    y = parts[0]; m = parts[1].padStart(2, '0'); d = parts[2].padStart(2, '0');
-                } else {
-                    d = parts[0].padStart(2, '0'); m = parts[1].padStart(2, '0'); y = parts[2];
-                    if (y.length === 2) y = '20' + y;
-                }
-                return `${d}/${m}/${y}`;
-            }
-            return limpo;
-        }
-
-        function dateMatches(dateStr, globalDateStr) {
-            if(!dateStr || !globalDateStr) return false;
-            const norm1 = normalizarDataParaComparacao(dateStr);
-            const norm2 = normalizarDataParaComparacao(globalDateStr);
-            if (norm1 === norm2) return true;
-            const p1 = norm1.split('/');
-            const p2 = norm2.split('/');
-            if (p1.length >= 2 && p2.length >= 2) {
-                return p1[0] === p2[0] && p1[1] === p2[1];
+        function mesEAnoIguais(data1Str, data2Str) {
+            if(!data1Str || !data2Str) return false;
+            const n1 = normalizarDataParaComparacao(data1Str);
+            const n2 = normalizarDataParaComparacao(data2Str);
+            const p1 = n1.split('/');
+            const p2 = n2.split('/');
+            if(p1.length >= 2 && p2.length >= 2) {
+                return p1[1] === p2[1] && (p1[2] || '2026') === (p2[2] || '2026');
             }
             return false;
         }
 
-        function identificarTipoProduto(texto, secTitle) {
-            const str = `${texto || ''} ${secTitle || ''}`.toUpperCase();
-            if (str.includes('CARREGA TUDO') || str.includes('CT')) return 'CT';
-            if (str.includes('SILO')) return 'SILO';
-            if (str.includes('BASE') || str.includes('CHASSI')) return 'BASES';
-            if (str.includes('TANQUE') || str.includes('TQ')) return 'TANQUE';
-            if (str.includes('ESPECIAL') || str.includes('ESP')) return 'ESPECIAIS';
-            if (str.includes('PINTURA')) return 'PINTURA';
-            return secTitle ? secTitle.split(' ')[0] : 'PRODUTO';
+        function calcularDiasUteisMesAteHoje(dataStr) {
+            if(!dataStr) return 1;
+            const parts = normalizarDataParaComparacao(dataStr).split('/');
+            if(parts.length < 3) return 1; 
+            const d = parseInt(parts[0], 10);
+            const m = parseInt(parts[1], 10) - 1;
+            const y = parseInt(parts[2], 10);
+            
+            let start = new Date(y, m, 1);
+            let end = new Date(y, m, d);
+            let dias = 0;
+            let cur = new Date(start);
+            while(cur <= end) {
+                let dw = cur.getDay();
+                if(dw !== 0 && dw !== 6) dias++;
+                cur.setDate(cur.getDate() + 1);
+            }
+            return Math.max(1, dias);
+        }
+
+        function extrairNumeroOrdem(texto) {
+            if (!texto) return '';
+            const match = String(texto).match(/(\d{6,})/);
+            return match ? match[1] : String(texto).replace(/[^0-9]/g, '');
         }
 
         function obterDescricaoProduto(textoOuObj, opNum) {
@@ -1260,10 +1303,7 @@ TANQUES	BASCULANTE	18"></textarea>
             if (diffDiasUteis === 1) status = 'orange';
             else if (diffDiasUteis >= 2) status = 'red';
             else if (diffDiasUteis < 0) status = 'green';
-            return { 
-                atraso: diffDiasUteis !== 0 ? diffDiasUteis : '0', 
-                status: status 
-            };
+            return { atraso: diffDiasUteis !== 0 ? diffDiasUteis : '0', status: status };
         }
 
         function sanearParaFirebase(obj) {
@@ -1295,8 +1335,16 @@ TANQUES	BASCULANTE	18"></textarea>
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
+        function handleGlobalSearch(e) {
+            if (e.key === 'Enter') {
+                const val = e.target.value.trim().toUpperCase();
+                if(!val) return;
+                mostrarToast(`Buscando OP: ${val}...`, 'fa-magnifying-glass');
+            }
+        }
+
         // =========================================================================
-        // NAVEGAÇÃO DE DATA GLOBAL (3 MESES)
+        // NAVEGAÇÃO DE DATA GLOBAL
         // =========================================================================
         function alterarDiaReferencia(offsetDias) {
             let ref = parseDataComAnoRef(db.globalDate, 2026) || new Date();
@@ -1333,10 +1381,7 @@ TANQUES	BASCULANTE	18"></textarea>
             if (!isAdmin) { toggleAdmin(); return; }
             document.getElementById('modal-carga-pinos').classList.add('active');
         }
-
-        function fecharModalCargaPinos() {
-            document.getElementById('modal-carga-pinos').classList.remove('active');
-        }
+        function fecharModalCargaPinos() { document.getElementById('modal-carga-pinos').classList.remove('active'); }
 
         function processarCargaPinosExcel() {
             const text = document.getElementById('pinos-carga-textarea').value;
@@ -1366,12 +1411,7 @@ TANQUES	BASCULANTE	18"></textarea>
                 else if (categoria.includes('TANQ') || categoria.includes('TQ')) catKey = 'tanques';
                 else if (categoria.includes('BASE') || categoria.includes('CHASSI')) catKey = 'bases';
 
-                novosPinos[catKey].push({
-                    modelo: modelo,
-                    prog: prog,
-                    ok: 0,
-                    okManual: false
-                });
+                novosPinos[catKey].push({ modelo: modelo, prog: prog, ok: 0, okManual: false });
                 count++;
             });
 
@@ -1390,28 +1430,17 @@ TANQUES	BASCULANTE	18"></textarea>
             if (!isAdmin) { toggleAdmin(); return; }
             if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
             if (!db.pinosManual[categoria]) db.pinosManual[categoria] = [];
-
-            db.pinosManual[categoria].push({
-                modelo: "NOVO MODELO",
-                prog: 1,
-                ok: 0,
-                okManual: true
-            });
-
-            recalcularPainelPremio();
-            autoSaveCloud(true);
-            mostrarToast("Novo modelo adicionado!", "fa-plus");
+            db.pinosManual[categoria].push({ modelo: "NOVO MODELO", prog: 1, ok: 0, okManual: true });
+            recalcularPainelPremio(); autoSaveCloud(true); mostrarToast("Novo modelo adicionado!", "fa-plus");
         }
 
         function removerModeloPino(categoria, idx) {
             if (!isAdmin) { toggleAdmin(); return; }
             if (!db.pinosManual || !db.pinosManual[categoria]) return;
-
             const mod = db.pinosManual[categoria][idx].modelo;
             if (confirm(`Deseja remover o modelo "${mod}"?`)) {
                 db.pinosManual[categoria].splice(idx, 1);
-                recalcularPainelPremio();
-                autoSaveCloud(true);
+                recalcularPainelPremio(); autoSaveCloud(true);
                 mostrarToast(`Modelo "${mod}" removido!`, 'fa-trash-can');
             }
         }
@@ -1428,18 +1457,12 @@ TANQUES	BASCULANTE	18"></textarea>
             Object.keys(db.basePCP).forEach(secId => {
                 const lista = db.basePCP[secId];
                 if (!Array.isArray(lista)) return;
-
-                if (!pcpIndex.bySectorAndDate[secId]) {
-                    pcpIndex.bySectorAndDate[secId] = {};
-                }
-
+                if (!pcpIndex.bySectorAndDate[secId]) pcpIndex.bySectorAndDate[secId] = {};
                 const secMap = pcpIndex.bySectorAndDate[secId];
 
                 lista.forEach(item => {
                     const ovNum = extrairNumeroOrdem(item.ov);
-                    if (ovNum) {
-                        pcpIndex.byOv.set(ovNum, { ...item, sec: secId });
-                    }
+                    if (ovNum) pcpIndex.byOv.set(ovNum, { ...item, sec: secId });
 
                     const dEntNorm = normalizarDataParaComparacao(item.plan_ent);
                     const dSaiNorm = normalizarDataParaComparacao(item.plan_sai);
@@ -1465,15 +1488,9 @@ TANQUES	BASCULANTE	18"></textarea>
         function buscarOrdemPorNumero(secId, numeroOrdem) {
             const numBuscado = extrairNumeroOrdem(numeroOrdem);
             if (!numBuscado || numBuscado.length < 3) return null;
-
-            if (pcpIndex.byOv.has(numBuscado)) {
-                return pcpIndex.byOv.get(numBuscado);
-            }
-
+            if (pcpIndex.byOv.has(numBuscado)) return pcpIndex.byOv.get(numBuscado);
             for (let [ovKey, val] of pcpIndex.byOv.entries()) {
-                if (ovKey.includes(numBuscado) || numBuscado.includes(ovKey)) {
-                    return val;
-                }
+                if (ovKey.includes(numBuscado) || numBuscado.includes(ovKey)) return val;
             }
             return null;
         }
@@ -1523,9 +1540,7 @@ TANQUES	BASCULANTE	18"></textarea>
                     rowCurrent++;
                 }
 
-                if (rowCurrent >= tabela.length) {
-                    tabela.push(getEmptyRow());
-                }
+                if (rowCurrent >= tabela.length) tabela.push(getEmptyRow());
 
                 const r = tabela[rowCurrent];
                 r.data_pcp = dataNorm;
@@ -1536,8 +1551,7 @@ TANQUES	BASCULANTE	18"></textarea>
                         r.plan_ent = par.entrada.plan_ent;
                     }
                 } else if (!r.lock_ent && !r.real_ent) {
-                    r.ordem_ent = '';
-                    r.plan_ent = '';
+                    r.ordem_ent = ''; r.plan_ent = '';
                 }
 
                 if (par.saida) {
@@ -1546,10 +1560,8 @@ TANQUES	BASCULANTE	18"></textarea>
                         r.plan_sai = par.saida.plan_sai;
                     }
                 } else if (!r.lock_sai && !r.real_sai) {
-                    r.ordem_sai = '';
-                    r.plan_sai = '';
+                    r.ordem_sai = ''; r.plan_sai = '';
                 }
-
                 rowCurrent++;
             });
 
@@ -1565,7 +1577,7 @@ TANQUES	BASCULANTE	18"></textarea>
 
             const rowOrigem = db.data[secOrigemId][rowIdx];
             
-            // Puxa estritamente a Saída Real se houver, garantindo o rastreio correto
+            // CORREÇÃO: Puxa estritamente a Saída Real se houver, garantindo o rastreio correto
             let opNumeroRaw = rowOrigem.real_sai || rowOrigem.ordem_sai || rowOrigem.real_ent || rowOrigem.ordem_ent;
             const opNumero = extrairNumeroOrdem(opNumeroRaw);
 
@@ -1609,7 +1621,6 @@ TANQUES	BASCULANTE	18"></textarea>
                     freeIdx = tbDest.length - 1;
                 }
 
-                // Garante que o número gravado no destino é o número Real capturado
                 const textoCompleto = descProd ? `${opNumero} - ${descProd}` : opNumero;
                 
                 tbDest[freeIdx].ordem_ent = textoCompleto;
@@ -1627,39 +1638,6 @@ TANQUES	BASCULANTE	18"></textarea>
                 autoSaveCloud(true);
                 mostrarToast(`OP ${opNumero} enviada com sucesso para ${destino}!`, 'fa-truck-fast');
             }
-        }
-
-        function apontarRapidoPorOp(opNum, secId) {
-            if (!isAdmin) { toggleAdmin(); return; }
-            if (!db.data[secId]) db.data[secId] = [];
-
-            const tabela = db.data[secId];
-            let rowEncontrada = tabela.find(r => extrairNumeroOrdem(r.real_sai || r.ordem_sai || r.real_ent || r.ordem_ent) === opNum);
-            const hojeDataCompleta = getDataCompleta();
-
-            if (!rowEncontrada) {
-                let freeIdx = tabela.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
-                if (freeIdx === -1) {
-                    tabela.push(getEmptyRow());
-                    freeIdx = tabela.length - 1;
-                }
-                rowEncontrada = tabela[freeIdx];
-                const pcp = buscarOrdemPorNumero(secId, opNum);
-                rowEncontrada.ordem_ent = pcp ? `${pcp.ov}${pcp.prod ? ' - ' + pcp.prod : ''}` : opNum;
-                rowEncontrada.ordem_sai = rowEncontrada.ordem_ent;
-                rowEncontrada.data_pcp = db.globalDate || hojeDataCompleta;
-            }
-
-            rowEncontrada.aponta = 'OK';
-            if (rowEncontrada.destino_fluxo === 'SAIDA_LINHA_NP') {
-                rowEncontrada.destino_fluxo = 'SAIDA_LINHA_AP';
-            }
-            if (!rowEncontrada.real_sai) rowEncontrada.real_sai = opNum;
-            rowEncontrada.data_real_sai = hojeDataCompleta;
-
-            forceRenderTodasTabelas();
-            autoSaveCloud(true);
-            mostrarToast(`OP ${opNum} Apontada com Sucesso (Verde)!`, 'fa-circle-check');
         }
 
         // ==========================================
@@ -1689,9 +1667,7 @@ TANQUES	BASCULANTE	18"></textarea>
 
             const existingKeys = new Set();
             Object.keys(db.basePCP).forEach(sec => {
-                db.basePCP[sec].forEach(r => {
-                    existingKeys.add(`${sec}_${extrairNumeroOrdem(r.ov)}_${r.plan_ent}_${r.plan_sai}`);
-                });
+                db.basePCP[sec].forEach(r => { existingKeys.add(`${sec}_${extrairNumeroOrdem(r.ov)}_${r.plan_ent}_${r.plan_sai}`); });
             });
 
             linhasOriginais.forEach(linha => {
@@ -1735,16 +1711,13 @@ TANQUES	BASCULANTE	18"></textarea>
 
                 if (destino) {
                     if (!db.basePCP[destino]) db.basePCP[destino] = [];
-
                     const chaveRegistro = `${destino}_${extrairNumeroOrdem(ov)}_${dataEntrada}_${dataSaida}`;
                     if (!existingKeys.has(chaveRegistro)) {
                         existingKeys.add(chaveRegistro);
                         db.basePCP[destino].push({ ov: ov, prod: prod, plan_ent: dataEntrada, plan_sai: dataSaida });
                         count++;
                     }
-                } else {
-                    erros++;
-                }
+                } else { erros++; }
             });
             
             fecharModalPCP();
@@ -1781,9 +1754,7 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         function recalcularPainelPremio() {
-            if (!db.pinosManual) {
-                db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
-            }
+            if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
 
             const metaBase = parseInt(document.getElementById('premio-meta-base-input') ? document.getElementById('premio-meta-base-input').value : (db.premioConfig.metaBase || 78)) || 78;
             const atraso = parseInt(document.getElementById('premio-atraso-input') ? document.getElementById('premio-atraso-input').value : (db.premioConfig.atraso || 12)) || 12;
@@ -1804,76 +1775,51 @@ TANQUES	BASCULANTE	18"></textarea>
             renderColunaPinosEditavel('especiais', apontamentosPorTexto);
             renderColunaPinosEditavel('tanques', apontamentosPorTexto);
 
-            let totalProgGeral = 0;
-            let totalOkGeral = 0;
+            let totalProgGeral = 0; let totalOkGeral = 0;
 
             ['bases', 'especiais', 'tanques'].forEach(cat => {
                 const itens = db.pinosManual[cat] || [];
-                itens.forEach(item => {
-                    totalProgGeral += parseInt(item.prog) || 0;
-                    totalOkGeral += parseInt(item.ok) || 0;
-                });
+                itens.forEach(item => { totalProgGeral += parseInt(item.prog) || 0; totalOkGeral += parseInt(item.ok) || 0; });
             });
 
             const metaTotal = metaBase + atraso;
-
             const qtd90 = Math.ceil(metaBase * 0.90);
             const qtd100 = metaBase;
             const qtd110 = Math.ceil(metaBase * 1.10);
 
-            const elMeta90 = document.getElementById('txt-meta-90');
-            const elMeta100 = document.getElementById('txt-meta-100');
-            const elMeta110 = document.getElementById('txt-meta-110');
-            if (elMeta90) elMeta90.innerText = qtd90;
-            if (elMeta100) elMeta100.innerText = qtd100;
-            if (elMeta110) elMeta110.innerText = qtd110;
-
-            document.getElementById('kpi-premio-prog').innerText = totalProgGeral || metaTotal;
-            document.getElementById('kpi-premio-real').innerText = totalOkGeral;
+            if(document.getElementById('txt-meta-90')) document.getElementById('txt-meta-90').innerText = qtd90;
+            if(document.getElementById('txt-meta-100')) document.getElementById('txt-meta-100').innerText = qtd100;
+            if(document.getElementById('txt-meta-110')) document.getElementById('txt-meta-110').innerText = qtd110;
+            if(document.getElementById('kpi-premio-prog')) document.getElementById('kpi-premio-prog').innerText = totalProgGeral || metaTotal;
+            if(document.getElementById('kpi-premio-real')) document.getElementById('kpi-premio-real').innerText = totalOkGeral;
             const saldoGeral = Math.max(0, (totalProgGeral || metaTotal) - totalOkGeral);
-            document.getElementById('kpi-premio-saldo').innerText = saldoGeral;
+            if(document.getElementById('kpi-premio-saldo')) document.getElementById('kpi-premio-saldo').innerText = saldoGeral;
 
             const pctAtingido = metaBase > 0 ? ((totalOkGeral / metaBase) * 100).toFixed(1) : 0;
-            document.getElementById('termometro-pct').innerText = `${pctAtingido}%`;
+            if(document.getElementById('termometro-pct')) document.getElementById('termometro-pct').innerText = `${pctAtingido}%`;
 
             const fillWidth = Math.min(100, Math.max(0, (totalOkGeral / qtd110) * 100));
             const barFill = document.getElementById('termometro-bar-fill');
             if (barFill) barFill.style.width = `${fillWidth}%`;
 
-            let valorPremio = "R$ 0,00";
-            let statusMsg = "";
-            const m90 = document.getElementById('marker-90');
-            const m100 = document.getElementById('marker-100');
-            const m110 = document.getElementById('marker-110');
-
-            if (m90) m90.classList.remove('unlocked');
-            if (m100) m100.classList.remove('unlocked');
-            if (m110) m110.classList.remove('unlocked');
+            let valorPremio = "R$ 0,00"; let statusMsg = "";
+            ['marker-90', 'marker-100', 'marker-110'].forEach(m => { if(document.getElementById(m)) document.getElementById(m).classList.remove('unlocked'); });
 
             if (totalOkGeral >= qtd110) {
-                valorPremio = "R$ 260,00";
-                statusMsg = "🏆 PARABÉNS! Prêmio Máximo de R$ 260,00 Atingido!";
-                if (m90) m90.classList.add('unlocked');
-                if (m100) m100.classList.add('unlocked');
-                if (m110) m110.classList.add('unlocked');
+                valorPremio = "R$ 260,00"; statusMsg = "🏆 PARABÉNS! Prêmio Máximo de R$ 260,00 Atingido!";
+                ['marker-90', 'marker-100', 'marker-110'].forEach(m => { if(document.getElementById(m)) document.getElementById(m).classList.add('unlocked'); });
             } else if (totalOkGeral >= qtd100) {
-                valorPremio = "R$ 200,00";
-                const faltam = qtd110 - totalOkGeral;
-                statusMsg = `🔥 100% Garantido! Faltam apenas ${faltam} pinos para R$ 260,00`;
-                if (m90) m90.classList.add('unlocked');
-                if (m100) m100.classList.add('unlocked');
+                valorPremio = "R$ 200,00"; statusMsg = `🔥 100% Garantido! Faltam apenas ${qtd110 - totalOkGeral} pinos para R$ 260,00`;
+                ['marker-90', 'marker-100'].forEach(m => { if(document.getElementById(m)) document.getElementById(m).classList.add('unlocked'); });
             } else if (totalOkGeral >= qtd90) {
-                valorPremio = "R$ 150,00";
-                const faltam = qtd100 - totalOkGeral;
-                statusMsg = `✅ 90% Atingido! Faltam ${faltam} pinos para R$ 200,00`;
-                if (m90) m90.classList.add('unlocked');
+                valorPremio = "R$ 150,00"; statusMsg = `✅ 90% Atingido! Faltam ${qtd100 - totalOkGeral} pinos para R$ 200,00`;
+                if(document.getElementById('marker-90')) document.getElementById('marker-90').classList.add('unlocked');
             } else {
-                const faltam = qtd90 - totalOkGeral;
-                statusMsg = `🎯 Faltam ${faltam} pinos para destravar R$ 150,00`;
+                statusMsg = `🎯 Faltam ${qtd90 - totalOkGeral} pinos para destravar R$ 150,00`;
             }
 
-            document.getElementById('termometro-status-msg').innerText = statusMsg;
-            document.getElementById('kpi-premio-valor').innerText = valorPremio;
+            if(document.getElementById('termometro-status-msg')) document.getElementById('termometro-status-msg').innerText = statusMsg;
+            if(document.getElementById('kpi-premio-valor')) document.getElementById('kpi-premio-valor').innerText = valorPremio;
 
             calcularLinhaLider();
         }
@@ -1889,12 +1835,10 @@ TANQUES	BASCULANTE	18"></textarea>
                 db.pinosManual[categoria] = itens;
             }
 
-            let html = '';
-            let totalSaldoCat = 0;
+            let html = ''; let totalSaldoCat = 0;
 
             itens.forEach((item, idx) => {
                 const modNome = (item.modelo || '').toUpperCase();
-                
                 if (item.okManual === undefined || item.okManual === false) {
                     let countAuto = 0;
                     apontamentosTexto.forEach(txt => {
@@ -1915,19 +1859,11 @@ TANQUES	BASCULANTE	18"></textarea>
 
                 html += `
                     <tr>
-                        <td>
-                            <input type="text" class="cell-input pino-nome-input" data-cat="${categoria}" data-idx="${idx}" value="${item.modelo}">
-                        </td>
-                        <td style="text-align:center;">
-                            <input type="number" class="pino-val-input" data-cat="${categoria}" data-idx="${idx}" data-type="prog" value="${progNum}">
-                        </td>
-                        <td style="text-align:center;">
-                            <input type="number" class="pino-val-input" style="color: var(--status-green);" data-cat="${categoria}" data-idx="${idx}" data-type="ok" value="${okNum}">
-                        </td>
+                        <td><input type="text" class="cell-input pino-nome-input" data-cat="${categoria}" data-idx="${idx}" value="${item.modelo}"></td>
+                        <td style="text-align:center;"><input type="number" class="pino-val-input" data-cat="${categoria}" data-idx="${idx}" data-type="prog" value="${progNum}"></td>
+                        <td style="text-align:center;"><input type="number" class="pino-val-input" style="color: var(--status-green);" data-cat="${categoria}" data-idx="${idx}" data-type="ok" value="${okNum}"></td>
                         <td style="text-align:center;"><span class="${badgeClass}">${badgeTxt}</span></td>
-                        <td style="text-align:center;" class="admin-only">
-                            <button class="btn-del-pino" onclick="removerModeloPino('${categoria}', ${idx})" title="Remover este modelo"><i class="fa-solid fa-xmark"></i></button>
-                        </td>
+                        <td style="text-align:center;" class="admin-only"><button class="btn-del-pino" onclick="removerModeloPino('${categoria}', ${idx})"><i class="fa-solid fa-xmark"></i></button></td>
                     </tr>
                 `;
             });
@@ -1942,349 +1878,313 @@ TANQUES	BASCULANTE	18"></textarea>
         function calcularLinhaLider() {
             const categorias = ['bases', 'especiais', 'tanques'];
             const nomes = { bases: 'Linha de Bases (Chassi)', especiais: 'Linha de Especiais', tanques: 'Linha de Tanques' };
-            let melhorNome = 'Linhas Empatadas';
-            let melhorPct = -1;
+            let melhorNome = 'Linhas Empatadas'; let melhorPct = -1;
 
             categorias.forEach(cat => {
                 const itens = db.pinosManual[cat] || [];
                 let totProg = 0, totOk = 0;
-                itens.forEach(i => {
-                    totProg += parseInt(i.prog) || 0;
-                    totOk += parseInt(i.ok) || 0;
-                });
+                itens.forEach(i => { totProg += parseInt(i.prog) || 0; totOk += parseInt(i.ok) || 0; });
                 let pct = totProg > 0 ? (totOk / totProg) * 100 : 0;
-                if (pct > melhorPct) {
-                    melhorPct = pct;
-                    melhorNome = nomes[cat];
-                }
+                if (pct > melhorPct) { melhorPct = pct; melhorNome = nomes[cat]; }
             });
 
-            const elNome = document.getElementById('linha-lider-nome');
-            const elPct = document.getElementById('linha-lider-pct');
-            if (elNome) elNome.innerText = melhorNome;
-            if (elPct) elPct.innerText = `${melhorPct.toFixed(0)}% Concluído`;
+            if (document.getElementById('linha-lider-nome')) document.getElementById('linha-lider-nome').innerText = melhorNome;
+            if (document.getElementById('linha-lider-pct')) document.getElementById('linha-lider-pct').innerText = `${melhorPct.toFixed(0)}% Concluído`;
         }
 
         // =========================================================================
-        // MOTOR DA ESTAMPARIA (SLIDE AUTOMÁTICO E MANUAL DE DIAS)
+        // ESTAMPARIA
         // =========================================================================
-        
         function obterUltimosDiasUteis(qtd) {
-            let datas = [];
-            let d = new Date();
+            let datas = []; let d = new Date();
             while(datas.length < qtd) {
-                if (d.getDay() !== 0 && d.getDay() !== 6) { // Pula Domingo (0) e Sábado (6)
-                    datas.unshift(formatarDataEstamparia(d));
-                }
+                if (d.getDay() !== 0 && d.getDay() !== 6) datas.unshift(formatarDataEstamparia(d));
                 d.setDate(d.getDate() - 1);
-            }
-            return datas;
+            } return datas;
         }
 
         function atualizarDiasEstamparia() {
             if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
             
-            // Inicialização se vazia ou fora do tamanho padrão de 5 dias
             if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
                 db.estampariaMatriz.datas = obterUltimosDiasUteis(5);
                 estampariaLinhas.forEach(linha => {
-                    if (!db.estampariaMatriz.valores[linha] || db.estampariaMatriz.valores[linha].length !== 5) {
-                        db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                    }
-                });
-                return;
+                    if (!db.estampariaMatriz.valores[linha] || db.estampariaMatriz.valores[linha].length !== 5) db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                }); return;
             }
 
-            // Garante 5 colunas por linha
             estampariaLinhas.forEach(linha => {
-                if (!db.estampariaMatriz.valores[linha]) {
-                    db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                } else if (db.estampariaMatriz.valores[linha].length < 5) {
-                    while (db.estampariaMatriz.valores[linha].length < 5) db.estampariaMatriz.valores[linha].push('');
-                }
+                if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                else if (db.estampariaMatriz.valores[linha].length < 5) while (db.estampariaMatriz.valores[linha].length < 5) db.estampariaMatriz.valores[linha].push('');
             });
 
-            // AUTOMAÇÃO CARROSSEL: Verifica qual é o "Hoje" (Dia Útil)
-            let hoje = new Date();
-            while (hoje.getDay() === 0 || hoje.getDay() === 6) {
-                hoje.setDate(hoje.getDate() - 1);
-            }
+            let hoje = new Date(); while (hoje.getDay() === 0 || hoje.getDay() === 6) hoje.setDate(hoje.getDate() - 1);
             const hojeFormatado = formatarDataEstamparia(hoje);
             let datasAntigas = db.estampariaMatriz.datas;
             
-            // Se a última coluna não for a data de hoje, passa para a esquerda preservando o preenchimento (Automação principal)
             if (datasAntigas[datasAntigas.length - 1] !== hojeFormatado) {
-                executarShiftEstamparia(hojeFormatado);
-                autoSaveCloud(false);
+                executarShiftEstamparia(hojeFormatado); autoSaveCloud(false);
             }
         }
 
         function executarShiftEstamparia(novaDataStr) {
             if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
             if (!db.estampariaMatriz.datas) db.estampariaMatriz.datas = [];
-            
-            // Remove a coluna mais antiga à esquerda e adiciona a nova à direita
-            db.estampariaMatriz.datas.shift();
-            db.estampariaMatriz.datas.push(novaDataStr);
-            
+            db.estampariaMatriz.datas.shift(); db.estampariaMatriz.datas.push(novaDataStr);
             estampariaLinhas.forEach(linha => {
-                if (!db.estampariaMatriz.valores[linha]) {
-                    db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                }
-                // Desliza valores para a esquerda e cria a nova célula do dia em branco
-                db.estampariaMatriz.valores[linha].shift();
-                db.estampariaMatriz.valores[linha].push('');
+                if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                db.estampariaMatriz.valores[linha].shift(); db.estampariaMatriz.valores[linha].push('');
             });
         }
 
         function forcarAberturaDiaAtualEstamparia() {
             if (!isAdmin) { toggleAdmin(); return; }
-            
-            let hoje = new Date();
-            while (hoje.getDay() === 0 || hoje.getDay() === 6) {
-                hoje.setDate(hoje.getDate() - 1);
-            }
+            let hoje = new Date(); while (hoje.getDay() === 0 || hoje.getDay() === 6) hoje.setDate(hoje.getDate() - 1);
             const hojeFormatado = formatarDataEstamparia(hoje);
-
-            let datasAntigas = db.estampariaMatriz.datas;
-            if (datasAntigas[datasAntigas.length - 1] === hojeFormatado) {
-                mostrarToast("O dia atual já está aberto na última coluna!", "fa-circle-info");
-                return;
-            }
-
+            if (db.estampariaMatriz.datas[db.estampariaMatriz.datas.length - 1] === hojeFormatado) { mostrarToast("O dia atual já está aberto na última coluna!", "fa-circle-info"); return; }
             if (confirm(`Deseja forçar a abertura da coluna para o dia útil atual (${hojeFormatado})?`)) {
-                executarShiftEstamparia(hojeFormatado);
-                renderizarEstampariaMatriz();
-                autoSaveCloud(true);
-                mostrarToast(`Coluna de ${hojeFormatado} aberta com sucesso!`, "fa-calendar-plus");
+                executarShiftEstamparia(hojeFormatado); renderizarEstampariaMatriz(); autoSaveCloud(true); mostrarToast(`Coluna de ${hojeFormatado} aberta com sucesso!`, "fa-calendar-plus");
             }
         }
 
         function renderizarEstampariaMatriz() {
-            const container = document.getElementById('tabela-estamparia-matriz');
-            if(!container) return;
-            
+            const container = document.getElementById('tabela-estamparia-matriz'); if(!container) return;
             if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
             if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) atualizarDiasEstamparia();
             
             const datas = db.estampariaMatriz.datas || ['','','','',''];
-            
-            let thead = `
-                <tr>
-                    <th colspan="6" style="text-align: center; font-size: 16px; padding: 12px; border-bottom: 2px solid var(--randon-black);">
-                        <i class="fa-solid fa-industry" style="margin-right: 8px;"></i> Controle Manufaturados
-                    </th>
-                </tr>
-                <tr>
-                    <th style="width: 280px; text-align: left; padding-left: 20px; background-color: white;">Linha</th>`;
-            
+            let thead = `<tr><th colspan="6" style="text-align: center; font-size: 16px; padding: 12px; border-bottom: 2px solid var(--randon-black);"><i class="fa-solid fa-industry" style="margin-right: 8px;"></i> Controle Manufaturados</th></tr><tr><th style="width: 280px; text-align: left; padding-left: 20px; background-color: white;">Linha</th>`;
             datas.forEach((d, cIdx) => {
                 let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : 'background-color: white;';
-                thead += `<th style="${bg} border-bottom: 2px solid var(--randon-black); border-top: 1px solid var(--randon-black);">
-                            <input type="text" class="cell-input" style="font-weight:900; font-size: 15px; text-align: center; ${bg}" data-col-date="${cIdx}" value="${d || ''}">
-                          </th>`;
-            });
-            thead += `</tr>`;
+                thead += `<th style="${bg} border-bottom: 2px solid var(--randon-black); border-top: 1px solid var(--randon-black);"><input type="text" class="cell-input" style="font-weight:900; font-size: 15px; text-align: center; ${bg}" data-col-date="${cIdx}" value="${d || ''}"></th>`;
+            }); thead += `</tr>`;
 
             let tbody = '';
             estampariaLinhas.forEach((linha) => {
                 if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
                 tbody += `<tr><td style="font-weight: 900; padding-left: 20px; color: var(--randon-dark); font-size: 14px; border-right: 2px solid var(--randon-black);">${linha}</td>`;
-                
                 datas.forEach((d, cIdx) => {
                     const val = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx] !== undefined) ? db.estampariaMatriz.valores[linha][cIdx] : '';
                     let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : '';
                     let colorStyle = 'color: var(--randon-blue);'; 
-                    
                     if (cIdx > 0 && val !== '') {
                         const prevVal = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx - 1]) ? db.estampariaMatriz.valores[linha][cIdx - 1] : '';
                         if (prevVal !== '') {
-                            const numVal = parseFloat(val);
-                            const numPrev = parseFloat(prevVal);
+                            const numVal = parseFloat(val), numPrev = parseFloat(prevVal);
                             if (!isNaN(numVal) && !isNaN(numPrev)) {
                                 if (numVal < numPrev) colorStyle = 'color: var(--status-green);';
                                 else if (numVal > numPrev) colorStyle = 'color: var(--status-red);';
                             }
                         }
                     }
-                    
-                    tbody += `<td style="${bg}">
-                                <input type="text" class="cell-input estamparia-val-input" 
-                                       style="font-size: 16px; font-weight: 900; text-align: center; ${colorStyle}" 
-                                       data-row-name="${linha}" data-col-idx="${cIdx}" 
-                                       value="${val}">
-                             </td>`;
-                });
-                tbody += `</tr>`;
+                    tbody += `<td style="${bg}"><input type="text" class="cell-input estamparia-val-input" style="font-size: 16px; font-weight: 900; text-align: center; ${colorStyle}" data-row-name="${linha}" data-col-idx="${cIdx}" value="${val}"></td>`;
+                }); tbody += `</tr>`;
             });
-
             container.innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`;
             updateEstampariaChart();
         }
 
         // =========================================================================
-        // MOTOR DO BI (ANALYSIS) E GUIA/GARGALOS - COM EDIÇÃO DIRETA
+        // MOTOR DO BI E NOVO TRACKING MENSAL
         // =========================================================================
-        function updateAnalytics() {
-            if (!db.data) return;
-            const hoje = db.globalDate || getDataCompleta();
-            const lblData = document.getElementById('resumo-data-label');
-            if(lblData) lblData.innerText = hoje;
+        let cacheTracking = { soldaMes: 0, op2Mes: 0, diasUteisMes: 1 };
 
-            let totalApontamentos = 0, totalOK = 0, totalCOGI = 0, totalAtrasos = 0, totalProg = 0;
+        function calcularProjecao() {
+            const inputSolda = parseInt(document.getElementById('simula-solda').value) || 0;
+            const inputOp2 = parseInt(document.getElementById('simula-op2').value) || 0;
+            const resSolda = (cacheTracking.soldaMes + inputSolda) / cacheTracking.diasUteisMes;
+            const resOp2 = (cacheTracking.op2Mes + inputOp2) / cacheTracking.diasUteisMes;
+            const elSolda = document.getElementById('projecao-solda-res');
+            const elOp2 = document.getElementById('projecao-op2-res');
+            if(elSolda) elSolda.innerText = `Nova Média: ${resSolda.toFixed(1)}`;
+            if(elOp2) elOp2.innerText = `Nova Média: ${resOp2.toFixed(1)}`;
+        }
 
-            const listas = { solda: [], pintura: [], op1: [], op2: [] };
+        function atualizarTrackingMensal(hojeStr) {
+            const diasUteis = calcularDiasUteisMesAteHoje(hojeStr); cacheTracking.diasUteisMes = diasUteis;
+            let totalSoldaMes = 0, totalOp2Mes = 0;
 
             Object.keys(db.data).forEach(secId => {
                 const config = configuracaoSetores.find(c => c.id === secId);
                 if(!config) return;
+                db.data[secId].forEach(row => {
+                    if (row.aponta === 'OK') {
+                        const dataConclusao = row.data_real_sai || row.data_pcp || row.data_real_ent;
+                        if (mesEAnoIguais(dataConclusao, hojeStr)) { 
+                            if (config.view === 'solda') totalSoldaMes++;
+                            else if (config.view === 'op2') totalOp2Mes++;
+                        }
+                    }
+                });
+            });
+
+            cacheTracking.soldaMes = totalSoldaMes; cacheTracking.op2Mes = totalOp2Mes;
+            const mediaSolda = (totalSoldaMes / diasUteis).toFixed(1), mediaOp2 = (totalOp2Mes / diasUteis).toFixed(1);
+
+            const elDias = document.getElementById('lbl-dias-uteis');
+            const elMediaSolda = document.getElementById('media-solda-atual');
+            const elMediaOp2 = document.getElementById('media-op2-atual');
+            const elSubSolda = document.getElementById('subtotal-solda');
+            const elSubOp2 = document.getElementById('subtotal-op2');
+
+            if(elDias) elDias.innerText = diasUteis;
+            if(elSubSolda) elSubSolda.innerText = totalSoldaMes;
+            if(elSubOp2) elSubOp2.innerText = totalOp2Mes;
+            if(elMediaSolda) elMediaSolda.innerHTML = `${mediaSolda} <small>OPs/dia</small>`;
+            if(elMediaOp2) elMediaOp2.innerHTML = `${mediaOp2} <small>OPs/dia</small>`;
+            calcularProjecao();
+        }
+
+        function updateAnalytics() {
+            if (!db.data) return;
+            const hoje = db.globalDate || getDataCompleta();
+            const lblData = document.getElementById('resumo-data-label'); if(lblData) lblData.innerText = hoje;
+
+            atualizarTrackingMensal(hoje);
+
+            let totalApontamentos = 0, totalOK = 0, totalCOGI = 0, totalAtrasos = 0, totalProg = 0;
+            const listas = { solda: [], pintura: [], op1: [], op2: [] };
+            
+            let paretoData = {}, statusData = { OK: 0, COGI: 0, NP: 0 }, aderenciaSetor = { labels: [], data: [] }, evolucaoData = {};
+
+            Object.keys(db.data).forEach(secId => {
+                const config = configuracaoSetores.find(c => c.id === secId); if(!config) return;
+                let secProg = 0, secOk = 0;
 
                 db.data[secId].forEach((row, idx) => {
                     const temDado = row.real_ent || row.ordem_ent || row.real_sai || row.ordem_sai;
                     if (!temDado) return;
 
-                    totalProg++;
+                    totalProg++; secProg++;
                     if (row.aponta) totalApontamentos++;
-                    if (row.aponta === 'OK') totalOK++;
-                    if (row.aponta === 'COGI') totalCOGI++;
                     if (row.atr_sai > 0 || row.atr_ent > 0) totalAtrasos++;
 
-                    // Filtra itens apenas da data referenciada no painel superior
-                    const isHoje = (row.data_real_sai === hoje || row.data_pcp === hoje || row.data_real_ent === hoje);
-                    if (isHoje) {
-                        const itemData = { secId, idx, row, config };
-                        if (config.view === 'solda' && (row.destino_fluxo || row.real_sai)) listas.solda.push(itemData);
-                        else if (config.view === 'pintura') listas.pintura.push(itemData);
-                        else if (config.view === 'op1') listas.op1.push(itemData);
-                        else if (config.view === 'op2') listas.op2.push(itemData);
+                    // Lógica Gráfico Qualidade e Evolução
+                    if(row.aponta === 'OK') {
+                        totalOK++; secOk++; statusData.OK++;
+                        let dOK = row.data_real_sai || row.data_pcp;
+                        if (dOK) { let dShort = normalizarDataParaComparacao(dOK).substring(0,5); evolucaoData[dShort] = (evolucaoData[dShort] || 0) + 1; }
+                    } else if(row.aponta === 'COGI') {
+                        totalCOGI++; statusData.COGI++;
+                        if (row.impactos) paretoData[row.impactos] = (paretoData[row.impactos] || 0) + 1;
+                    } else if (row.aponta === 'NP') {
+                        statusData.NP++;
+                    }
+
+                    // Listas Resumo do Dia
+                    if(row.data_real_sai === hoje || row.data_pcp === hoje || row.data_real_ent === hoje) {
+                        let item = { secId, idx, row, config };
+                        if(config.view === 'solda' && (row.destino_fluxo || row.real_sai)) listas.solda.push(item);
+                        else if(config.view === 'pintura') listas.pintura.push(item);
+                        else if(config.view === 'op1') listas.op1.push(item);
+                        else if(config.view === 'op2') listas.op2.push(item);
                     }
                 });
+
+                if (secProg > 0) {
+                    aderenciaSetor.labels.push(config.title.split(' ')[0]);
+                    aderenciaSetor.data.push(Math.round((secOk / secProg) * 100));
+                }
             });
 
-            // GERA HTML EDITÁVEL PARA O BI
-            const buildListHTML = (list) => {
-                return list.map(item => {
-                    const op = item.row.real_sai || item.row.real_ent || extrairNumeroOrdem(item.row.ordem_sai || item.row.ordem_ent);
-                    const prod = obterDescricaoProduto(item.row.ordem_sai || item.row.ordem_ent, op);
-                    const aponta = item.row.aponta || '';
-                    
-                    let bgClass = aponta === 'OK' ? 'item-ok' : (aponta ? 'item-np' : '');
-                    let selectColor = aponta === 'OK' ? 'color: #065f46; background: #d1fae5;' : (aponta === 'COGI' ? 'color: #991b1b; background: #fee2e2;' : 'color: var(--randon-dark);');
-
-                    return `
-                        <div class="resumo-dia-item ${bgClass}">
-                            <div class="resumo-dia-item-top">
-                                <span class="badge-prod-tipo">${item.config.title.split(' ')[0]}</span>
-                                <span style="font-size: 11px; font-weight: 900; color: var(--randon-blue);">${op}</span>
-                            </div>
-                            <div style="font-size: 10px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${prod}">${prod || 'N/D'}</div>
-                            <div class="resumo-dia-item-bottom">
-                                <select class="cell-input" style="height: 24px; border: 1px solid var(--border-light); font-size: 10px; padding: 0 4px; width: 100%; font-weight: 800; ${selectColor}"
-                                    onchange="window.alterarApontamentoBI('${item.secId}', ${item.idx}, this.value)">
-                                    <option value="">- PENDENTE -</option>
-                                    <option value="OK" ${aponta === 'OK' ? 'selected' : ''}>🟢 OK</option>
-                                    <option value="NP" ${aponta === 'NP' ? 'selected' : ''}>⏳ NÃO APONTADO</option>
-                                    <option value="COGI" ${aponta === 'COGI' ? 'selected' : ''}>🔴 COGI</option>
-                                </select>
-                            </div>
+            // ATUALIZA LISTAS DIÁRIAS (EDITÁVEIS E COM BADGE OP DESTAQUE)
+            const buildList = (list) => list.map(i => {
+                const op = i.row.real_sai || i.row.real_ent || extrairNumeroOrdem(i.row.ordem_sai || i.row.ordem_ent);
+                const prod = obterDescricaoProduto(i.row.ordem_sai || i.row.ordem_ent, op);
+                const ap = i.row.aponta || '', bg = ap==='OK'?'item-ok':(ap?'item-np':''), col = ap==='OK'?'color:#065f46;background:#d1fae5;':(ap==='COGI'?'color:#991b1b;background:#fee2e2;':'color:var(--randon-dark);');
+                
+                return `
+                    <div class="resumo-dia-item ${bg}">
+                        <div class="resumo-dia-item-top">
+                            <span class="badge-prod-tipo">${i.config.title.split(' ')[0]}</span>
+                            <span class="badge-op-destaque">OP: ${op}</span>
                         </div>
-                    `;
-                }).join('');
-            };
+                        <div style="font-size: 11px; color: #475569; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px;" title="${prod}">${prod || 'N/D'}</div>
+                        <div class="resumo-dia-item-bottom" style="margin-top: 6px;">
+                            <select class="cell-input" style="height: 26px; border: 1px solid var(--border-light); font-size: 11px; padding: 0 4px; width: 100%; font-weight: 800; ${col}" onchange="window.alterarApontamentoBI('${i.secId}', ${i.idx}, this.value)">
+                                <option value="">- PENDENTE -</option>
+                                <option value="OK" ${ap==='OK'?'selected':''}>🟢 OK</option>
+                                <option value="NP" ${ap==='NP'?'selected':''}>⏳ NÃO APONTADO</option>
+                                <option value="COGI" ${ap==='COGI'?'selected':''}>🔴 COGI</option>
+                            </select>
+                        </div>
+                    </div>`;
+            }).join('');
 
-            if(document.getElementById('resumo-list-solda')) {
-                document.getElementById('resumo-list-solda').innerHTML = buildListHTML(listas.solda);
-                document.getElementById('resumo-count-solda').innerText = listas.solda.length;
-            }
-            if(document.getElementById('resumo-list-pintura')) {
-                document.getElementById('resumo-list-pintura').innerHTML = buildListHTML(listas.pintura);
-                document.getElementById('resumo-count-pintura').innerText = listas.pintura.length;
-            }
-            if(document.getElementById('resumo-list-op1')) {
-                document.getElementById('resumo-list-op1').innerHTML = buildListHTML(listas.op1);
-                document.getElementById('resumo-count-op1').innerText = listas.op1.length;
-            }
-            if(document.getElementById('resumo-list-op2')) {
-                document.getElementById('resumo-list-op2').innerHTML = buildListHTML(listas.op2);
-                document.getElementById('resumo-count-op2').innerText = listas.op2.length;
-            }
+            if(document.getElementById('resumo-list-solda')) { document.getElementById('resumo-list-solda').innerHTML = buildList(listas.solda); document.getElementById('resumo-count-solda').innerText = listas.solda.length; }
+            if(document.getElementById('resumo-list-pintura')) { document.getElementById('resumo-list-pintura').innerHTML = buildList(listas.pintura); document.getElementById('resumo-count-pintura').innerText = listas.pintura.length; }
+            if(document.getElementById('resumo-list-op1')) { document.getElementById('resumo-list-op1').innerHTML = buildList(listas.op1); document.getElementById('resumo-count-op1').innerText = listas.op1.length; }
+            if(document.getElementById('resumo-list-op2')) { document.getElementById('resumo-list-op2').innerHTML = buildList(listas.op2); document.getElementById('resumo-count-op2').innerText = listas.op2.length; }
 
-            // Atualiza Top Cards KPI
+            // ATUALIZA KPIs TOP
             if(document.getElementById('dash-total-apontamentos')) document.getElementById('dash-total-apontamentos').innerText = totalApontamentos;
-            if(document.getElementById('dash-ok')) document.getElementById('dash-ok').innerText = totalProg > 0 ? ((totalOK / totalProg) * 100).toFixed(0) + '%' : '0%';
+            if(document.getElementById('dash-ok')) document.getElementById('dash-ok').innerText = totalProg>0?((totalOK/totalProg)*100).toFixed(0)+'%':'0%';
             if(document.getElementById('dash-cogi')) document.getElementById('dash-cogi').innerText = totalCOGI;
             if(document.getElementById('dash-atrasos')) document.getElementById('dash-atrasos').innerText = totalAtrasos;
-            if(document.getElementById('dash-aderencia')) document.getElementById('dash-aderencia').innerText = totalProg > 0 ? (((totalOK+totalCOGI) / totalProg) * 100).toFixed(0) + '%' : '0%';
+            if(document.getElementById('dash-aderencia')) document.getElementById('dash-aderencia').innerText = totalProg>0?(((totalOK+totalCOGI)/totalProg)*100).toFixed(0)+'%':'0%';
+
+            // INJETA DADOS NOS GRÁFICOS
+            if(chartsObj.pareto) {
+                let sortedPareto = Object.entries(paretoData).sort((a,b) => b[1] - a[1]);
+                chartsObj.pareto.data.labels = sortedPareto.map(x => x[0]);
+                chartsObj.pareto.data.datasets = [{ label: 'Ocorrências COGI', data: sortedPareto.map(x => x[1]), backgroundColor: '#ef4444' }];
+                chartsObj.pareto.update();
+            }
+
+            if(chartsObj.pie) {
+                chartsObj.pie.data.labels = ['OK', 'COGI', 'Não Apontado'];
+                chartsObj.pie.data.datasets[0].data = [statusData.OK, statusData.COGI, statusData.NP];
+                chartsObj.pie.data.datasets[0].backgroundColor = ['#10b981', '#ef4444', '#f59e0b'];
+                chartsObj.pie.update();
+            }
+
+            if(chartsObj.aderencia) {
+                chartsObj.aderencia.data.labels = aderenciaSetor.labels;
+                chartsObj.aderencia.data.datasets = [{ label: 'Aderência (%)', data: aderenciaSetor.data, backgroundColor: '#3b82f6' }];
+                chartsObj.aderencia.update();
+            }
+
+            if(chartsObj.line) {
+                let sortedDates = Object.keys(evolucaoData).sort((a,b) => {
+                    let [d1, m1] = a.split('/'); let [d2, m2] = b.split('/');
+                    return (parseInt(m1)*100 + parseInt(d1)) - (parseInt(m2)*100 + parseInt(d2));
+                }).slice(-7);
+                chartsObj.line.data.labels = sortedDates;
+                chartsObj.line.data.datasets = [{
+                    label: 'OPs Concluídas', data: sortedDates.map(d => evolucaoData[d]),
+                    borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.2)', fill: true, tension: 0.3
+                }];
+                chartsObj.line.update();
+            }
         }
 
-        // FUNÇÃO PARA ATUALIZAR STATUS DIRETO PELO BI
         window.alterarApontamentoBI = function(secId, rowIdx, novoStatus) {
-            if (!isAdmin) {
-                toggleAdmin();
-                updateAnalytics(); // Restaura visão se cancelar login
-                return;
-            }
+            if (!isAdmin) { toggleAdmin(); updateAnalytics(); return; }
             if(db.data[secId] && db.data[secId][rowIdx]) {
-                const row = db.data[secId][rowIdx];
-                row.aponta = novoStatus;
-                
-                // Automação: Se o BI marcou OK e não houver Saída Real preenchida, preenche automático.
-                if(novoStatus === 'OK' && !row.real_sai) {
-                    row.real_sai = extrairNumeroOrdem(row.ordem_sai || row.real_ent || row.ordem_ent);
-                    row.data_real_sai = getDataCompleta();
-                }
-
-                autoSaveCloud(true);
-                forceRenderTodasTabelas(); 
-                mostrarToast("Status atualizado pelo BI!", "fa-check");
+                const row = db.data[secId][rowIdx]; row.aponta = novoStatus;
+                if(novoStatus === 'OK' && !row.real_sai) { row.real_sai = extrairNumeroOrdem(row.ordem_sai || row.real_ent || row.ordem_ent); row.data_real_sai = getDataCompleta(); }
+                autoSaveCloud(true); forceRenderTodasTabelas(); mostrarToast("Status atualizado!");
             }
         }
 
+        // =========================================================================
+        // RESUMOS FINAIS
+        // =========================================================================
         function renderResumoApontamento() {
-            const tbSaidas = document.getElementById('tbody-saidas-linha');
-            const tbEspelho = document.getElementById('tbody-espelho-finais');
-            if(!tbSaidas || !tbEspelho) return;
-
-            let htmlSaidas = '', htmlEspelho = '';
-            const hoje = db.globalDate || getDataCompleta();
-
+            const tbS = document.getElementById('tbody-saidas-linha'), tbE = document.getElementById('tbody-espelho-finais'); if(!tbS || !tbE) return;
+            let hS = '', hE = '', hoje = db.globalDate || getDataCompleta();
             Object.keys(db.data).forEach(secId => {
-                const config = configuracaoSetores.find(c => c.id === secId);
-                if(!config) return;
-
-                db.data[secId].forEach(row => {
-                    const op = row.real_sai || row.real_ent || extrairNumeroOrdem(row.ordem_sai || row.ordem_ent);
-                    if(!op) return;
-
-                    const isHoje = (row.data_real_sai === hoje || row.data_pcp === hoje || row.data_real_ent === hoje);
-                    if(!isHoje) return;
-
-                    if (config.view === 'solda' && (row.destino_fluxo || row.real_sai)) {
-                        htmlSaidas += `
-                            <tr>
-                                <td style="padding-left: 20px;"><strong>${config.title}</strong></td>
-                                <td>${op} - ${obterDescricaoProduto(row.ordem_sai, op)}</td>
-                                <td>${row.data_real_sai || row.data_pcp}</td>
-                                <td><span class="badge-status-${row.aponta === 'OK' ? 'ok' : 'np'}">${row.aponta || 'PENDENTE'}</span></td>
-                                <td style="padding-left: 20px;">${row.acoes || row.destino_fluxo || '-'}</td>
-                            </tr>
-                        `;
-                    } else if (['pintura', 'op1', 'op2'].includes(config.view)) {
-                        htmlEspelho += `
-                            <tr>
-                                <td style="padding-left: 20px;"><strong>${config.title}</strong></td>
-                                <td>${op} - ${obterDescricaoProduto(row.ordem_sai, op)}</td>
-                                <td>${row.data_real_ent || '-'}</td>
-                                <td>${row.data_real_sai || '-'}</td>
-                                <td style="padding-left: 20px;"><span class="badge-status-${row.aponta === 'OK' ? 'ok' : (row.aponta === 'COGI' ? 'np' : 'np')}" style="${row.aponta==='COGI'?'background:#fee2e2;color:#991b1b;border-color:#ef4444;':''}">${row.aponta || 'EM PROCESSO'}</span> ${row.impactos ? '- ' + row.impactos : ''}</td>
-                            </tr>
-                        `;
+                const config = configuracaoSetores.find(c => c.id === secId); if(!config) return;
+                db.data[secId].forEach(r => {
+                    const op = r.real_sai || r.real_ent || extrairNumeroOrdem(r.ordem_sai || r.ordem_ent);
+                    if(op && (r.data_real_sai === hoje || r.data_pcp === hoje || r.data_real_ent === hoje)) {
+                        if (config.view === 'solda' && (r.destino_fluxo || r.real_sai)) hS += `<tr><td style="padding-left:20px;"><strong>${config.title}</strong></td><td>${op} - ${obterDescricaoProduto(r.ordem_sai, op)}</td><td>${r.data_real_sai||r.data_pcp}</td><td><span class="badge-status-${r.aponta==='OK'?'ok':'np'}">${r.aponta||'PENDENTE'}</span></td><td style="padding-left:20px;">${r.acoes||r.destino_fluxo||'-'}</td></tr>`;
+                        else if (['pintura', 'op1', 'op2'].includes(config.view)) hE += `<tr><td style="padding-left:20px;"><strong>${config.title}</strong></td><td>${op} - ${obterDescricaoProduto(r.ordem_sai, op)}</td><td>${r.data_real_ent||'-'}</td><td>${r.data_real_sai||'-'}</td><td style="padding-left:20px;"><span class="badge-status-${r.aponta==='OK'?'ok':(r.aponta==='COGI'?'np':'np')}" style="${r.aponta==='COGI'?'background:#fee2e2;color:#991b1b;border-color:#ef4444;':''}">${r.aponta||'EM PROCESSO'}</span> ${r.impactos?'- '+r.impactos:''}</td></tr>`;
                     }
                 });
             });
-
-            tbSaidas.innerHTML = htmlSaidas || '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #94a3b8;">Nenhuma saída registrada hoje.</td></tr>';
-            tbEspelho.innerHTML = htmlEspelho || '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #94a3b8;">Nenhum processo final registrado hoje.</td></tr>';
+            tbS.innerHTML = hS || '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #94a3b8;">Nenhuma saída registrada hoje.</td></tr>';
+            tbE.innerHTML = hE || '<tr><td colspan="5" style="text-align:center; padding: 20px; color: #94a3b8;">Nenhum processo final registrado hoje.</td></tr>';
         }
 
         function renderPainelGargalos() {
@@ -2329,7 +2229,7 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         // =========================================================================
-        // RENDERIZAÇÃO DE TABELAS (SEM TEXTO MÁGICA DUPLA)
+        // RENDERIZAÇÃO DE TABELAS DINÂMICAS E EVENTOS
         // =========================================================================
         function renderizarViews() {
             let activeInput = document.activeElement;
@@ -2500,6 +2400,7 @@ TANQUES	BASCULANTE	18"></textarea>
             renderizarEstampariaMatriz();
             renderizarViews(); 
             recalcularDashboard(); 
+            updateAnalytics();
             renderResumoApontamento();
             renderPainelGargalos();
             recalcularPainelPremio();
@@ -2515,12 +2416,8 @@ TANQUES	BASCULANTE	18"></textarea>
             });
         }
 
-        // ==========================================
-        // EVENTOS DE ENTRADA DE DADOS
-        // ==========================================
         document.addEventListener('input', function(e) {
             const target = e.target;
-            
             if (target.classList.contains('estamparia-val-input')) {
                 const linha = target.dataset.rowName;
                 const cIdx = parseInt(target.dataset.colIdx);
@@ -2552,7 +2449,6 @@ TANQUES	BASCULANTE	18"></textarea>
 
         document.addEventListener('change', function(e) {
             const target = e.target;
-            
             if (target.classList.contains('pino-nome-input')) {
                 const cat = target.dataset.cat, idx = parseInt(target.dataset.idx);
                 if (db.pinosManual && db.pinosManual[cat] && db.pinosManual[cat][idx]) {
@@ -2669,7 +2565,7 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         // ==========================================
-        // RESTAURAÇÃO TOTAL INTELIGENTE
+        // UTILIDADES EXTRAS (Firebase, Admin, Export)
         // ==========================================
         function restaurarTudoUltimoPreenchimento() {
             for (let i = 1; i <= 5; i++) {
@@ -2688,9 +2584,6 @@ TANQUES	BASCULANTE	18"></textarea>
             alert("Nenhum ponto local disponível para restauração.");
         }
 
-        // ==========================================
-        // AUTO-SAVE E LOCALSTORAGE
-        // ==========================================
         function autoSaveCloud(exibirAviso = true) {
             setStatusConexao('syncing');
             clearTimeout(saveTimeout);
@@ -2816,29 +2709,19 @@ TANQUES	BASCULANTE	18"></textarea>
             Chart.defaults.font.family = "'Inter', sans-serif"; 
             Chart.defaults.color = "#94a3b8";
             chartsObj.pareto = new Chart(document.getElementById('chartPareto'), { 
-                type: 'bar', 
-                data: { labels: [], datasets: [] }, 
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } } 
+                type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } } 
             });
             chartsObj.line = new Chart(document.getElementById('chartEvolucao'), { 
-                type: 'line', 
-                data: { labels: [], datasets: [] }, 
-                options: { responsive: true, maintainAspectRatio: false, tension: 0.3, scales: { y: { beginAtZero: true } } } 
+                type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3, scales: { y: { beginAtZero: true } } } 
             });
             chartsObj.pie = new Chart(document.getElementById('chartStatus'), { 
-                type: 'doughnut', 
-                data: { labels: ['OK', 'COGI'], datasets: [{ data: [0,0], backgroundColor: ['#10b981', '#ef4444'] }] }, 
-                options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'bottom' } } } 
+                type: 'doughnut', data: { labels: ['OK', 'COGI', 'Não Apontado'], datasets: [{ data: [0,0,0], backgroundColor: ['#10b981', '#ef4444', '#f59e0b'] }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'bottom' } } } 
             });
             chartsObj.aderencia = new Chart(document.getElementById('chartAderencia'), { 
-                type: 'bar', 
-                data: { labels: [], datasets: [] }, 
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { position: 'bottom' } } } 
+                type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { position: 'bottom' } } } 
             });
             chartsObj.estamparia = new Chart(document.getElementById('chartEstamparia'), { 
-                type: 'line', 
-                data: { labels: [], datasets: [] }, 
-                options: { responsive: true, maintainAspectRatio: false, tension: 0.3, scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'bottom' } } } 
+                type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3, scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'bottom' } } } 
             });
         }
 
@@ -2851,28 +2734,17 @@ TANQUES	BASCULANTE	18"></textarea>
             chartsObj.estamparia.data.labels = datas;
             const datasets = [];
             const cores = { 
-                "Atraso Programação": "#ef4444", 
-                "Estamparia Geral": "#3b82f6", 
-                "Laser": "#10b981", 
-                "Linea": "#f59e0b", 
-                "Dobra": "#8b5cf6", 
-                "PRM - Carbo": "#ec4899", 
-                "115 - CDL": "#14b8a6", 
-                "160 - Externo": "#64748b" 
+                "Atraso Programação": "#ef4444", "Estamparia Geral": "#3b82f6", "Laser": "#10b981", 
+                "Linea": "#f59e0b", "Dobra": "#8b5cf6", "PRM - Carbo": "#ec4899", "115 - CDL": "#14b8a6", "160 - Externo": "#64748b" 
             };
             estampariaLinhas.forEach(linha => {
                 if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
                 const valArray = db.estampariaMatriz.valores[linha];
                 const numData = valArray.map(v => parseFloat(v) || 0);
                 datasets.push({
-                    label: linha,
-                    data: numData,
-                    borderColor: cores[linha] || "#cbd5e1",
-                    backgroundColor: 'transparent',
-                    borderWidth: 3,
-                    pointBackgroundColor: cores[linha] || "#cbd5e1",
-                    pointRadius: 5,
-                    hidden: !["Atraso Programação", "Estamparia Geral", "Laser", "Dobra"].includes(linha)
+                    label: linha, data: numData, borderColor: cores[linha] || "#cbd5e1",
+                    backgroundColor: 'transparent', borderWidth: 3, pointBackgroundColor: cores[linha] || "#cbd5e1",
+                    pointRadius: 5, hidden: !["Atraso Programação", "Estamparia Geral", "Laser", "Dobra"].includes(linha)
                 });
             });
             chartsObj.estamparia.data.datasets = datasets;
@@ -2880,13 +2752,10 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         function iniciarModoTV() {
-            isTVMode = true;
-            document.body.classList.add('tv-mode');
-            let currentTabIdx = 0;
-            let progress = 0;
+            isTVMode = true; document.body.classList.add('tv-mode');
+            let currentTabIdx = 0; let progress = 0;
             const TABS_ANDON = ['premio', 'solda', 'pintura', 'op1', 'op2', 'analytics'];
-            const duracaoPorTab = 15000;
-            const step = 100;
+            const duracaoPorTab = 15000; const step = 100;
             
             switchTab(TABS_ANDON[currentTabIdx]);
             clearInterval(tvInterval);
@@ -2904,8 +2773,7 @@ TANQUES	BASCULANTE	18"></textarea>
         }
 
         function sairModoTV() {
-            isTVMode = false;
-            document.body.classList.remove('tv-mode');
+            isTVMode = false; document.body.classList.remove('tv-mode');
             clearInterval(tvInterval);
             const bar = document.getElementById('tv-progress-bar');
             if (bar) bar.style.width = '0%';
@@ -2914,18 +2782,15 @@ TANQUES	BASCULANTE	18"></textarea>
         function gerarPDFExecutivo() {
             const elemento = document.querySelector('.view-container.active') || document.body;
             const opt = {
-                margin: 5,
-                filename: `Relatorio_Producao_Randon_${(db.globalDate || getDataAtualFormatada()).replace(/[\/\.]/g, '-')}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
+                margin: 5, filename: `Relatorio_Producao_Randon_${(db.globalDate || getDataAtualFormatada()).replace(/[\/\.]/g, '-')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
             mostrarToast('Gerando PDF...', 'fa-file-pdf');
             html2pdf().set(opt).from(elemento).save().then(() => {
                 mostrarToast('PDF baixado com sucesso!', 'fa-circle-check');
             }).catch(err => {
-                console.error(err);
-                mostrarToast('Erro ao gerar PDF', 'fa-triangle-exclamation');
+                console.error(err); mostrarToast('Erro ao gerar PDF', 'fa-triangle-exclamation');
             });
         }
 
@@ -2939,19 +2804,10 @@ TANQUES	BASCULANTE	18"></textarea>
                     const temDado = r.ordem_ent || r.ordem_sai || r.real_ent || r.real_sai || r.data_pcp || r.atr_ent || r.atr_sai;
                     if (temDado) {
                         const rowCsv = [
-                            sec.view.toUpperCase(),
-                            `"${sec.title}"`,
-                            `"${r.data_pcp || ''}"`,
-                            `"${r.ordem_ent || ''}"`,
-                            `"${r.real_ent || ''}"`,
-                            `"${r.atr_ent || 0}"`,
-                            `"${r.ordem_sai || ''}"`,
-                            `"${r.real_sai || ''}"`,
-                            `"${r.atr_sai || 0}"`,
-                            `"${r.aponta || 'PENDENTE'}"`,
-                            `"${r.destino_fluxo || ''}"`,
-                            `"${r.impactos || ''}"`,
-                            `"${(r.acoes || '').replace(/"/g, '""')}"`
+                            sec.view.toUpperCase(), `"${sec.title}"`, `"${r.data_pcp || ''}"`, `"${r.ordem_ent || ''}"`,
+                            `"${r.real_ent || ''}"`, `"${r.atr_ent || 0}"`, `"${r.ordem_sai || ''}"`, `"${r.real_sai || ''}"`,
+                            `"${r.atr_sai || 0}"`, `"${r.aponta || 'PENDENTE'}"`, `"${r.destino_fluxo || ''}"`,
+                            `"${r.impactos || ''}"`, `"${(r.acoes || '').replace(/"/g, '""')}"`
                         ];
                         csvContent += rowCsv.join(";") + "\n";
                     }
@@ -2959,13 +2815,9 @@ TANQUES	BASCULANTE	18"></textarea>
             });
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", `Producao_Randon_${(db.globalDate || getDataAtualFormatada()).replace(/[\/\.]/g,'-')}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const link = document.createElement("a"); const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url); link.setAttribute("download", `Producao_Randon_${(db.globalDate || getDataAtualFormatada()).replace(/[\/\.]/g,'-')}.csv`);
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
             mostrarToast("Planilha Excel (.CSV) Gerada!", "fa-file-excel");
         }
 
@@ -2980,8 +2832,7 @@ TANQUES	BASCULANTE	18"></textarea>
                     count++;
                 }
             });
-            forceRenderTodasTabelas();
-            autoSaveCloud(true);
+            forceRenderTodasTabelas(); autoSaveCloud(true);
             mostrarToast(`${count} itens marcados como ${status} no setor!`, 'fa-check-double');
         }
 
@@ -2989,15 +2840,13 @@ TANQUES	BASCULANTE	18"></textarea>
             if(!isAdmin) return toggleAdmin();
             const confirmacao = confirm("ATENÇÃO: Deseja apagar TODAS as Ordens, Datas e Programações da fábrica inteira para iniciar um NOVO MÊS?");
             if (confirmacao) {
-                db.basePCP = {};
-                reconstruirIndicesPCP();
+                db.basePCP = {}; reconstruirIndicesPCP();
                 if(!db.data) db.data = {};
                 configuracaoSetores.forEach(sec => {
                     db.data[sec.id] = [];
                     for(let i=0; i<sec.rows; i++) { db.data[sec.id].push(getEmptyRow()); }
                 });
-                forceRenderTodasTabelas();
-                autoSaveCloud(true);
+                forceRenderTodasTabelas(); autoSaveCloud(true);
                 mostrarToast("Programação PCP Zerada!", "fa-trash-can");
             }
         }
@@ -3009,18 +2858,14 @@ TANQUES	BASCULANTE	18"></textarea>
                 if(!db.data) db.data = {};
                 Object.keys(db.data).forEach(tabelaKey => {
                     db.data[tabelaKey].forEach(row => {
-                        row.aponta = ''; row.impactos = ''; row.acoes = '';
-                        row.destino_fluxo = '';
+                        row.aponta = ''; row.impactos = ''; row.acoes = ''; row.destino_fluxo = '';
                         row.atr_ent = ''; row.atr_sai = ''; row.manual_atr_ent = false; row.manual_atr_sai = false;
-                        row.stat_ent = ''; row.stat_sai = '';
-                        row.real_ent = ''; row.real_sai = ''; row.data_pcp = '';
-                        row.data_real_ent = ''; row.data_real_sai = '';
-                        row.ordem_ent = ''; row.ordem_sai = '';
+                        row.stat_ent = ''; row.stat_sai = ''; row.real_ent = ''; row.real_sai = ''; row.data_pcp = '';
+                        row.data_real_ent = ''; row.data_real_sai = ''; row.ordem_ent = ''; row.ordem_sai = '';
                         row.lock_ent = false; row.lock_sai = false;
                     });
                 });
-                forceRenderTodasTabelas();
-                autoSaveCloud(true);
+                forceRenderTodasTabelas(); autoSaveCloud(true);
                 mostrarToast("Lousa de apontamentos zerada!", "fa-eraser");
             }
         }
@@ -3036,9 +2881,7 @@ TANQUES	BASCULANTE	18"></textarea>
             let pcpInfo = buscarOrdemPorNumero(null, num);
             if (pcpInfo) {
                 steps.push({
-                    setor: `PCP / Programação (${(pcpInfo.sec || 'GERAL').toUpperCase()})`,
-                    status: 'completed',
-                    icon: 'fa-calendar-check',
+                    setor: `PCP / Programação (${(pcpInfo.sec || 'GERAL').toUpperCase()})`, status: 'completed', icon: 'fa-calendar-check',
                     detalhes: `Produto: ${pcpInfo.prod || 'N/D'} | Plan Ent: ${pcpInfo.plan_ent || '-'} | Plan Saí: ${pcpInfo.plan_sai || '-'}`
                 });
             }
@@ -3049,16 +2892,13 @@ TANQUES	BASCULANTE	18"></textarea>
                     const ent = extrairNumeroOrdem(r.real_ent || r.ordem_ent);
                     const sai = extrairNumeroOrdem(r.real_sai || r.ordem_sai);
                     if (ent === num || sai === num) {
-                        let st = 'completed';
-                        let desc = '';
+                        let st = 'completed'; let desc = '';
                         if (r.aponta === 'OK') desc = '🟢 Concluído e Liberado';
                         else if (r.aponta === 'COGI') desc = `🔴 Gargalo Ativo: ${r.impactos || 'Sem motivo'}`;
                         else { desc = '⏳ Em Produção'; st = 'in-progress'; }
 
                         steps.push({
-                            setor: sec.title,
-                            status: st,
-                            icon: st === 'completed' ? 'fa-check' : 'fa-gear fa-spin',
+                            setor: sec.title, status: st, icon: st === 'completed' ? 'fa-check' : 'fa-gear fa-spin',
                             detalhes: `Entrada: ${r.data_real_ent || r.data_pcp || '-'} | Saída: ${r.data_real_sai || '-'} | Status: ${desc}`
                         });
                     }
@@ -3093,9 +2933,7 @@ TANQUES	BASCULANTE	18"></textarea>
             if (elDate) elDate.value = dataInicial;
             db.globalDate = dataInicial;
 
-            initCharts();
-            initFirebase();
-            forceRenderTodasTabelas();
+            initCharts(); initFirebase(); forceRenderTodasTabelas();
         });
     </script>
 </body>
