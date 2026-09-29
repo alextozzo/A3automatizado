@@ -26,10 +26,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-body); color: var(--randon-dark); font-size: 13px; overflow-y: scroll; }
         
+        /* BLOQUEIO DE EDIÇÃO SEM SENHA - INCLUINDO AS NOVAS TABELAS EXCEL (.ex-in) */
         body.readonly-mode .cell-input, body.readonly-mode .meta-input, body.readonly-mode .estamparia-val-input,
         body.readonly-mode .premio-config-input, body.readonly-mode .pino-val-input, body.readonly-mode .pino-nome-input,
-        body.readonly-mode .btn-flow-action, body.readonly-mode .btn-apontar-rapido { pointer-events: none; background-color: transparent !important; }
-        
+        body.readonly-mode .btn-flow-action, body.readonly-mode .btn-apontar-rapido,
+        body.readonly-mode .ex-in { pointer-events: none; background-color: transparent !important; }
+
         .admin-only { display: none !important; }
         body.admin-mode .admin-only { display: flex !important; }
 
@@ -97,7 +99,7 @@
 
         @keyframes pulseBlue { 0% { box-shadow: 0 0 0 0 rgba(59,130,246,0.6); } 70% { box-shadow: 0 0 0 10px rgba(59,130,246,0); } 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); } }
 
-        /* TABELAS E COMPONENTES */
+        /* TABELAS E COMPONENTES GERAIS */
         .view-container { padding: 25px; display: none; flex-direction: column; gap: 30px; animation: fadeIn 0.3s; }
         .view-container.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -179,7 +181,7 @@
 
         .lider-card { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); border-radius: 12px; padding: 20px 25px; color: white; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border: 2px solid #3b82f6; box-shadow: 0 10px 20px rgba(59,130,246,0.2); }
 
-        /* BI E TRACKING MENSAL (DARK MODE) MAIS COMPACTO */
+        /* BI E TRACKING MENSAL */
         .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 30px; border-radius: 12px; border: 1px solid var(--border-light); border-left: 6px solid var(--randon-red); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); margin-bottom: 20px; }
         
         .dark-panel-container { background: linear-gradient(145deg, #0f172a, #1e293b); border: 2px solid #334155; border-radius: 8px; padding: 12px 15px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); color: white; }
@@ -199,7 +201,6 @@
         .projecao-resultado { font-size: 12px; font-weight: 900; color: #fde047; margin-left: auto; background: rgba(253, 224, 71, 0.1); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(253, 224, 71, 0.2);}
         .dark-card-subtotal { position: absolute; top: 12px; right: 15px; font-size: 11px; font-weight: 800; color: #34d399; background: rgba(16, 185, 129, 0.15); padding: 3px 6px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3);}
         
-        /* DESTAQUE DA OP NO RESUMO */
         .badge-op-destaque { font-size: 16px; font-weight: 900; color: #ffffff; background: #2563eb; padding: 4px 8px; border-radius: 4px; border: 2px solid #1d4ed8; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(37,99,235,0.3); }
 
         .resumo-dia-container { background: white; border-radius: 12px; border: 1px solid var(--border-light); border-top: 5px solid var(--randon-blue); padding: 25px; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05); }
@@ -252,6 +253,34 @@
 
         .btn-flow-action { background-color: #ffffff; border: 1.5px solid #cbd5e1; color: #0f172a; padding: 4px 6px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; width: 100%; height: 100%; outline: none;}
         .btn-flow-action:hover { border-color: var(--randon-blue); background-color: #eff6ff; }
+
+        /* ======== NOVO LAYOUT DO EXCEL ROBUSTO & MAIS VISÍVEL (TV) ======== */
+        .excel-section { background: white; padding: 20px; border-radius: 12px; border: 1px solid var(--border-light); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-top: 25px; overflow-x: auto;}
+        .excel-title { background: #4ade80; color: #064e3b; font-weight: 900; text-align: center; padding: 12px; font-size: 18px; text-transform: uppercase; border: 2px solid #166534; margin-bottom: 15px; letter-spacing: 1px;}
+        .ex-flex-header { display: flex; justify-content: center; gap: 40px; margin-bottom: 20px; font-size: 15px; font-weight: 900; color: #0f172a;}
+        .ex-flex-header input { border: none; border-bottom: 2px solid #cbd5e1; width: 50px; text-align: center; font-weight: 900; font-size: 16px; outline: none; background: transparent; color: #b91c1c;}
+        
+        .excel-grid { display: flex; gap: 20px; min-width: 900px; }
+        .excel-col { flex: 1; }
+        
+        .excel-table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 15px;}
+        .excel-table th, .excel-table td { border: 1px solid #64748b; padding: 0; height: 32px; }
+        .excel-table th { background: #e2e8f0; font-weight: 900; color: #0f172a; font-size: 13px; text-transform: uppercase; }
+        
+        /* Aumentado o tamanho da letra e o peso para leitura de longe */
+        .excel-table input { width: 100%; height: 100%; border: none; background: transparent; text-align: center; font-size: 14px; font-weight: 900; color: #000000; outline: none; display: block; box-sizing: border-box;}
+        .excel-table input:focus { background: #eff6ff !important; box-shadow: inset 0 0 0 3px #3b82f6;}
+        
+        /* Cores mais fortes para contraste na TV */
+        .bg-pink { background-color: #fbcfe8 !important; } .bg-pink input { background-color: transparent !important; }
+        .bg-green { background-color: #bbf7d0 !important; } .bg-green input { background-color: transparent !important; }
+        .bg-yellow { background-color: #fde047 !important; } .bg-yellow input { background-color: transparent !important; }
+        .bg-purple { background-color: #e9d5ff !important; } .bg-purple input { background-color: transparent !important; }
+        .bg-blue { background-color: #bfdbfe !important; } .bg-blue input { background-color: transparent !important; }
+        
+        .txt-red { color: #dc2626 !important; font-weight: 900 !important; }
+        .txt-green { color: #15803d !important; font-weight: 900 !important; }
+        .txt-grey { color: #475569 !important; }
 
         @media print {
             body { background-color: white !important; font-size: 12px; overflow: visible !important; }
@@ -363,6 +392,8 @@
     </div>
 
     <!-- VIEWS -->
+    
+    <!-- ABA 1: PRÊMIO -->
     <div id="view-premio" class="view-container">
         <div class="premio-header-card">
             <div class="premio-title-row">
@@ -416,7 +447,10 @@
         </div>
     </div>
 
+    <!-- ABA 2: ESTAMPARIA + NOVO LAYOUT DO EXCEL -->
     <div id="view-estamparia" class="view-container active">
+        
+        <!-- Tabela Estamparia -->
         <div class="section-card">
             <div class="section-header" style="background: var(--randon-dark);">
                 <div class="section-title-box" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
@@ -426,12 +460,140 @@
             </div>
             <div style="padding: 20px; background: white; overflow-x: auto;"><table class="estamparia-table" id="tabela-estamparia-matriz"></table></div>
         </div>
+        
+        <!-- Gráfico Estamparia -->
         <div class="section-card">
             <div class="section-header" style="background: white; border-bottom: 2px solid var(--border-light);"><div class="section-title-box" style="width: 100%;"><h2 style="color: var(--randon-dark);">Evolução Diária - Estamparia</h2></div></div>
             <div style="padding: 20px; background: white;"><div class="chart-container-bi" style="height: 350px;"><canvas id="chartEstamparia"></canvas></div></div>
         </div>
+
+        <!-- ======== LAYOUT EXCEL - SEÇÃO 1: CONTROLE SAÍDAS DE LINHA ======== -->
+        <div class="excel-section" style="position: relative;">
+            <button class="btn btn-tv admin-only" onclick="toggleOcultar(this)" style="position: absolute; right: 20px; top: 15px; font-size: 11px; border: 1px solid #cbd5e1; font-weight: 800;"><i class="fa-solid fa-eye-slash"></i> Ocultar Linhas Vazias</button>
+            <div class="excel-title">CONTROLE PRODUÇÃO- SAÍDAS DE LINHA</div>
+            <div class="ex-flex-header">
+                <div>META MÊS <input type="text" value="81" class="ex-in"> | PRODUZIDOS <input type="text" value="60" class="ex-in"></div>
+                <div>MÉDIA/DIA <input type="text" value="3,9" class="ex-in"> | MÉDIA/DIA <input type="text" value="3,5" class="ex-in"></div>
+            </div>
+            
+            <div class="excel-grid">
+                <div class="excel-col" style="flex: 1.1;">
+                    <table class="excel-table">
+                        <tbody id="tbody-dias-mes"></tbody>
+                    </table>
+                </div>
+
+                <div class="excel-col">
+                    <table class="excel-table">
+                        <thead>
+                            <tr><th colspan="5" class="bg-pink">Saídas de Linha do DIA</th></tr>
+                            <tr><th>CT</th><th>TQ</th><th>Silo</th><th>BS</th><th>ESP</th></tr>
+                        </thead>
+                        <tbody id="tbody-saidas-dia">
+                            <tr><td class="bg-yellow"><input type="text" class="ex-in" value="3616"></td><td class="bg-yellow"><input type="text" class="ex-in" value="8606BTD"></td><td class="bg-yellow"><input type="text" class="ex-in" value="4036"></td><td class="bg-purple"><input type="text" class="ex-in" value="9373 BS GR"></td><td><input type="text" class="ex-in" value="7919 PM"></td></tr>
+                            <tr><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in" value="8607 BTD"></td><td><input type="text" class="ex-in" value="5830"></td><td><input type="text" class="ex-in"></td><td class="bg-pink"><input type="text" class="ex-in txt-red" value="296 CT"></td></tr>
+                            <tr><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td></tr>
+                            <tr><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td></tr>
+                            <tr><td class="bg-pink"><input type="text" class="ex-in" value="1"></td><td class="bg-pink"><input type="text" class="ex-in" value="2"></td><td class="bg-pink"><input type="text" class="ex-in" value="2"></td><td class="bg-pink"><input type="text" class="ex-in" value="1"></td><td class="bg-pink"><input type="text" class="ex-in" value="2"></td></tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-tv admin-only" onclick="addRow('tbody-saidas-dia')" style="width: 100%; justify-content: center; font-size: 11px; margin-top: -10px; border-radius: 0 0 8px 8px; border: 1px dashed #cbd5e1; color: #64748b;"><i class="fa-solid fa-plus"></i> Adicionar Linha</button>
+
+                    <table class="excel-table" style="margin-top: 15px;">
+                        <thead>
+                            <tr><th colspan="5" style="background:#ffedd5;">Saídas de Linha Dia seguinte</th></tr>
+                            <tr><th>CT</th><th>TQ</th><th>Silo</th><th>BS</th><th>ESP</th></tr>
+                        </thead>
+                        <tbody id="tbody-saidas-seguinte">
+                            <tr><td><input type="text" class="ex-in" value="3615"></td><td><input type="text" class="ex-in" value="8606BTR"></td><td><input type="text" class="ex-in" value="5831"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in" value="0872 CT"></td></tr>
+                            <tr><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td></tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-tv admin-only" onclick="addRow('tbody-saidas-seguinte')" style="width: 100%; justify-content: center; font-size: 11px; margin-top: -10px; border-radius: 0 0 8px 8px; border: 1px dashed #cbd5e1; color: #64748b;"><i class="fa-solid fa-plus"></i> Adicionar Linha</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== LAYOUT EXCEL - SEÇÃO 2: PINTURA E MOF ======== -->
+        <div class="excel-section">
+            <div class="excel-title" style="background: #a7f3d0; border-color: #059669;">CONTROLE PRODUÇÃO- PINTURA/MOF E OP1</div>
+            <div class="excel-grid">
+                <div class="excel-col">
+                    <table class="excel-table">
+                        <thead>
+                            <tr><th colspan="5" style="background:#e2e8f0;">Pintura</th></tr>
+                            <tr><th>CT</th><th>TQ</th><th>Silo</th><th>BS</th><th>ESP</th></tr>
+                        </thead>
+                        <tbody id="tbody-pintura-excel"></tbody>
+                        <tfoot>
+                            <tr><td class="bg-blue"><input type="text" class="ex-in" value="2"></td><td class="bg-blue"><input type="text" class="ex-in" value="0"></td><td class="bg-blue"><input type="text" class="ex-in" value="2"></td><td class="bg-blue"><input type="text" class="ex-in" value="0"></td><td class="bg-blue"><input type="text" class="ex-in" value="0"></td></tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="excel-col" style="flex: 1.2;">
+                    <table class="excel-table">
+                        <thead>
+                            <tr><th colspan="6" style="background:#e2e8f0;">EM MONTAGEM</th></tr>
+                            <tr><th>CT</th><th>TQ</th><th>Silo</th><th>BS</th><th>ESP</th><th>TQ</th></tr>
+                        </thead>
+                        <tbody id="tbody-montagem-excel"></tbody>
+                        <tfoot>
+                            <tr><td class="bg-blue"><input type="text" class="ex-in" value="0"></td><td class="bg-blue"><input type="text" class="ex-in" value="8"></td><td class="bg-blue"><input type="text" class="ex-in" value="0"></td><td class="bg-blue"><input type="text" class="ex-in" value="0"></td><td class="bg-blue"><input type="text" class="ex-in" value="0"></td><td class="bg-blue"><input type="text" class="ex-in" value="0"></td></tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="excel-col">
+                    <table class="excel-table">
+                        <thead>
+                            <tr><th colspan="4" class="bg-green">OP1</th></tr>
+                            <tr><th>CT</th><th>TQ</th><th>BS</th><th>ESP</th></tr>
+                        </thead>
+                        <tbody id="tbody-op1-excel"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== LAYOUT EXCEL - SEÇÃO 3: OP2 E CONTROLES ======== -->
+        <div class="excel-section">
+            <div class="excel-title" style="background: #86efac;">CONTROLE PRODUÇÃO- OP2</div>
+            <div class="ex-flex-header">
+                <div>META MÊS <input type="text" value="81" class="ex-in"> | PRODUZIDOS <input type="text" value="59" class="ex-in"></div>
+                <div>MÉDIA/DIA <input type="text" value="3,9" class="ex-in"> | MÉDIA/DIA <input type="text" value="3,5" class="ex-in"></div>
+            </div>
+
+            <table class="excel-table" style="width: 40%; margin: 0 auto 20px auto;">
+                <thead>
+                    <tr><th colspan="4" style="background:#e2e8f0;">OP2 DIA</th></tr>
+                    <tr><th>CT</th><th>TQ</th><th>Silo</th><th>BS</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="bg-purple"><input type="text" class="ex-in" value="3646"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td></tr>
+                </tbody>
+            </table>
+
+            <div class="excel-grid">
+                <div class="excel-col">
+                    <table class="excel-table">
+                        <thead>
+                            <tr><th style="background:#e2e8f0;">Produto</th><th style="background:#e2e8f0;">Pendências</th><th style="background:#e2e8f0;">Resp.</th></tr>
+                        </thead>
+                        <tbody id="tbody-pendencias-excel"></tbody>
+                    </table>
+                </div>
+                <div class="excel-col" style="flex: 1.5;">
+                    <table class="excel-table">
+                        <thead>
+                            <tr><th colspan="4" style="background:#e2e8f0;">CONTROLE DIÁRIO APONTAMENTOS</th></tr>
+                        </thead>
+                        <tbody id="tbody-diario-op2"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- ABAS RECONSTRUÍDAS POR JAVASCRIPT -->
     <div id="view-solda" class="view-container"></div>
     <div id="view-pintura" class="view-container"></div>
     <div id="view-op1" class="view-container"></div>
@@ -447,14 +609,12 @@
             <button class="btn btn-tv" onclick="updateAnalytics()" style="padding: 12px 20px; font-size: 14px;"><i class="fa-solid fa-rotate"></i> Atualizar Dados</button>
         </div>
 
-        <!-- NOVO PAINEL DE GESTÃO DE MÉDIAS MENSAL (DARK MODE COMPACTO) -->
         <div class="dark-panel-container">
             <div class="dark-panel-header">
                 <h3><i class="fa-solid fa-gauge-high"></i> Painel de Comando - Tracking Mensal (OKs)</h3>
                 <div class="days-counter">Dias Úteis Decorridos (Mês): <span id="lbl-dias-uteis" style="color: white;">0</span></div>
             </div>
             <div class="dark-grid">
-                <!-- Card Solda -->
                 <div class="dark-card border-green">
                     <div class="dark-card-subtotal"><i class="fa-solid fa-check-double"></i> Entregues OK: <strong id="subtotal-solda">0</strong></div>
                     <div class="dark-card-title">Média: Saídas de Linha (Solda)</div>
@@ -465,7 +625,6 @@
                         <span class="projecao-resultado" id="projecao-solda-res">Nova Média: 0.0</span>
                     </div>
                 </div>
-                <!-- Card OP2 -->
                 <div class="dark-card border-purple">
                     <div class="dark-card-subtotal"><i class="fa-solid fa-check-double"></i> Entregues OK: <strong id="subtotal-op2">0</strong></div>
                     <div class="dark-card-title">Média: Finalizações (OP2)</div>
@@ -566,6 +725,7 @@
         </div>
     </div>
 
+    <!-- GUIA DE APONTAMENTO VIVO -->
     <div id="view-apontamento" class="view-container">
         <div class="analytics-header">
             <div>
@@ -670,14 +830,9 @@
         };
 
         const siglaParaSetor = {
-            'TQ': 'tq', 'TANQUE': 'tq', 'TANQUES': 'tq',
-            'CT': 'ct', 'CARREGA TUDO': 'ct',
-            'BASES': 'bases', 'CHASSI': 'bases',
-            'SILO': 'silo', 'SILOS': 'silo',
-            'ESPECIAIS': 'esp_box1',
-            'PINTURA': 'pintura',
-            'OP1': 'op1_bases',
-            'OP2': 'op2_geral'
+            'TQ': 'tq', 'TANQUE': 'tq', 'TANQUES': 'tq', 'CT': 'ct', 'CARREGA TUDO': 'ct',
+            'BASES': 'bases', 'CHASSI': 'bases', 'SILO': 'silo', 'SILOS': 'silo',
+            'ESPECIAIS': 'esp_box1', 'PINTURA': 'pintura', 'OP1': 'op1_bases', 'OP2': 'op2_geral'
         };
 
         const estampariaLinhas = [
@@ -686,19 +841,11 @@
         ];
 
         let db = { 
-            globalDate: '', 
-            data: {}, 
-            estampariaMatriz: { datas: [], valores: {} },
-            basePCP: {},
-            premioConfig: { metaBase: 78, atraso: 12, diasUteis: 21 },
-            pinosManual: null
+            globalDate: '', data: {}, estampariaMatriz: { datas: [], valores: {} },
+            basePCP: {}, premioConfig: { metaBase: 78, atraso: 12, diasUteis: 21 }, pinosManual: null
         };
         
-        let pcpIndex = {
-            bySectorAndDate: {},
-            byOv: new Map()
-        };
-
+        let pcpIndex = { bySectorAndDate: {}, byOv: new Map() };
         let chartsObj = { pareto: null, pie: null, line: null, aderencia: null, estamparia: null };
         let saveTimeout, tvInterval;
         let firebaseDB = null, dbRef = null;
@@ -706,26 +853,112 @@
         const DEFAULT_VISIBLES_ROWS = 15;
         let expandedSections = {};
 
+        /* FUNÇÕES EXCEL/JAVASCRIPT MÁGICAS (AGORA BLOQUEADAS PELO ADMIN-ONLY) */
+        function addRow(tbodyId) {
+            if (!isAdmin) { toggleAdmin(); return; }
+            const tbody = document.getElementById(tbodyId);
+            if(!tbody) return;
+            const tr = document.createElement('tr');
+            const cols = tbody.rows[0].cells.length;
+            let html = '';
+            for(let i=0; i<cols; i++) { html += `<td><input type="text" class="ex-in"></td>`; }
+            tr.innerHTML = html;
+            tbody.appendChild(tr);
+        }
+
+        function toggleOcultar(btn) {
+            const isHidden = btn.innerText.includes('Mostrar');
+            const trs = document.querySelectorAll('.linha-dia');
+            trs.forEach(tr => {
+                const inputTexto = tr.querySelector('.desc-input');
+                if(inputTexto && !inputTexto.value.trim()) {
+                    tr.style.display = isHidden ? '' : 'none';
+                }
+            });
+            btn.innerHTML = isHidden ? '<i class="fa-solid fa-eye-slash"></i> Ocultar Linhas Vazias' : '<i class="fa-solid fa-eye"></i> Mostrar Linhas Vazias';
+        }
+
+        function gerarTabelasExcel() {
+            let tbDiasMes = ''; let tbDiarioOP2 = '';
+            const diasFicticios = ['01', '02', '03', '04', '08', '09', '10', '11', '14', '15', '16', '17', '18', '21', '22', '23', '24', '25', '28', '29', '30'];
+            let semanas = [ { start: 0, end: 3, label: '1ª Sem' }, { start: 4, end: 8, label: '2ª Sem' }, { start: 9, end: 13, label: '3ª Sem' }, { start: 14, end: 20, label: '4ª Sem' } ];
+            
+            semanas.forEach(sem => {
+                for (let i = sem.start; i <= sem.end; i++) {
+                    if(!diasFicticios[i]) break;
+                    let classe = i % 2 === 0 ? 'bg-pink' : 'bg-green';
+                    if(i % 3 === 0) classe = 'bg-yellow';
+                    tbDiasMes += `
+                        <tr class="linha-dia">
+                            <td style="width: 15%;"><input type="text" class="ex-in" value="${diasFicticios[i]}/set"></td>
+                            <td style="width: 10%;" class="${classe}"><input type="text" class="ex-in" value=""></td>
+                            <td style="width: 20%;"><input type="text" class="ex-in desc-input"></td>
+                            <td style="width: 15%;"><input type="text" class="ex-in"></td>
+                            <td style="width: 10%;" class="${classe}"><input type="text" class="ex-in"></td>
+                            <td style="width: 30%;"><input type="text" class="ex-in desc-input"></td>
+                        </tr>
+                    `;
+                }
+                tbDiasMes += `<tr><td colspan="6" style="text-align: right; padding-right: 15px; font-weight: 800; background: #f8fafc;">${sem.label}. Total: <input type="text" class="ex-in" style="width: 50px; border-bottom: 2px solid #0f172a; display:inline-block; font-weight: 900; color: #b91c1c;"></td></tr>`;
+            });
+            if(document.getElementById('tbody-dias-mes')) document.getElementById('tbody-dias-mes').innerHTML = tbDiasMes;
+
+            const gerarVazias = (qtd, cols) => {
+                let html = '';
+                for(let i=0; i<qtd; i++) {
+                    html += `<tr class="linha-dia">`;
+                    for(let c=0; c<cols; c++) html += `<td><input type="text" class="ex-in desc-input"></td>`;
+                    html += `</tr>`;
+                } return html;
+            }
+            
+            if(document.getElementById('tbody-pintura-excel')) document.getElementById('tbody-pintura-excel').innerHTML = 
+                `<tr><td class="bg-purple"><input type="text" class="ex-in" value="3678 CT"></td><td><input type="text" class="ex-in"></td><td class="bg-purple"><input type="text" class="ex-in" value="5828"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td></tr>` + 
+                gerarVazias(9, 5);
+
+            if(document.getElementById('tbody-montagem-excel')) document.getElementById('tbody-montagem-excel').innerHTML = 
+                `<tr><td><input type="text" class="ex-in"></td><td class="bg-purple"><input type="text" class="ex-in" value="4297 7C"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td></tr>` +
+                gerarVazias(9, 6);
+                
+            if(document.getElementById('tbody-op1-excel')) document.getElementById('tbody-op1-excel').innerHTML = 
+                `<tr><td class="bg-purple"><input type="text" class="ex-in" value="1954"></td><td class="bg-pink"><input type="text" class="ex-in txt-red" value="3137 6C"></td><td><input type="text" class="ex-in"></td><td><input type="text" class="ex-in"></td></tr>` +
+                gerarVazias(9, 4);
+
+            if(document.getElementById('tbody-pendencias-excel')) document.getElementById('tbody-pendencias-excel').innerHTML = 
+                `<tr><td><input type="text" class="ex-in" value="3137" style="font-weight:900;"></td><td><input type="text" class="ex-in" value="Problema de qualidade" style="font-weight:900;"></td><td><input type="text" class="ex-in"></td></tr>` +
+                gerarVazias(9, 3);
+
+            semanas.forEach(sem => {
+                for (let i = sem.start; i <= sem.end; i++) {
+                    if(!diasFicticios[i]) break;
+                    let classe = i % 2 === 0 ? 'bg-pink' : 'bg-yellow';
+                    tbDiarioOP2 += `
+                        <tr class="linha-dia">
+                            <td style="width: 25%;"><input type="text" class="ex-in" value="${diasFicticios[i]}/set"></td>
+                            <td style="width: 15%;" class="${classe}"><input type="text" class="ex-in txt-red" value=""></td>
+                            <td style="width: 30%;"><input type="text" class="ex-in desc-input"></td>
+                            <td style="width: 30%;"><input type="text" class="ex-in" placeholder="..."></td>
+                        </tr>
+                    `;
+                }
+                tbDiarioOP2 += `<tr><td colspan="4" style="text-align: right; padding-right: 15px; font-weight: 800; background: #f8fafc;">${sem.label}. Total: <input type="text" class="ex-in" style="width: 50px; border-bottom: 2px solid #0f172a; display:inline-block; font-weight: 900; color: #b91c1c;"></td></tr>`;
+            });
+            if(document.getElementById('tbody-diario-op2')) document.getElementById('tbody-diario-op2').innerHTML = tbDiarioOP2;
+        }
+
+        /* ----- ROTINAS DE FUNCIONAMENTO GERAL DO SISTEMA ----- */
         function getEmptyRow() {
             return { 
-                data_pcp: '', 
-                ordem_ent: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', manual_atr_ent: false,
+                data_pcp: '', ordem_ent: '', plan_ent: '', real_ent: '', atr_ent: '', stat_ent: '', manual_atr_ent: false,
                 ordem_sai: '', plan_sai: '', real_sai: '', atr_sai: '', stat_sai: '', manual_atr_sai: false,
-                aponta: '', impactos: '', acoes: '', origem: '', destino_fluxo: '',
-                data_real_ent: '', data_real_sai: '',
+                aponta: '', impactos: '', acoes: '', origem: '', destino_fluxo: '', data_real_ent: '', data_real_sai: '',
                 lock_ent: false, lock_sai: false
             };
         }
 
-        function getDataAtualFormatada() {
-            const hoje = new Date();
-            return `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}`;
-        }
-
-        function getDataCompleta(dateObj = new Date()) {
-            return `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`;
-        }
-
+        function getDataAtualFormatada() { const hoje = new Date(); return `${String(hoje.getDate()).padStart(2, '0')}/${String(hoje.getMonth() + 1).padStart(2, '0')}`; }
+        function getDataCompleta(dateObj = new Date()) { return `${String(dateObj.getDate()).padStart(2, '0')}/${String(dateObj.getMonth() + 1).padStart(2, '0')}/${dateObj.getFullYear()}`; }
+        
         function formatarDataEstamparia(dateObj) {
             const mesesAbreviados = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
             return `${String(dateObj.getDate()).padStart(2, '0')}/${mesesAbreviados[dateObj.getMonth()]}`;
@@ -734,10 +967,7 @@
         function extrairAnoDeData(dataStr) {
             if (!dataStr) return 2026;
             let parts = String(dataStr).trim().replace(/[.\-]/g, '/').split('/');
-            if (parts.length === 3) {
-                let y = parseInt(parts[2].length === 4 ? parts[2] : parts[0], 10);
-                if (!isNaN(y) && y > 2000) return y;
-            }
+            if (parts.length === 3) { let y = parseInt(parts[2].length === 4 ? parts[2] : parts[0], 10); if (!isNaN(y) && y > 2000) return y; }
             return 2026;
         }
 
@@ -745,16 +975,11 @@
             if (!dataStr) return '';
             let limpo = String(dataStr).trim().replace(/[.\-]/g, '/');
             const parts = limpo.split('/');
-            if (parts.length === 2) {
-                return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}`;
-            } else if (parts.length === 3) {
+            if (parts.length === 2) return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}`;
+            else if (parts.length === 3) {
                 let d, m, y;
-                if (parts[0].length === 4) {
-                    y = parts[0]; m = parts[1].padStart(2, '0'); d = parts[2].padStart(2, '0');
-                } else {
-                    d = parts[0].padStart(2, '0'); m = parts[1].padStart(2, '0'); y = parts[2];
-                    if (y.length === 2) y = '20' + y;
-                }
+                if (parts[0].length === 4) { y = parts[0]; m = parts[1].padStart(2, '0'); d = parts[2].padStart(2, '0'); } 
+                else { d = parts[0].padStart(2, '0'); m = parts[1].padStart(2, '0'); y = parts[2]; if (y.length === 2) y = '20' + y; }
                 return `${d}/${m}/${y}`;
             }
             return limpo;
@@ -762,30 +987,16 @@
 
         function parseDataComAnoRef(dataStr, anoRef) {
             if (!dataStr || typeof dataStr !== 'string') return null;
-            let s = dataStr.trim().replace(/[.\-]/g, '/');
-            let parts = s.split('/');
-            let ano = anoRef || 2026;
+            let s = dataStr.trim().replace(/[.\-]/g, '/'); let parts = s.split('/'); let ano = anoRef || 2026;
             if (parts.length === 2) {
-                let d = parseInt(parts[0], 10);
-                let m = parseInt(parts[1], 10) - 1;
-                if (isNaN(d) || isNaN(m)) return null;
-                return new Date(ano, m, d, 12, 0, 0);
+                let d = parseInt(parts[0], 10); let m = parseInt(parts[1], 10) - 1;
+                if (isNaN(d) || isNaN(m)) return null; return new Date(ano, m, d, 12, 0, 0);
             } else if (parts.length === 3) {
                 let d, m, y;
-                if (parts[0].length === 4) {
-                    y = parseInt(parts[0], 10);
-                    m = parseInt(parts[1], 10) - 1;
-                    d = parseInt(parts[2], 10);
-                } else {
-                    d = parseInt(parts[0], 10);
-                    m = parseInt(parts[1], 10) - 1;
-                    y = parseInt(parts[2], 10);
-                    if (y < 100) y += 2000;
-                }
-                if (isNaN(d) || isNaN(m) || isNaN(y)) return null;
-                return new Date(y, m, d, 12, 0, 0);
-            }
-            return null;
+                if (parts[0].length === 4) { y = parseInt(parts[0], 10); m = parseInt(parts[1], 10) - 1; d = parseInt(parts[2], 10); } 
+                else { d = parseInt(parts[0], 10); m = parseInt(parts[1], 10) - 1; y = parseInt(parts[2], 10); if (y < 100) y += 2000; }
+                if (isNaN(d) || isNaN(m) || isNaN(y)) return null; return new Date(y, m, d, 12, 0, 0);
+            } return null;
         }
 
         function calcularDiasUteis(dInicio, dFim) {
@@ -794,52 +1005,25 @@
             let end = new Date(dFim.getFullYear(), dFim.getMonth(), dFim.getDate());
             if (start.getTime() === end.getTime()) return 0;
             let sinal = 1;
-            if (start > end) {
-                sinal = -1;
-                let tmp = start;
-                start = end;
-                end = tmp;
-            }
-            let businessDays = 0;
-            let cur = new Date(start);
-            cur.setDate(cur.getDate() + 1);
-            while (cur <= end) {
-                let dayOfWeek = cur.getDay();
-                if (dayOfWeek !== 0 && dayOfWeek !== 6) businessDays++;
-                cur.setDate(cur.getDate() + 1);
-            }
+            if (start > end) { sinal = -1; let tmp = start; start = end; end = tmp; }
+            let businessDays = 0; let cur = new Date(start); cur.setDate(cur.getDate() + 1);
+            while (cur <= end) { let dayOfWeek = cur.getDay(); if (dayOfWeek !== 0 && dayOfWeek !== 6) businessDays++; cur.setDate(cur.getDate() + 1); }
             return businessDays * sinal;
         }
 
         function mesEAnoIguais(data1Str, data2Str) {
             if(!data1Str || !data2Str) return false;
-            const n1 = normalizarDataParaComparacao(data1Str);
-            const n2 = normalizarDataParaComparacao(data2Str);
-            const p1 = n1.split('/');
-            const p2 = n2.split('/');
-            if(p1.length >= 2 && p2.length >= 2) {
-                return p1[1] === p2[1] && (p1[2] || '2026') === (p2[2] || '2026');
-            }
+            const p1 = normalizarDataParaComparacao(data1Str).split('/'); const p2 = normalizarDataParaComparacao(data2Str).split('/');
+            if(p1.length >= 2 && p2.length >= 2) return p1[1] === p2[1] && (p1[2] || '2026') === (p2[2] || '2026');
             return false;
         }
 
         function calcularDiasUteisMesAteHoje(dataStr) {
             if(!dataStr) return 1;
-            const parts = normalizarDataParaComparacao(dataStr).split('/');
-            if(parts.length < 3) return 1; 
-            const d = parseInt(parts[0], 10);
-            const m = parseInt(parts[1], 10) - 1;
-            const y = parseInt(parts[2], 10);
-            
-            let start = new Date(y, m, 1);
-            let end = new Date(y, m, d);
-            let dias = 0;
-            let cur = new Date(start);
-            while(cur <= end) {
-                let dw = cur.getDay();
-                if(dw !== 0 && dw !== 6) dias++;
-                cur.setDate(cur.getDate() + 1);
-            }
+            const parts = normalizarDataParaComparacao(dataStr).split('/'); if(parts.length < 3) return 1; 
+            const d = parseInt(parts[0], 10); const m = parseInt(parts[1], 10) - 1; const y = parseInt(parts[2], 10);
+            let start = new Date(y, m, 1); let end = new Date(y, m, d); let dias = 0; let cur = new Date(start);
+            while(cur <= end) { let dw = cur.getDay(); if(dw !== 0 && dw !== 6) dias++; cur.setDate(cur.getDate() + 1); }
             return Math.max(1, dias);
         }
 
@@ -850,150 +1034,85 @@
         }
 
         function obterDescricaoProduto(textoOuObj, opNum) {
-            if (typeof textoOuObj === 'string' && textoOuObj.includes(' - ')) {
-                return textoOuObj.split(' - ').slice(1).join(' - ').trim();
-            }
+            if (typeof textoOuObj === 'string' && textoOuObj.includes(' - ')) return textoOuObj.split(' - ').slice(1).join(' - ').trim();
             if (opNum && pcpIndex.byOv.has(opNum)) {
                 const info = pcpIndex.byOv.get(opNum);
                 if (info && info.prod && info.prod.trim() !== '') return info.prod.trim();
-            }
-            return '';
+            } return '';
         }
 
         function calcularAtraso(planStr, realStr) {
-            if (!planStr || !realStr || String(planStr).trim() === '' || String(realStr).trim() === '') {
-                return { atraso: '', status: '' };
-            }
-            const anoPlan = extrairAnoDeData(planStr);
-            const dPlan = parseDataComAnoRef(planStr, anoPlan);
-            const dReal = parseDataComAnoRef(realStr, anoPlan);
+            if (!planStr || !realStr || String(planStr).trim() === '' || String(realStr).trim() === '') return { atraso: '', status: '' };
+            const anoPlan = extrairAnoDeData(planStr); const dPlan = parseDataComAnoRef(planStr, anoPlan); const dReal = parseDataComAnoRef(realStr, anoPlan);
             if (!dPlan || !dReal) return { atraso: '', status: '' };
             const diffDiasUteis = calcularDiasUteis(dPlan, dReal);
             let status = 'green';
-            if (diffDiasUteis === 1) status = 'orange';
-            else if (diffDiasUteis >= 2) status = 'red';
-            else if (diffDiasUteis < 0) status = 'green';
+            if (diffDiasUteis === 1) status = 'orange'; else if (diffDiasUteis >= 2) status = 'red'; else if (diffDiasUteis < 0) status = 'green';
             return { atraso: diffDiasUteis !== 0 ? diffDiasUteis : '0', status: status };
         }
 
         function sanearParaFirebase(obj) {
             if (Array.isArray(obj)) return obj.map(item => sanearParaFirebase(item));
-            if (obj !== null && typeof obj === 'object') {
-                let novoObj = {};
-                for (let key in obj) novoObj[key] = sanearParaFirebase(obj[key]);
-                return novoObj;
-            }
+            if (obj !== null && typeof obj === 'object') { let novoObj = {}; for (let key in obj) novoObj[key] = sanearParaFirebase(obj[key]); return novoObj; }
             return (obj === null || obj === undefined) ? '' : obj;
         }
 
         function setStatusConexao(estado) {
-            const badge = document.getElementById('net-status-badge');
-            const txt = document.getElementById('net-status-text');
-            if(!badge || !txt) return;
-            badge.className = `net-badge ${estado}`;
-            if(estado === 'online') { txt.innerText = 'Online'; }
-            else if(estado === 'syncing') { txt.innerText = 'Gravando...'; }
-            else { txt.innerText = 'Offline'; }
+            const badge = document.getElementById('net-status-badge'); const txt = document.getElementById('net-status-text');
+            if(!badge || !txt) return; badge.className = `net-badge ${estado}`;
+            if(estado === 'online') txt.innerText = 'Online'; else if(estado === 'syncing') txt.innerText = 'Gravando...'; else txt.innerText = 'Offline';
         }
 
         function mostrarToast(msg, icon = "fa-circle-check") {
-            const t = document.getElementById('toast'); 
-            if (!t) return;
-            document.getElementById('toast-msg').innerText = msg;
-            t.querySelector('i').className = `fa-solid ${icon}`; 
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
+            const t = document.getElementById('toast'); if (!t) return;
+            document.getElementById('toast-msg').innerText = msg; t.querySelector('i').className = `fa-solid ${icon}`; 
+            t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
         }
 
         function handleGlobalSearch(e) {
             if (e.key === 'Enter') {
-                const val = e.target.value.trim().toUpperCase();
-                if(!val) return;
+                const val = e.target.value.trim().toUpperCase(); if(!val) return;
                 mostrarToast(`Buscando OP: ${val}...`, 'fa-magnifying-glass');
             }
         }
 
-        // =========================================================================
-        // NAVEGAÇÃO DE DATA GLOBAL
-        // =========================================================================
         function alterarDiaReferencia(offsetDias) {
-            let ref = parseDataComAnoRef(db.globalDate, 2026) || new Date();
-            ref.setDate(ref.getDate() + offsetDias);
-            const novaDataCompleta = getDataCompleta(ref);
-            db.globalDate = novaDataCompleta;
-            const el = document.getElementById('global-date');
-            if (el) el.value = novaDataCompleta;
-            forceRenderTodasTabelas();
-            mostrarToast(`Programação: ${novaDataCompleta}`, 'fa-calendar-day');
+            let ref = parseDataComAnoRef(db.globalDate, 2026) || new Date(); ref.setDate(ref.getDate() + offsetDias);
+            const novaDataCompleta = getDataCompleta(ref); db.globalDate = novaDataCompleta;
+            const el = document.getElementById('global-date'); if (el) el.value = novaDataCompleta;
+            forceRenderTodasTabelas(); mostrarToast(`Programação: ${novaDataCompleta}`, 'fa-calendar-day');
         }
 
         function irParaHoje() {
-            const hoje = getDataCompleta(new Date());
-            db.globalDate = hoje;
-            const el = document.getElementById('global-date');
-            if (el) el.value = hoje;
-            forceRenderTodasTabelas();
-            mostrarToast(`Hoje: ${hoje}`, 'fa-calendar-check');
+            const hoje = getDataCompleta(new Date()); db.globalDate = hoje;
+            const el = document.getElementById('global-date'); if (el) el.value = hoje;
+            forceRenderTodasTabelas(); mostrarToast(`Hoje: ${hoje}`, 'fa-calendar-check');
         }
 
         function definirDataManual(valor) {
-            if (!valor || valor.trim() === '') return;
-            const norm = normalizarDataParaComparacao(valor);
-            db.globalDate = norm;
-            forceRenderTodasTabelas();
-            mostrarToast(`Data alterada para: ${norm}`, 'fa-calendar-day');
+            if (!valor || valor.trim() === '') return; const norm = normalizarDataParaComparacao(valor); db.globalDate = norm;
+            forceRenderTodasTabelas(); mostrarToast(`Data alterada para: ${norm}`, 'fa-calendar-day');
         }
 
-        // =========================================================================
-        // CARGA RÁPIDA DE METAS E PINOS (EXCEL)
-        // =========================================================================
-        function abrirModalCargaPinos() {
-            if (!isAdmin) { toggleAdmin(); return; }
-            document.getElementById('modal-carga-pinos').classList.add('active');
-        }
+        function abrirModalCargaPinos() { if (!isAdmin) { toggleAdmin(); return; } document.getElementById('modal-carga-pinos').classList.add('active'); }
         function fecharModalCargaPinos() { document.getElementById('modal-carga-pinos').classList.remove('active'); }
 
         function processarCargaPinosExcel() {
             const text = document.getElementById('pinos-carga-textarea').value;
             if (!text.trim()) return mostrarToast("Cole a tabela do Excel primeiro!", "fa-triangle-exclamation");
-
-            let linhas = text.split(/\r?\n/).filter(l => l.trim() !== '');
-            let novosPinos = { bases: [], especiais: [], tanques: [] };
-            let count = 0;
-
+            let linhas = text.split(/\r?\n/).filter(l => l.trim() !== ''); let novosPinos = { bases: [], especiais: [], tanques: [] }; let count = 0;
             linhas.forEach(l => {
-                let cols = l.split('\t').map(c => c.trim()).filter(c => c !== '');
-                if (cols.length < 2) cols = l.split(/\s{2,}/).map(c => c.trim()).filter(c => c !== '');
+                let cols = l.split('\t').map(c => c.trim()).filter(c => c !== ''); if (cols.length < 2) cols = l.split(/\s{2,}/).map(c => c.trim()).filter(c => c !== '');
                 if (cols.length < 2) return;
-
                 let categoria = '', modelo = '', prog = 0;
-                if (cols.length >= 3) {
-                    categoria = cols[0].toUpperCase();
-                    modelo = cols[1].toUpperCase();
-                    prog = parseInt(cols[2]) || 0;
-                } else {
-                    modelo = cols[0].toUpperCase();
-                    prog = parseInt(cols[1]) || 0;
-                }
-
+                if (cols.length >= 3) { categoria = cols[0].toUpperCase(); modelo = cols[1].toUpperCase(); prog = parseInt(cols[2]) || 0; } 
+                else { modelo = cols[0].toUpperCase(); prog = parseInt(cols[1]) || 0; }
                 let catKey = 'bases';
-                if (categoria.includes('ESP')) catKey = 'especiais';
-                else if (categoria.includes('TANQ') || categoria.includes('TQ')) catKey = 'tanques';
-                else if (categoria.includes('BASE') || categoria.includes('CHASSI')) catKey = 'bases';
-
-                novosPinos[catKey].push({ modelo: modelo, prog: prog, ok: 0, okManual: false });
-                count++;
+                if (categoria.includes('ESP')) catKey = 'especiais'; else if (categoria.includes('TANQ') || categoria.includes('TQ')) catKey = 'tanques'; else if (categoria.includes('BASE') || categoria.includes('CHASSI')) catKey = 'bases';
+                novosPinos[catKey].push({ modelo: modelo, prog: prog, ok: 0, okManual: false }); count++;
             });
-
-            if (count > 0) {
-                db.pinosManual = novosPinos;
-                fecharModalCargaPinos();
-                recalcularPainelPremio();
-                autoSaveCloud(true);
-                mostrarToast(`${count} produtos e metas atualizados com sucesso!`, 'fa-trophy');
-            } else {
-                mostrarToast("Formato inválido. Use: CATEGORIA | MODELO | META", "fa-triangle-exclamation");
-            }
+            if (count > 0) { db.pinosManual = novosPinos; fecharModalCargaPinos(); recalcularPainelPremio(); autoSaveCloud(true); mostrarToast(`${count} produtos e metas atualizados com sucesso!`, 'fa-trophy'); } 
+            else { mostrarToast("Formato inválido. Use: CATEGORIA | MODELO | META", "fa-triangle-exclamation"); }
         }
 
         function adicionarModeloPino(categoria) {
@@ -1008,355 +1127,159 @@
             if (!isAdmin) { toggleAdmin(); return; }
             if (!db.pinosManual || !db.pinosManual[categoria]) return;
             const mod = db.pinosManual[categoria][idx].modelo;
-            if (confirm(`Deseja remover o modelo "${mod}"?`)) {
-                db.pinosManual[categoria].splice(idx, 1);
-                recalcularPainelPremio(); autoSaveCloud(true);
-                mostrarToast(`Modelo "${mod}" removido!`, 'fa-trash-can');
-            }
+            if (confirm(`Deseja remover o modelo "${mod}"?`)) { db.pinosManual[categoria].splice(idx, 1); recalcularPainelPremio(); autoSaveCloud(true); mostrarToast(`Modelo "${mod}" removido!`, 'fa-trash-can'); }
         }
 
-        // =========================================================================
-        // INDEXADOR ULTRA RÁPIDO DO PCP
-        // =========================================================================
         function reconstruirIndicesPCP() {
-            pcpIndex.bySectorAndDate = {};
-            pcpIndex.byOv = new Map();
-
+            pcpIndex.bySectorAndDate = {}; pcpIndex.byOv = new Map();
             if (!db.basePCP) return;
-
             Object.keys(db.basePCP).forEach(secId => {
-                const lista = db.basePCP[secId];
-                if (!Array.isArray(lista)) return;
+                const lista = db.basePCP[secId]; if (!Array.isArray(lista)) return;
                 if (!pcpIndex.bySectorAndDate[secId]) pcpIndex.bySectorAndDate[secId] = {};
                 const secMap = pcpIndex.bySectorAndDate[secId];
-
                 lista.forEach(item => {
-                    const ovNum = extrairNumeroOrdem(item.ov);
-                    if (ovNum) pcpIndex.byOv.set(ovNum, { ...item, sec: secId });
-
-                    const dEntNorm = normalizarDataParaComparacao(item.plan_ent);
-                    const dSaiNorm = normalizarDataParaComparacao(item.plan_sai);
-
-                    const keysEnt = [dEntNorm, dEntNorm.substring(0, 5)];
-                    const keysSai = [dSaiNorm, dSaiNorm.substring(0, 5)];
-
-                    keysEnt.forEach(k => {
-                        if (!k) return;
-                        if (!secMap[k]) secMap[k] = { entradas: [], saidas: [] };
-                        secMap[k].entradas.push(item);
-                    });
-
-                    keysSai.forEach(k => {
-                        if (!k) return;
-                        if (!secMap[k]) secMap[k] = { entradas: [], saidas: [] };
-                        secMap[k].saidas.push(item);
-                    });
+                    const ovNum = extrairNumeroOrdem(item.ov); if (ovNum) pcpIndex.byOv.set(ovNum, { ...item, sec: secId });
+                    const dEntNorm = normalizarDataParaComparacao(item.plan_ent); const dSaiNorm = normalizarDataParaComparacao(item.plan_sai);
+                    const keysEnt = [dEntNorm, dEntNorm.substring(0, 5)]; const keysSai = [dSaiNorm, dSaiNorm.substring(0, 5)];
+                    keysEnt.forEach(k => { if (!k) return; if (!secMap[k]) secMap[k] = { entradas: [], saidas: [] }; secMap[k].entradas.push(item); });
+                    keysSai.forEach(k => { if (!k) return; if (!secMap[k]) secMap[k] = { entradas: [], saidas: [] }; secMap[k].saidas.push(item); });
                 });
             });
         }
 
         function buscarOrdemPorNumero(secId, numeroOrdem) {
-            const numBuscado = extrairNumeroOrdem(numeroOrdem);
-            if (!numBuscado || numBuscado.length < 3) return null;
+            const numBuscado = extrairNumeroOrdem(numeroOrdem); if (!numBuscado || numBuscado.length < 3) return null;
             if (pcpIndex.byOv.has(numBuscado)) return pcpIndex.byOv.get(numBuscado);
-            for (let [ovKey, val] of pcpIndex.byOv.entries()) {
-                if (ovKey.includes(numBuscado) || numBuscado.includes(ovKey)) return val;
-            }
-            return null;
+            for (let [ovKey, val] of pcpIndex.byOv.entries()) { if (ovKey.includes(numBuscado) || numBuscado.includes(ovKey)) return val; } return null;
         }
 
         function aplicarMagiaMultipla(secId, startRowIdx, dataVal) {
             if (!dataVal || dataVal.trim() === '') return 0;
-            const dataNorm = normalizarDataParaComparacao(dataVal);
-            const dataCurta = dataNorm.substring(0, 5);
-
-            const secMap = pcpIndex.bySectorAndDate[secId];
-            if (!secMap) return 0;
-
+            const dataNorm = normalizarDataParaComparacao(dataVal); const dataCurta = dataNorm.substring(0, 5);
+            const secMap = pcpIndex.bySectorAndDate[secId]; if (!secMap) return 0;
             const grupo = secMap[dataNorm] || secMap[dataCurta] || { entradas: [], saidas: [] };
-            const listaEntradas = grupo.entradas || [];
-            const listaSaidas = grupo.saidas || [];
-
+            const listaEntradas = grupo.entradas || []; const listaSaidas = grupo.saidas || [];
             if (listaEntradas.length === 0 && listaSaidas.length === 0) return 0;
-
-            if (!db.data[secId]) db.data[secId] = [];
-            const tabela = db.data[secId];
-
-            let pares = [];
-            let entradasRestantes = [...listaEntradas];
-            let saidasRestantes = [...listaSaidas];
-
+            if (!db.data[secId]) db.data[secId] = []; const tabela = db.data[secId];
+            let pares = []; let entradasRestantes = [...listaEntradas]; let saidasRestantes = [...listaSaidas];
             for (let i = entradasRestantes.length - 1; i >= 0; i--) {
-                const ent = entradasRestantes[i];
-                const entNum = extrairNumeroOrdem(ent.ov);
+                const ent = entradasRestantes[i]; const entNum = extrairNumeroOrdem(ent.ov);
                 const matchSaiIdx = saidasRestantes.findIndex(s => extrairNumeroOrdem(s.ov) === entNum);
-                if (matchSaiIdx !== -1) {
-                    pares.push({ entrada: ent, saida: saidasRestantes[matchSaiIdx] });
-                    entradasRestantes.splice(i, 1);
-                    saidasRestantes.splice(matchSaiIdx, 1);
-                }
+                if (matchSaiIdx !== -1) { pares.push({ entrada: ent, saida: saidasRestantes[matchSaiIdx] }); entradasRestantes.splice(i, 1); saidasRestantes.splice(matchSaiIdx, 1); }
             }
-
-            let filasFinais = [...pares];
-            entradasRestantes.forEach(e => filasFinais.push({ entrada: e, saida: null }));
-            saidasRestantes.forEach(s => filasFinais.push({ entrada: null, saida: s }));
-
+            let filasFinais = [...pares]; entradasRestantes.forEach(e => filasFinais.push({ entrada: e, saida: null })); saidasRestantes.forEach(s => filasFinais.push({ entrada: null, saida: s }));
             let rowCurrent = startRowIdx;
-
             filasFinais.forEach((par) => {
-                while (rowCurrent < tabela.length && 
-                      (tabela[rowCurrent].lock_ent || tabela[rowCurrent].lock_sai || 
-                      (tabela[rowCurrent].data_pcp && tabela[rowCurrent].data_pcp !== dataNorm))) {
-                    rowCurrent++;
-                }
-
+                while (rowCurrent < tabela.length && (tabela[rowCurrent].lock_ent || tabela[rowCurrent].lock_sai || (tabela[rowCurrent].data_pcp && tabela[rowCurrent].data_pcp !== dataNorm))) { rowCurrent++; }
                 if (rowCurrent >= tabela.length) tabela.push(getEmptyRow());
-
-                const r = tabela[rowCurrent];
-                r.data_pcp = dataNorm;
-
-                if (par.entrada) {
-                    if (!r.lock_ent && !r.real_ent) {
-                        r.ordem_ent = `${par.entrada.ov}${par.entrada.prod ? ' - ' + par.entrada.prod : ''}`;
-                        r.plan_ent = par.entrada.plan_ent;
-                    }
-                } else if (!r.lock_ent && !r.real_ent) {
-                    r.ordem_ent = ''; r.plan_ent = '';
-                }
-
-                if (par.saida) {
-                    if (!r.lock_sai && !r.real_sai) {
-                        r.ordem_sai = `${par.saida.ov}${par.saida.prod ? ' - ' + par.saida.prod : ''}`;
-                        r.plan_sai = par.saida.plan_sai;
-                    }
-                } else if (!r.lock_sai && !r.real_sai) {
-                    r.ordem_sai = ''; r.plan_sai = '';
-                }
+                const r = tabela[rowCurrent]; r.data_pcp = dataNorm;
+                if (par.entrada) { if (!r.lock_ent && !r.real_ent) { r.ordem_ent = `${par.entrada.ov}${par.entrada.prod ? ' - ' + par.entrada.prod : ''}`; r.plan_ent = par.entrada.plan_ent; } } 
+                else if (!r.lock_ent && !r.real_ent) { r.ordem_ent = ''; r.plan_ent = ''; }
+                if (par.saida) { if (!r.lock_sai && !r.real_sai) { r.ordem_sai = `${par.saida.ov}${par.saida.prod ? ' - ' + par.saida.prod : ''}`; r.plan_sai = par.saida.plan_sai; } } 
+                else if (!r.lock_sai && !r.real_sai) { r.ordem_sai = ''; r.plan_sai = ''; }
                 rowCurrent++;
             });
-
             return filasFinais.length;
         }
 
-        // =========================================================================
-        // DESTINAÇÃO OPERACIONAL E PUXAR OP REAL
-        // =========================================================================
         function encaminharOrdemManual(secOrigemId, rowIdx, destino) {
             if (!isAdmin) { toggleAdmin(); return; }
             if (!db.data[secOrigemId] || !db.data[secOrigemId][rowIdx]) return;
-
             const rowOrigem = db.data[secOrigemId][rowIdx];
-            
-            // CORREÇÃO: Puxa estritamente a Saída Real se houver, garantindo o rastreio correto
-            let opNumeroRaw = rowOrigem.real_sai || rowOrigem.ordem_sai || rowOrigem.real_ent || rowOrigem.ordem_ent;
-            const opNumero = extrairNumeroOrdem(opNumeroRaw);
-
-            if (!opNumero) {
-                mostrarToast("Nenhuma OP válida nesta linha.", "fa-triangle-exclamation");
-                return;
-            }
-
-            const hojeDataCompleta = getDataCompleta();
-            const secConfigOrigem = configuracaoSetores.find(c => c.id === secOrigemId);
+            let opNumeroRaw = rowOrigem.real_sai || rowOrigem.ordem_sai || rowOrigem.real_ent || rowOrigem.ordem_ent; const opNumero = extrairNumeroOrdem(opNumeroRaw);
+            if (!opNumero) { mostrarToast("Nenhuma OP válida nesta linha.", "fa-triangle-exclamation"); return; }
+            const hojeDataCompleta = getDataCompleta(); const secConfigOrigem = configuracaoSetores.find(c => c.id === secOrigemId);
             const descProd = obterDescricaoProduto(rowOrigem.ordem_sai || rowOrigem.ordem_ent, opNumero);
-
             rowOrigem.destino_fluxo = destino;
             if (!rowOrigem.data_pcp) rowOrigem.data_pcp = db.globalDate || hojeDataCompleta;
-
             if (destino === 'SAIDA_LINHA_AP' || destino === 'SAIDA_LINHA_NP') {
-                rowOrigem.aponta = destino === 'SAIDA_LINHA_AP' ? 'OK' : 'NP';
-                if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
-                rowOrigem.data_real_sai = hojeDataCompleta;
-                forceRenderTodasTabelas();
-                autoSaveCloud(true);
-                mostrarToast(`OP ${opNumero} - Saída de Linha registrada!`, 'fa-circle-check');
-                return;
+                rowOrigem.aponta = destino === 'SAIDA_LINHA_AP' ? 'OK' : 'NP'; if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero; rowOrigem.data_real_sai = hojeDataCompleta;
+                forceRenderTodasTabelas(); autoSaveCloud(true); mostrarToast(`OP ${opNumero} - Saída de Linha registrada!`, 'fa-circle-check'); return;
             }
-
             let targetId = null;
             if (destino === 'PINTURA') targetId = 'pintura';
             else if (destino === 'OP1') {
                 const info = (rowOrigem.ordem_sai || rowOrigem.ordem_ent || '').toUpperCase();
-                if (info.includes('TQ') || info.includes('TANQUE')) targetId = 'op1_tq1';
-                else if (info.includes('CT') || info.includes('CARREGA')) targetId = 'op1_ct';
-                else if (info.includes('SILO')) targetId = 'op1_silo';
-                else targetId = 'op1_bases';
+                if (info.includes('TQ') || info.includes('TANQUE')) targetId = 'op1_tq1'; else if (info.includes('CT') || info.includes('CARREGA')) targetId = 'op1_ct'; else if (info.includes('SILO')) targetId = 'op1_silo'; else targetId = 'op1_bases';
             } else if (destino === 'OP2') targetId = 'op2_geral';
-
             if (targetId && db.data[targetId]) {
-                const tbDest = db.data[targetId];
-                let freeIdx = tbDest.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
-                if (freeIdx === -1) {
-                    tbDest.push(getEmptyRow());
-                    freeIdx = tbDest.length - 1;
-                }
-
+                const tbDest = db.data[targetId]; let freeIdx = tbDest.findIndex(r => !r.ordem_ent && !r.ordem_sai && !r.real_ent && !r.real_sai);
+                if (freeIdx === -1) { tbDest.push(getEmptyRow()); freeIdx = tbDest.length - 1; }
                 const textoCompleto = descProd ? `${opNumero} - ${descProd}` : opNumero;
-                
-                tbDest[freeIdx].ordem_ent = textoCompleto;
-                tbDest[freeIdx].ordem_sai = textoCompleto;
-                tbDest[freeIdx].real_ent = opNumero; // Transfere a real_sai da Solda para real_ent do destino
-                tbDest[freeIdx].data_pcp = db.globalDate || hojeDataCompleta;
-                tbDest[freeIdx].data_real_ent = hojeDataCompleta;
-                tbDest[freeIdx].origem = secConfigOrigem ? secConfigOrigem.title : 'SOLDA';
-                tbDest[freeIdx].aponta = ''; 
-
-                if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero;
-                rowOrigem.data_real_sai = hojeDataCompleta;
-
-                forceRenderTodasTabelas();
-                autoSaveCloud(true);
-                mostrarToast(`OP ${opNumero} enviada com sucesso para ${destino}!`, 'fa-truck-fast');
+                tbDest[freeIdx].ordem_ent = textoCompleto; tbDest[freeIdx].ordem_sai = textoCompleto; tbDest[freeIdx].real_ent = opNumero;
+                tbDest[freeIdx].data_pcp = db.globalDate || hojeDataCompleta; tbDest[freeIdx].data_real_ent = hojeDataCompleta; tbDest[freeIdx].origem = secConfigOrigem ? secConfigOrigem.title : 'SOLDA'; tbDest[freeIdx].aponta = ''; 
+                if (!rowOrigem.real_sai) rowOrigem.real_sai = opNumero; rowOrigem.data_real_sai = hojeDataCompleta;
+                forceRenderTodasTabelas(); autoSaveCloud(true); mostrarToast(`OP ${opNumero} enviada com sucesso para ${destino}!`, 'fa-truck-fast');
             }
         }
 
-        // ==========================================
-        // CARGA PCP DE ALTA PERFORMANCE
-        // ==========================================
         const REGEX_DATA_SOLTA = /\b(\d{1,2})[\.\/\-](\d{1,2})(?:[\.\/\-](\d{2,4}))?\b/g;
-
         function extrairDatasDaLinha(linha) {
-            const datas = [];
-            let m;
-            REGEX_DATA_SOLTA.lastIndex = 0;
+            const datas = []; let m; REGEX_DATA_SOLTA.lastIndex = 0;
             while ((m = REGEX_DATA_SOLTA.exec(linha)) !== null) {
-                let ano = m[3] || '2026';
-                if (ano.length === 2) ano = '20' + ano;
+                let ano = m[3] || '2026'; if (ano.length === 2) ano = '20' + ano;
                 datas.push({ raw: m[0], index: m.index, dia: m[1].padStart(2, '0'), mes: m[2].padStart(2, '0'), ano: ano });
-            }
-            return datas;
+            } return datas;
         }
 
         function processarBasePCP() {
             const text = document.getElementById('pcp-dados').value;
             if(!text.trim()) return mostrarToast('Cole os dados primeiro!', 'fa-triangle-exclamation');
-            
-            let count = 0, erros = 0;
-            let linhasOriginais = text.split(/\r?\n/).filter(l => l.trim() !== '');
+            let count = 0, erros = 0; let linhasOriginais = text.split(/\r?\n/).filter(l => l.trim() !== '');
             if(!db.basePCP) db.basePCP = {};
-
             const existingKeys = new Set();
-            Object.keys(db.basePCP).forEach(sec => {
-                db.basePCP[sec].forEach(r => { existingKeys.add(`${sec}_${extrairNumeroOrdem(r.ov)}_${r.plan_ent}_${r.plan_sai}`); });
-            });
-
+            Object.keys(db.basePCP).forEach(sec => { db.basePCP[sec].forEach(r => { existingKeys.add(`${sec}_${extrairNumeroOrdem(r.ov)}_${r.plan_ent}_${r.plan_sai}`); }); });
             linhasOriginais.forEach(linha => {
                 const primeiraColTeste = linha.trim().split(/\t|\s{2,}/)[0].toLowerCase();
                 if (primeiraColTeste.includes('linha') || primeiraColTeste.includes('ordem') || primeiraColTeste.includes('venda')) return;
-
-                const datasEncontradas = extrairDatasDaLinha(linha);
-                if (datasEncontradas.length < 2) { erros++; return; }
-
-                const dataEntradaInfo = datasEncontradas[0];
-                const dataSaidaInfo = datasEncontradas[datasEncontradas.length > 1 ? 1 : 0];
-
-                const dataEntrada = `${dataEntradaInfo.dia}/${dataEntradaInfo.mes}/${dataEntradaInfo.ano}`;
-                const dataSaida = `${dataSaidaInfo.dia}/${dataSaidaInfo.mes}/${dataSaidaInfo.ano}`;
-
+                const datasEncontradas = extrairDatasDaLinha(linha); if (datasEncontradas.length < 2) { erros++; return; }
+                const dataEntradaInfo = datasEncontradas[0]; const dataSaidaInfo = datasEncontradas[datasEncontradas.length > 1 ? 1 : 0];
+                const dataEntrada = `${dataEntradaInfo.dia}/${dataEntradaInfo.mes}/${dataEntradaInfo.ano}`; const dataSaida = `${dataSaidaInfo.dia}/${dataSaidaInfo.mes}/${dataSaidaInfo.ano}`;
                 let cabecalho = linha.substring(0, dataEntradaInfo.index).trim();
-                let col = cabecalho.split('\t').map(c => c.trim()).filter(c => c !== '');
-                if (col.length < 2) col = cabecalho.split(/\s{2,}/).map(c => c.trim()).filter(c => c !== '');
-                if (col.length < 2) col = cabecalho.split(/\s+/).map(c => c.trim()).filter(c => c !== '');
-
+                let col = cabecalho.split('\t').map(c => c.trim()).filter(c => c !== ''); if (col.length < 2) col = cabecalho.split(/\s{2,}/).map(c => c.trim()).filter(c => c !== ''); if (col.length < 2) col = cabecalho.split(/\s+/).map(c => c.trim()).filter(c => c !== '');
                 if (col.length < 2) { erros++; return; }
-
-                const linhaAlvo = col[0];
-                const ov = col[1];
-                const prod = col.length > 2 ? col.slice(2).join(' ') : '';
-
+                const linhaAlvo = col[0]; const ov = col[1]; const prod = col.length > 2 ? col.slice(2).join(' ') : '';
                 if (ov === '' || ov.length < 3) { erros++; return; }
-
                 let destino = mapaLinhaParaSetor[linhaAlvo] || siglaParaSetor[linhaAlvo.trim().toUpperCase()] || null;
                 if (!destino) {
                     const lowerLinha = linhaAlvo.toLowerCase();
-                    if (lowerLinha.includes('tanque') || lowerLinha.includes('tq')) destino = 'tq';
-                    else if (lowerLinha.includes('carrega tudo') || lowerLinha.includes('carrega') || lowerLinha.includes('ct')) destino = 'ct';
-                    else if (lowerLinha.includes('bases') || lowerLinha.includes('chassi')) destino = 'bases';
-                    else if (lowerLinha.includes('silo')) destino = 'silo';
-                    else if (lowerLinha.includes('especiais') || lowerLinha.includes('esp')) destino = 'esp_box1';
-                    else if (lowerLinha.includes('pintura')) destino = 'pintura';
-                    else if (lowerLinha.includes('op1')) destino = 'op1_bases';
-                    else if (lowerLinha.includes('op2')) destino = 'op2_geral';
+                    if (lowerLinha.includes('tanque') || lowerLinha.includes('tq')) destino = 'tq'; else if (lowerLinha.includes('carrega tudo') || lowerLinha.includes('carrega') || lowerLinha.includes('ct')) destino = 'ct'; else if (lowerLinha.includes('bases') || lowerLinha.includes('chassi')) destino = 'bases'; else if (lowerLinha.includes('silo')) destino = 'silo'; else if (lowerLinha.includes('especiais') || lowerLinha.includes('esp')) destino = 'esp_box1'; else if (lowerLinha.includes('pintura')) destino = 'pintura'; else if (lowerLinha.includes('op1')) destino = 'op1_bases'; else if (lowerLinha.includes('op2')) destino = 'op2_geral';
                 }
-
                 if (destino) {
-                    if (!db.basePCP[destino]) db.basePCP[destino] = [];
-                    const chaveRegistro = `${destino}_${extrairNumeroOrdem(ov)}_${dataEntrada}_${dataSaida}`;
-                    if (!existingKeys.has(chaveRegistro)) {
-                        existingKeys.add(chaveRegistro);
-                        db.basePCP[destino].push({ ov: ov, prod: prod, plan_ent: dataEntrada, plan_sai: dataSaida });
-                        count++;
-                    }
+                    if (!db.basePCP[destino]) db.basePCP[destino] = []; const chaveRegistro = `${destino}_${extrairNumeroOrdem(ov)}_${dataEntrada}_${dataSaida}`;
+                    if (!existingKeys.has(chaveRegistro)) { existingKeys.add(chaveRegistro); db.basePCP[destino].push({ ov: ov, prod: prod, plan_ent: dataEntrada, plan_sai: dataSaida }); count++; }
                 } else { erros++; }
             });
-            
             fecharModalPCP();
-            if (count > 0) {
-                reconstruirIndicesPCP();
-                forceRenderTodasTabelas(); 
-                autoSaveCloud(true);
-                mostrarToast(`⚡ ${count} ordens integradas! Suporte a 3 meses ativo.`, 'fa-bolt');
-            } else {
-                mostrarToast(`Nenhuma nova ordem adicionada.`, 'fa-circle-info');
-            }
+            if (count > 0) { reconstruirIndicesPCP(); forceRenderTodasTabelas(); autoSaveCloud(true); mostrarToast(`⚡ ${count} ordens integradas! Suporte a 3 meses ativo.`, 'fa-bolt'); } 
+            else { mostrarToast(`Nenhuma nova ordem adicionada.`, 'fa-circle-info'); }
         }
 
-        // ==========================================
-        // CÁLCULOS E DASHBOARD
-        // ==========================================
         function recalcularDashboard() {
             configuracaoSetores.forEach(sec => {
                 let totalProgMes = 0;
-                if (db.basePCP && db.basePCP[sec.id] && db.basePCP[sec.id].length > 0) {
-                    totalProgMes = db.basePCP[sec.id].length;
-                } else if(db.data[sec.id]) {
-                    db.data[sec.id].forEach(row => {
-                        const temProgramacao = (row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '') ||
-                                                (row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== '');
-                        if(temProgramacao) totalProgMes++;
-                    });
-                }
-                const elMes = document.getElementById(`kpi-mes-${sec.id}`);
-                if (elMes) elMes.innerText = totalProgMes;
+                if (db.basePCP && db.basePCP[sec.id] && db.basePCP[sec.id].length > 0) { totalProgMes = db.basePCP[sec.id].length; } 
+                else if(db.data[sec.id]) { db.data[sec.id].forEach(row => { const temProgramacao = (row.plan_ent && row.plan_ent.trim() !== '') || (row.plan_sai && row.plan_sai.trim() !== '') || (row.ordem_ent && row.ordem_ent.trim() !== '') || (row.ordem_sai && row.ordem_sai.trim() !== ''); if(temProgramacao) totalProgMes++; }); }
+                const elMes = document.getElementById(`kpi-mes-${sec.id}`); if (elMes) elMes.innerText = totalProgMes;
             });
-
             recalcularPainelPremio();
         }
 
         function recalcularPainelPremio() {
             if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
-
             const metaBase = parseInt(document.getElementById('premio-meta-base-input') ? document.getElementById('premio-meta-base-input').value : (db.premioConfig.metaBase || 78)) || 78;
             const atraso = parseInt(document.getElementById('premio-atraso-input') ? document.getElementById('premio-atraso-input').value : (db.premioConfig.atraso || 12)) || 12;
-            
-            db.premioConfig.metaBase = metaBase;
-            db.premioConfig.atraso = atraso;
+            db.premioConfig.metaBase = metaBase; db.premioConfig.atraso = atraso;
 
-            const linhasOP2 = db.data['op2_geral'] || [];
-            let apontamentosPorTexto = [];
-            linhasOP2.forEach(r => {
-                if (r.aponta === 'OK') {
-                    const txtCompleto = `${r.ordem_sai || ''} ${r.ordem_ent || ''} ${r.real_sai || ''} ${r.real_ent || ''}`.toUpperCase();
-                    apontamentosPorTexto.push(txtCompleto);
-                }
-            });
+            const linhasOP2 = db.data['op2_geral'] || []; let apontamentosPorTexto = [];
+            linhasOP2.forEach(r => { if (r.aponta === 'OK') { const txtCompleto = `${r.ordem_sai || ''} ${r.ordem_ent || ''} ${r.real_sai || ''} ${r.real_ent || ''}`.toUpperCase(); apontamentosPorTexto.push(txtCompleto); } });
 
-            renderColunaPinosEditavel('bases', apontamentosPorTexto);
-            renderColunaPinosEditavel('especiais', apontamentosPorTexto);
-            renderColunaPinosEditavel('tanques', apontamentosPorTexto);
+            renderColunaPinosEditavel('bases', apontamentosPorTexto); renderColunaPinosEditavel('especiais', apontamentosPorTexto); renderColunaPinosEditavel('tanques', apontamentosPorTexto);
 
             let totalProgGeral = 0; let totalOkGeral = 0;
+            ['bases', 'especiais', 'tanques'].forEach(cat => { const itens = db.pinosManual[cat] || []; itens.forEach(item => { totalProgGeral += parseInt(item.prog) || 0; totalOkGeral += parseInt(item.ok) || 0; }); });
 
-            ['bases', 'especiais', 'tanques'].forEach(cat => {
-                const itens = db.pinosManual[cat] || [];
-                itens.forEach(item => { totalProgGeral += parseInt(item.prog) || 0; totalOkGeral += parseInt(item.ok) || 0; });
-            });
-
-            const metaTotal = metaBase + atraso;
-            const qtd90 = Math.ceil(metaBase * 0.90);
-            const qtd100 = metaBase;
-            const qtd110 = Math.ceil(metaBase * 1.10);
-
+            const metaTotal = metaBase + atraso; const qtd90 = Math.ceil(metaBase * 0.90); const qtd100 = metaBase; const qtd110 = Math.ceil(metaBase * 1.10);
             if(document.getElementById('txt-meta-90')) document.getElementById('txt-meta-90').innerText = qtd90;
             if(document.getElementById('txt-meta-100')) document.getElementById('txt-meta-100').innerText = qtd100;
             if(document.getElementById('txt-meta-110')) document.getElementById('txt-meta-110').innerText = qtd110;
@@ -1364,119 +1287,65 @@
             if(document.getElementById('kpi-premio-real')) document.getElementById('kpi-premio-real').innerText = totalOkGeral;
             const saldoGeral = Math.max(0, (totalProgGeral || metaTotal) - totalOkGeral);
             if(document.getElementById('kpi-premio-saldo')) document.getElementById('kpi-premio-saldo').innerText = saldoGeral;
-
             const pctAtingido = metaBase > 0 ? ((totalOkGeral / metaBase) * 100).toFixed(1) : 0;
             if(document.getElementById('termometro-pct')) document.getElementById('termometro-pct').innerText = `${pctAtingido}%`;
-
-            const fillWidth = Math.min(100, Math.max(0, (totalOkGeral / qtd110) * 100));
-            const barFill = document.getElementById('termometro-bar-fill');
-            if (barFill) barFill.style.width = `${fillWidth}%`;
+            const fillWidth = Math.min(100, Math.max(0, (totalOkGeral / qtd110) * 100)); const barFill = document.getElementById('termometro-bar-fill'); if (barFill) barFill.style.width = `${fillWidth}%`;
 
             let valorPremio = "R$ 0,00"; let statusMsg = "";
             ['marker-90', 'marker-100', 'marker-110'].forEach(m => { if(document.getElementById(m)) document.getElementById(m).classList.remove('unlocked'); });
 
-            if (totalOkGeral >= qtd110) {
-                valorPremio = "R$ 260,00"; statusMsg = "🏆 PARABÉNS! Prêmio Máximo de R$ 260,00 Atingido!";
-                ['marker-90', 'marker-100', 'marker-110'].forEach(m => { if(document.getElementById(m)) document.getElementById(m).classList.add('unlocked'); });
-            } else if (totalOkGeral >= qtd100) {
-                valorPremio = "R$ 200,00"; statusMsg = `🔥 100% Garantido! Faltam apenas ${qtd110 - totalOkGeral} pinos para R$ 260,00`;
-                ['marker-90', 'marker-100'].forEach(m => { if(document.getElementById(m)) document.getElementById(m).classList.add('unlocked'); });
-            } else if (totalOkGeral >= qtd90) {
-                valorPremio = "R$ 150,00"; statusMsg = `✅ 90% Atingido! Faltam ${qtd100 - totalOkGeral} pinos para R$ 200,00`;
-                if(document.getElementById('marker-90')) document.getElementById('marker-90').classList.add('unlocked');
-            } else {
-                statusMsg = `🎯 Faltam ${qtd90 - totalOkGeral} pinos para destravar R$ 150,00`;
-            }
+            if (totalOkGeral >= qtd110) { valorPremio = "R$ 260,00"; statusMsg = "🏆 PARABÉNS! Prêmio Máximo de R$ 260,00 Atingido!"; ['marker-90', 'marker-100', 'marker-110'].forEach(m => { if(document.getElementById(m)) document.getElementById(m).classList.add('unlocked'); }); } 
+            else if (totalOkGeral >= qtd100) { valorPremio = "R$ 200,00"; statusMsg = `🔥 100% Garantido! Faltam apenas ${qtd110 - totalOkGeral} pinos para R$ 260,00`; ['marker-90', 'marker-100'].forEach(m => { if(document.getElementById(m)) document.getElementById(m).classList.add('unlocked'); }); } 
+            else if (totalOkGeral >= qtd90) { valorPremio = "R$ 150,00"; statusMsg = `✅ 90% Atingido! Faltam ${qtd100 - totalOkGeral} pinos para R$ 200,00`; if(document.getElementById('marker-90')) document.getElementById('marker-90').classList.add('unlocked'); } 
+            else { statusMsg = `🎯 Faltam ${qtd90 - totalOkGeral} pinos para destravar R$ 150,00`; }
 
             if(document.getElementById('termometro-status-msg')) document.getElementById('termometro-status-msg').innerText = statusMsg;
             if(document.getElementById('kpi-premio-valor')) document.getElementById('kpi-premio-valor').innerText = valorPremio;
-
             calcularLinhaLider();
         }
 
         function renderColunaPinosEditavel(categoria, apontamentosTexto) {
-            const tbody = document.getElementById(`tbody-pinos-${categoria}`);
-            const badgeTotal = document.getElementById(`saldo-total-${categoria}`);
-            if (!tbody) return;
-
+            const tbody = document.getElementById(`tbody-pinos-${categoria}`); const badgeTotal = document.getElementById(`saldo-total-${categoria}`); if (!tbody) return;
             let itens = db.pinosManual[categoria] || [];
-            if (itens.length === 0) {
-                itens = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT[categoria]));
-                db.pinosManual[categoria] = itens;
-            }
-
+            if (itens.length === 0) { itens = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT[categoria])); db.pinosManual[categoria] = itens; }
             let html = ''; let totalSaldoCat = 0;
-
             itens.forEach((item, idx) => {
                 const modNome = (item.modelo || '').toUpperCase();
-                if (item.okManual === undefined || item.okManual === false) {
-                    let countAuto = 0;
-                    apontamentosTexto.forEach(txt => {
-                        if (modNome && (txt.includes(modNome) || (modNome === "CARREGA TUDO" && txt.includes("CT")) || (modNome === "SILO CILINDRICO" && txt.includes("SILO")))) {
-                            countAuto++;
-                        }
-                    });
-                    if (countAuto > 0) item.ok = countAuto;
-                }
-
-                const progNum = parseInt(item.prog) || 0;
-                const okNum = parseInt(item.ok) || 0;
-                const saldo = Math.max(0, progNum - okNum);
-                totalSaldoCat += saldo;
-
-                const badgeClass = saldo === 0 ? 'badge-saldo zerado' : 'badge-saldo pendente';
-                const badgeTxt = saldo === 0 ? '✔ OK' : `${saldo}`;
-
-                html += `
-                    <tr>
-                        <td><input type="text" class="cell-input pino-nome-input" data-cat="${categoria}" data-idx="${idx}" value="${item.modelo}"></td>
-                        <td style="text-align:center;"><input type="number" class="pino-val-input" data-cat="${categoria}" data-idx="${idx}" data-type="prog" value="${progNum}"></td>
-                        <td style="text-align:center;"><input type="number" class="pino-val-input" style="color: var(--status-green);" data-cat="${categoria}" data-idx="${idx}" data-type="ok" value="${okNum}"></td>
-                        <td style="text-align:center;"><span class="${badgeClass}">${badgeTxt}</span></td>
-                        <td style="text-align:center;" class="admin-only"><button class="btn-del-pino" onclick="removerModeloPino('${categoria}', ${idx})"><i class="fa-solid fa-xmark"></i></button></td>
-                    </tr>
-                `;
+                if (item.okManual === undefined || item.okManual === false) { let countAuto = 0; apontamentosTexto.forEach(txt => { if (modNome && (txt.includes(modNome) || (modNome === "CARREGA TUDO" && txt.includes("CT")) || (modNome === "SILO CILINDRICO" && txt.includes("SILO")))) { countAuto++; } }); if (countAuto > 0) item.ok = countAuto; }
+                const progNum = parseInt(item.prog) || 0; const okNum = parseInt(item.ok) || 0; const saldo = Math.max(0, progNum - okNum); totalSaldoCat += saldo;
+                const badgeClass = saldo === 0 ? 'badge-saldo zerado' : 'badge-saldo pendente'; const badgeTxt = saldo === 0 ? '✔ OK' : `${saldo}`;
+                html += `<tr>
+                    <td><input type="text" class="cell-input pino-nome-input" data-cat="${categoria}" data-idx="${idx}" value="${item.modelo}"></td>
+                    <td style="text-align:center;"><input type="number" class="pino-val-input" data-cat="${categoria}" data-idx="${idx}" data-type="prog" value="${progNum}"></td>
+                    <td style="text-align:center;"><input type="number" class="pino-val-input" style="color: var(--status-green);" data-cat="${categoria}" data-idx="${idx}" data-type="ok" value="${okNum}"></td>
+                    <td style="text-align:center;"><span class="${badgeClass}">${badgeTxt}</span></td>
+                    <td style="text-align:center;" class="admin-only"><button class="btn-del-pino" onclick="removerModeloPino('${categoria}', ${idx})"><i class="fa-solid fa-xmark"></i></button></td>
+                </tr>`;
             });
-
             tbody.innerHTML = html;
-            if (badgeTotal) {
-                badgeTotal.innerText = `${totalSaldoCat} Restantes`;
-                badgeTotal.className = totalSaldoCat === 0 ? 'badge-saldo zerado' : 'badge-saldo pendente';
-            }
+            if (badgeTotal) { badgeTotal.innerText = `${totalSaldoCat} Restantes`; badgeTotal.className = totalSaldoCat === 0 ? 'badge-saldo zerado' : 'badge-saldo pendente'; }
         }
 
         function calcularLinhaLider() {
-            const categorias = ['bases', 'especiais', 'tanques'];
-            const nomes = { bases: 'Linha de Bases (Chassi)', especiais: 'Linha de Especiais', tanques: 'Linha de Tanques' };
+            const categorias = ['bases', 'especiais', 'tanques']; const nomes = { bases: 'Linha de Bases (Chassi)', especiais: 'Linha de Especiais', tanques: 'Linha de Tanques' };
             let melhorNome = 'Linhas Empatadas'; let melhorPct = -1;
-
             categorias.forEach(cat => {
-                const itens = db.pinosManual[cat] || [];
-                let totProg = 0, totOk = 0;
+                const itens = db.pinosManual[cat] || []; let totProg = 0, totOk = 0;
                 itens.forEach(i => { totProg += parseInt(i.prog) || 0; totOk += parseInt(i.ok) || 0; });
-                let pct = totProg > 0 ? (totOk / totProg) * 100 : 0;
-                if (pct > melhorPct) { melhorPct = pct; melhorNome = nomes[cat]; }
+                let pct = totProg > 0 ? (totOk / totProg) * 100 : 0; if (pct > melhorPct) { melhorPct = pct; melhorNome = nomes[cat]; }
             });
-
             if (document.getElementById('linha-lider-nome')) document.getElementById('linha-lider-nome').innerText = melhorNome;
             if (document.getElementById('linha-lider-pct')) document.getElementById('linha-lider-pct').innerText = `${melhorPct.toFixed(0)}% Concluído`;
         }
 
-        // =========================================================================
-        // ESTAMPARIA
-        // =========================================================================
         function obterUltimosDiasUteis(qtd) {
             let datas = []; let d = new Date();
-            while(datas.length < qtd) {
-                if (d.getDay() !== 0 && d.getDay() !== 6) datas.unshift(formatarDataEstamparia(d));
-                d.setDate(d.getDate() - 1);
-            } return datas;
+            while(datas.length < qtd) { if (d.getDay() !== 0 && d.getDay() !== 6) datas.unshift(formatarDataEstamparia(d)); d.setDate(d.getDate() - 1); } return datas;
         }
 
         function atualizarDiasEstamparia() {
             if (!db.estampariaMatriz || !db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
-                db.estampariaMatriz = { datas: [], valores: {} };
-                let d = new Date(); while(db.estampariaMatriz.datas.length < 5) { if(d.getDay()!==0 && d.getDay()!==6) db.estampariaMatriz.datas.unshift(formatarDataEstamparia(d)); d.setDate(d.getDate()-1); }
+                db.estampariaMatriz = { datas: [], valores: {} }; let d = new Date(); while(db.estampariaMatriz.datas.length < 5) { if(d.getDay()!==0 && d.getDay()!==6) db.estampariaMatriz.datas.unshift(formatarDataEstamparia(d)); d.setDate(d.getDate()-1); }
                 estampariaLinhas.forEach(l => db.estampariaMatriz.valores[l] = Array(5).fill('')); return;
             }
             let h = new Date(); while(h.getDay()===0 || h.getDay()===6) h.setDate(h.getDate()-1);
@@ -1489,110 +1358,57 @@
         }
 
         function executarShiftEstamparia(novaDataStr) {
-            if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-            if (!db.estampariaMatriz.datas) db.estampariaMatriz.datas = [];
+            if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} }; if (!db.estampariaMatriz.datas) db.estampariaMatriz.datas = [];
             db.estampariaMatriz.datas.shift(); db.estampariaMatriz.datas.push(novaDataStr);
-            estampariaLinhas.forEach(linha => {
-                if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                db.estampariaMatriz.valores[linha].shift(); db.estampariaMatriz.valores[linha].push('');
-            });
+            estampariaLinhas.forEach(linha => { if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill(''); db.estampariaMatriz.valores[linha].shift(); db.estampariaMatriz.valores[linha].push(''); });
         }
 
         function forcarAberturaDiaAtualEstamparia() {
             if (!isAdmin) { toggleAdmin(); return; }
-            let hoje = new Date(); while (hoje.getDay() === 0 || hoje.getDay() === 6) hoje.setDate(hoje.getDate() - 1);
-            const hojeFormatado = formatarDataEstamparia(hoje);
+            let hoje = new Date(); while (hoje.getDay() === 0 || hoje.getDay() === 6) hoje.setDate(hoje.getDate() - 1); const hojeFormatado = formatarDataEstamparia(hoje);
             if (db.estampariaMatriz.datas[db.estampariaMatriz.datas.length - 1] === hojeFormatado) { mostrarToast("O dia atual já está aberto na última coluna!", "fa-circle-info"); return; }
-            if (confirm(`Deseja forçar a abertura da coluna para o dia útil atual (${hojeFormatado})?`)) {
-                executarShiftEstamparia(hojeFormatado); renderizarEstampariaMatriz(); autoSaveCloud(true); mostrarToast(`Coluna de ${hojeFormatado} aberta com sucesso!`, "fa-calendar-plus");
-            }
+            if (confirm(`Deseja forçar a abertura da coluna para o dia útil atual (${hojeFormatado})?`)) { executarShiftEstamparia(hojeFormatado); renderizarEstampariaMatriz(); autoSaveCloud(true); mostrarToast(`Coluna de ${hojeFormatado} aberta com sucesso!`, "fa-calendar-plus"); }
         }
 
         function renderizarEstampariaMatriz() {
             const container = document.getElementById('tabela-estamparia-matriz'); if(!container) return;
             if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
             if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) atualizarDiasEstamparia();
-            
             const datas = db.estampariaMatriz.datas || ['','','','',''];
             let thead = `<tr><th colspan="6" style="text-align: center; font-size: 16px; padding: 12px; border-bottom: 2px solid var(--randon-black);"><i class="fa-solid fa-industry" style="margin-right: 8px;"></i> Controle Manufaturados</th></tr><tr><th style="width: 280px; text-align: left; padding-left: 20px; background-color: white;">Linha</th>`;
-            datas.forEach((d, cIdx) => {
-                let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : 'background-color: white;';
-                thead += `<th style="${bg} border-bottom: 2px solid var(--randon-black); border-top: 1px solid var(--randon-black);"><input type="text" class="cell-input" style="font-weight:900; font-size: 15px; text-align: center; ${bg}" data-col-date="${cIdx}" value="${d || ''}"></th>`;
-            }); thead += `</tr>`;
-
+            datas.forEach((d, cIdx) => { let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : 'background-color: white;'; thead += `<th style="${bg} border-bottom: 2px solid var(--randon-black); border-top: 1px solid var(--randon-black);"><input type="text" class="cell-input" style="font-weight:900; font-size: 15px; text-align: center; ${bg}" data-col-date="${cIdx}" value="${d || ''}"></th>`; }); thead += `</tr>`;
             let tbody = '';
             estampariaLinhas.forEach((linha) => {
                 if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
                 tbody += `<tr><td style="font-weight: 900; padding-left: 20px; color: var(--randon-dark); font-size: 14px; border-right: 2px solid var(--randon-black);">${linha}</td>`;
                 datas.forEach((d, cIdx) => {
                     const val = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx] !== undefined) ? db.estampariaMatriz.valores[linha][cIdx] : '';
-                    let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : '';
-                    let colorStyle = 'color: var(--randon-blue);'; 
-                    if (cIdx > 0 && val !== '') {
-                        const prevVal = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx - 1]) ? db.estampariaMatriz.valores[linha][cIdx - 1] : '';
-                        if (prevVal !== '') {
-                            const numVal = parseFloat(val), numPrev = parseFloat(prevVal);
-                            if (!isNaN(numVal) && !isNaN(numPrev)) {
-                                if (numVal < numPrev) colorStyle = 'color: var(--status-green);';
-                                else if (numVal > numPrev) colorStyle = 'color: var(--status-red);';
-                            }
-                        }
-                    }
+                    let bg = cIdx === 4 ? 'background-color: #e2e8f0;' : ''; let colorStyle = 'color: var(--randon-blue);'; 
+                    if (cIdx > 0 && val !== '') { const prevVal = (db.estampariaMatriz.valores[linha] && db.estampariaMatriz.valores[linha][cIdx - 1]) ? db.estampariaMatriz.valores[linha][cIdx - 1] : ''; if (prevVal !== '') { const numVal = parseFloat(val), numPrev = parseFloat(prevVal); if (!isNaN(numVal) && !isNaN(numPrev)) { if (numVal < numPrev) colorStyle = 'color: var(--status-green);'; else if (numVal > numPrev) colorStyle = 'color: var(--status-red);'; } } }
                     tbody += `<td style="${bg}"><input type="text" class="cell-input estamparia-val-input" style="font-size: 16px; font-weight: 900; text-align: center; ${colorStyle}" data-row-name="${linha}" data-col-idx="${cIdx}" value="${val}"></td>`;
                 }); tbody += `</tr>`;
             });
-            container.innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`;
-            updateEstampariaChart();
+            container.innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`; updateEstampariaChart();
         }
 
-        // =========================================================================
-        // MOTOR DO BI E NOVO TRACKING MENSAL
-        // =========================================================================
-        let cacheTracking = { soldaMes: 0, op2Mes: 0, diasUteisMes: 1 };
-
         function calcularProjecao() {
-            const inputSolda = parseInt(document.getElementById('simula-solda').value) || 0;
-            const inputOp2 = parseInt(document.getElementById('simula-op2').value) || 0;
-            const resSolda = (cacheTracking.soldaMes + inputSolda) / cacheTracking.diasUteisMes;
-            const resOp2 = (cacheTracking.op2Mes + inputOp2) / cacheTracking.diasUteisMes;
-            const elSolda = document.getElementById('projecao-solda-res');
-            const elOp2 = document.getElementById('projecao-op2-res');
-            if(elSolda) elSolda.innerText = `Nova Média: ${resSolda.toFixed(1)}`;
-            if(elOp2) elOp2.innerText = `Nova Média: ${resOp2.toFixed(1)}`;
+            const inputSolda = parseInt(document.getElementById('simula-solda').value) || 0; const inputOp2 = parseInt(document.getElementById('simula-op2').value) || 0;
+            const resSolda = (cacheTracking.soldaMes + inputSolda) / cacheTracking.diasUteisMes; const resOp2 = (cacheTracking.op2Mes + inputOp2) / cacheTracking.diasUteisMes;
+            const elSolda = document.getElementById('projecao-solda-res'); const elOp2 = document.getElementById('projecao-op2-res');
+            if(elSolda) elSolda.innerText = `Nova Média: ${resSolda.toFixed(1)}`; if(elOp2) elOp2.innerText = `Nova Média: ${resOp2.toFixed(1)}`;
         }
 
         function atualizarTrackingMensal(hojeStr) {
             const diasUteis = calcularDiasUteisMesAteHoje(hojeStr); cacheTracking.diasUteisMes = diasUteis;
             let totalSoldaMes = 0, totalOp2Mes = 0;
-
             Object.keys(db.data).forEach(secId => {
-                const config = configuracaoSetores.find(c => c.id === secId);
-                if(!config) return;
-                db.data[secId].forEach(row => {
-                    if (row.aponta === 'OK') {
-                        const dataConclusao = row.data_real_sai || row.data_pcp || row.data_real_ent;
-                        if (mesEAnoIguais(dataConclusao, hojeStr)) { 
-                            if (config.view === 'solda') totalSoldaMes++;
-                            else if (config.view === 'op2') totalOp2Mes++;
-                        }
-                    }
-                });
+                const config = configuracaoSetores.find(c => c.id === secId); if(!config) return;
+                db.data[secId].forEach(row => { if (row.aponta === 'OK') { const dataConclusao = row.data_real_sai || row.data_pcp || row.data_real_ent; if (mesEAnoIguais(dataConclusao, hojeStr)) { if (config.view === 'solda') totalSoldaMes++; else if (config.view === 'op2') totalOp2Mes++; } } });
             });
-
             cacheTracking.soldaMes = totalSoldaMes; cacheTracking.op2Mes = totalOp2Mes;
             const mediaSolda = (totalSoldaMes / diasUteis).toFixed(1), mediaOp2 = (totalOp2Mes / diasUteis).toFixed(1);
-
-            const elDias = document.getElementById('lbl-dias-uteis');
-            const elMediaSolda = document.getElementById('media-solda-atual');
-            const elMediaOp2 = document.getElementById('media-op2-atual');
-            const elSubSolda = document.getElementById('subtotal-solda');
-            const elSubOp2 = document.getElementById('subtotal-op2');
-
-            if(elDias) elDias.innerText = diasUteis;
-            if(elSubSolda) elSubSolda.innerText = totalSoldaMes;
-            if(elSubOp2) elSubOp2.innerText = totalOp2Mes;
-            if(elMediaSolda) elMediaSolda.innerHTML = `${mediaSolda} <small>OPs/dia</small>`;
-            if(elMediaOp2) elMediaOp2.innerHTML = `${mediaOp2} <small>OPs/dia</small>`;
+            const elDias = document.getElementById('lbl-dias-uteis'); const elMediaSolda = document.getElementById('media-solda-atual'); const elMediaOp2 = document.getElementById('media-op2-atual'); const elSubSolda = document.getElementById('subtotal-solda'); const elSubOp2 = document.getElementById('subtotal-op2');
+            if(elDias) elDias.innerText = diasUteis; if(elSubSolda) elSubSolda.innerText = totalSoldaMes; if(elSubOp2) elSubOp2.innerText = totalOp2Mes; if(elMediaSolda) elMediaSolda.innerHTML = `${mediaSolda} <small>OPs/dia</small>`; if(elMediaOp2) elMediaOp2.innerHTML = `${mediaOp2} <small>OPs/dia</small>`;
             calcularProjecao();
         }
 
@@ -1600,76 +1416,32 @@
             if (!db.data) return;
             const hoje = db.globalDate || getDataCompleta();
             const lblData = document.getElementById('resumo-data-label'); if(lblData) lblData.innerText = hoje;
-
             atualizarTrackingMensal(hoje);
-
             let totalApontamentos = 0, totalOK = 0, totalCOGI = 0, totalAtrasos = 0, totalProg = 0;
             const listas = { solda: [], pintura: [], op1: [], op2: [] };
-            
             let paretoData = {}, statusData = { OK: 0, COGI: 0, NP: 0 }, aderenciaSetor = { labels: [], data: [] }, evolucaoData = {};
 
             Object.keys(db.data).forEach(secId => {
                 const config = configuracaoSetores.find(c => c.id === secId); if(!config) return;
                 let secProg = 0, secOk = 0;
-
                 db.data[secId].forEach((row, idx) => {
-                    const temDado = row.real_ent || row.ordem_ent || row.real_sai || row.ordem_sai;
-                    if (!temDado) return;
-
-                    totalProg++; secProg++;
-                    if (row.aponta) totalApontamentos++;
-                    if (row.atr_sai > 0 || row.atr_ent > 0) totalAtrasos++;
-
-                    // Lógica Gráfico Qualidade e Evolução
-                    if(row.aponta === 'OK') {
-                        totalOK++; secOk++; statusData.OK++;
-                        let dOK = row.data_real_sai || row.data_pcp;
-                        if (dOK) { let dShort = normalizarDataParaComparacao(dOK).substring(0,5); evolucaoData[dShort] = (evolucaoData[dShort] || 0) + 1; }
-                    } else if(row.aponta === 'COGI') {
-                        totalCOGI++; statusData.COGI++;
-                        if (row.impactos) paretoData[row.impactos] = (paretoData[row.impactos] || 0) + 1;
-                    } else if (row.aponta === 'NP') {
-                        statusData.NP++;
-                    }
-
-                    // Listas Resumo do Dia
+                    const temDado = row.real_ent || row.ordem_ent || row.real_sai || row.ordem_sai; if (!temDado) return;
+                    totalProg++; secProg++; if (row.aponta) totalApontamentos++; if (row.atr_sai > 0 || row.atr_ent > 0) totalAtrasos++;
+                    if(row.aponta === 'OK') { totalOK++; secOk++; statusData.OK++; let dOK = row.data_real_sai || row.data_pcp; if (dOK) { let dShort = normalizarDataParaComparacao(dOK).substring(0,5); evolucaoData[dShort] = (evolucaoData[dShort] || 0) + 1; } } 
+                    else if(row.aponta === 'COGI') { totalCOGI++; statusData.COGI++; if (row.impactos) paretoData[row.impactos] = (paretoData[row.impactos] || 0) + 1; } 
+                    else if (row.aponta === 'NP') { statusData.NP++; }
                     if(row.data_real_sai === hoje || row.data_pcp === hoje || row.data_real_ent === hoje) {
                         let item = { secId, idx, row, config };
-                        if(config.view === 'solda' && (row.destino_fluxo || row.real_sai)) listas.solda.push(item);
-                        else if(config.view === 'pintura') listas.pintura.push(item);
-                        else if(config.view === 'op1') listas.op1.push(item);
-                        else if(config.view === 'op2') listas.op2.push(item);
+                        if(config.view === 'solda' && (row.destino_fluxo || row.real_sai)) listas.solda.push(item); else if(config.view === 'pintura') listas.pintura.push(item); else if(config.view === 'op1') listas.op1.push(item); else if(config.view === 'op2') listas.op2.push(item);
                     }
                 });
-
-                if (secProg > 0) {
-                    aderenciaSetor.labels.push(config.title.split(' ')[0]);
-                    aderenciaSetor.data.push(Math.round((secOk / secProg) * 100));
-                }
+                if (secProg > 0) { aderenciaSetor.labels.push(config.title.split(' ')[0]); aderenciaSetor.data.push(Math.round((secOk / secProg) * 100)); }
             });
 
-            // ATUALIZA LISTAS DIÁRIAS (EDITÁVEIS E COM BADGE OP DESTAQUE)
             const buildList = (list) => list.map(i => {
-                const op = i.row.real_sai || i.row.real_ent || extrairNumeroOrdem(i.row.ordem_sai || i.row.ordem_ent);
-                const prod = obterDescricaoProduto(i.row.ordem_sai || i.row.ordem_ent, op);
+                const op = i.row.real_sai || i.row.real_ent || extrairNumeroOrdem(i.row.ordem_sai || i.row.ordem_ent); const prod = obterDescricaoProduto(i.row.ordem_sai || i.row.ordem_ent, op);
                 const ap = i.row.aponta || '', bg = ap==='OK'?'item-ok':(ap?'item-np':''), col = ap==='OK'?'color:#065f46;background:#d1fae5;':(ap==='COGI'?'color:#991b1b;background:#fee2e2;':'color:var(--randon-dark);');
-                
-                return `
-                    <div class="resumo-dia-item ${bg}">
-                        <div class="resumo-dia-item-top">
-                            <span class="badge-prod-tipo">${i.config.title.split(' ')[0]}</span>
-                            <span class="badge-op-destaque">OP: ${op}</span>
-                        </div>
-                        <div style="font-size: 11px; color: #475569; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px;" title="${prod}">${prod || 'N/D'}</div>
-                        <div class="resumo-dia-item-bottom" style="margin-top: 6px;">
-                            <select class="cell-input" style="height: 26px; border: 1px solid var(--border-light); font-size: 11px; padding: 0 4px; width: 100%; font-weight: 800; ${col}" onchange="window.alterarApontamentoBI('${i.secId}', ${i.idx}, this.value)">
-                                <option value="">- PENDENTE -</option>
-                                <option value="OK" ${ap==='OK'?'selected':''}>🟢 OK</option>
-                                <option value="NP" ${ap==='NP'?'selected':''}>⏳ NÃO APONTADO</option>
-                                <option value="COGI" ${ap==='COGI'?'selected':''}>🔴 COGI</option>
-                            </select>
-                        </div>
-                    </div>`;
+                return `<div class="resumo-dia-item ${bg}"><div class="resumo-dia-item-top"><span class="badge-prod-tipo">${i.config.title.split(' ')[0]}</span><span class="badge-op-destaque">OP: ${op}</span></div><div style="font-size: 11px; color: #475569; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px;" title="${prod}">${prod || 'N/D'}</div><div class="resumo-dia-item-bottom" style="margin-top: 6px;"><select class="cell-input" style="height: 26px; border: 1px solid var(--border-light); font-size: 11px; padding: 0 4px; width: 100%; font-weight: 800; ${col}" onchange="window.alterarApontamentoBI('${i.secId}', ${i.idx}, this.value)"><option value="">- PENDENTE -</option><option value="OK" ${ap==='OK'?'selected':''}>🟢 OK</option><option value="NP" ${ap==='NP'?'selected':''}>⏳ NÃO APONTADO</option><option value="COGI" ${ap==='COGI'?'selected':''}>🔴 COGI</option></select></div></div>`;
             }).join('');
 
             if(document.getElementById('resumo-list-solda')) { document.getElementById('resumo-list-solda').innerHTML = buildList(listas.solda); document.getElementById('resumo-count-solda').innerText = listas.solda.length; }
@@ -1677,46 +1449,16 @@
             if(document.getElementById('resumo-list-op1')) { document.getElementById('resumo-list-op1').innerHTML = buildList(listas.op1); document.getElementById('resumo-count-op1').innerText = listas.op1.length; }
             if(document.getElementById('resumo-list-op2')) { document.getElementById('resumo-list-op2').innerHTML = buildList(listas.op2); document.getElementById('resumo-count-op2').innerText = listas.op2.length; }
 
-            // ATUALIZA KPIs TOP
             if(document.getElementById('dash-total-apontamentos')) document.getElementById('dash-total-apontamentos').innerText = totalApontamentos;
             if(document.getElementById('dash-ok')) document.getElementById('dash-ok').innerText = totalProg>0?((totalOK/totalProg)*100).toFixed(0)+'%':'0%';
             if(document.getElementById('dash-cogi')) document.getElementById('dash-cogi').innerText = totalCOGI;
             if(document.getElementById('dash-atrasos')) document.getElementById('dash-atrasos').innerText = totalAtrasos;
             if(document.getElementById('dash-aderencia')) document.getElementById('dash-aderencia').innerText = totalProg>0?(((totalOK+totalCOGI)/totalProg)*100).toFixed(0)+'%':'0%';
 
-            // INJETA DADOS NOS GRÁFICOS
-            if(chartsObj.pareto) {
-                let sortedPareto = Object.entries(paretoData).sort((a,b) => b[1] - a[1]);
-                chartsObj.pareto.data.labels = sortedPareto.map(x => x[0]);
-                chartsObj.pareto.data.datasets = [{ label: 'Ocorrências COGI', data: sortedPareto.map(x => x[1]), backgroundColor: '#ef4444' }];
-                chartsObj.pareto.update();
-            }
-
-            if(chartsObj.pie) {
-                chartsObj.pie.data.labels = ['OK', 'COGI', 'Não Apontado'];
-                chartsObj.pie.data.datasets[0].data = [statusData.OK, statusData.COGI, statusData.NP];
-                chartsObj.pie.data.datasets[0].backgroundColor = ['#10b981', '#ef4444', '#f59e0b'];
-                chartsObj.pie.update();
-            }
-
-            if(chartsObj.aderencia) {
-                chartsObj.aderencia.data.labels = aderenciaSetor.labels;
-                chartsObj.aderencia.data.datasets = [{ label: 'Aderência (%)', data: aderenciaSetor.data, backgroundColor: '#3b82f6' }];
-                chartsObj.aderencia.update();
-            }
-
-            if(chartsObj.line) {
-                let sortedDates = Object.keys(evolucaoData).sort((a,b) => {
-                    let [d1, m1] = a.split('/'); let [d2, m2] = b.split('/');
-                    return (parseInt(m1)*100 + parseInt(d1)) - (parseInt(m2)*100 + parseInt(d2));
-                }).slice(-7);
-                chartsObj.line.data.labels = sortedDates;
-                chartsObj.line.data.datasets = [{
-                    label: 'OPs Concluídas', data: sortedDates.map(d => evolucaoData[d]),
-                    borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.2)', fill: true, tension: 0.3
-                }];
-                chartsObj.line.update();
-            }
+            if(chartsObj.pareto) { let sortedPareto = Object.entries(paretoData).sort((a,b) => b[1] - a[1]); chartsObj.pareto.data.labels = sortedPareto.map(x => x[0]); chartsObj.pareto.data.datasets = [{ label: 'Ocorrências COGI', data: sortedPareto.map(x => x[1]), backgroundColor: '#ef4444' }]; chartsObj.pareto.update(); }
+            if(chartsObj.pie) { chartsObj.pie.data.labels = ['OK', 'COGI', 'Não Apontado']; chartsObj.pie.data.datasets[0].data = [statusData.OK, statusData.COGI, statusData.NP]; chartsObj.pie.data.datasets[0].backgroundColor = ['#10b981', '#ef4444', '#f59e0b']; chartsObj.pie.update(); }
+            if(chartsObj.aderencia) { chartsObj.aderencia.data.labels = aderenciaSetor.labels; chartsObj.aderencia.data.datasets = [{ label: 'Aderência (%)', data: aderenciaSetor.data, backgroundColor: '#3b82f6' }]; chartsObj.aderencia.update(); }
+            if(chartsObj.line) { let sortedDates = Object.keys(evolucaoData).sort((a,b) => { let [d1, m1] = a.split('/'); let [d2, m2] = b.split('/'); return (parseInt(m1)*100 + parseInt(d1)) - (parseInt(m2)*100 + parseInt(d2)); }).slice(-7); chartsObj.line.data.labels = sortedDates; chartsObj.line.data.datasets = [{ label: 'OPs Concluídas', data: sortedDates.map(d => evolucaoData[d]), borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.2)', fill: true, tension: 0.3 }]; chartsObj.line.update(); }
         }
 
         window.alterarApontamentoBI = function(secId, rowIdx, novoStatus) {
@@ -1728,9 +1470,6 @@
             }
         }
 
-        // =========================================================================
-        // RESUMOS FINAIS
-        // =========================================================================
         function renderResumoApontamento() {
             const tbS = document.getElementById('tbody-saidas-linha'), tbE = document.getElementById('tbody-espelho-finais'); if(!tbS || !tbE) return;
             let hS = '', hE = '', hoje = db.globalDate || getDataCompleta();
@@ -1749,261 +1488,86 @@
         }
 
         function renderPainelGargalos() {
-            const tbGargalos = document.getElementById('tbody-painel-gargalos');
-            const containerMotivos = document.getElementById('ggl-por-motivo');
-            const totalEl = document.getElementById('ggl-total');
-            if(!tbGargalos) return;
-
+            const tbGargalos = document.getElementById('tbody-painel-gargalos'); const containerMotivos = document.getElementById('ggl-por-motivo'); const totalEl = document.getElementById('ggl-total'); if(!tbGargalos) return;
             let html = '', total = 0, contagem = {};
-
             Object.keys(db.data).forEach(secId => {
                 const config = configuracaoSetores.find(c => c.id === secId);
                 db.data[secId].forEach(row => {
                     if (row.aponta === 'COGI') {
-                        total++;
-                        const motivo = row.impactos || 'Não Informado';
-                        contagem[motivo] = (contagem[motivo] || 0) + 1;
-                        const op = row.real_sai || row.real_ent || extrairNumeroOrdem(row.ordem_sai || row.ordem_ent);
-
-                        html += `
-                            <tr style="background-color: #fff1f2;">
-                                <td style="padding-left: 20px; color: #991b1b;"><strong>${config ? config.title : secId}</strong></td>
-                                <td style="font-weight: 900;">${op}</td>
-                                <td>${row.data_pcp || '-'}</td>
-                                <td style="color: #ef4444; font-weight: 800;">${motivo}</td>
-                                <td><span class="badge-status-np" style="background:#fee2e2;color:#991b1b;border-color:#ef4444;">COGI</span></td>
-                                <td style="padding-left: 20px;">${row.acoes || '-'}</td>
-                            </tr>
-                        `;
+                        total++; const motivo = row.impactos || 'Não Informado'; contagem[motivo] = (contagem[motivo] || 0) + 1; const op = row.real_sai || row.real_ent || extrairNumeroOrdem(row.ordem_sai || row.ordem_ent);
+                        html += `<tr style="background-color: #fff1f2;"><td style="padding-left: 20px; color: #991b1b;"><strong>${config ? config.title : secId}</strong></td><td style="font-weight: 900;">${op}</td><td>${row.data_pcp || '-'}</td><td style="color: #ef4444; font-weight: 800;">${motivo}</td><td><span class="badge-status-np" style="background:#fee2e2;color:#991b1b;border-color:#ef4444;">COGI</span></td><td style="padding-left: 20px;">${row.acoes || '-'}</td></tr>`;
                     }
                 });
             });
-
             tbGargalos.innerHTML = html || '<tr><td colspan="6" style="text-align:center; padding: 20px; color: #10b981; font-weight: bold;">Nenhum gargalo ativo no momento. 🎉</td></tr>';
-            if (totalEl) totalEl.innerText = total;
-
-            let htmlMotivos = '';
-            Object.entries(contagem).forEach(([m, qtd]) => {
-                htmlMotivos += `<span style="background: white; border: 1px solid #fca5a5; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; color: #b91c1c;">${m}: ${qtd}</span>`;
-            });
+            if (totalEl) totalEl.innerText = total; let htmlMotivos = '';
+            Object.entries(contagem).forEach(([m, qtd]) => { htmlMotivos += `<span style="background: white; border: 1px solid #fca5a5; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; color: #b91c1c;">${m}: ${qtd}</span>`; });
             if (containerMotivos) containerMotivos.innerHTML = htmlMotivos;
         }
 
-        // =========================================================================
-        // RENDERIZAÇÃO DE TABELAS DINÂMICAS E EVENTOS
-        // =========================================================================
         function renderizarViews() {
-            let activeInput = document.activeElement;
-            let focusSec = activeInput ? activeInput.dataset.sec : null;
-            let focusRow = activeInput ? activeInput.dataset.row : null;
-            let focusField = activeInput ? activeInput.dataset.field : null;
-            let cursorStart = 0, cursorEnd = 0;
-            
-            if (activeInput && (activeInput.tagName === 'INPUT' || activeInput.tagName === 'SELECT')) {
-                cursorStart = activeInput.selectionStart || 0;
-                cursorEnd = activeInput.selectionEnd || 0;
-            }
-
+            let activeInput = document.activeElement; let focusSec = activeInput ? activeInput.dataset.sec : null; let focusRow = activeInput ? activeInput.dataset.row : null; let focusField = activeInput ? activeInput.dataset.field : null; let cursorStart = 0, cursorEnd = 0;
+            if (activeInput && (activeInput.tagName === 'INPUT' || activeInput.tagName === 'SELECT')) { cursorStart = activeInput.selectionStart || 0; cursorEnd = activeInput.selectionEnd || 0; }
             let htmlViews = { solda: '', pintura: '', op1: '', op2: '' };
-
             configuracaoSetores.forEach(sec => {
-                let tbody = '';
-                const limit = DEFAULT_VISIBLES_ROWS; 
-                const totalRows = db.data[sec.id] ? Math.max(db.data[sec.id].length, sec.rows) : sec.rows;
-                const isExpanded = expandedSections[sec.id];
-
+                let tbody = ''; const limit = DEFAULT_VISIBLES_ROWS; const totalRows = db.data[sec.id] ? Math.max(db.data[sec.id].length, sec.rows) : sec.rows; const isExpanded = expandedSections[sec.id];
                 for(let i = 0; i < totalRows; i++) {
-                    const row = db.data[sec.id] ? (db.data[sec.id][i] || getEmptyRow()) : getEmptyRow();
-                    let displayStyle = (!isExpanded && i >= limit) ? 'display: none;' : '';
-                    
-                    let clsEnt = '';
-                    let clsSai = '';
-                    
-                    if (row.stat_ent === 'red' && row.real_ent) clsEnt = 'ordem-diferente';
-                    else if (row.real_ent && row.real_ent.trim() !== '') clsEnt = 'ordem-ok';
-                    else if (row.ordem_ent) clsEnt = 'ordem-programada';
-
-                    if (row.stat_sai === 'red' && row.real_sai) clsSai = 'ordem-diferente';
-                    else if (row.real_sai && row.real_sai.trim() !== '') clsSai = 'ordem-ok';
-                    else if (row.ordem_sai) clsSai = 'ordem-programada';
-                    
-                    let dataClass = row.data_pcp ? 'data-input' : '';
-                    const opEntNum = extrairNumeroOrdem(row.real_ent || row.ordem_ent);
-                    const opSaiNum = extrairNumeroOrdem(row.real_sai || row.ordem_sai);
-
-                    let tdFluxo = `
-                        <td>
-                            <select class="btn-flow-action" onchange="encaminharOrdemManual('${sec.id}', ${i}, this.value)">
-                                <option value="" ${!row.destino_fluxo ? 'selected' : ''}>Destino...</option>
-                                <option value="SAIDA_LINHA_AP" ${row.destino_fluxo === 'SAIDA_LINHA_AP' ? 'selected' : ''}>🏁 Saída Linha (AP)</option>
-                                <option value="SAIDA_LINHA_NP" ${row.destino_fluxo === 'SAIDA_LINHA_NP' ? 'selected' : ''}>⏳ Saída Linha (N/P)</option>
-                                <option value="PINTURA" ${row.destino_fluxo === 'PINTURA' ? 'selected' : ''}>🎨 Pintura</option>
-                                <option value="OP1" ${row.destino_fluxo === 'OP1' ? 'selected' : ''}>🛠️ OP1</option>
-                                <option value="OP2" ${row.destino_fluxo === 'OP2' ? 'selected' : ''}>🏁 OP2</option>
-                            </select>
-                        </td>
-                    `;
-                    
-                    tbody += `
-                        <tr style="${displayStyle}">
-                            <td>
-                                ${row.origem ? `<div class="auto-tag">AUTO: ${row.origem}</div>` : ''}
-                                <input type="text" class="cell-input ${dataClass}" style="color: var(--randon-black); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="data_pcp" value="${row.data_pcp || ''}" placeholder="DD/MM">
-                            </td>
-                            
-                            <td class="${clsEnt}">
-                                <input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_ent" value="${row.ordem_ent || ''}" placeholder="Prog Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}">
-                            </td>
+                    const row = db.data[sec.id] ? (db.data[sec.id][i] || getEmptyRow()) : getEmptyRow(); let displayStyle = (!isExpanded && i >= limit) ? 'display: none;' : '';
+                    let clsEnt = ''; let clsSai = '';
+                    if (row.stat_ent === 'red' && row.real_ent) clsEnt = 'ordem-diferente'; else if (row.real_ent && row.real_ent.trim() !== '') clsEnt = 'ordem-ok'; else if (row.ordem_ent) clsEnt = 'ordem-programada';
+                    if (row.stat_sai === 'red' && row.real_sai) clsSai = 'ordem-diferente'; else if (row.real_sai && row.real_sai.trim() !== '') clsSai = 'ordem-ok'; else if (row.ordem_sai) clsSai = 'ordem-programada';
+                    let dataClass = row.data_pcp ? 'data-input' : ''; const opEntNum = extrairNumeroOrdem(row.real_ent || row.ordem_ent); const opSaiNum = extrairNumeroOrdem(row.real_sai || row.ordem_sai);
+                    let tdFluxo = `<td><select class="btn-flow-action" onchange="encaminharOrdemManual('${sec.id}', ${i}, this.value)"><option value="" ${!row.destino_fluxo ? 'selected' : ''}>Destino...</option><option value="SAIDA_LINHA_AP" ${row.destino_fluxo === 'SAIDA_LINHA_AP' ? 'selected' : ''}>🏁 Saída Linha (AP)</option><option value="SAIDA_LINHA_NP" ${row.destino_fluxo === 'SAIDA_LINHA_NP' ? 'selected' : ''}>⏳ Saída Linha (N/P)</option><option value="PINTURA" ${row.destino_fluxo === 'PINTURA' ? 'selected' : ''}>🎨 Pintura</option><option value="OP1" ${row.destino_fluxo === 'OP1' ? 'selected' : ''}>🛠️ OP1</option><option value="OP2" ${row.destino_fluxo === 'OP2' ? 'selected' : ''}>🏁 OP2</option></select></td>`;
+                    tbody += `<tr style="${displayStyle}">
+                            <td>${row.origem ? `<div class="auto-tag">AUTO: ${row.origem}</div>` : ''}<input type="text" class="cell-input ${dataClass}" style="color: var(--randon-black); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="data_pcp" value="${row.data_pcp || ''}" placeholder="DD/MM"></td>
+                            <td class="${clsEnt}"><input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_ent" value="${row.ordem_ent || ''}" placeholder="Prog Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
                             <td><input type="text" class="cell-input ${opEntNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opEntNum}')" data-sec="${sec.id}" data-row="${i}" data-field="real_ent" value="${row.real_ent || ''}" placeholder="Real Ent" title="${opEntNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
                             <td><input type="number" class="cell-input" style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_ent" value="${row.atr_ent !== undefined ? row.atr_ent : ''}" placeholder="0" title="Atraso manual ou calculado"></td>
                             <td><div class="status-btn"><div class="circle ${row.stat_ent || ''}"></div></div></td>
-                            
-                            <td class="${clsSai}">
-                                <input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_sai" value="${row.ordem_sai || ''}" placeholder="Prog Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}">
-                            </td>
+                            <td class="${clsSai}"><input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" style="color: var(--randon-blue);" data-sec="${sec.id}" data-row="${i}" data-field="ordem_sai" value="${row.ordem_sai || ''}" placeholder="Prog Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
                             <td><input type="text" class="cell-input ${opSaiNum ? 'op-clickable' : ''}" ondblclick="abrirTimelineOP('${opSaiNum}')" data-sec="${sec.id}" data-row="${i}" data-field="real_sai" value="${row.real_sai || ''}" placeholder="Real Sai" title="${opSaiNum ? 'Duplo clique para Genealogia da OP' : ''}"></td>
                             <td><input type="number" class="cell-input" style="color: var(--status-red); font-weight:900;" data-sec="${sec.id}" data-row="${i}" data-field="atr_sai" value="${row.atr_sai !== undefined ? row.atr_sai : ''}" placeholder="0" title="Atraso manual ou calculado"></td>
                             <td><div class="status-btn"><div class="circle ${row.stat_sai || ''}"></div></div></td>
-                            
-                            <td class="${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' || row.aponta === 'NP' ? 'bg-cogi' : '')}">
-                                <select class="cell-input" style="color: inherit;" data-sec="${sec.id}" data-row="${i}" data-field="aponta">
-                                    <option value="" ${row.aponta === '' ? 'selected' : ''}>-</option>
-                                    <option value="OK" ${row.aponta === 'OK' ? 'selected' : ''}>🟢 OK</option>
-                                    <option value="NP" ${row.aponta === 'NP' ? 'selected' : ''}>🔴 NÃO APONTADO</option>
-                                    <option value="COGI" ${row.aponta === 'COGI' ? 'selected' : ''}>🔴 COGI</option>
-                                </select>
-                            </td>
-
+                            <td class="${row.aponta === 'OK' ? 'bg-ok' : (row.aponta === 'COGI' || row.aponta === 'NP' ? 'bg-cogi' : '')}"><select class="cell-input" style="color: inherit;" data-sec="${sec.id}" data-row="${i}" data-field="aponta"><option value="" ${row.aponta === '' ? 'selected' : ''}>-</option><option value="OK" ${row.aponta === 'OK' ? 'selected' : ''}>🟢 OK</option><option value="NP" ${row.aponta === 'NP' ? 'selected' : ''}>🔴 NÃO APONTADO</option><option value="COGI" ${row.aponta === 'COGI' ? 'selected' : ''}>🔴 COGI</option></select></td>
                             ${tdFluxo}
-
-                            <td>
-                                <select class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="impactos">
-                                    <option value="">--</option>
-                                    ${MOTIVOS_GARGALO.map(m => `<option value="${m}" ${row.impactos === m ? 'selected' : ''}>${m}</option>`).join('')}
-                                </select>
-                            </td>
+                            <td><select class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="impactos"><option value="">--</option>${MOTIVOS_GARGALO.map(m => `<option value="${m}" ${row.impactos === m ? 'selected' : ''}>${m}</option>`).join('')}</select></td>
                             <td><input type="text" class="cell-input" data-sec="${sec.id}" data-row="${i}" data-field="acoes" value="${row.acoes || ''}" style="text-align: left; padding-left: 10px;"></td>
-                        </tr>
-                    `;
+                        </tr>`;
                 }
-
                 let btnMarcarTodos = `<button class="btn btn-pcp admin-only" onclick="marcarTodosSetor('${sec.id}', 'OK')" style="padding: 4px 10px; font-size: 10px; margin-left: 10px;" title="Marcar todas as OPs deste setor como OK"><i class="fa-solid fa-check-double"></i> Todos OK</button>`;
-                
-                let btnVerMais = '';
-                if (totalRows > limit) {
-                    let btnText = isExpanded ? 'Ocultar Linhas Excedentes <i class="fa-solid fa-chevron-up"></i>' : `Ver Mais ${totalRows - limit} Linhas <i class="fa-solid fa-chevron-down"></i>`;
-                    btnVerMais = `<div class="ver-mais-container"><button class="btn-expandir" onclick="toggleRows('${sec.id}')">${btnText}</button></div>`;
-                }
-
-                let kpiHeaderHtml = `
-                    <div class="kpi-row-header" style="width: auto;">
-                        <div class="kpi-box" style="padding: 6px 20px;">
-                            <span style="color: #94a3b8;">Programado Total (PCP)</span>
-                            <strong id="kpi-mes-${sec.id}" style="color: white; font-size: 24px;">0</strong>
-                        </div>
-                    </div>
-                `;
-
-                htmlViews[sec.view] += `
-                    <div class="section-card">
-                        <div class="section-header">
-                            <div class="section-title-box" style="width: 100%;">
-                                <h2>${sec.title}</h2>
-                                ${btnMarcarTodos}
-                            </div>
-                            ${kpiHeaderHtml}
-                        </div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th style="width:7%">📅 Data</th>
-                                    <th style="width:11%">📦 Prog. Ent</th>
-                                    <th style="width:8%">✅ Real Ent</th>
-                                    <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
-                                    <th style="width:11%">📦 Prog. Sai</th>
-                                    <th style="width:8%">✅ Real Sai</th>
-                                    <th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th>
-                                    <th style="width:9%">📋 Aponta</th>
-                                    <th style="width:10%">🚀 Destino</th>
-                                    <th style="width:10%">⚠️ Gargalo</th>
-                                    <th style="width:12%; text-align: left; padding-left: 10px;">🛠️ Ações Corretivas</th>
-                                </tr>
-                            </thead>
-                            <tbody>${tbody}</tbody>
-                        </table>
-                        ${btnVerMais}
-                    </div>
-                `;
+                let btnVerMais = ''; if (totalRows > limit) { let btnText = isExpanded ? 'Ocultar Linhas Excedentes <i class="fa-solid fa-chevron-up"></i>' : `Ver Mais ${totalRows - limit} Linhas <i class="fa-solid fa-chevron-down"></i>`; btnVerMais = `<div class="ver-mais-container"><button class="btn-expandir" onclick="toggleRows('${sec.id}')">${btnText}</button></div>`; }
+                let kpiHeaderHtml = `<div class="kpi-row-header" style="width: auto;"><div class="kpi-box" style="padding: 6px 20px;"><span style="color: #94a3b8;">Programado Total (PCP)</span><strong id="kpi-mes-${sec.id}" style="color: white; font-size: 24px;">0</strong></div></div>`;
+                htmlViews[sec.view] += `<div class="section-card"><div class="section-header"><div class="section-title-box" style="width: 100%;"><h2>${sec.title}</h2>${btnMarcarTodos}</div>${kpiHeaderHtml}</div><table><thead><tr><th style="width:7%">📅 Data</th><th style="width:11%">📦 Prog. Ent</th><th style="width:8%">✅ Real Ent</th><th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th><th style="width:11%">📦 Prog. Sai</th><th style="width:8%">✅ Real Sai</th><th style="width:4%">⏱️ Atr</th><th style="width:3%">🔴 St</th><th style="width:9%">📋 Aponta</th><th style="width:10%">🚀 Destino</th><th style="width:10%">⚠️ Gargalo</th><th style="width:12%; text-align: left; padding-left: 10px;">🛠️ Ações Corretivas</th></tr></thead><tbody>${tbody}</tbody></table>${btnVerMais}</div>`;
             });
 
-            ['solda', 'pintura', 'op1', 'op2'].forEach(v => {
-                const el = document.getElementById(`view-${v}`);
-                if(el) el.innerHTML = htmlViews[v];
-            });
-
-            if (focusSec && focusRow && focusField) {
-                let target = document.querySelector(`[data-sec="${focusSec}"][data-row="${focusRow}"][data-field="${focusField}"]`);
-                if (target) {
-                    target.focus();
-                    if(target.tagName === 'INPUT' && target.type !== 'number') target.setSelectionRange(cursorStart, cursorEnd);
-                }
-            }
+            ['solda', 'pintura', 'op1', 'op2'].forEach(v => { const el = document.getElementById(`view-${v}`); if(el) el.innerHTML = htmlViews[v]; });
+            if (focusSec && focusRow && focusField) { let target = document.querySelector(`[data-sec="${focusSec}"][data-row="${focusRow}"][data-field="${focusField}"]`); if (target) { target.focus(); if(target.tagName === 'INPUT' && target.type !== 'number') target.setSelectionRange(cursorStart, cursorEnd); } }
         }
 
-        function toggleRows(secId) {
-            expandedSections[secId] = !expandedSections[secId];
-            renderizarViews();
-        }
+        function toggleRows(secId) { expandedSections[secId] = !expandedSections[secId]; renderizarViews(); }
 
         function forceRenderTodasTabelas() {
-            expurgarLinhasFantasmas();
-            atualizarAtrasosGlobais(); 
-            renderizarEstampariaMatriz();
-            renderizarViews(); 
-            recalcularDashboard(); 
-            updateAnalytics();
-            renderResumoApontamento();
-            renderPainelGargalos();
-            recalcularPainelPremio();
+            expurgarLinhasFantasmas(); atualizarAtrasosGlobais(); renderizarEstampariaMatriz(); renderizarViews(); 
+            recalcularDashboard(); updateAnalytics(); renderResumoApontamento(); renderPainelGargalos(); recalcularPainelPremio();
         }
 
         function expurgarLinhasFantasmas() {
             if (!db.data) db.data = {}; 
-            configuracaoSetores.forEach(sec => {
-                if(!db.data[sec.id]) db.data[sec.id] = [];
-                while (db.data[sec.id].length < sec.rows) {
-                    db.data[sec.id].push(getEmptyRow());
-                }
-            });
+            configuracaoSetores.forEach(sec => { if(!db.data[sec.id]) db.data[sec.id] = []; while (db.data[sec.id].length < sec.rows) { db.data[sec.id].push(getEmptyRow()); } });
         }
 
         document.addEventListener('input', function(e) {
             const target = e.target;
             if (target.classList.contains('estamparia-val-input')) {
-                const linha = target.dataset.rowName;
-                const cIdx = parseInt(target.dataset.colIdx);
-                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-                if (!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {};
-                if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                db.estampariaMatriz.valores[linha][cIdx] = target.value;
-                autoSaveCloud(false);
-                return;
+                const linha = target.dataset.rowName; const cIdx = parseInt(target.dataset.colIdx);
+                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} }; if (!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {}; if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                db.estampariaMatriz.valores[linha][cIdx] = target.value; autoSaveCloud(false); return;
             }
-
             if (target.classList.contains('cell-input')) {
                 const secId = target.dataset.sec, rowIdx = target.dataset.row, field = target.dataset.field;
-                if (!secId || rowIdx === undefined || !field) return;
-                const row = db.data[secId] && db.data[secId][rowIdx];
-                if (!row) return;
-                
-                const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
-                row[field] = val;
-
-                if (field === 'ordem_ent' || field === 'real_ent') row.lock_ent = (val.trim() !== '');
-                if (field === 'ordem_sai' || field === 'real_sai') row.lock_sai = (val.trim() !== '');
-                if (field === 'atr_ent') row.manual_atr_ent = (val.trim() !== '');
-                if (field === 'atr_sai') row.manual_atr_sai = (val.trim() !== '');
-
+                if (!secId || rowIdx === undefined || !field) return; const row = db.data[secId] && db.data[secId][rowIdx]; if (!row) return;
+                const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase(); row[field] = val;
+                if (field === 'ordem_ent' || field === 'real_ent') row.lock_ent = (val.trim() !== ''); if (field === 'ordem_sai' || field === 'real_sai') row.lock_sai = (val.trim() !== ''); if (field === 'atr_ent') row.manual_atr_ent = (val.trim() !== ''); if (field === 'atr_sai') row.manual_atr_sai = (val.trim() !== '');
                 autoSaveCloud(false);
             }
         });
@@ -2012,164 +1576,66 @@
             const target = e.target;
             if (target.classList.contains('pino-nome-input')) {
                 const cat = target.dataset.cat, idx = parseInt(target.dataset.idx);
-                if (db.pinosManual && db.pinosManual[cat] && db.pinosManual[cat][idx]) {
-                    db.pinosManual[cat][idx].modelo = target.value.toUpperCase();
-                    autoSaveCloud(false);
-                    mostrarToast("Modelo alterado!", "fa-pen");
-                }
-                return;
+                if (db.pinosManual && db.pinosManual[cat] && db.pinosManual[cat][idx]) { db.pinosManual[cat][idx].modelo = target.value.toUpperCase(); autoSaveCloud(false); mostrarToast("Modelo alterado!", "fa-pen"); } return;
             }
-
             if (target.classList.contains('pino-val-input')) {
-                const cat = target.dataset.cat, idx = parseInt(target.dataset.idx), type = target.dataset.type;
-                const val = parseInt(target.value) || 0;
+                const cat = target.dataset.cat, idx = parseInt(target.dataset.idx), type = target.dataset.type; const val = parseInt(target.value) || 0;
                 if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
-                if (db.pinosManual[cat] && db.pinosManual[cat][idx]) {
-                    db.pinosManual[cat][idx][type] = val;
-                    if (type === 'ok') db.pinosManual[cat][idx].okManual = true;
-                    recalcularPainelPremio();
-                    autoSaveCloud();
-                    mostrarToast("Pinos atualizados!", "fa-trophy");
-                }
-                return;
+                if (db.pinosManual[cat] && db.pinosManual[cat][idx]) { db.pinosManual[cat][idx][type] = val; if (type === 'ok') db.pinosManual[cat][idx].okManual = true; recalcularPainelPremio(); autoSaveCloud(); mostrarToast("Pinos atualizados!", "fa-trophy"); } return;
             }
-
             if (target.id === 'premio-meta-base-input' || target.id === 'premio-atraso-input') {
                 if (!db.premioConfig) db.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
-                db.premioConfig.metaBase = parseInt(document.getElementById('premio-meta-base-input').value) || 78;
-                db.premioConfig.atraso = parseInt(document.getElementById('premio-atraso-input').value) || 12;
-                recalcularPainelPremio();
-                autoSaveCloud();
-                return;
+                db.premioConfig.metaBase = parseInt(document.getElementById('premio-meta-base-input').value) || 78; db.premioConfig.atraso = parseInt(document.getElementById('premio-atraso-input').value) || 12;
+                recalcularPainelPremio(); autoSaveCloud(); return;
             }
-
             if(target.classList.contains('estamparia-val-input')) {
                 const linha = target.dataset.rowName, cIdx = parseInt(target.dataset.colIdx);
-                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-                if (!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {};
-                if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                db.estampariaMatriz.valores[linha][cIdx] = target.value;
-                autoSaveCloud(); 
-                renderizarEstampariaMatriz();
-                return;
+                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} }; if (!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {}; if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
+                db.estampariaMatriz.valores[linha][cIdx] = target.value; autoSaveCloud(); renderizarEstampariaMatriz(); return;
             }
-
             if(target.dataset && target.dataset.colDate !== undefined) {
-                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-                db.estampariaMatriz.datas[parseInt(target.dataset.colDate)] = target.value;
-                autoSaveCloud(); 
-                renderizarEstampariaMatriz();
-                return;
+                if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} }; db.estampariaMatriz.datas[parseInt(target.dataset.colDate)] = target.value; autoSaveCloud(); renderizarEstampariaMatriz(); return;
             }
-
             if(target.classList.contains('cell-input')) {
-                const secId = target.dataset.sec, rowIdx = parseInt(target.dataset.row), field = target.dataset.field;
-                if (!secId || rowIdx === undefined || isNaN(rowIdx) || !field) return;
-                const row = db.data[secId] && db.data[secId][rowIdx];
-                if (!row) return;
-                const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
-
+                const secId = target.dataset.sec, rowIdx = parseInt(target.dataset.row), field = target.dataset.field; if (!secId || rowIdx === undefined || isNaN(rowIdx) || !field) return;
+                const row = db.data[secId] && db.data[secId][rowIdx]; if (!row) return; const val = (target.tagName === 'SELECT') ? target.value : target.value.toUpperCase();
                 if (field === 'data_pcp') {
-                    if (val.trim() === '') {
-                        row.data_pcp = '';
-                    } else {
-                        const valNormalizado = normalizarDataParaComparacao(val);
-                        row.data_pcp = valNormalizado;
-                        const qtdPuxadas = aplicarMagiaMultipla(secId, rowIdx, valNormalizado);
-                        if (qtdPuxadas > 0) {
-                            mostrarToast(`📦 ${qtdPuxadas} ordens sincronizadas para ${valNormalizado}`, 'fa-calendar-check');
-                        } else {
-                            mostrarToast(`⚠️ Sem ordens programadas para ${valNormalizado}`, 'fa-pen');
-                        }
-                    }
-                    atualizarAtrasosGlobais();
-                    forceRenderTodasTabelas();
-                    autoSaveCloud(true);
-                    return;
+                    if (val.trim() === '') { row.data_pcp = ''; } else { const valNormalizado = normalizarDataParaComparacao(val); row.data_pcp = valNormalizado; const qtdPuxadas = aplicarMagiaMultipla(secId, rowIdx, valNormalizado); if (qtdPuxadas > 0) { mostrarToast(`📦 ${qtdPuxadas} ordens sincronizadas para ${valNormalizado}`, 'fa-calendar-check'); } else { mostrarToast(`⚠️ Sem ordens programadas para ${valNormalizado}`, 'fa-pen'); } }
+                    atualizarAtrasosGlobais(); forceRenderTodasTabelas(); autoSaveCloud(true); return;
                 }
-                
-                row[field] = val;
-                atualizarAtrasosGlobais();
-                forceRenderTodasTabelas(); 
-                autoSaveCloud(true);
+                row[field] = val; atualizarAtrasosGlobais(); forceRenderTodasTabelas(); autoSaveCloud(true);
             }
+            
+            if (target.classList.contains('ex-in')) { autoSaveCloud(false); }
         });
 
         function atualizarAtrasosGlobais() {
             if (!db.data) return;
             Object.keys(db.data).forEach(secId => {
-                const tabela = db.data[secId];
-                if (!tabela) return;
+                const tabela = db.data[secId]; if (!tabela) return;
                 tabela.forEach(row => {
-                    const dataExecEnt = row.data_pcp || row.data_real_ent || db.globalDate || getDataCompleta();
-                    const dataExecSai = row.data_pcp || row.data_real_sai || db.globalDate || getDataCompleta();
-
-                    if (row.real_ent && String(row.real_ent).trim() !== '' && !row.manual_atr_ent) {
-                        const plan = row.plan_ent;
-                        if (plan) {
-                            const cEnt = calcularAtraso(plan, dataExecEnt);
-                            row.atr_ent = cEnt.atraso;
-                            row.stat_ent = cEnt.status;
-                        }
-                    }
-
-                    if (row.real_sai && String(row.real_sai).trim() !== '' && !row.manual_atr_sai) {
-                        const plan = row.plan_sai;
-                        if (plan) {
-                            const cSai = calcularAtraso(plan, dataExecSai);
-                            row.atr_sai = cSai.atraso;
-                            row.stat_sai = cSai.status;
-                        }
-                    }
+                    const dataExecEnt = row.data_pcp || row.data_real_ent || db.globalDate || getDataCompleta(); const dataExecSai = row.data_pcp || row.data_real_sai || db.globalDate || getDataCompleta();
+                    if (row.real_ent && String(row.real_ent).trim() !== '' && !row.manual_atr_ent) { const plan = row.plan_ent; if (plan) { const cEnt = calcularAtraso(plan, dataExecEnt); row.atr_ent = cEnt.atraso; row.stat_ent = cEnt.status; } }
+                    if (row.real_sai && String(row.real_sai).trim() !== '' && !row.manual_atr_sai) { const plan = row.plan_sai; if (plan) { const cSai = calcularAtraso(plan, dataExecSai); row.atr_sai = cSai.atraso; row.stat_sai = cSai.status; } }
                 });
             });
         }
 
-        // ==========================================
-        // UTILIDADES EXTRAS (Firebase, Admin, Export)
-        // ==========================================
         function restaurarTudoUltimoPreenchimento() {
             for (let i = 1; i <= 5; i++) {
                 const raw = localStorage.getItem('erp_randon_v' + i);
-                if (raw) {
-                    try {
-                        db = JSON.parse(raw);
-                        reconstruirIndicesPCP();
-                        forceRenderTodasTabelas();
-                        autoSaveCloud(true);
-                        mostrarToast("Versão recuperada com sucesso!", "fa-wand-magic-sparkles");
-                        return;
-                    } catch(e){}
-                }
-            }
-            alert("Nenhum ponto local disponível para restauração.");
+                if (raw) { try { db = JSON.parse(raw); reconstruirIndicesPCP(); forceRenderTodasTabelas(); autoSaveCloud(true); mostrarToast("Versão recuperada com sucesso!", "fa-wand-magic-sparkles"); return; } catch(e){} }
+            } alert("Nenhum ponto local disponível para restauração.");
         }
 
         function autoSaveCloud(exibirAviso = true) {
-            setStatusConexao('syncing');
-            clearTimeout(saveTimeout);
+            setStatusConexao('syncing'); clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
                 let dbLimpo = sanearParaFirebase(db);
-                try {
-                    let rIdx = parseInt(localStorage.getItem('rolling_idx') || '1');
-                    localStorage.setItem('erp_randon_v' + rIdx, JSON.stringify(dbLimpo));
-                    localStorage.setItem('rolling_idx', rIdx >= 5 ? 1 : rIdx + 1);
-                } catch(e) {
-                    for(let i=6; i<=60; i++) { localStorage.removeItem('erp_randon_v' + i); }
-                    try { localStorage.setItem('erp_randon_v1', JSON.stringify(dbLimpo)); } catch(err){}
-                }
-
-                if(dbRef) {
-                    dbRef.set(dbLimpo).then(() => {
-                        setStatusConexao('online');
-                        if(exibirAviso) mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up");
-                    }).catch(err => {
-                        console.error("ERRO FIREBASE:", err);
-                        setStatusConexao('offline');
-                    });
-                } else {
-                    setStatusConexao('offline');
-                }
+                try { let rIdx = parseInt(localStorage.getItem('rolling_idx') || '1'); localStorage.setItem('erp_randon_v' + rIdx, JSON.stringify(dbLimpo)); localStorage.setItem('rolling_idx', rIdx >= 5 ? 1 : rIdx + 1); } 
+                catch(e) { for(let i=6; i<=60; i++) { localStorage.removeItem('erp_randon_v' + i); } try { localStorage.setItem('erp_randon_v1', JSON.stringify(dbLimpo)); } catch(err){} }
+                if(dbRef) { dbRef.set(dbLimpo).then(() => { setStatusConexao('online'); if(exibirAviso) mostrarToast("Nuvem Atualizada", "fa-cloud-arrow-up"); }).catch(err => { console.error("ERRO FIREBASE:", err); setStatusConexao('offline'); }); } 
+                else { setStatusConexao('offline'); }
             }, 300);
         }
 
@@ -2177,243 +1643,85 @@
             try {
                 if (!firebase.apps.length) {
                     firebase.initializeApp({ 
-                        apiKey: "AIzaSyBM7jVlfBEZrvk53J7wfSjS3N6hlDuEAiA",
-                        authDomain: "a3banco.firebaseapp.com",
-                        projectId: "a3banco",
-                        databaseURL: "https://a3banco-default-rtdb.firebaseio.com",
-                        storageBucket: "a3banco.firebasestorage.app",
-                        messagingSenderId: "316929363871",
-                        appId: "1:316929363871:web:7cc18c48ce47f7933277aa"
+                        apiKey: "AIzaSyBM7jVlfBEZrvk53J7wfSjS3N6hlDuEAiA", authDomain: "a3banco.firebaseapp.com", projectId: "a3banco", databaseURL: "https://a3banco-default-rtdb.firebaseio.com", storageBucket: "a3banco.firebasestorage.app", messagingSenderId: "316929363871", appId: "1:316929363871:web:7cc18c48ce47f7933277aa"
                     });
                 }
-                firebaseDB = firebase.database();
-                dbRef = firebaseDB.ref('operacao_atual'); 
-                
-                firebaseDB.ref('.info/connected').on('value', snap => {
-                    if (snap.val() === true) setStatusConexao('online');
-                    else setStatusConexao('offline');
-                });
-
+                firebaseDB = firebase.database(); dbRef = firebaseDB.ref('operacao_atual'); 
+                firebaseDB.ref('.info/connected').on('value', snap => { if (snap.val() === true) setStatusConexao('online'); else setStatusConexao('offline'); });
                 dbRef.on('value', (snapshot) => {
                     const nuvemDb = snapshot.val();
                     if(nuvemDb) { 
-                        if (!nuvemDb.data) nuvemDb.data = {}; 
-                        if (!nuvemDb.basePCP) nuvemDb.basePCP = {};
-                        if (!nuvemDb.premioConfig) nuvemDb.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
-                        db = nuvemDb; 
-                        reconstruirIndicesPCP();
-                        expurgarLinhasFantasmas(); 
-                        atualizarDiasEstamparia();
-                        forceRenderTodasTabelas();
+                        if (!nuvemDb.data) nuvemDb.data = {}; if (!nuvemDb.basePCP) nuvemDb.basePCP = {}; if (!nuvemDb.premioConfig) nuvemDb.premioConfig = { metaBase: 78, atraso: 12, diasUteis: 21 };
+                        db = nuvemDb; reconstruirIndicesPCP(); expurgarLinhasFantasmas(); atualizarDiasEstamparia(); forceRenderTodasTabelas();
                     }
                 });
             } catch (e) {
-                setStatusConexao('offline');
-                const local = localStorage.getItem('erp_randon_v1') || localStorage.getItem('erp_randon_v49'); 
-                if(local) { 
-                    db = JSON.parse(local); 
-                    reconstruirIndicesPCP();
-                    atualizarDiasEstamparia(); 
-                    forceRenderTodasTabelas(); 
-                }
+                setStatusConexao('offline'); const local = localStorage.getItem('erp_randon_v1') || localStorage.getItem('erp_randon_v49'); 
+                if(local) { db = JSON.parse(local); reconstruirIndicesPCP(); atualizarDiasEstamparia(); forceRenderTodasTabelas(); }
             }
-        }
-
-        function toggleAdmin() {
-            const modal = document.getElementById('modal-auth');
-            if (isAdmin) {
-                isAdmin = false;
-                document.body.classList.remove('admin-mode');
-                document.body.classList.add('readonly-mode');
-                document.getElementById('lock-icon').className = 'fa-solid fa-lock auth-icon';
-                document.getElementById('auth-label').innerText = 'Visualização';
-                mostrarToast('Modo visualização ativado', 'fa-eye');
-            } else {
-                modal.classList.toggle('active');
-                document.getElementById('senha-admin').value = '';
-                document.getElementById('senha-admin').focus();
-            }
-        }
-
-        function fecharModalAuth() { document.getElementById('modal-auth').classList.remove('active'); }
-        function fecharModalPCP() { document.getElementById('modal-pcp').classList.remove('active'); }
-        function abrirModalPCP() { if (!isAdmin) { toggleAdmin(); return; } document.getElementById('modal-pcp').classList.add('active'); }
-
-        function verificarSenha() {
-            const senha = document.getElementById('senha-admin').value;
-            if (senha === SENHA_ADMIN) {
-                isAdmin = true;
-                document.body.classList.remove('readonly-mode');
-                document.body.classList.add('admin-mode');
-                document.getElementById('lock-icon').className = 'fa-solid fa-unlock auth-icon';
-                document.getElementById('auth-label').innerText = 'Admin';
-                fecharModalAuth();
-                mostrarToast('Modo Administrador ativado!', 'fa-shield-halved');
-                forceRenderTodasTabelas();
-            } else {
-                alert('Senha incorreta! Tente novamente.');
-                document.getElementById('senha-admin').value = '';
-                document.getElementById('senha-admin').focus();
-            }
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-            const container = document.getElementById(`view-${tabId}`);
-            if (container) container.classList.add('active');
-            const btn = document.getElementById(`tab-btn-${tabId}`);
-            if (btn) btn.classList.add('active');
-            if (tabId === 'premio') recalcularPainelPremio();
-            if (tabId === 'analytics') updateAnalytics();
-            if (tabId === 'apontamento') renderResumoApontamento();
-            if (tabId === 'estamparia') updateEstampariaChart();
         }
 
         function initCharts() {
-            Chart.defaults.font.family = "'Inter', sans-serif"; 
-            Chart.defaults.color = "#94a3b8";
-            chartsObj.pareto = new Chart(document.getElementById('chartPareto'), { 
-                type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } } 
-            });
-            chartsObj.line = new Chart(document.getElementById('chartEvolucao'), { 
-                type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3, scales: { y: { beginAtZero: true } } } 
-            });
-            chartsObj.pie = new Chart(document.getElementById('chartStatus'), { 
-                type: 'doughnut', data: { labels: ['OK', 'COGI', 'Não Apontado'], datasets: [{ data: [0,0,0], backgroundColor: ['#10b981', '#ef4444', '#f59e0b'] }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'bottom' } } } 
-            });
-            chartsObj.aderencia = new Chart(document.getElementById('chartAderencia'), { 
-                type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { position: 'bottom' } } } 
-            });
-            chartsObj.estamparia = new Chart(document.getElementById('chartEstamparia'), { 
-                type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3, scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'bottom' } } } 
-            });
+            Chart.defaults.font.family = "'Inter', sans-serif"; Chart.defaults.color = "#94a3b8";
+            chartsObj.pareto = new Chart(document.getElementById('chartPareto'), { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } } });
+            chartsObj.line = new Chart(document.getElementById('chartEvolucao'), { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3, scales: { y: { beginAtZero: true } } } });
+            chartsObj.pie = new Chart(document.getElementById('chartStatus'), { type: 'doughnut', data: { labels: ['OK', 'COGI', 'Não Apontado'], datasets: [{ data: [0,0,0], backgroundColor: ['#10b981', '#ef4444', '#f59e0b'] }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: { legend: { position: 'bottom' } } } });
+            chartsObj.aderencia = new Chart(document.getElementById('chartAderencia'), { type: 'bar', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } }, plugins: { legend: { position: 'bottom' } } } });
+            chartsObj.estamparia = new Chart(document.getElementById('chartEstamparia'), { type: 'line', data: { labels: [], datasets: [] }, options: { responsive: true, maintainAspectRatio: false, tension: 0.3, scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'bottom' } } } });
         }
 
         function updateEstampariaChart() {
             if(!chartsObj.estamparia) return;
-            if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-            if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) atualizarDiasEstamparia();
-            
-            const datas = db.estampariaMatriz.datas || ['','','','',''];
-            chartsObj.estamparia.data.labels = datas;
-            const datasets = [];
-            const cores = { 
-                "Atraso Programação": "#ef4444", "Estamparia Geral": "#3b82f6", "Laser": "#10b981", 
-                "Linea": "#f59e0b", "Dobra": "#8b5cf6", "PRM - Carbo": "#ec4899", "115 - CDL": "#14b8a6", "160 - Externo": "#64748b" 
-            };
+            if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} }; if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) atualizarDiasEstamparia();
+            const datas = db.estampariaMatriz.datas || ['','','','','']; chartsObj.estamparia.data.labels = datas; const datasets = [];
+            const cores = { "Atraso Programação": "#ef4444", "Estamparia Geral": "#3b82f6", "Laser": "#10b981", "Linea": "#f59e0b", "Dobra": "#8b5cf6", "PRM - Carbo": "#ec4899", "115 - CDL": "#14b8a6", "160 - Externo": "#64748b" };
             estampariaLinhas.forEach(linha => {
                 if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
-                const valArray = db.estampariaMatriz.valores[linha];
-                const numData = valArray.map(v => parseFloat(v) || 0);
-                datasets.push({
-                    label: linha, data: numData, borderColor: cores[linha] || "#cbd5e1",
-                    backgroundColor: 'transparent', borderWidth: 3, pointBackgroundColor: cores[linha] || "#cbd5e1",
-                    pointRadius: 5, hidden: !["Atraso Programação", "Estamparia Geral", "Laser", "Dobra"].includes(linha)
-                });
+                const valArray = db.estampariaMatriz.valores[linha]; const numData = valArray.map(v => parseFloat(v) || 0);
+                datasets.push({ label: linha, data: numData, borderColor: cores[linha] || "#cbd5e1", backgroundColor: 'transparent', borderWidth: 3, pointBackgroundColor: cores[linha] || "#cbd5e1", pointRadius: 5, hidden: !["Atraso Programação", "Estamparia Geral", "Laser", "Dobra"].includes(linha) });
             });
-            chartsObj.estamparia.data.datasets = datasets;
-            chartsObj.estamparia.update();
+            chartsObj.estamparia.data.datasets = datasets; chartsObj.estamparia.update();
         }
 
         function iniciarModoTV() {
-            isTVMode = true; document.body.classList.add('tv-mode');
-            let currentTabIdx = 0; let progress = 0;
-            const TABS_ANDON = ['premio', 'solda', 'pintura', 'op1', 'op2', 'analytics'];
-            const duracaoPorTab = 15000; const step = 100;
-            
-            switchTab(TABS_ANDON[currentTabIdx]);
-            clearInterval(tvInterval);
-            tvInterval = setInterval(() => {
-                progress += (step / duracaoPorTab) * 100;
-                const bar = document.getElementById('tv-progress-bar');
-                if (bar) bar.style.width = `${progress}%`;
-                
-                if (progress >= 100) {
-                    progress = 0;
-                    currentTabIdx = (currentTabIdx + 1) % TABS_ANDON.length;
-                    switchTab(TABS_ANDON[currentTabIdx]);
-                }
-            }, step);
+            isTVMode = true; document.body.classList.add('tv-mode'); let currentTabIdx = 0; let progress = 0; const TABS_ANDON = ['premio', 'solda', 'pintura', 'op1', 'op2', 'analytics']; const duracaoPorTab = 15000; const step = 100;
+            switchTab(TABS_ANDON[currentTabIdx]); clearInterval(tvInterval);
+            tvInterval = setInterval(() => { progress += (step / duracaoPorTab) * 100; const bar = document.getElementById('tv-progress-bar'); if (bar) bar.style.width = `${progress}%`; if (progress >= 100) { progress = 0; currentTabIdx = (currentTabIdx + 1) % TABS_ANDON.length; switchTab(TABS_ANDON[currentTabIdx]); } }, step);
         }
 
-        function sairModoTV() {
-            isTVMode = false; document.body.classList.remove('tv-mode');
-            clearInterval(tvInterval);
-            const bar = document.getElementById('tv-progress-bar');
-            if (bar) bar.style.width = '0%';
-        }
+        function sairModoTV() { isTVMode = false; document.body.classList.remove('tv-mode'); clearInterval(tvInterval); const bar = document.getElementById('tv-progress-bar'); if (bar) bar.style.width = '0%'; }
 
         function gerarPDFExecutivo() {
             const elemento = document.querySelector('.view-container.active') || document.body;
-            const opt = {
-                margin: 5, filename: `Relatorio_Producao_Randon_${(db.globalDate || getDataAtualFormatada()).replace(/[\/\.]/g, '-')}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-            };
-            mostrarToast('Gerando PDF...', 'fa-file-pdf');
-            html2pdf().set(opt).from(elemento).save().then(() => {
-                mostrarToast('PDF baixado com sucesso!', 'fa-circle-check');
-            }).catch(err => {
-                console.error(err); mostrarToast('Erro ao gerar PDF', 'fa-triangle-exclamation');
-            });
+            const opt = { margin: 5, filename: `Relatorio_Producao_Randon_${(db.globalDate || getDataAtualFormatada()).replace(/[\/\.]/g, '-')}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } };
+            mostrarToast('Gerando PDF...', 'fa-file-pdf'); html2pdf().set(opt).from(elemento).save().then(() => { mostrarToast('PDF baixado com sucesso!', 'fa-circle-check'); }).catch(err => { console.error(err); mostrarToast('Erro ao gerar PDF', 'fa-triangle-exclamation'); });
         }
 
         function exportarExcelProducao() {
-            let csvContent = "\uFEFF";
-            csvContent += "Macro Setor;Setor;Data Referencia;OP Entrada;Real Entrada;Atraso Ent (Dias Uteis);OP Saida;Real Saida;Atraso Sai (Dias Uteis);Status Apontamento;Destino;Motivo Gargalo;Acoes Corretivas / Observacoes\n";
-
+            let csvContent = "\uFEFF"; csvContent += "Macro Setor;Setor;Data Referencia;OP Entrada;Real Entrada;Atraso Ent (Dias Uteis);OP Saida;Real Saida;Atraso Sai (Dias Uteis);Status Apontamento;Destino;Motivo Gargalo;Acoes Corretivas / Observacoes\n";
             configuracaoSetores.forEach(sec => {
                 const linhas = db.data[sec.id] || [];
                 linhas.forEach(r => {
                     const temDado = r.ordem_ent || r.ordem_sai || r.real_ent || r.real_sai || r.data_pcp || r.atr_ent || r.atr_sai;
                     if (temDado) {
-                        const rowCsv = [
-                            sec.view.toUpperCase(), `"${sec.title}"`, `"${r.data_pcp || ''}"`, `"${r.ordem_ent || ''}"`,
-                            `"${r.real_ent || ''}"`, `"${r.atr_ent || 0}"`, `"${r.ordem_sai || ''}"`, `"${r.real_sai || ''}"`,
-                            `"${r.atr_sai || 0}"`, `"${r.aponta || 'PENDENTE'}"`, `"${r.destino_fluxo || ''}"`,
-                            `"${r.impactos || ''}"`, `"${(r.acoes || '').replace(/"/g, '""')}"`
-                        ];
+                        const rowCsv = [ sec.view.toUpperCase(), `"${sec.title}"`, `"${r.data_pcp || ''}"`, `"${r.ordem_ent || ''}"`, `"${r.real_ent || ''}"`, `"${r.atr_ent || 0}"`, `"${r.ordem_sai || ''}"`, `"${r.real_sai || ''}"`, `"${r.atr_sai || 0}"`, `"${r.aponta || 'PENDENTE'}"`, `"${r.destino_fluxo || ''}"`, `"${r.impactos || ''}"`, `"${(r.acoes || '').replace(/"/g, '""')}"` ];
                         csvContent += rowCsv.join(";") + "\n";
                     }
                 });
             });
-
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a"); const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url); link.setAttribute("download", `Producao_Randon_${(db.globalDate || getDataAtualFormatada()).replace(/[\/\.]/g,'-')}.csv`);
-            document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            mostrarToast("Planilha Excel (.CSV) Gerada!", "fa-file-excel");
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); const url = URL.createObjectURL(blob); link.setAttribute("href", url); link.setAttribute("download", `Producao_Randon_${(db.globalDate || getDataAtualFormatada()).replace(/[\/\.]/g,'-')}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link); mostrarToast("Planilha Excel (.CSV) Gerada!", "fa-file-excel");
         }
 
         function marcarTodosSetor(secId, status) {
-            if (!isAdmin) { toggleAdmin(); return; }
-            if (!db.data[secId]) return;
-            let count = 0;
-            db.data[secId].forEach(row => {
-                if (row.ordem_ent || row.ordem_sai || row.real_ent || row.real_sai) {
-                    row.aponta = status;
-                    if (!row.real_sai && row.ordem_sai) row.real_sai = extrairNumeroOrdem(row.ordem_sai);
-                    count++;
-                }
-            });
-            forceRenderTodasTabelas(); autoSaveCloud(true);
-            mostrarToast(`${count} itens marcados como ${status} no setor!`, 'fa-check-double');
+            if (!isAdmin) { toggleAdmin(); return; } if (!db.data[secId]) return; let count = 0;
+            db.data[secId].forEach(row => { if (row.ordem_ent || row.ordem_sai || row.real_ent || row.real_sai) { row.aponta = status; if (!row.real_sai && row.ordem_sai) row.real_sai = extrairNumeroOrdem(row.ordem_sai); count++; } });
+            forceRenderTodasTabelas(); autoSaveCloud(true); mostrarToast(`${count} itens marcados como ${status} no setor!`, 'fa-check-double');
         }
 
         function apagarProgramacaoPCP() {
             if(!isAdmin) return toggleAdmin();
             const confirmacao = confirm("ATENÇÃO: Deseja apagar TODAS as Ordens, Datas e Programações da fábrica inteira para iniciar um NOVO MÊS?");
-            if (confirmacao) {
-                db.basePCP = {}; reconstruirIndicesPCP();
-                if(!db.data) db.data = {};
-                configuracaoSetores.forEach(sec => {
-                    db.data[sec.id] = [];
-                    for(let i=0; i<sec.rows; i++) { db.data[sec.id].push(getEmptyRow()); }
-                });
-                forceRenderTodasTabelas(); autoSaveCloud(true);
-                mostrarToast("Programação PCP Zerada!", "fa-trash-can");
-            }
+            if (confirmacao) { db.basePCP = {}; reconstruirIndicesPCP(); if(!db.data) db.data = {}; configuracaoSetores.forEach(sec => { db.data[sec.id] = []; for(let i=0; i<sec.rows; i++) { db.data[sec.id].push(getEmptyRow()); } }); forceRenderTodasTabelas(); autoSaveCloud(true); mostrarToast("Programação PCP Zerada!", "fa-trash-can"); }
         }
 
         function zerarApontamentos() {
@@ -2422,81 +1730,40 @@
             if (confirmacao) {
                 if(!db.data) db.data = {};
                 Object.keys(db.data).forEach(tabelaKey => {
-                    db.data[tabelaKey].forEach(row => {
-                        row.aponta = ''; row.impactos = ''; row.acoes = ''; row.destino_fluxo = '';
-                        row.atr_ent = ''; row.atr_sai = ''; row.manual_atr_ent = false; row.manual_atr_sai = false;
-                        row.stat_ent = ''; row.stat_sai = ''; row.real_ent = ''; row.real_sai = ''; row.data_pcp = '';
-                        row.data_real_ent = ''; row.data_real_sai = ''; row.ordem_ent = ''; row.ordem_sai = '';
-                        row.lock_ent = false; row.lock_sai = false;
-                    });
-                });
-                forceRenderTodasTabelas(); autoSaveCloud(true);
-                mostrarToast("Lousa de apontamentos zerada!", "fa-eraser");
+                    db.data[tabelaKey].forEach(row => { row.aponta = ''; row.impactos = ''; row.acoes = ''; row.destino_fluxo = ''; row.atr_ent = ''; row.atr_sai = ''; row.manual_atr_ent = false; row.manual_atr_sai = false; row.stat_ent = ''; row.stat_sai = ''; row.real_ent = ''; row.real_sai = ''; row.data_pcp = ''; row.data_real_ent = ''; row.data_real_sai = ''; row.ordem_ent = ''; row.ordem_sai = ''; row.lock_ent = false; row.lock_sai = false; });
+                }); forceRenderTodasTabelas(); autoSaveCloud(true); mostrarToast("Lousa de apontamentos zerada!", "fa-eraser");
             }
         }
 
         function abrirTimelineOP(numeroOrdem) {
-            const num = extrairNumeroOrdem(numeroOrdem);
-            if (!num) return;
-
-            document.getElementById('timeline-op-title').innerText = num;
-            const container = document.getElementById('timeline-body');
-            let steps = [];
-
-            let pcpInfo = buscarOrdemPorNumero(null, num);
-            if (pcpInfo) {
-                steps.push({
-                    setor: `PCP / Programação (${(pcpInfo.sec || 'GERAL').toUpperCase()})`, status: 'completed', icon: 'fa-calendar-check',
-                    detalhes: `Produto: ${pcpInfo.prod || 'N/D'} | Plan Ent: ${pcpInfo.plan_ent || '-'} | Plan Saí: ${pcpInfo.plan_sai || '-'}`
-                });
-            }
-
+            const num = extrairNumeroOrdem(numeroOrdem); if (!num) return; document.getElementById('timeline-op-title').innerText = num; const container = document.getElementById('timeline-body'); let steps = []; let pcpInfo = buscarOrdemPorNumero(null, num);
+            if (pcpInfo) { steps.push({ setor: `PCP / Programação (${(pcpInfo.sec || 'GERAL').toUpperCase()})`, status: 'completed', icon: 'fa-calendar-check', detalhes: `Produto: ${pcpInfo.prod || 'N/D'} | Plan Ent: ${pcpInfo.plan_ent || '-'} | Plan Saí: ${pcpInfo.plan_sai || '-'}` }); }
             configuracaoSetores.forEach(sec => {
                 const linhas = db.data[sec.id] || [];
                 linhas.forEach(r => {
-                    const ent = extrairNumeroOrdem(r.real_ent || r.ordem_ent);
-                    const sai = extrairNumeroOrdem(r.real_sai || r.ordem_sai);
+                    const ent = extrairNumeroOrdem(r.real_ent || r.ordem_ent); const sai = extrairNumeroOrdem(r.real_sai || r.ordem_sai);
                     if (ent === num || sai === num) {
                         let st = 'completed'; let desc = '';
-                        if (r.aponta === 'OK') desc = '🟢 Concluído e Liberado';
-                        else if (r.aponta === 'COGI') desc = `🔴 Gargalo Ativo: ${r.impactos || 'Sem motivo'}`;
-                        else { desc = '⏳ Em Produção'; st = 'in-progress'; }
-
-                        steps.push({
-                            setor: sec.title, status: st, icon: st === 'completed' ? 'fa-check' : 'fa-gear fa-spin',
-                            detalhes: `Entrada: ${r.data_real_ent || r.data_pcp || '-'} | Saída: ${r.data_real_sai || '-'} | Status: ${desc}`
-                        });
+                        if (r.aponta === 'OK') desc = '🟢 Concluído e Liberado'; else if (r.aponta === 'COGI') desc = `🔴 Gargalo Ativo: ${r.impactos || 'Sem motivo'}`; else { desc = '⏳ Em Produção'; st = 'in-progress'; }
+                        steps.push({ setor: sec.title, status: st, icon: st === 'completed' ? 'fa-check' : 'fa-gear fa-spin', detalhes: `Entrada: ${r.data_real_ent || r.data_pcp || '-'} | Saída: ${r.data_real_sai || '-'} | Status: ${desc}` });
                     }
                 });
             });
-
-            if (steps.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--randon-grey); font-weight:700;">Nenhum registro histórico estruturado para a OP ${num}.</div>`;
-            } else {
-                container.innerHTML = steps.map(s => `
-                    <div class="timeline-step ${s.status}">
-                        <div class="timeline-icon"><i class="fa-solid ${s.icon}"></i></div>
-                        <div class="timeline-content">
-                            <div class="timeline-title"><span>${s.setor}</span></div>
-                            <div class="timeline-dates">${s.detalhes}</div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
+            if (steps.length === 0) { container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--randon-grey); font-weight:700;">Nenhum registro histórico estruturado para a OP ${num}.</div>`; } 
+            else { container.innerHTML = steps.map(s => `<div class="timeline-step ${s.status}"><div class="timeline-icon"><i class="fa-solid ${s.icon}"></i></div><div class="timeline-content"><div class="timeline-title"><span>${s.setor}</span></div><div class="timeline-dates">${s.detalhes}</div></div></div>`).join(''); }
             document.getElementById('modal-timeline').classList.add('active');
         }
 
         function fecharModalTimeline() { document.getElementById('modal-timeline').classList.remove('active'); }
 
-        // ==========================================
-        // INICIALIZAÇÃO
-        // ==========================================
         window.addEventListener('DOMContentLoaded', () => {
             const dataInicial = getDataCompleta();
             const elDate = document.getElementById('global-date');
             if (elDate) elDate.value = dataInicial;
             db.globalDate = dataInicial;
+
+            // Injeta o novo layout do excel com JS
+            gerarTabelasExcel();
 
             initCharts(); initFirebase(); forceRenderTodasTabelas();
         });
