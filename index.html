@@ -22,7 +22,6 @@
             --randon-blue: #3b82f6;
             --randon-blue-soft: #eff6ff;
             --randon-grey: #64748b;
-            --randon-dark: #0f172a;
             --bg-body: #f7f8fa;
             --bg-card: #ffffff;
             --border-light: #eef1f5;
@@ -36,7 +35,6 @@
             --status-orange-soft: #fffbeb;
             --status-red: #ef4444;
             --status-red-soft: #fef2f2;
-            --gold: #f59e0b;
             --shadow-sm: 0 1px 2px rgba(15,23,42,.04);
             --shadow-md: 0 1px 3px rgba(15,23,42,.06), 0 4px 12px -2px rgba(15,23,42,.06);
             --shadow-lg: 0 4px 16px -4px rgba(15,23,42,.08), 0 12px 32px -8px rgba(15,23,42,.08);
@@ -45,51 +43,42 @@
             --radius-lg: 16px;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
-        body { 
-            background-color: var(--bg-body); 
-            color: var(--text-primary); 
-            font-size: 16px; 
-            overflow-y: scroll; 
-            -webkit-font-smoothing: antialiased;
-        }
+        body { background-color: var(--bg-body); color: var(--text-primary); font-size: 16px; overflow-y: scroll; -webkit-font-smoothing: antialiased; }
         body.readonly-mode .cell-input, body.readonly-mode .meta-input, body.readonly-mode .estamparia-val-input,
         body.readonly-mode .premio-config-input, body.readonly-mode .pino-val-input, body.readonly-mode .pino-nome-input,
-        body.readonly-mode .btn-flow-action, body.readonly-mode .btn-apontar-rapido, body.readonly-mode .ex-in,
-        body.readonly-mode .op2-dia-input, body.readonly-mode .desc-input-dia, body.readonly-mode .desc-input-diario { 
+        body.readonly-mode .btn-flow-action, body.readonly-mode .ex-in,
+        body.readonly-mode .op2-dia-input, body.readonly-mode .desc-input-dia, body.readonly-mode .desc-input-diario,
+        body.readonly-mode .meta-mes-input { 
             pointer-events: none !important; background-color: transparent !important; 
         }
         .admin-only { display: none !important; }
         body.admin-mode .admin-only { display: flex !important; }
         body.admin-mode .btn.admin-only { display: inline-flex !important; }
 
+        .sync-indicator {
+            position: fixed; top: 90px; right: 20px; z-index: 1500;
+            background: rgba(15,23,42,.9); color: white; padding: 8px 16px;
+            border-radius: 20px; font-size: 12px; font-weight: 800;
+            display: none; align-items: center; gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,.3);
+        }
+        .sync-indicator.active { display: flex; }
+        .sync-indicator i { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
         /* NAVBAR */
         .navbar { 
-            background-color: #0f172a; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 0 24px; 
-            height: 84px; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            box-shadow: 0 4px 20px rgba(15,23,42,.15);
+            background-color: #0f172a; display: flex; justify-content: space-between; 
+            align-items: center; padding: 0 24px; height: 84px; position: sticky; 
+            top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(15,23,42,.15);
         }
         .nav-left { display: flex; align-items: center; gap: 16px; height: 100%; }
-        .logo-card { 
-            background: #ffffff; padding: 6px 14px; border-radius: 10px; display: flex; 
-            align-items: center; justify-content: center; height: 56px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,.2); transition: .2s; cursor: pointer; 
-        }
+        .logo-card { background: #ffffff; padding: 6px 14px; border-radius: 10px; display: flex; align-items: center; justify-content: center; height: 56px; box-shadow: 0 2px 8px rgba(0,0,0,.2); transition: .2s; cursor: pointer; }
         .logo-card:hover { transform: translateY(-1px); }
         .logo-card svg { height: 44px; width: auto; display: block; }
         .nav-tabs { display: flex; height: 100%; overflow-x: auto; scrollbar-width: none; gap: 6px; }
         .nav-tabs::-webkit-scrollbar { display: none; }
-        .nav-tab { 
-            display: flex; align-items: center; gap: 8px; padding: 0 20px; font-size: 15px; 
-            font-weight: 800; color: #94a3b8; cursor: pointer; border-radius: 8px; 
-            transition: .2s; margin: 16px 0; white-space: nowrap; 
-        }
+        .nav-tab { display: flex; align-items: center; gap: 8px; padding: 0 20px; font-size: 15px; font-weight: 800; color: #94a3b8; cursor: pointer; border-radius: 8px; transition: .2s; margin: 16px 0; white-space: nowrap; }
         .nav-tab:hover { color: white; background-color: rgba(255,255,255,.06); }
         .nav-tab.active { color: white; background-color: rgba(255,255,255,.15); box-shadow: inset 0 -3px 0 var(--randon-red); }
         .nav-tab.tab-premio { color: #fde047; }
@@ -97,59 +86,28 @@
         .nav-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         
         .search-box-container { position: relative; display: flex; align-items: center; }
-        .search-box-container input { 
-            background-color: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.08); 
-            padding: 10px 14px 10px 36px; border-radius: 8px; color: white; 
-            font-size: 14px; font-weight: 700; outline: none; width: 160px; transition: .2s; 
-        }
-        .search-box-container input:focus { 
-            width: 220px; background-color: rgba(255,255,255,.15); 
-            border-color: var(--randon-blue); box-shadow: 0 0 0 3px rgba(59,130,246,.2); 
-        }
+        .search-box-container input { background-color: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.08); padding: 10px 14px 10px 36px; border-radius: 8px; color: white; font-size: 14px; font-weight: 700; outline: none; width: 160px; transition: .2s; }
+        .search-box-container input:focus { width: 220px; background-color: rgba(255,255,255,.15); border-color: var(--randon-blue); box-shadow: 0 0 0 3px rgba(59,130,246,.2); }
         .search-box-container input::placeholder { color: #64748b; }
         .search-box-container i { position: absolute; left: 12px; color: #64748b; font-size: 13px; pointer-events: none; }
 
-        .net-badge { 
-            display: flex; align-items: center; gap: 6px; padding: 8px 14px; 
-            border-radius: 20px; font-size: 12px; font-weight: 800; 
-            text-transform: uppercase; letter-spacing: .3px; 
-        }
+        .net-badge { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .3px; }
         .net-badge.online { background-color: rgba(16,185,129,.12); color: #34d399; }
         .net-badge.syncing { background-color: rgba(245,158,11,.12); color: #fbbf24; animation: pulse 1.2s infinite; }
         .net-badge.offline { background-color: rgba(239,68,68,.12); color: #f87171; }
         @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
 
-        .global-date-container { 
-            display: flex; align-items: center; gap: 4px; 
-            background-color: rgba(255,255,255,.06); padding: 6px 10px; 
-            border-radius: 8px; border: 1px solid rgba(255,255,255,.06); 
-        }
+        .global-date-container { display: flex; align-items: center; gap: 4px; background-color: rgba(255,255,255,.06); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.06); }
         .global-date-container label { font-weight: 800; color: #64748b; text-transform: uppercase; font-size: 11px; letter-spacing: .5px; }
-        .global-date-container input { 
-            border: none; background: transparent; font-weight: 800; font-size: 16px; 
-            outline: none; color: #60a5fa; cursor: pointer; width: 100px; 
-            text-align: center; font-variant-numeric: tabular-nums;
-        }
+        .global-date-container input { border: none; background: transparent; font-weight: 800; font-size: 16px; outline: none; color: #60a5fa; cursor: pointer; width: 100px; text-align: center; font-variant-numeric: tabular-nums; }
         .global-date-container input[type="month"] { color: #fde047; width: 155px; cursor: pointer; font-size: 15px; }
-        .btn-date-nav { 
-            background: rgba(255,255,255,.06); border: none; color: #cbd5e1; 
-            border-radius: 6px; padding: 6px 10px; cursor: pointer; font-size: 12px; transition: .2s; 
-        }
+        .btn-date-nav { background: rgba(255,255,255,.06); border: none; color: #cbd5e1; border-radius: 6px; padding: 6px 10px; cursor: pointer; font-size: 12px; transition: .2s; }
         .btn-date-nav:hover { background: var(--randon-blue); color: white; }
 
-        .auth-container { 
-            display: flex; align-items: center; gap: 6px; 
-            background-color: rgba(255,255,255,.06); padding: 10px 14px; border-radius: 8px; 
-            cursor: pointer; border: 1px solid rgba(255,255,255,.06); 
-            color: #cbd5e1; font-weight: 800; font-size: 13px; 
-        }
+        .auth-container { display: flex; align-items: center; gap: 6px; background-color: rgba(255,255,255,.06); padding: 10px 14px; border-radius: 8px; cursor: pointer; border: 1px solid rgba(255,255,255,.06); color: #cbd5e1; font-weight: 800; font-size: 13px; }
         .auth-container:hover { background-color: rgba(255,255,255,.12); color: white; }
 
-        .btn { 
-            padding: 10px 16px; border: none; border-radius: 8px; font-weight: 800; 
-            font-size: 13px; cursor: pointer; transition: .2s; display: flex; 
-            align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: .3px; 
-        }
+        .btn { padding: 10px 16px; border: none; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; transition: .2s; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: .3px; }
         .btn-pdf { background-color: #334155; color: white; }
         .btn-pdf:hover { background-color: #1e293b; }
         .btn-excel { background-color: #047857; color: white; }
@@ -166,62 +124,28 @@
         .btn-orange:hover { filter: brightness(.92); }
 
         /* MODAIS */
-        .modal-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(15,23,42,.7); z-index: 2000; justify-content: center; 
-            align-items: center; backdrop-filter: blur(6px); 
-        }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,.7); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(6px); }
         .modal-overlay.active { display: flex; animation: fadeIn .2s; }
-        .modal-content { 
-            background: white; padding: 32px; border-radius: var(--radius-lg); 
-            width: 850px; max-width: 95%; box-shadow: 0 25px 50px rgba(0,0,0,.4); 
-            max-height: 90vh; overflow-y: auto; 
-        }
+        .modal-content { background: white; padding: 32px; border-radius: var(--radius-lg); width: 850px; max-width: 95%; box-shadow: 0 25px 50px rgba(0,0,0,.4); max-height: 90vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .modal-header h3 { font-size: 22px; color: var(--text-primary); font-weight: 900; letter-spacing: -.3px; }
         .close-btn { cursor: pointer; font-size: 26px; color: #cbd5e1; background: none; border: none; transition: .2s; }
         .close-btn:hover { color: var(--status-red); transform: scale(1.1); }
-        .pcp-textarea { 
-            width: 100%; height: 250px; border: 1.5px dashed var(--border-mid); 
-            border-radius: var(--radius-md); padding: 16px; 
-            font-family: 'SF Mono', 'Monaco', monospace; font-size: 14px; 
-            outline: none; resize: none; background-color: #fafbfc; 
-            color: var(--text-primary); font-weight: 700; white-space: pre; 
-        }
-        .input-senha { 
-            padding: 14px; border: 2px solid var(--border-mid); border-radius: 10px; 
-            width: 100%; font-size: 22px; font-weight: 800; text-align: center; 
-            margin-bottom: 20px; outline: none; letter-spacing: 4px;
-        }
+        .pcp-textarea { width: 100%; height: 250px; border: 1.5px dashed var(--border-mid); border-radius: var(--radius-md); padding: 16px; font-family: 'SF Mono', 'Monaco', monospace; font-size: 14px; outline: none; resize: none; background-color: #fafbfc; color: var(--text-primary); font-weight: 700; white-space: pre; }
+        .input-senha { padding: 14px; border: 2px solid var(--border-mid); border-radius: 10px; width: 100%; font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 20px; outline: none; letter-spacing: 4px; }
         .input-senha:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,.1); }
 
-        #toast { 
-            position: fixed; bottom: 32px; right: 32px; background-color: #0f172a; 
-            color: #fff; padding: 20px 30px; border-radius: 12px; transition: .3s; 
-            transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; 
-            display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow-lg); 
-            font-size: 16px; border-left: 5px solid var(--status-green);
-        }
+        #toast { position: fixed; bottom: 32px; right: 32px; background-color: #0f172a; color: #fff; padding: 20px 30px; border-radius: 12px; transition: .3s; transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow-lg); font-size: 16px; border-left: 5px solid var(--status-green); }
         #toast.show { transform: translateY(0); opacity: 1; }
 
         .op-timeline { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; max-height: 400px; overflow-y: auto; padding-right: 8px; }
         .timeline-step { display: flex; align-items: flex-start; gap: 16px; position: relative; }
-        .timeline-step::before { 
-            content: ''; position: absolute; left: 21px; top: 44px; bottom: -20px; 
-            width: 3px; background: var(--border-mid); 
-        }
+        .timeline-step::before { content: ''; position: absolute; left: 21px; top: 44px; bottom: -20px; width: 3px; background: var(--border-mid); }
         .timeline-step:last-child::before { display: none; }
-        .timeline-icon { 
-            width: 44px; height: 44px; border-radius: 12px; background: #f1f5f9; 
-            display: flex; align-items: center; justify-content: center; font-size: 18px; 
-            color: var(--text-muted); z-index: 2; flex-shrink: 0; 
-        }
+        .timeline-icon { width: 44px; height: 44px; border-radius: 12px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text-muted); z-index: 2; flex-shrink: 0; }
         .timeline-step.completed .timeline-icon { background: var(--status-green); color: white; }
         .timeline-step.in-progress .timeline-icon { background: var(--randon-blue); color: white; animation: pulseBlue 1.5s infinite; }
-        .timeline-content { 
-            background: #f8fafc; border-radius: 10px; padding: 14px 18px; 
-            flex: 1; border: 1px solid var(--border-light); 
-        }
+        .timeline-content { background: #f8fafc; border-radius: 10px; padding: 14px 18px; flex: 1; border: 1px solid var(--border-light); }
         .timeline-title { font-weight: 900; font-size: 16px; color: var(--text-primary); }
         .timeline-dates { font-size: 15px; color: var(--text-secondary); font-weight: 700; margin-top: 6px; }
         @keyframes pulseBlue { 0% { box-shadow: 0 0 0 0 rgba(59,130,246,.5); } 70% { box-shadow: 0 0 0 12px rgba(59,130,246,0); } 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); } }
@@ -234,15 +158,8 @@
         .section-card { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; }
         .section-header { display: flex; justify-content: space-between; align-items: stretch; background: white; border-bottom: 1px solid var(--border-light); }
         .section-title-box { display: flex; align-items: center; gap: 16px; padding: 20px 26px; }
-        .section-title-box h2 { 
-            font-size: 20px; font-weight: 900; color: var(--text-primary); letter-spacing: -.3px; 
-            display: flex; align-items: center; gap: 12px;
-        }
-        /* 🎨 BARRAS COLORIDAS NOS TÍTULOS */
-        .section-title-box h2::before {
-            content: ''; width: 6px; height: 26px; border-radius: 3px; background: var(--randon-blue);
-            display: inline-block; flex-shrink: 0;
-        }
+        .section-title-box h2 { font-size: 20px; font-weight: 900; color: var(--text-primary); letter-spacing: -.3px; display: flex; align-items: center; gap: 12px; }
+        .section-title-box h2::before { content: ''; width: 6px; height: 26px; border-radius: 3px; background: var(--randon-blue); display: inline-block; flex-shrink: 0; }
         .section-card.sec-tanques .section-title-box h2::before { background: #0ea5e9; }
         .section-card.sec-ct .section-title-box h2::before { background: #f59e0b; }
         .section-card.sec-bases .section-title-box h2::before { background: #10b981; }
@@ -260,26 +177,15 @@
 
         /* TABELAS */
         table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
-        th { 
-            background-color: #fafbfc; color: var(--text-secondary); padding: 16px 12px; 
-            font-size: 12px; font-weight: 900; text-align: center; 
-            text-transform: uppercase; letter-spacing: .6px; 
-            border-bottom: 2px solid var(--border-mid); 
-        }
+        th { background-color: #fafbfc; color: var(--text-secondary); padding: 16px 12px; font-size: 12px; font-weight: 900; text-align: center; text-transform: uppercase; letter-spacing: .6px; border-bottom: 2px solid var(--border-mid); }
         td { padding: 8px 10px; height: 56px; border-bottom: 1px solid var(--border-light); background-color: white; font-size: 16px; }
         tbody tr:last-child td { border-bottom: none; }
         tr:hover td { background-color: #fafbfc; transition: background-color .15s; }
 
-        .cell-input { 
-            width: 100%; height: 100%; min-height: 42px; border: 1px solid transparent; 
-            background: transparent; padding: 8px 10px; font-size: 16px; outline: none; 
-            color: var(--text-primary); font-weight: 800; text-align: center; 
-            border-radius: 8px; transition: .15s; font-variant-numeric: tabular-nums;
-        }
+        .cell-input { width: 100%; height: 100%; min-height: 42px; border: 1px solid transparent; background: transparent; padding: 8px 10px; font-size: 16px; outline: none; color: var(--text-primary); font-weight: 800; text-align: center; border-radius: 8px; transition: .15s; font-variant-numeric: tabular-nums; }
         .cell-input:hover:not(:disabled) { background-color: #f8fafc; }
         .cell-input:focus { background-color: white; border-color: var(--randon-blue); box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
-        .cell-input[type="number"]::-webkit-outer-spin-button,
-        .cell-input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .cell-input[type="number"]::-webkit-outer-spin-button, .cell-input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         select.cell-input { cursor: pointer; text-align-last: center; font-size: 14px; font-weight: 800; }
 
         .status-btn { width: 100%; height: 100%; border: none; background: transparent; display: flex; align-items: center; justify-content: center; }
@@ -288,32 +194,16 @@
         .circle.orange { background-color: var(--status-orange); box-shadow: 0 0 0 6px rgba(245,158,11,.18); }
         .circle.red { background-color: var(--status-red); box-shadow: 0 0 0 6px rgba(239,68,68,.18); }
 
-        /* 🎨 FUNDOS COLORIDOS POR STATUS — MAIS VISÍVEL */
         .bg-ok { background-color: #d1fae5 !important; box-shadow: inset 5px 0 0 var(--status-green); color: #065f46 !important; }
         .bg-cogi { background-color: #fee2e2 !important; box-shadow: inset 5px 0 0 var(--status-red); color: #991b1b !important; }
         .ordem-programada { background-color: #dbeafe !important; box-shadow: inset 5px 0 0 var(--randon-blue); color: #1e40af !important; font-weight: 900 !important; }
         .ordem-diferente { background-color: #fee2e2 !important; box-shadow: inset 5px 0 0 var(--status-red); color: #991b1b !important; font-weight: 900 !important; }
         .ordem-ok { background-color: #d1fae5 !important; box-shadow: inset 5px 0 0 var(--status-green); color: #065f46 !important; font-weight: 900 !important; }
         .data-input { background-color: #fef3c7 !important; font-weight: 900 !important; color: #92400e !important; border-radius: 6px; }
-        .auto-tag { 
-            font-size: 10px; background: var(--status-orange); color: white; 
-            padding: 2px 6px; border-radius: 4px; position: absolute; top: 2px; left: 4px; 
-            pointer-events: none; font-weight: 900; letter-spacing: .3px;
-        }
+        .auto-tag { font-size: 10px; background: var(--status-orange); color: white; padding: 2px 6px; border-radius: 4px; position: absolute; top: 2px; left: 4px; pointer-events: none; font-weight: 900; letter-spacing: .3px; }
         .op-clickable { cursor: pointer; }
         .op-clickable:hover { color: var(--randon-blue) !important; }
 
-        /* 🎨 CORES POR SETOR NA TABELA DE SOLDA */
-        .section-card.sec-tanques td:first-child { box-shadow: inset 3px 0 0 #0ea5e9; }
-        .section-card.sec-ct td:first-child { box-shadow: inset 3px 0 0 #f59e0b; }
-        .section-card.sec-bases td:first-child { box-shadow: inset 3px 0 0 #10b981; }
-        .section-card.sec-silo td:first-child { box-shadow: inset 3px 0 0 #8b5cf6; }
-        .section-card.sec-esp td:first-child { box-shadow: inset 3px 0 0 #ec4899; }
-        .section-card.sec-pintura td:first-child { box-shadow: inset 3px 0 0 #3b82f6; }
-        .section-card.sec-op1 td:first-child { box-shadow: inset 3px 0 0 #f97316; }
-        .section-card.sec-op2 td:first-child { box-shadow: inset 3px 0 0 #a855f7; }
-
-        /* 🎨 CABEÇALHO COLORIDO POR SEÇÃO */
         .section-card.sec-tanques .section-header { background: linear-gradient(90deg, #0ea5e9 0%, #0ea5e9 4px, white 4px); }
         .section-card.sec-ct .section-header { background: linear-gradient(90deg, #f59e0b 0%, #f59e0b 4px, white 4px); }
         .section-card.sec-bases .section-header { background: linear-gradient(90deg, #10b981 0%, #10b981 4px, white 4px); }
@@ -323,21 +213,11 @@
         .section-card.sec-op1 .section-header { background: linear-gradient(90deg, #f97316 0%, #f97316 4px, white 4px); }
         .section-card.sec-op2 .section-header { background: linear-gradient(90deg, #a855f7 0%, #a855f7 4px, white 4px); }
 
-        .ver-mais-container { 
-            background-color: #fafbfc; padding: 14px; text-align: center; 
-            border-top: 1px solid var(--border-light); display: flex; gap: 10px; 
-            justify-content: center; align-items: center; flex-wrap: wrap; 
-        }
-        .btn-expandir { 
-            background-color: white; border: 1px solid var(--border-mid); 
-            color: var(--randon-blue); padding: 10px 20px; border-radius: 8px; 
-            font-size: 13px; font-weight: 900; cursor: pointer; box-shadow: var(--shadow-sm); 
-            text-transform: uppercase; transition: .2s; display: inline-flex; 
-            align-items: center; gap: 6px; letter-spacing: .3px;
-        }
+        .ver-mais-container { background-color: #fafbfc; padding: 14px; text-align: center; border-top: 1px solid var(--border-light); display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; }
+        .btn-expandir { background-color: white; border: 1px solid var(--border-mid); color: var(--randon-blue); padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 900; cursor: pointer; box-shadow: var(--shadow-sm); text-transform: uppercase; transition: .2s; display: inline-flex; align-items: center; gap: 6px; letter-spacing: .3px; }
         .btn-expandir:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: var(--randon-blue); }
 
-        /* ESTAMPARIA — 🎨 CORES FORTES POR LINHA */
+        /* ESTAMPARIA */
         .estamparia-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 0 0 1px var(--border-light); }
         .estamparia-table th, .estamparia-table td { padding: 18px 14px; text-align: center; border: none; border-bottom: 1px solid var(--border-light); }
         .estamparia-table th { background-color: #fafbfc; color: var(--text-secondary); font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: .6px; border-bottom: 2px solid var(--border-mid); }
@@ -345,7 +225,6 @@
         .estamparia-table tbody tr:last-child td { border-bottom: none; }
         .estamparia-table td input { font-size: 20px; font-weight: 900; width: 100%; text-align: center; border: none; background: transparent; outline: none; font-variant-numeric: tabular-nums; color: var(--text-primary); }
         
-        /* 🎨 LINHAS COLORIDAS NA ESTAMPARIA */
         .estamparia-table tbody tr.row-atraso td:first-child { background: #fee2e2 !important; color: #991b1b !important; box-shadow: inset 5px 0 0 #ef4444; font-weight: 900; }
         .estamparia-table tbody tr.row-geral td:first-child { background: #dbeafe !important; color: #1e40af !important; box-shadow: inset 5px 0 0 #3b82f6; font-weight: 900; }
         .estamparia-table tbody tr.row-laser td:first-child { background: #d1fae5 !important; color: #065f46 !important; box-shadow: inset 5px 0 0 #10b981; font-weight: 900; }
@@ -363,16 +242,9 @@
         .termometro-container { background: rgba(255,255,255,.05); border-radius: var(--radius-md); padding: 28px 32px; border: 1px solid rgba(255,255,255,.08); }
         .termometro-labels { display: flex; justify-content: space-between; font-weight: 800; font-size: 16px; margin-bottom: 14px; color: #cbd5e1; }
         .termometro-bar-bg { height: 38px; background: rgba(0,0,0,.3); border-radius: 19px; overflow: hidden; position: relative; }
-        .termometro-fill { 
-            height: 100%; width: 0%; 
-            background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 85%, #3b82f6 100%); 
-            border-radius: 19px; transition: width .8s ease-in-out; 
-        }
+        .termometro-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 85%, #3b82f6 100%); border-radius: 19px; transition: width .8s ease-in-out; }
         .termometro-markers { display: flex; justify-content: space-between; margin-top: 20px; font-size: 15px; font-weight: 800; gap: 12px; flex-wrap: wrap; }
-        .marker-tag { 
-            padding: 12px 20px; border-radius: 10px; background: rgba(255,255,255,.06); 
-            color: #cbd5e1; border: 1px solid rgba(255,255,255,.08); font-weight: 800; transition: .3s; font-size: 15px;
-        }
+        .marker-tag { padding: 12px 20px; border-radius: 10px; background: rgba(255,255,255,.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,.08); font-weight: 800; transition: .3s; font-size: 15px; }
         .marker-tag.unlocked { background: var(--status-green); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(16,185,129,.4); }
         
         .premio-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 28px; }
@@ -382,7 +254,6 @@
 
         .pinos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .pinos-col-card { background: white; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); display: flex; flex-direction: column; }
-        /* 🎨 CORES POR CATEGORIA */
         .pinos-col-card.pinos-bases .pinos-col-header { background: linear-gradient(135deg, #059669, #10b981); }
         .pinos-col-card.pinos-especiais .pinos-col-header { background: linear-gradient(135deg, #db2777, #ec4899); }
         .pinos-col-card.pinos-tanques .pinos-col-header { background: linear-gradient(135deg, #0284c7, #0ea5e9); }
@@ -402,52 +273,26 @@
         .btn-del-pino { background: none; border: none; color: #cbd5e1; cursor: pointer; font-size: 16px; padding: 8px 10px; border-radius: 6px; transition: .2s; }
         .btn-del-pino:hover { color: var(--status-red); background: var(--status-red-soft); }
 
-        .lider-card { 
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); 
-            border-radius: var(--radius-lg); padding: 28px 36px; color: white; 
-            display: flex; align-items: center; justify-content: space-between; 
-            box-shadow: var(--shadow-lg); gap: 20px; flex-wrap: wrap;
-        }
+        .lider-card { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); border-radius: var(--radius-lg); padding: 28px 36px; color: white; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-lg); gap: 20px; flex-wrap: wrap; }
 
         /* EXCEL SECTIONS */
-        .excel-section { background: white; padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-top: 24px; overflow-x: auto; }
-        .excel-title { 
-            color: var(--text-primary); font-weight: 900; text-align: left; 
-            padding: 6px 6px 20px; font-size: 18px; text-transform: uppercase; 
-            letter-spacing: 1.5px; margin-bottom: 18px; 
-            border-bottom: 2px solid var(--border-light); 
-            display: flex; align-items: center; gap: 12px;
-        }
+        .excel-section { background: white; padding: 32px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-top: 24px; overflow-x: auto; position: relative; }
+        .excel-title { color: var(--text-primary); font-weight: 900; text-align: left; padding: 6px 6px 20px; font-size: 18px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 18px; border-bottom: 2px solid var(--border-light); display: flex; align-items: center; gap: 12px; }
         .excel-title::before { content: ''; width: 6px; height: 24px; background: var(--randon-blue); border-radius: 3px; }
         .ex-flex-header { display: flex; justify-content: center; gap: 40px; margin-bottom: 24px; font-size: 16px; font-weight: 800; color: var(--text-secondary); flex-wrap: wrap; }
-        .ex-flex-header input { border: none; border-bottom: 2px solid var(--border-mid); width: 75px; text-align: center; font-weight: 900; font-size: 19px; outline: none; background: transparent; color: var(--randon-red); font-variant-numeric: tabular-nums; }
+        .ex-flex-header input { border: none; border-bottom: 2px solid var(--border-mid); width: 80px; text-align: center; font-weight: 900; font-size: 19px; outline: none; background: transparent; color: var(--randon-red); font-variant-numeric: tabular-nums; padding: 4px; border-radius: 4px; transition: .2s; }
+        .ex-flex-header input:focus { background: #fff7ed; box-shadow: 0 2px 8px rgba(227,33,40,.15); border-bottom-color: var(--randon-red); }
         .excel-grid { display: flex; gap: 24px; min-width: 900px; }
         .excel-col { flex: 1; }
-        .excel-table { 
-            width: 100%; border-collapse: separate; border-spacing: 0; 
-            table-layout: fixed; margin-bottom: 16px; border-radius: 10px; 
-            overflow: hidden; box-shadow: 0 0 0 1px var(--border-light);
-        }
+        .excel-table { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; margin-bottom: 16px; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px var(--border-light); }
         .excel-table th, .excel-table td { padding: 0; height: 50px; text-align: center; border: none; border-bottom: 1px solid var(--border-light); }
         .excel-table thead th { background: #fafbfc; font-weight: 900; color: var(--text-secondary); font-size: 13px; text-transform: uppercase; letter-spacing: .5px; padding: 16px 10px; height: auto; }
         .excel-table tbody tr:last-child td { border-bottom: none; }
         .excel-table input.ex-in, .excel-table input.op2-dia-input, 
-        .excel-table input.desc-input-dia, .excel-table input.desc-input-diario { 
-            width: 100%; height: 100%; border: none; background: transparent; 
-            text-align: center; font-size: 16px; font-weight: 800; 
-            color: var(--text-primary); outline: none; display: block; 
-            box-sizing: border-box; font-variant-numeric: tabular-nums; padding: 6px 10px;
-        }
+        .excel-table input.desc-input-dia, .excel-table input.desc-input-diario { width: 100%; height: 100%; border: none; background: transparent; text-align: center; font-size: 16px; font-weight: 800; color: var(--text-primary); outline: none; display: block; box-sizing: border-box; font-variant-numeric: tabular-nums; padding: 6px 10px; }
         .excel-table input:focus { background: var(--randon-blue-soft) !important; box-shadow: inset 0 0 0 2px var(--randon-blue); }
         
-        /* 🎨 RÓTULOS DE SEMANA MAIS VISÍVEIS */
-        .excel-table tr.linha-semana-total td {
-            background: #fef3c7 !important;
-            color: #92400e !important;
-            font-weight: 900 !important;
-            font-size: 15px !important;
-            height: 50px !important;
-        }
+        .excel-table tr.linha-semana-total td { background: #fef3c7 !important; color: #92400e !important; font-weight: 900 !important; font-size: 15px !important; height: 50px !important; }
         .excel-table tr.linha-semana-total td span { font-size: 20px !important; font-weight: 900 !important; color: #dc2626 !important; }
         
         .bg-pink { background-color: #fdf2f8 !important; }
@@ -455,15 +300,9 @@
         .bg-yellow { background-color: #fefce8 !important; }
         .bg-purple { background-color: #faf5ff !important; }
         .bg-blue { background-color: #eff6ff !important; }
-        .txt-red { color: #dc2626 !important; font-weight: 900 !important; }
 
         .excel-actions { display: flex; gap: 10px; justify-content: center; padding: 14px; background: #fafbfc; border-radius: 10px; align-items: center; flex-wrap: wrap; }
-        .btn-excel-action { 
-            background: white; border: 1px solid var(--border-mid); color: var(--text-primary); 
-            padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 800; 
-            cursor: pointer; text-transform: uppercase; transition: .2s; 
-            display: inline-flex; align-items: center; gap: 6px; letter-spacing: .3px;
-        }
+        .btn-excel-action { background: white; border: 1px solid var(--border-mid); color: var(--text-primary); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: .2s; display: inline-flex; align-items: center; gap: 6px; letter-spacing: .3px; }
         .btn-excel-action:hover { background: #f1f5f9; border-color: var(--randon-blue); color: var(--randon-blue); }
         .btn-excel-add { background: var(--status-green); color: white; border-color: transparent; }
         .btn-excel-add:hover { background: #059669; color: white; }
@@ -471,11 +310,7 @@
         .btn-excel-rem:hover { background: #dc2626; color: white; }
 
         /* BI */
-        .analytics-header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            background: white; padding: 36px; border-radius: var(--radius-lg); 
-            box-shadow: var(--shadow-md); margin-bottom: 24px; gap: 20px; flex-wrap: wrap;
-        }
+        .analytics-header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 36px; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 24px; gap: 20px; flex-wrap: wrap; }
         .dark-panel-container { background: linear-gradient(145deg, #0f172a, #1e293b); border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 24px; box-shadow: var(--shadow-lg); color: white; }
         .dark-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,.08); gap: 12px; flex-wrap: wrap; }
         .dark-panel-header h3 { font-size: 19px; font-weight: 900; color: #f8fafc; margin: 0; letter-spacing: .3px; }
@@ -560,6 +395,7 @@
 <body class="readonly-mode">
 
     <div id="tv-bar-container"><div id="tv-progress-bar"></div></div>
+    <div class="sync-indicator" id="sync-indicator"><i class="fa-solid fa-sync"></i> Sincronizando em tempo real...</div>
 
     <nav class="navbar" id="navbar">
         <div class="nav-left">
@@ -665,7 +501,7 @@
                         <span style="color:#94a3b8; font-size: 13px; font-weight: 900; letter-spacing: .5px;">META BASE:</span> <input type="number" id="premio-meta-base-input" value="78" style="width: 70px; background: transparent; border: 1px dashed rgba(255,255,255,.3); color: white; text-align: center; font-size: 20px; font-weight: 900; outline: none; font-variant-numeric: tabular-nums;">
                     </div>
                     <div style="background: rgba(239,68,68,.15); padding: 10px 18px; border-radius: 8px; border: 1px solid rgba(239,68,68,.2);">
-                        <span style="color:#fca5a5; font-size: 13px; font-weight: 900; letter-spacing: .5px;">ATRASO:</span> <input type="number" id="premio-atraso-input" value="12" style="width: 70px; background: transparent; border: 1px dashed rgba(255,255,255,.3); color: #fca5a5; text-align: center; font-size: 20px; font-weight: 900; outline: none; font-variant-numeric: tabular-nums;">
+                        <span style="color:#fca5a5; font-size: 13px; font-weight: 900; letter-spacing: .5px;">ATRASO:</span> <input type="number" id="premio-atraso-input" value="0" style="width: 70px; background: transparent; border: 1px dashed rgba(255,255,255,.3); color: #fca5a5; text-align: center; font-size: 20px; font-weight: 900; outline: none; font-variant-numeric: tabular-nums;">
                     </div>
                 </div>
             </div>
@@ -723,12 +559,12 @@
             <div style="padding: 24px; background: white;"><div class="chart-container-bi" style="height: 400px;"><canvas id="chartEstamparia"></canvas></div></div>
         </div>
 
-        <div class="excel-section" style="position: relative;">
+        <div class="excel-section">
             <button class="btn btn-tv admin-only" onclick="toggleOcultarVazias(this)" style="position: absolute; right: 24px; top: 24px; font-size: 13px; border: 1px solid var(--border-mid); font-weight: 800;"><i class="fa-solid fa-eye-slash"></i> Ocultar Linhas Vazias</button>
             <div class="excel-title">Controle Produção — Saídas de Linha</div>
             <div class="ex-flex-header">
-                <div>META MÊS <input type="text" value="81"> | PRODUZIDOS <input type="text" value="60"></div>
-                <div>MÉDIA/DIA <input type="text" value="3,9"> | MÉDIA/DIA <input type="text" value="3,5"></div>
+                <div>META MÊS <input type="text" id="meta-mes-saidas" oninput="salvarMetaMes('saidas', this.value)"> | PRODUZIDOS <input type="text" id="produzidos-saidas" oninput="salvarProduzidos('saidas', this.value)"></div>
+                <div>MÉDIA/DIA <input type="text" id="media-meta-saidas" oninput="salvarMediaMeta('saidas', this.value)"> | MÉDIA/DIA REAL <input type="text" id="media-real-saidas" oninput="salvarMediaReal('saidas', this.value)"></div>
             </div>
             <div class="excel-grid">
                 <div class="excel-col" style="flex: 1.1;">
@@ -815,8 +651,8 @@
         <div class="excel-section">
             <div class="excel-title">Controle Produção — OP2</div>
             <div class="ex-flex-header">
-                <div>META MÊS <input type="text" value="81"> | PRODUZIDOS <input type="text" value="59"></div>
-                <div>MÉDIA/DIA <input type="text" value="3,9"> | MÉDIA/DIA <input type="text" value="3,5"></div>
+                <div>META MÊS <input type="text" id="meta-mes-op2" oninput="salvarMetaMes('op2', this.value)"> | PRODUZIDOS <input type="text" id="produzidos-op2" oninput="salvarProduzidos('op2', this.value)"></div>
+                <div>MÉDIA/DIA <input type="text" id="media-meta-op2" oninput="salvarMediaMeta('op2', this.value)"> | MÉDIA/DIA REAL <input type="text" id="media-real-op2" oninput="salvarMediaReal('op2', this.value)"></div>
             </div>
             <div style="max-width: 700px; margin: 0 auto 20px auto;">
                 <table class="excel-table" id="tabela-op2-dia">
@@ -1021,14 +857,29 @@
     const SENHA_ADMIN = "Randon123@";
     let isAdmin = false;
     let isTVMode = false;
-    // ⚡ SALVAMENTO OTIMIZADO: debounce de 2s + auto-save a cada 30s
-    const AUTO_SAVE_INTERVAL_MS = 30000;   // era 60000 → 30s
-    const DEBOUNCE_SAVE_MS = 2000;         // salva 2s após última alteração
+    const AUTO_SAVE_INTERVAL_MS = 15000;
+    const DEBOUNCE_SAVE_MS = 800;
     let autoSaveIntervalId = null;
     let debounceSaveTimer = null;
     let temAlteracoesPendentes = false;
     let saveEmAndamento = false;
+    let supressaoSync = false; // 🔑 evita loop quando recebe dados do Firebase
     const OP2_DIA_DEFAULT_ROWS = 4;
+
+    // 🔑 Mapa de paths do Firebase para atualização cirúrgica (menos tráfego, mais rápido)
+    const FIREBASE_PATHS = {
+        base: 'operacao_atual',
+        metas: 'operacao_atual.metasSaidas',
+        metaMes: 'operacao_atual.metasSaidas.metaMes',
+        produzidos: 'operacao_atual.metasSaidas.produzidos',
+        mediaMeta: 'operacao_atual.metasSaidas.mediaMeta',
+        mediaReal: 'operacao_atual.metasSaidas.mediaReal',
+        metaMesOp2: 'operacao_atual.metasSaidas.op2.metaMes',
+        produzidosOp2: 'operacao_atual.metasSaidas.op2.produzidos',
+        mediaMetaOp2: 'operacao_atual.metasSaidas.op2.mediaMeta',
+        mediaRealOp2: 'operacao_atual.metasSaidas.op2.mediaReal',
+        premioConfig: 'operacao_atual.premioConfig'
+    };
 
     const TABELA_PINOS_DEFAULT = {
         bases: [
@@ -1079,26 +930,15 @@
 
     const estampariaLinhas = ["Atraso Programação","Estamparia Geral","Laser","Linea","Dobra","PRM - Carbo","115 - CDL","160 - Externo"];
     const estampariaClasses = {
-        "Atraso Programação": "row-atraso",
-        "Estamparia Geral": "row-geral",
-        "Laser": "row-laser",
-        "Linea": "row-linea",
-        "Dobra": "row-dobra",
-        "PRM - Carbo": "row-prm",
-        "115 - CDL": "row-cdl",
-        "160 - Externo": "row-externo"
+        "Atraso Programação": "row-atraso", "Estamparia Geral": "row-geral", "Laser": "row-laser",
+        "Linea": "row-linea", "Dobra": "row-dobra", "PRM - Carbo": "row-prm",
+        "115 - CDL": "row-cdl", "160 - Externo": "row-externo"
     };
 
     const TABELAS_EXCEL_MAP = {
-        'tbody-dias-mes': 'diasMes',
-        'tbody-saidas-dia': 'saidasDia',
-        'tbody-saidas-seguinte': 'saidasSeguinte',
-        'tbody-pintura-excel': 'pintura',
-        'tbody-montagem-excel': 'montagem',
-        'tbody-op1-excel': 'op1',
-        'tbody-op2-dia': 'op2Dia',
-        'tbody-pendencias-excel': 'pendencias',
-        'tbody-diario-op2': 'diarioOp2'
+        'tbody-dias-mes': 'diasMes', 'tbody-saidas-dia': 'saidasDia', 'tbody-saidas-seguinte': 'saidasSeguinte',
+        'tbody-pintura-excel': 'pintura', 'tbody-montagem-excel': 'montagem', 'tbody-op1-excel': 'op1',
+        'tbody-op2-dia': 'op2Dia', 'tbody-pendencias-excel': 'pendencias', 'tbody-diario-op2': 'diarioOp2'
     };
 
     let db = {
@@ -1107,8 +947,12 @@
         data: {},
         estampariaMatriz: { datas: [], valores: {} },
         basePCP: {},
-        premioConfig: { metaBase: 78, atraso: 12, diasUteis: 21 },
+        premioConfig: { metaBase: 78, atraso: 0, diasUteis: 21 },
         pinosManual: null,
+        metasSaidas: {
+            metaMes: '81', produzidos: '60', mediaMeta: '3,9', mediaReal: '3,5',
+            op2: { metaMes: '81', produzidos: '59', mediaMeta: '3,9', mediaReal: '3,5' }
+        },
         tabelasExcel: {
             diasMes: [], saidasDia: [], saidasSeguinte: [], pintura: [],
             montagem: [], op1: [], op2Dia: [], pendencias: [], diarioOp2: []
@@ -1244,13 +1088,17 @@
         b.className = `net-badge ${estado}`;
         t.innerText = estado==='online'?'Online':(estado==='syncing'?'Gravando...':'Offline');
     }
+    function mostrarSyncIndicador(mostrar) {
+        const el = document.getElementById('sync-indicator');
+        if (el) el.classList.toggle('active', mostrar);
+    }
     function mostrarToast(msg, icon = "fa-circle-check") {
         const t = document.getElementById('toast');
         if (!t) return;
         document.getElementById('toast-msg').innerText = msg;
         t.querySelector('i').className = `fa-solid ${icon}`;
         t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3000);
+        setTimeout(() => t.classList.remove('show'), 2500);
     }
     function handleGlobalSearch(e) {
         if (e.key === 'Enter') {
@@ -1297,7 +1145,7 @@
     }
 
     // =========================================================
-    // NAVEGAÇÃO DE ABAS
+    // NAVEGAÇÃO
     // =========================================================
     function switchTab(id) {
         if (temAlteracoesPendentes) salvarNoFirebase(false);
@@ -1310,10 +1158,6 @@
         if (id === 'estamparia') updateEstampariaChart();
         if (id === 'apontamento') renderResumoApontamento();
     }
-
-    // =========================================================
-    // NAVEGAÇÃO DE DATA
-    // =========================================================
     function alterarDiaReferencia(off) {
         let ref = parseDataComAnoRef(db.globalDate, 2026) || new Date();
         ref.setDate(ref.getDate() + off);
@@ -1340,29 +1184,28 @@
     }
 
     // =========================================================
-    // NAVEGAÇÃO DE MÊS — PERSISTÊNCIA COMPLETA
+    // MÊS — PERSISTÊNCIA COMPLETA
     // =========================================================
     function definirMesManual(valor) {
         if (!valor || !/^\d{4}-\d{2}$/.test(valor)) return;
         const mesAnterior = db.mesReferencia;
         db.mesReferencia = valor;
-        // ✅ Salva snapshot do mês anterior antes de trocar (por segurança)
         if (mesAnterior && mesAnterior !== valor) {
             if (!db.snapshotsMeses) db.snapshotsMeses = {};
             db.snapshotsMeses[mesAnterior] = {
                 tabelasExcel: JSON.parse(JSON.stringify(db.tabelasExcel || {})),
                 estampariaMatriz: JSON.parse(JSON.stringify(db.estampariaMatriz || {})),
                 premioConfig: JSON.parse(JSON.stringify(db.premioConfig || {})),
+                metasSaidas: JSON.parse(JSON.stringify(db.metasSaidas || {})),
                 ts: Date.now()
             };
         }
-        // Recupera snapshot do mês se já existir
         if (db.snapshotsMeses && db.snapshotsMeses[valor]) {
             const snap = db.snapshotsMeses[valor];
             if (snap.tabelasExcel) db.tabelasExcel = snap.tabelasExcel;
             if (snap.premioConfig) db.premioConfig = snap.premioConfig;
+            if (snap.metasSaidas) db.metasSaidas = snap.metasSaidas;
         } else {
-            // Se não há snapshot, limpa apenas as tabelas baseadas em dias do mês
             if (db.tabelasExcel) {
                 db.tabelasExcel.diasMes = [];
                 db.tabelasExcel.diarioOp2 = [];
@@ -1372,20 +1215,62 @@
         gerarTabelasExcel();
         renderizarTabelaSemana('tbody-dias-mes', 'diasMes', 'desc-input-dia');
         renderizarTabelaSemana('tbody-diario-op2', 'diarioOp2', 'desc-input-diario');
-        // ⚡ SALVA IMEDIATAMENTE na nuvem
+        preencherMetasSaidasInputs();
         salvarNoFirebase(true);
         const [ano, mes] = valor.split('-');
         const nomesMeses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-        mostrarToast(`✅ Mês ${nomesMeses[parseInt(mes,10)-1]}/${ano} carregado e salvo`, 'fa-cloud-arrow-up');
+        mostrarToast(`✅ Mês ${nomesMeses[parseInt(mes,10)-1]}/${ano} carregado`, 'fa-cloud-arrow-up');
     }
 
+    function preencherMetasSaidasInputs() {
+        if (!db.metasSaidas) db.metasSaidas = { metaMes:'81', produzidos:'60', mediaMeta:'3,9', mediaReal:'3,5', op2:{ metaMes:'81', produzidos:'59', mediaMeta:'3,9', mediaReal:'3,5' } };
+        const m = db.metasSaidas;
+        if (document.getElementById('meta-mes-saidas')) document.getElementById('meta-mes-saidas').value = m.metaMes || '';
+        if (document.getElementById('produzidos-saidas')) document.getElementById('produzidos-saidas').value = m.produzidos || '';
+        if (document.getElementById('media-meta-saidas')) document.getElementById('media-meta-saidas').value = m.mediaMeta || '';
+        if (document.getElementById('media-real-saidas')) document.getElementById('media-real-saidas').value = m.mediaReal || '';
+        const o = m.op2 || {};
+        if (document.getElementById('meta-mes-op2')) document.getElementById('meta-mes-op2').value = o.metaMes || '';
+        if (document.getElementById('produzidos-op2')) document.getElementById('produzidos-op2').value = o.produzidos || '';
+        if (document.getElementById('media-meta-op2')) document.getElementById('media-meta-op2').value = o.mediaMeta || '';
+        if (document.getElementById('media-real-op2')) document.getElementById('media-real-op2').value = o.mediaReal || '';
+        if (document.getElementById('premio-meta-base-input')) document.getElementById('premio-meta-base-input').value = db.premioConfig?.metaBase ?? 78;
+        if (document.getElementById('premio-atraso-input')) document.getElementById('premio-atraso-input').value = db.premioConfig?.atraso ?? 0;
+    }
+
+    // 🔑 Funções de salvar cada campo das metas
+    window.salvarMetaMes = function(grupo, val) {
+        if (!db.metasSaidas) db.metasSaidas = {};
+        if (grupo === 'op2') { if (!db.metasSaidas.op2) db.metasSaidas.op2 = {}; db.metasSaidas.op2.metaMes = val; }
+        else db.metasSaidas.metaMes = val;
+        marcarAlteracao();
+    };
+    window.salvarProduzidos = function(grupo, val) {
+        if (!db.metasSaidas) db.metasSaidas = {};
+        if (grupo === 'op2') { if (!db.metasSaidas.op2) db.metasSaidas.op2 = {}; db.metasSaidas.op2.produzidos = val; }
+        else db.metasSaidas.produzidos = val;
+        marcarAlteracao();
+    };
+    window.salvarMediaMeta = function(grupo, val) {
+        if (!db.metasSaidas) db.metasSaidas = {};
+        if (grupo === 'op2') { if (!db.metasSaidas.op2) db.metasSaidas.op2 = {}; db.metasSaidas.op2.mediaMeta = val; }
+        else db.metasSaidas.mediaMeta = val;
+        marcarAlteracao();
+    };
+    window.salvarMediaReal = function(grupo, val) {
+        if (!db.metasSaidas) db.metasSaidas = {};
+        if (grupo === 'op2') { if (!db.metasSaidas.op2) db.metasSaidas.op2 = {}; db.metasSaidas.op2.mediaReal = val; }
+        else db.metasSaidas.mediaReal = val;
+        marcarAlteracao();
+    };
+
     // =========================================================
-    // FIREBASE + AUTO-SAVE OTIMIZADO
+    // FIREBASE — TEMPO REAL
     // =========================================================
     function marcarAlteracao() {
+        if (supressaoSync) return;
         temAlteracoesPendentes = true;
         setStatusConexao('syncing');
-        // ⚡ DEBOUNCE: salva 2 segundos após a última alteração
         if (debounceSaveTimer) clearTimeout(debounceSaveTimer);
         debounceSaveTimer = setTimeout(() => {
             if (temAlteracoesPendentes && !saveEmAndamento) salvarNoFirebase(false);
@@ -1399,6 +1284,7 @@
         if (saveEmAndamento) return;
         saveEmAndamento = true;
         setStatusConexao('syncing');
+        mostrarSyncIndicador(true);
         let dbLimpo = sanearParaFirebase(db);
         try { localStorage.setItem('erp_randon_backup_local', JSON.stringify(dbLimpo)); } catch(e) {}
         if (dbRef) {
@@ -1406,15 +1292,18 @@
                 temAlteracoesPendentes = false;
                 saveEmAndamento = false;
                 setStatusConexao('online');
+                mostrarSyncIndicador(false);
                 if (exibirAviso) mostrarToast('☁️ Nuvem atualizada', 'fa-cloud-arrow-up');
             }).catch(err => {
                 console.error('Erro Firebase:', err);
                 saveEmAndamento = false;
                 setStatusConexao('offline');
+                mostrarSyncIndicador(false);
             });
         } else {
             saveEmAndamento = false;
             setStatusConexao('offline');
+            mostrarSyncIndicador(false);
         }
     }
     function iniciarAutoSavePeriodico() {
@@ -1433,6 +1322,25 @@
         if (document.visibilityState === 'hidden' && temAlteracoesPendentes) salvarNoFirebase(false);
     });
 
+    // 🔑 Verifica se o usuário está digitando em algum input (para não sobrescrever o que ele está digitando com dados do Firebase)
+    function usuarioEstaDigitando() {
+        const el = document.activeElement;
+        if (!el) return false;
+        const tag = el.tagName;
+        if (tag !== 'INPUT' && tag !== 'SELECT' && tag !== 'TEXTAREA') return false;
+        // Se está em um campo editável, não sobrescreve
+        return el.classList.contains('cell-input') || 
+               el.classList.contains('ex-in') || 
+               el.classList.contains('pino-val-input') || 
+               el.classList.contains('pino-nome-input') || 
+               el.classList.contains('estamparia-val-input') || 
+               el.classList.contains('op2-dia-input') ||
+               el.id.startsWith('meta-') ||
+               el.id.startsWith('produzidos-') ||
+               el.id.startsWith('media-') ||
+               el.id.startsWith('premio-');
+    }
+
     function initFirebase() {
         try {
             if (!firebase.apps.length) {
@@ -1449,43 +1357,78 @@
             firebaseDB = firebase.database();
             dbRef = firebaseDB.ref('operacao_atual');
             firebaseDB.ref('.info/connected').on('value', snap => setStatusConexao(snap.val()===true?'online':'offline'));
-            dbRef.once('value').then(snapshot => {
+            
+            // 🚀 CARGA INICIAL + LISTENER EM TEMPO REAL
+            dbRef.on('value', snapshot => {
                 const nuvem = snapshot.val();
-                if (nuvem) {
-                    if (!nuvem.data) nuvem.data = {};
-                    if (!nuvem.basePCP) nuvem.basePCP = {};
-                    if (!nuvem.premioConfig) nuvem.premioConfig = { metaBase:78, atraso:12, diasUteis:21 };
-                    if (!nuvem.tabelasExcel) nuvem.tabelasExcel = {};
-                    if (!nuvem.snapshotsMeses) nuvem.snapshotsMeses = {};
-                    if (!nuvem.mesReferencia) {
-                        const agora = new Date();
-                        nuvem.mesReferencia = `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}`;
-                    }
-                    db = nuvem;
-                    reconstruirIndicesPCP();
-                    expurgarLinhasFantasmas();
-                    atualizarDiasEstamparia();
-                    gerarTabelasExcel();
+                if (!nuvem) return;
+                // Normaliza estrutura
+                if (!nuvem.data) nuvem.data = {};
+                if (!nuvem.basePCP) nuvem.basePCP = {};
+                if (!nuvem.premioConfig) nuvem.premioConfig = { metaBase:78, atraso:0, diasUteis:21 };
+                if (!nuvem.tabelasExcel) nuvem.tabelasExcel = {};
+                if (!nuvem.snapshotsMeses) nuvem.snapshotsMeses = {};
+                if (!nuvem.metasSaidas) nuvem.metasSaidas = { metaMes:'81', produzidos:'60', mediaMeta:'3,9', mediaReal:'3,5', op2:{ metaMes:'81', produzidos:'59', mediaMeta:'3,9', mediaReal:'3,5' } };
+                if (!nuvem.mesReferencia) {
+                    const agora = new Date();
+                    nuvem.mesReferencia = `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}`;
+                }
+                
+                // 🔑 Se o usuário está digitando, NÃO sobrescreve o valor atual do input
+                // mas atualiza o resto do db normalmente (outros campos que ele não está mexendo)
+                supressaoSync = true;
+                const dbAntigo = db;
+                // Preserva campos que o usuário está digitando no momento
+                const elAtivo = document.activeElement;
+                const idAtivo = elAtivo ? elAtivo.id : null;
+                const valorAtivo = elAtivo && (elAtivo.tagName==='INPUT'||elAtivo.tagName==='SELECT') ? elAtivo.value : null;
+                
+                db = nuvem;
+                reconstruirIndicesPCP();
+                expurgarLinhasFantasmas();
+                
+                // Preserva o valor ativo
+                if (idAtivo && valorAtivo !== null && db.metasSaidas) {
+                    if (idAtivo === 'meta-mes-saidas') db.metasSaidas.metaMes = valorAtivo;
+                    else if (idAtivo === 'produzidos-saidas') db.metasSaidas.produzidos = valorAtivo;
+                    else if (idAtivo === 'media-meta-saidas') db.metasSaidas.mediaMeta = valorAtivo;
+                    else if (idAtivo === 'media-real-saidas') db.metasSaidas.mediaReal = valorAtivo;
+                    else if (idAtivo === 'meta-mes-op2') { if(!db.metasSaidas.op2) db.metasSaidas.op2={}; db.metasSaidas.op2.metaMes = valorAtivo; }
+                    else if (idAtivo === 'produzidos-op2') { if(!db.metasSaidas.op2) db.metasSaidas.op2={}; db.metasSaidas.op2.produzidos = valorAtivo; }
+                    else if (idAtivo === 'media-meta-op2') { if(!db.metasSaidas.op2) db.metasSaidas.op2={}; db.metasSaidas.op2.mediaMeta = valorAtivo; }
+                    else if (idAtivo === 'media-real-op2') { if(!db.metasSaidas.op2) db.metasSaidas.op2={}; db.metasSaidas.op2.mediaReal = valorAtivo; }
+                    else if (idAtivo === 'premio-meta-base-input') db.premioConfig.metaBase = parseInt(valorAtivo)||78;
+                    else if (idAtivo === 'premio-atraso-input') db.premioConfig.atraso = parseInt(valorAtivo)||0;
+                }
+                
+                atualizarDiasEstamparia();
+                gerarTabelasExcel();
+                
+                // 🔑 Só re-renderiza se NÃO está digitando (evita perder foco/cursor)
+                if (!usuarioEstaDigitando()) {
                     forceRenderTodasTabelas();
                     restaurarTabelasExcelDoBanco();
-                    const elMes = document.getElementById('global-month');
-                    if (elMes) elMes.value = db.mesReferencia;
-                    mostrarToast('Dados sincronizados da nuvem', 'fa-cloud-arrow-down');
+                    preencherMetasSaidasInputs();
                 } else {
-                    const backup = localStorage.getItem('erp_randon_backup_local');
-                    if (backup) { try { db = JSON.parse(backup); if (!db.tabelasExcel) db.tabelasExcel = {}; reconstruirIndicesPCP(); expurgarLinhasFantasmas(); atualizarDiasEstamparia(); gerarTabelasExcel(); forceRenderTodasTabelas(); restaurarTabelasExcelDoBanco(); } catch(e){} }
+                    // Se está digitando, atualiza apenas o que não é input
+                    atualizarAtrasosGlobais();
+                    recalcularDashboard();
+                    recalcularPainelPremio();
                 }
-            }).catch(err => {
-                console.warn('Erro Firebase:', err);
-                const backup = localStorage.getItem('erp_randon_backup_local');
-                if (backup) { try { db = JSON.parse(backup); if (!db.tabelasExcel) db.tabelasExcel = {}; reconstruirIndicesPCP(); expurgarLinhasFantasmas(); atualizarDiasEstamparia(); gerarTabelasExcel(); forceRenderTodasTabelas(); restaurarTabelasExcelDoBanco(); } catch(e){} }
+                
+                const elMes = document.getElementById('global-month');
+                if (elMes && document.activeElement !== elMes) elMes.value = db.mesReferencia;
+                
+                supressaoSync = false;
+                temAlteracoesPendentes = false;
             });
+            
             iniciarAutoSavePeriodico();
         } catch(e) {
             console.error('Erro initFirebase:', e);
             setStatusConexao('offline');
             const backup = localStorage.getItem('erp_randon_backup_local');
-            if (backup) { try { db = JSON.parse(backup); if (!db.tabelasExcel) db.tabelasExcel = {}; reconstruirIndicesPCP(); expurgarLinhasFantasmas(); atualizarDiasEstamparia(); gerarTabelasExcel(); forceRenderTodasTabelas(); restaurarTabelasExcelDoBanco(); } catch(err){} }
+            if (backup) { try { db = JSON.parse(backup); reconstruirIndicesPCP(); expurgarLinhasFantasmas(); atualizarDiasEstamparia(); gerarTabelasExcel(); forceRenderTodasTabelas(); restaurarTabelasExcelDoBanco(); } catch(err){} }
             iniciarAutoSavePeriodico();
         }
     }
@@ -1694,14 +1637,18 @@
     }
 
     // =========================================================
-    // PRÊMIOS & PINOS
+    // PRÊMIOS & PINOS — LÓGICA COM META BASE + ATRASO
     // =========================================================
     function recalcularPainelPremio() {
         if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
         const metaBase = parseInt(document.getElementById('premio-meta-base-input')?.value) || 78;
-        const atraso = parseInt(document.getElementById('premio-atraso-input')?.value) || 12;
+        const atraso = parseInt(document.getElementById('premio-atraso-input')?.value) || 0;
         db.premioConfig.metaBase = metaBase;
         db.premioConfig.atraso = atraso;
+        
+        // 🔑 NOVA LÓGICA: Meta efetiva = metaBase + atraso (se atraso > 0, soma)
+        const metaEfetiva = metaBase + atraso;
+        
         const linhasOP2 = db.data['op2_geral'] || [];
         let apontamentos = [];
         linhasOP2.forEach(r => {
@@ -1720,18 +1667,17 @@
                 totalOk += parseInt(i.ok)||0;
             });
         });
-        const metaTotal = metaBase + atraso;
-        const qtd90 = Math.ceil(metaBase * 0.90);
-        const qtd100 = metaBase;
-        const qtd110 = Math.ceil(metaBase * 1.10);
+        const qtd90 = Math.ceil(metaEfetiva * 0.90);
+        const qtd100 = metaEfetiva;
+        const qtd110 = Math.ceil(metaEfetiva * 1.10);
         if (document.getElementById('txt-meta-90')) document.getElementById('txt-meta-90').innerText = qtd90;
         if (document.getElementById('txt-meta-100')) document.getElementById('txt-meta-100').innerText = qtd100;
         if (document.getElementById('txt-meta-110')) document.getElementById('txt-meta-110').innerText = qtd110;
-        if (document.getElementById('kpi-premio-prog')) document.getElementById('kpi-premio-prog').innerText = totalProg || metaTotal;
+        if (document.getElementById('kpi-premio-prog')) document.getElementById('kpi-premio-prog').innerText = metaEfetiva;
         if (document.getElementById('kpi-premio-real')) document.getElementById('kpi-premio-real').innerText = totalOk;
-        const saldo = Math.max(0, (totalProg || metaTotal) - totalOk);
+        const saldo = Math.max(0, metaEfetiva - totalOk);
         if (document.getElementById('kpi-premio-saldo')) document.getElementById('kpi-premio-saldo').innerText = saldo;
-        const pct = metaBase > 0 ? ((totalOk / metaBase) * 100).toFixed(1) : 0;
+        const pct = metaEfetiva > 0 ? ((totalOk / metaEfetiva) * 100).toFixed(1) : 0;
         if (document.getElementById('termometro-pct')) document.getElementById('termometro-pct').innerText = `${pct}%`;
         const fill = Math.min(100, Math.max(0, (totalOk / qtd110) * 100));
         const bar = document.getElementById('termometro-bar-fill');
@@ -1938,6 +1884,7 @@
         calcularTotalSemanaTabela(chaveDB);
     }
     function atualizarDescSemana(chave, idxFlat, valor) {
+        if (supressaoSync) return;
         if (!db.tabelasExcel[chave]) return;
         if (!db.tabelasExcel[chave][idxFlat]) db.tabelasExcel[chave][idxFlat] = { data:'', desc:'', qtd:0 };
         db.tabelasExcel[chave][idxFlat].desc = valor;
@@ -2120,7 +2067,7 @@
     }
 
     // =========================================================
-    // ESTAMPARIA — 🎨 COM CLASSES COLORIDAS
+    // ESTAMPARIA
     // =========================================================
     function atualizarDiasEstamparia() {
         if (!db.estampariaMatriz || !db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
@@ -2236,7 +2183,7 @@
     }
 
     // =========================================================
-    // VIEWS DOS SETORES (Solda, Pintura, OP1, OP2) — 🎨 COM CLASSES
+    // VIEWS DOS SETORES
     // =========================================================
     function expurgarLinhasFantasmas() {
         if (!db.data) db.data = {};
@@ -2638,6 +2585,7 @@
     // =========================================================
     document.addEventListener('input', function(e) {
         const t = e.target;
+        if (supressaoSync) return;
         if (t.classList.contains('estamparia-val-input')) {
             const l = t.dataset.rowName, i = parseInt(t.dataset.colIdx);
             if (!db.estampariaMatriz.valores[l]) db.estampariaMatriz.valores[l] = Array(5).fill('');
@@ -2658,6 +2606,11 @@
             marcarAlteracao();
             return;
         }
+        // 🔑 Inputs de meta soltos
+        if (t.id && (t.id.startsWith('meta-') || t.id.startsWith('produzidos-') || t.id.startsWith('media-'))) {
+            // já tratado via oninput inline
+            return;
+        }
         if (t.classList.contains('cell-input')) {
             const s = t.dataset.sec, r = t.dataset.row, f = t.dataset.field;
             if (s && r !== undefined && f) {
@@ -2675,6 +2628,7 @@
     });
     document.addEventListener('change', function(e) {
         const t = e.target;
+        if (supressaoSync) return;
         if (t.classList.contains('estamparia-val-input')) { renderizarEstampariaMatriz(); return; }
         if (t.dataset.colDate !== undefined) {
             if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
@@ -2705,9 +2659,9 @@
             return;
         }
         if (t.id === 'premio-meta-base-input' || t.id === 'premio-atraso-input') {
-            if (!db.premioConfig) db.premioConfig = { metaBase:78, atraso:12, diasUteis:21 };
+            if (!db.premioConfig) db.premioConfig = { metaBase:78, atraso:0, diasUteis:21 };
             db.premioConfig.metaBase = parseInt(document.getElementById('premio-meta-base-input').value) || 78;
-            db.premioConfig.atraso = parseInt(document.getElementById('premio-atraso-input').value) || 12;
+            db.premioConfig.atraso = parseInt(document.getElementById('premio-atraso-input').value) || 0;
             recalcularPainelPremio();
             marcarAlteracao();
             return;
@@ -2736,6 +2690,19 @@
             atualizarAtrasosGlobais();
             marcarAlteracao();
             forceRenderTodasTabelas();
+        }
+    });
+
+    // 🔑 Eventos específicos dos inputs de meta (change para garantir)
+    document.addEventListener('change', function(e) {
+        const t = e.target;
+        if (t.id && t.id.startsWith('premio-')) {
+            if (supressaoSync) return;
+            if (!db.premioConfig) db.premioConfig = { metaBase:78, atraso:0, diasUteis:21 };
+            db.premioConfig.metaBase = parseInt(document.getElementById('premio-meta-base-input').value) || 78;
+            db.premioConfig.atraso = parseInt(document.getElementById('premio-atraso-input').value) || 0;
+            recalcularPainelPremio();
+            marcarAlteracao();
         }
     });
 
@@ -2868,6 +2835,8 @@
         renderizarViews();
         recalcularPainelPremio();
         forceRenderTodasTabelas();
+        // Preenche inputs de metas
+        setTimeout(() => preencherMetasSaidasInputs(), 800);
         console.log("🚀 Sistema iniciado. Mês:", db.mesReferencia);
     });
     </script>
