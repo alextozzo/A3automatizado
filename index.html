@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -133,7 +133,31 @@
         .close-btn:hover { color: var(--status-red); transform: scale(1.1); }
         .pcp-textarea { width: 100%; height: 250px; border: 1.5px dashed var(--border-mid); border-radius: var(--radius-md); padding: 16px; font-family: 'SF Mono', 'Monaco', monospace; font-size: 14px; outline: none; resize: none; background-color: #fafbfc; color: var(--text-primary); font-weight: 700; white-space: pre; }
         .input-senha { padding: 14px; border: 2px solid var(--border-mid); border-radius: 10px; width: 100%; font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 20px; outline: none; letter-spacing: 4px; }
-        .input-senha:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,.1); }
+        .input-senha:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,.1); }.input-email {
+    padding: 14px;
+    border: 2px solid var(--border-mid);
+    border-radius: 10px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 14px;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+}
+.input-email:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,.1); }
+.login-error {
+    color: var(--status-red);
+    font-weight: 800;
+    font-size: 14px;
+    margin-bottom: 14px;
+    padding: 10px 14px;
+    background: var(--status-red-soft);
+    border-radius: 8px;
+    display: none;
+}
+.login-error.show { display: block; }
 
         #toast { position: fixed; bottom: 32px; right: 32px; background-color: #0f172a; color: #fff; padding: 20px 30px; border-radius: 12px; transition: .3s; transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow-lg); font-size: 16px; border-left: 5px solid var(--status-green); }
         #toast.show { transform: translateY(0); opacity: 1; }
@@ -448,14 +472,16 @@
 
     <button id="btn-exit-tv" onclick="sairModoTV()"><i class="fa-solid fa-power-off"></i> Sair do Modo TV</button>
 
-    <div class="modal-overlay" id="modal-auth">
+        <div class="modal-overlay" id="modal-auth">
         <div class="modal-content" style="width: 420px; text-align: center; padding: 40px 30px;">
-            <div class="modal-header" style="justify-content: center; margin-bottom: 20px;"><h3 style="font-size: 26px;"><i class="fa-solid fa-shield-halved" style="color: var(--randon-blue); margin-right: 10px;"></i> Acesso Restrito</h3></div>
-            <p style="margin-bottom: 24px; color: var(--randon-grey); font-weight: 700; font-size: 16px;">Digite a senha de administrador para liberar a edição.</p>
-            <input type="password" id="senha-admin" class="input-senha" placeholder="••••••••" onkeyup="if(event.key === 'Enter') verificarSenha()">
+            <div class="modal-header" style="justify-content: center; margin-bottom: 20px;"><h3 style="font-size: 26px;"><i class="fa-solid fa-shield-halved" style="color: var(--randon-blue); margin-right: 10px;"></i> Entrar como Gestor</h3></div>
+            <p style="margin-bottom: 24px; color: var(--randon-grey); font-weight: 700; font-size: 16px;">Entre com seu e-mail e senha de gestor para liberar a edição.</p>
+            <input type="email" id="email-admin" class="input-email" placeholder="gestor@exemplo.com" autocomplete="username">
+            <input type="password" id="senha-admin" class="input-senha" placeholder="••••••••" autocomplete="current-password" onkeyup="if(event.key === 'Enter') verificarSenha()">
+            <div class="login-error" id="login-error"></div>
             <div style="display: flex; gap: 10px;">
                 <button class="btn btn-tv" style="flex: 1; justify-content: center;" onclick="fecharModalAuth()">Cancelar</button>
-                <button class="btn btn-auth" style="flex: 2; justify-content: center;" onclick="verificarSenha()"><i class="fa-solid fa-unlock"></i> Desbloquear</button>
+                <button class="btn btn-auth" style="flex: 2; justify-content: center;" id="btn-login" onclick="verificarSenha()"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
             </div>
         </div>
     </div>
@@ -489,9 +515,7 @@
             <div class="modal-header"><h3><i class="fa-solid fa-route" style="color: var(--randon-blue);"></i> Rastreabilidade: <span id="timeline-op-title"></span></h3><button class="close-btn" onclick="fecharModalTimeline()"><i class="fa-solid fa-xmark"></i></button></div>
             <div id="timeline-body" class="op-timeline"></div>
         </div>
-    </div>
-
-    <div id="view-premio" class="view-container">
+    </div>    <div id="view-premio" class="view-container">
         <div class="premio-header-card">
             <div class="premio-title-row">
                 <div><h2><i class="fa-solid fa-trophy" style="color: #fde047;"></i> Termômetro do Prêmio</h2></div>
@@ -847,9 +871,7 @@
         </div>
     </div>
 
-    <div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Sincronizado!</span></div>
-    
-    <script>
+    <div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Sincronizado!</span></div>    <script>
     // =========================================================
     // CONFIGURAÇÕES GERAIS
     // =========================================================
@@ -863,10 +885,13 @@
     let debounceSaveTimer = null;
     let temAlteracoesPendentes = false;
     let saveEmAndamento = false;
-    let supressaoSync = false; // 🔑 evita loop quando recebe dados do Firebase
+    let supressaoSync = false;
     const OP2_DIA_DEFAULT_ROWS = 4;
 
-    // 🔑 Mapa de paths do Firebase para atualização cirúrgica (menos tráfego, mais rápido)
+    // Chave: data no formato 'YYYY-MM-DD'
+    // Nome do módulo de histórico diário
+    const MAX_DIAS_HISTORICO = 120;
+
     const FIREBASE_PATHS = {
         base: 'operacao_atual',
         metas: 'operacao_atual.metasSaidas',
@@ -941,6 +966,12 @@
         'tbody-op2-dia': 'op2Dia', 'tbody-pendencias-excel': 'pendencias', 'tbody-diario-op2': 'diarioOp2'
     };
 
+    // =========================================================
+    // 🔑 TABELAS QUE FICAM ISOLADAS POR DIA
+    // (Saídas DIA, Saídas Seguinte, Pintura, Montagem, OP1, OP2 DIA)
+    // =========================================================
+    const TABELAS_POR_DIA = ['saidasDia', 'saidasSeguinte', 'pintura', 'montagem', 'op1', 'op2Dia'];
+
     let db = {
         globalDate: '',
         mesReferencia: '',
@@ -956,7 +987,10 @@
         tabelasExcel: {
             diasMes: [], saidasDia: [], saidasSeguinte: [], pintura: [],
             montagem: [], op1: [], op2Dia: [], pendencias: [], diarioOp2: []
-        }
+        },
+        // 🔑 NOVO: histórico diário das 6 tabelas isoladas
+        // Estrutura: { 'YYYY-MM-DD': { saidasDia: [...], saidasSeguinte: [...], pintura: [...], montagem: [...], op1: [...], op2Dia: [...] } }
+        historicoEstamparia: {}
     };
 
     let pcpIndex = { bySectorAndDate: {}, byOv: new Map() };
@@ -1079,6 +1113,124 @@
     }
 
     // =========================================================
+    // 🔑 CONVERSÃO DE DATA BR <-> ISO (para chave do histórico)
+    // =========================================================
+    function brParaChaveISO(dataBR) {
+        if (!dataBR) return '';
+        const p = String(dataBR).trim().replace(/[.\-]/g,'/').split('/');
+        if (p.length !== 3) return '';
+        let d, m, y;
+        if (p[0].length === 4) { y = p[0]; m = p[1].padStart(2,'0'); d = p[2].padStart(2,'0'); }
+        else { d = p[0].padStart(2,'0'); m = p[1].padStart(2,'0'); y = p[2]; if (y.length === 2) y = '20' + y; }
+        return `${y.padStart(4,'0')}-${m}-${d}`;
+    }
+
+    // =========================================================
+    // 🔑 HISTÓRICO DIÁRIO DAS 6 TABELAS DA ESTAMPARIA
+    // =========================================================
+    function tabelasTemConteudo() {
+        // Verifica se pelo menos uma das 6 tabelas tem conteúdo
+        return TABELAS_POR_DIA.some(ch => {
+            const t = db.tabelasExcel[ch];
+            if (!Array.isArray(t)) return false;
+            return t.some(linha => Array.isArray(linha) && linha.some(v => v && String(v).trim() !== ''));
+        });
+    }
+
+    function tabelasEstaoVazias() {
+        return !tabelasTemConteudo();
+    }
+
+    function salvarHistoricoEstamparia(dataBR) {
+        if (!dataBR) return;
+        const chave = brParaChaveISO(dataBR);
+        if (!chave) return;
+        if (!db.historicoEstamparia) db.historicoEstamparia = {};
+        
+        // Só salva se tiver conteúdo real (não grava tabelas em branco)
+        if (!tabelasTemConteudo()) {
+            // Se não tem conteúdo mas já existe histórico, mantém o histórico antigo
+            // (para não perder dados de um dia já preenchido)
+            return;
+        }
+        
+        const snapshot = { ts: Date.now() };
+        TABELAS_POR_DIA.forEach(ch => {
+            snapshot[ch] = JSON.parse(JSON.stringify(db.tabelasExcel[ch] || []));
+        });
+        
+        db.historicoEstamparia[chave] = snapshot;
+        
+        // Limita o histórico para não crescer infinitamente
+        const chaves = Object.keys(db.historicoEstamparia).sort();
+        if (chaves.length > MAX_DIAS_HISTORICO) {
+            const remover = chaves.slice(0, chaves.length - MAX_DIAS_HISTORICO);
+            remover.forEach(k => { delete db.historicoEstamparia[k]; });
+        }
+    }
+
+    function limparTabelasPorDia() {
+        // Zera as 6 tabelas (mantém a estrutura, só apaga o conteúdo)
+        TABELAS_POR_DIA.forEach(ch => {
+            if (!db.tabelasExcel[ch]) { db.tabelasExcel[ch] = []; return; }
+            if (ch === 'op2Dia') {
+                // OP2 DIA sempre tem mínimo de linhas
+                while (db.tabelasExcel[ch].length < OP2_DIA_DEFAULT_ROWS) db.tabelasExcel[ch].push(['','','','']);
+                db.tabelasExcel[ch] = db.tabelasExcel[ch].map(() => ['','','','']);
+            } else {
+                db.tabelasExcel[ch] = db.tabelasExcel[ch].map(linha => {
+                    if (!Array.isArray(linha)) return [];
+                    return linha.map(() => '');
+                });
+                // Garante pelo menos algumas linhas vazias
+                const minLinhas = (ch === 'montagem') ? 6 : (ch === 'op1') ? 4 : 5;
+                while (db.tabelasExcel[ch].length < 3) {
+                    db.tabelasExcel[ch].push(new Array(minLinhas).fill(''));
+                }
+            }
+        });
+    }
+
+    function restaurarHistoricoEstamparia(dataBR) {
+        if (!dataBR) return false;
+        const chave = brParaChaveISO(dataBR);
+        if (!chave) return false;
+        if (!db.historicoEstamparia || !db.historicoEstamparia[chave]) return false;
+        const snap = db.historicoEstamparia[chave];
+        TABELAS_POR_DIA.forEach(ch => {
+            if (Array.isArray(snap[ch])) {
+                db.tabelasExcel[ch] = JSON.parse(JSON.stringify(snap[ch]));
+            }
+        });
+        return true;
+    }
+
+    function aplicarDia(dataBR) {
+        // Salva o dia ANTES, restaura o dia NOVO, e limpa se não tiver histórico
+        const dataAntiga = db.globalDate;
+        if (dataAntiga && dataAntiga !== dataBR) {
+            salvarHistoricoEstamparia(dataAntiga);
+        }
+        db.globalDate = dataBR;
+        const elData = document.getElementById('global-date');
+        if (elData && elData.value !== dataBR) elData.value = dataBR;
+        
+        const temHistorico = restaurarHistoricoEstamparia(dataBR);
+        if (!temHistorico) {
+            limparTabelasPorDia();
+        }
+        
+        // Re-renderiza tudo que depende dessas tabelas
+        gerarTabelasExcel();
+        renderizarOP2Dia();
+        updateAnalytics();
+        renderResumoApontamento();
+        
+        marcarAlteracao();
+        return temHistorico;
+    }
+
+    // =========================================================
     // UI / TOAST / STATUS
     // =========================================================
     function setStatusConexao(estado) {
@@ -1111,37 +1263,93 @@
     // =========================================================
     // AUTENTICAÇÃO ADMIN
     // =========================================================
-    function toggleAdmin() {
+        function toggleAdmin() {
         const m = document.getElementById('modal-auth');
         if (isAdmin) {
-            isAdmin = false;
-            document.body.classList.remove('admin-mode');
-            document.body.classList.add('readonly-mode');
-            document.getElementById('lock-icon').className = 'fa-solid fa-lock';
-            document.getElementById('auth-label').innerText = 'Visualização';
-            mostrarToast('Modo visualização', 'fa-eye');
+            // Usuário logado → clicar no cadeado agora faz LOGOUT
+            if (confirm('Deseja sair do modo Gestor?')) {
+                logoutGestor();
+            }
         } else {
-            m.classList.toggle('active');
-            document.getElementById('senha-admin').value = '';
-            document.getElementById('senha-admin').focus();
+            m.classList.add('active');
+            limparErroLogin();
+            const emailEl = document.getElementById('email-admin');
+            const senhaEl = document.getElementById('senha-admin');
+            if (emailEl) emailEl.value = '';
+            if (senhaEl) senhaEl.value = '';
+            setTimeout(() => {
+                if (emailEl) emailEl.focus();
+            }, 100);
         }
     }
     function fecharModalAuth() { document.getElementById('modal-auth').classList.remove('active'); }
-    function verificarSenha() {
-        if (document.getElementById('senha-admin').value === SENHA_ADMIN) {
-            isAdmin = true;
-            document.body.classList.remove('readonly-mode');
-            document.body.classList.add('admin-mode');
-            document.getElementById('lock-icon').className = 'fa-solid fa-unlock';
-            document.getElementById('auth-label').innerText = 'Admin';
-            fecharModalAuth();
-            mostrarToast('Modo Administrador ativado!', 'fa-shield-halved');
-            forceRenderTodasTabelas();
+        // =========================================================
+    // LOGIN COM FIREBASE AUTH
+    // =========================================================
+    function mostrarErroLogin(msg) {
+        const el = document.getElementById('login-error');
+        if (!el) return;
+        el.innerText = msg;
+        el.classList.add('show');
+    }
+    function limparErroLogin() {
+        const el = document.getElementById('login-error');
+        if (el) { el.innerText = ''; el.classList.remove('show'); }
+    }
+    function setBotaoLoginCarregando(carregando) {
+        const btn = document.getElementById('btn-login');
+        if (!btn) return;
+        if (carregando) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
         } else {
-            alert('Senha incorreta!');
-            document.getElementById('senha-admin').value = '';
-            document.getElementById('senha-admin').focus();
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Entrar';
         }
+    }
+
+    function verificarSenha() {
+        const email = (document.getElementById('email-admin')?.value || '').trim();
+        const senha = document.getElementById('senha-admin')?.value || '';
+        limparErroLogin();
+
+        if (!email || !senha) {
+            mostrarErroLogin('Preencha e-mail e senha.');
+            return;
+        }
+        if (!window.firebase || !firebase.auth) {
+            mostrarErroLogin('Firebase Auth não carregado. Recarregue a página.');
+            return;
+        }
+
+        setBotaoLoginCarregando(true);
+        firebase.auth().signInWithEmailAndPassword(email, senha)
+            .then((userCredential) => {
+                // onAuthStateChanged vai tratar a UI
+                setBotaoLoginCarregando(false);
+            })
+            .catch((error) => {
+                console.error('Erro login:', error);
+                setBotaoLoginCarregando(false);
+                let msg = 'Não foi possível entrar.';
+                if (error.code === 'auth/invalid-email') msg = 'E-mail inválido.';
+                else if (error.code === 'auth/user-not-found') msg = 'Usuário não encontrado.';
+                else if (error.code === 'auth/wrong-password') msg = 'Senha incorreta.';
+                else if (error.code === 'auth/invalid-credential') msg = 'E-mail ou senha incorretos.';
+                else if (error.code === 'auth/too-many-requests') msg = 'Muitas tentativas. Aguarde alguns minutos.';
+                else if (error.code === 'auth/network-request-failed') msg = 'Falha de rede. Verifique a conexão.';
+                mostrarErroLogin(msg);
+            });
+    }
+
+    // Deslogar (chamado pelo botão "Sair" que vamos adicionar depois)
+    function logoutGestor() {
+        if (!window.firebase || !firebase.auth) return;
+        firebase.auth().signOut().then(() => {
+            mostrarToast('Sessão encerrada', 'fa-right-from-bracket');
+        }).catch(err => {
+            console.error('Erro ao sair:', err);
+        });
     }
 
     // =========================================================
@@ -1158,29 +1366,30 @@
         if (id === 'estamparia') updateEstampariaChart();
         if (id === 'apontamento') renderResumoApontamento();
     }
+
+    // 🔑 FUNÇÕES DE NAVEGAÇÃO DE DATA (modificadas para trabalhar com histórico)
     function alterarDiaReferencia(off) {
         let ref = parseDataComAnoRef(db.globalDate, 2026) || new Date();
         ref.setDate(ref.getDate() + off);
         const nova = getDataCompleta(ref);
-        db.globalDate = nova;
-        document.getElementById('global-date').value = nova;
-        marcarAlteracao();
+        const restaurado = aplicarDia(nova);
         forceRenderTodasTabelas();
-        mostrarToast(`Programação: ${nova}`, 'fa-calendar-day');
+        mostrarToast(`Programação: ${nova}${restaurado ? ' (dados restaurados)' : ' (novo dia)'}`, 'fa-calendar-day');
     }
+
     function irParaHoje() {
-        db.globalDate = getDataCompleta();
-        document.getElementById('global-date').value = db.globalDate;
-        marcarAlteracao();
+        const hoje = getDataCompleta();
+        const restaurado = aplicarDia(hoje);
         forceRenderTodasTabelas();
-        mostrarToast(`Hoje: ${db.globalDate}`, 'fa-calendar-check');
+        mostrarToast(`Hoje: ${hoje}${restaurado ? ' (dados restaurados)' : ''}`, 'fa-calendar-check');
     }
+
     function definirDataManual(v) {
         if (!v || v.trim()==='') return;
-        db.globalDate = normalizarDataParaComparacao(v);
-        marcarAlteracao();
+        const dataNova = normalizarDataParaComparacao(v);
+        const restaurado = aplicarDia(dataNova);
         forceRenderTodasTabelas();
-        mostrarToast(`Data: ${db.globalDate}`, 'fa-calendar-day');
+        mostrarToast(`Data: ${dataNova}${restaurado ? ' (dados restaurados)' : ' (novo dia)'}`, 'fa-calendar-day');
     }
 
     // =========================================================
@@ -1220,9 +1429,7 @@
         const [ano, mes] = valor.split('-');
         const nomesMeses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
         mostrarToast(`✅ Mês ${nomesMeses[parseInt(mes,10)-1]}/${ano} carregado`, 'fa-cloud-arrow-up');
-    }
-
-    function preencherMetasSaidasInputs() {
+    }    function preencherMetasSaidasInputs() {
         if (!db.metasSaidas) db.metasSaidas = { metaMes:'81', produzidos:'60', mediaMeta:'3,9', mediaReal:'3,5', op2:{ metaMes:'81', produzidos:'59', mediaMeta:'3,9', mediaReal:'3,5' } };
         const m = db.metasSaidas;
         if (document.getElementById('meta-mes-saidas')) document.getElementById('meta-mes-saidas').value = m.metaMes || '';
@@ -1238,7 +1445,6 @@
         if (document.getElementById('premio-atraso-input')) document.getElementById('premio-atraso-input').value = db.premioConfig?.atraso ?? 0;
     }
 
-    // 🔑 Funções de salvar cada campo das metas
     window.salvarMetaMes = function(grupo, val) {
         if (!db.metasSaidas) db.metasSaidas = {};
         if (grupo === 'op2') { if (!db.metasSaidas.op2) db.metasSaidas.op2 = {}; db.metasSaidas.op2.metaMes = val; }
@@ -1285,6 +1491,12 @@
         saveEmAndamento = true;
         setStatusConexao('syncing');
         mostrarSyncIndicador(true);
+        
+        // 🔑 Antes de enviar, salva o histórico do dia atual
+        if (db.globalDate) {
+            salvarHistoricoEstamparia(db.globalDate);
+        }
+        
         let dbLimpo = sanearParaFirebase(db);
         try { localStorage.setItem('erp_randon_backup_local', JSON.stringify(dbLimpo)); } catch(e) {}
         if (dbRef) {
@@ -1322,13 +1534,11 @@
         if (document.visibilityState === 'hidden' && temAlteracoesPendentes) salvarNoFirebase(false);
     });
 
-    // 🔑 Verifica se o usuário está digitando em algum input (para não sobrescrever o que ele está digitando com dados do Firebase)
     function usuarioEstaDigitando() {
         const el = document.activeElement;
         if (!el) return false;
         const tag = el.tagName;
         if (tag !== 'INPUT' && tag !== 'SELECT' && tag !== 'TEXTAREA') return false;
-        // Se está em um campo editável, não sobrescreve
         return el.classList.contains('cell-input') || 
                el.classList.contains('ex-in') || 
                el.classList.contains('pino-val-input') || 
@@ -1339,6 +1549,46 @@
                el.id.startsWith('produzidos-') ||
                el.id.startsWith('media-') ||
                el.id.startsWith('premio-');
+    }
+
+    // =========================================================
+    // AUTENTICAÇÃO — Firebase Auth
+    // =========================================================
+    function initAuth() {
+        if (!window.firebase || !firebase.auth) {
+            console.warn('Firebase Auth não disponível');
+            return;
+        }
+        firebase.auth().onAuthStateChanged((user) => {
+            const lockIcon = document.getElementById('lock-icon');
+            const authLabel = document.getElementById('auth-label');
+            const authBtn = document.getElementById('auth-btn');
+
+            if (user && user.email) {
+                // Usuário logado
+                isAdmin = true;
+                document.body.classList.remove('readonly-mode');
+                document.body.classList.add('admin-mode');
+                if (lockIcon) lockIcon.className = 'fa-solid fa-unlock';
+                if (authLabel) authLabel.innerText = user.email.split('@')[0];
+                if (authBtn) authBtn.classList.add('logged');
+                fecharModalAuth();
+                limparErroLogin();
+                setBotaoLoginCarregando(false);
+                mostrarToast('Bem-vindo, ' + user.email, 'fa-shield-halved');
+                forceRenderTodasTabelas();
+            } else {
+                // Sem login = visualização
+                isAdmin = false;
+                document.body.classList.add('readonly-mode');
+                document.body.classList.remove('admin-mode');
+                if (lockIcon) lockIcon.className = 'fa-solid fa-lock';
+                if (authLabel) authLabel.innerText = 'Entrar como Gestor';
+                if (authBtn) authBtn.classList.remove('logged');
+                setBotaoLoginCarregando(false);
+                forceRenderTodasTabelas();
+            }
+        });
     }
 
     function initFirebase() {
@@ -1358,7 +1608,6 @@
             dbRef = firebaseDB.ref('operacao_atual');
             firebaseDB.ref('.info/connected').on('value', snap => setStatusConexao(snap.val()===true?'online':'offline'));
             
-            // 🚀 CARGA INICIAL + LISTENER EM TEMPO REAL
             dbRef.on('value', snapshot => {
                 const nuvem = snapshot.val();
                 if (!nuvem) return;
@@ -1368,17 +1617,14 @@
                 if (!nuvem.premioConfig) nuvem.premioConfig = { metaBase:78, atraso:0, diasUteis:21 };
                 if (!nuvem.tabelasExcel) nuvem.tabelasExcel = {};
                 if (!nuvem.snapshotsMeses) nuvem.snapshotsMeses = {};
+                if (!nuvem.historicoEstamparia) nuvem.historicoEstamparia = {};
                 if (!nuvem.metasSaidas) nuvem.metasSaidas = { metaMes:'81', produzidos:'60', mediaMeta:'3,9', mediaReal:'3,5', op2:{ metaMes:'81', produzidos:'59', mediaMeta:'3,9', mediaReal:'3,5' } };
                 if (!nuvem.mesReferencia) {
                     const agora = new Date();
                     nuvem.mesReferencia = `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}`;
                 }
                 
-                // 🔑 Se o usuário está digitando, NÃO sobrescreve o valor atual do input
-                // mas atualiza o resto do db normalmente (outros campos que ele não está mexendo)
                 supressaoSync = true;
-                const dbAntigo = db;
-                // Preserva campos que o usuário está digitando no momento
                 const elAtivo = document.activeElement;
                 const idAtivo = elAtivo ? elAtivo.id : null;
                 const valorAtivo = elAtivo && (elAtivo.tagName==='INPUT'||elAtivo.tagName==='SELECT') ? elAtivo.value : null;
@@ -1387,7 +1633,6 @@
                 reconstruirIndicesPCP();
                 expurgarLinhasFantasmas();
                 
-                // Preserva o valor ativo
                 if (idAtivo && valorAtivo !== null && db.metasSaidas) {
                     if (idAtivo === 'meta-mes-saidas') db.metasSaidas.metaMes = valorAtivo;
                     else if (idAtivo === 'produzidos-saidas') db.metasSaidas.produzidos = valorAtivo;
@@ -1404,13 +1649,11 @@
                 atualizarDiasEstamparia();
                 gerarTabelasExcel();
                 
-                // 🔑 Só re-renderiza se NÃO está digitando (evita perder foco/cursor)
                 if (!usuarioEstaDigitando()) {
                     forceRenderTodasTabelas();
                     restaurarTabelasExcelDoBanco();
                     preencherMetasSaidasInputs();
                 } else {
-                    // Se está digitando, atualiza apenas o que não é input
                     atualizarAtrasosGlobais();
                     recalcularDashboard();
                     recalcularPainelPremio();
@@ -1646,7 +1889,6 @@
         db.premioConfig.metaBase = metaBase;
         db.premioConfig.atraso = atraso;
         
-        // 🔑 NOVA LÓGICA: Meta efetiva = metaBase + atraso (se atraso > 0, soma)
         const metaEfetiva = metaBase + atraso;
         
         const linhasOP2 = db.data['op2_geral'] || [];
@@ -1915,8 +2157,8 @@
         renderizarTabelaSemana('tbody-diario-op2', 'diarioOp2', 'desc-input-diario');
         if (!db.tabelasExcel.saidasDia || db.tabelasExcel.saidasDia.length === 0) {
             db.tabelasExcel.saidasDia = [
-                ['3616','8606BTD','4036','9373 BS GR','7919 PM'],
-                ['','8607 BTD','5830','','296 CT'],
+                ['','','','',''],
+                ['','','','',''],
                 ['','','','','']
             ];
         }
@@ -1930,7 +2172,7 @@
             }).join('');
         }
         if (!db.tabelasExcel.saidasSeguinte || db.tabelasExcel.saidasSeguinte.length === 0) {
-            db.tabelasExcel.saidasSeguinte = [['3615','8606BTR','5831','','0872 CT']];
+            db.tabelasExcel.saidasSeguinte = [['','','','','']];
         }
         const tbSS = document.getElementById('tbody-saidas-seguinte');
         if (tbSS) {
@@ -1941,7 +2183,7 @@
             }).join('');
         }
         if (!db.tabelasExcel.pintura || db.tabelasExcel.pintura.length === 0) {
-            db.tabelasExcel.pintura = [['3678 CT','','5828','','']];
+            db.tabelasExcel.pintura = [['','','','','']];
             for (let i = 0; i < 9; i++) db.tabelasExcel.pintura.push(['','','','','']);
         }
         const tbP = document.getElementById('tbody-pintura-excel');
@@ -1953,7 +2195,7 @@
             }).join('');
         }
         if (!db.tabelasExcel.montagem || db.tabelasExcel.montagem.length === 0) {
-            db.tabelasExcel.montagem = [['','4297 7C','','','','']];
+            db.tabelasExcel.montagem = [['','','','','','']];
             for (let i = 0; i < 9; i++) db.tabelasExcel.montagem.push(['','','','','','']);
         }
         const tbM = document.getElementById('tbody-montagem-excel');
@@ -1965,7 +2207,7 @@
             }).join('');
         }
         if (!db.tabelasExcel.op1 || db.tabelasExcel.op1.length === 0) {
-            db.tabelasExcel.op1 = [['1954','3137 6C','','']];
+            db.tabelasExcel.op1 = [['','','','']];
             for (let i = 0; i < 9; i++) db.tabelasExcel.op1.push(['','','','']);
         }
         const tbO1 = document.getElementById('tbody-op1-excel');
@@ -1977,7 +2219,7 @@
             }).join('');
         }
         if (!db.tabelasExcel.pendencias || db.tabelasExcel.pendencias.length === 0) {
-            db.tabelasExcel.pendencias = [['3137','Problema de qualidade','']];
+            db.tabelasExcel.pendencias = [['','','']];
             for (let i = 0; i < 9; i++) db.tabelasExcel.pendencias.push(['','','']);
         }
         const tbPend = document.getElementById('tbody-pendencias-excel');
@@ -2008,6 +2250,7 @@
         tbody.appendChild(tr);
         if (!db.tabelasExcel[chave]) db.tabelasExcel[chave] = [];
         db.tabelasExcel[chave].push(new Array(cols).fill(''));
+        salvarHistoricoEstamparia(db.globalDate);
         marcarAlteracao();
         mostrarToast('Linha adicionada!', 'fa-plus');
     }
@@ -2019,6 +2262,7 @@
         tbody.deleteRow(-1);
         const chave = TABELAS_EXCEL_MAP[tbodyId];
         if (db.tabelasExcel[chave]) db.tabelasExcel[chave].pop();
+        salvarHistoricoEstamparia(db.globalDate);
         marcarAlteracao();
         mostrarToast('Linha removida.', 'fa-minus');
     }
@@ -2042,6 +2286,7 @@
         if (!db.tabelasExcel.op2Dia) db.tabelasExcel.op2Dia = [];
         db.tabelasExcel.op2Dia.push(['','','','']);
         renderizarOP2Dia();
+        salvarHistoricoEstamparia(db.globalDate);
         marcarAlteracao();
         mostrarToast('Linha adicionada!', 'fa-plus');
     }
@@ -2054,6 +2299,7 @@
         if (!confirm('Remover última?')) return;
         db.tabelasExcel.op2Dia.pop();
         renderizarOP2Dia();
+        salvarHistoricoEstamparia(db.globalDate);
         marcarAlteracao();
         mostrarToast('Removida.', 'fa-minus');
     }
@@ -2595,7 +2841,13 @@
         }
         if (t.classList.contains('op2-dia-input')) {
             const r = parseInt(t.dataset.row), c = parseInt(t.dataset.col);
-            if (db.tabelasExcel.op2Dia && db.tabelasExcel.op2Dia[r]) { db.tabelasExcel.op2Dia[r][c] = t.value; marcarAlteracao(); }
+            if (db.tabelasExcel.op2Dia && db.tabelasExcel.op2Dia[r]) {
+                db.tabelasExcel.op2Dia[r][c] = t.value;
+                // 🔑 Snapshot do dia após edição (com debounce)
+                const dataAtual = db.globalDate;
+                setTimeout(() => { if (db.globalDate === dataAtual) salvarHistoricoEstamparia(dataAtual); }, 500);
+                marcarAlteracao();
+            }
             return;
         }
         if (t.dataset.chave && t.dataset.row !== undefined && t.dataset.col !== undefined && t.classList.contains('ex-in')) {
@@ -2603,12 +2855,15 @@
             if (!db.tabelasExcel[ch]) db.tabelasExcel[ch] = [];
             if (!db.tabelasExcel[ch][r]) db.tabelasExcel[ch][r] = [];
             db.tabelasExcel[ch][r][c] = t.value;
+            // 🔑 Se for uma das 6 tabelas isoladas por dia, salva snapshot (com debounce)
+            if (TABELAS_POR_DIA.includes(ch)) {
+                const dataAtual = db.globalDate;
+                setTimeout(() => { if (db.globalDate === dataAtual) salvarHistoricoEstamparia(dataAtual); }, 500);
+            }
             marcarAlteracao();
             return;
         }
-        // 🔑 Inputs de meta soltos
         if (t.id && (t.id.startsWith('meta-') || t.id.startsWith('produzidos-') || t.id.startsWith('media-'))) {
-            // já tratado via oninput inline
             return;
         }
         if (t.classList.contains('cell-input')) {
@@ -2693,7 +2948,6 @@
         }
     });
 
-    // 🔑 Eventos específicos dos inputs de meta (change para garantir)
     document.addEventListener('change', function(e) {
         const t = e.target;
         if (t.id && t.id.startsWith('premio-')) {
@@ -2716,6 +2970,7 @@
         try {
             db = JSON.parse(b);
             if (!db.tabelasExcel) db.tabelasExcel = {};
+            if (!db.historicoEstamparia) db.historicoEstamparia = {};
             reconstruirIndicesPCP();
             expurgarLinhasFantasmas();
             gerarTabelasExcel();
@@ -2828,14 +3083,14 @@
         }
         const elMes = document.getElementById('global-month');
         if (elMes) elMes.value = db.mesReferencia;
-        initCharts();
+               initCharts();
         initFirebase();
+        initAuth();
         gerarTabelasExcel();
         renderizarEstampariaMatriz();
         renderizarViews();
         recalcularPainelPremio();
         forceRenderTodasTabelas();
-        // Preenche inputs de metas
         setTimeout(() => preencherMetasSaidasInputs(), 800);
         console.log("🚀 Sistema iniciado. Mês:", db.mesReferencia);
     });
