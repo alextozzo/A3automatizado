@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -133,31 +134,32 @@
         .close-btn:hover { color: var(--status-red); transform: scale(1.1); }
         .pcp-textarea { width: 100%; height: 250px; border: 1.5px dashed var(--border-mid); border-radius: var(--radius-md); padding: 16px; font-family: 'SF Mono', 'Monaco', monospace; font-size: 14px; outline: none; resize: none; background-color: #fafbfc; color: var(--text-primary); font-weight: 700; white-space: pre; }
         .input-senha { padding: 14px; border: 2px solid var(--border-mid); border-radius: 10px; width: 100%; font-size: 22px; font-weight: 800; text-align: center; margin-bottom: 20px; outline: none; letter-spacing: 4px; }
-        .input-senha:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,.1); }.input-email {
-    padding: 14px;
-    border: 2px solid var(--border-mid);
-    border-radius: 10px;
-    width: 100%;
-    font-size: 16px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 14px;
-    outline: none;
-    font-family: 'Inter', sans-serif;
-    color: var(--text-primary);
-}
-.input-email:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,.1); }
-.login-error {
-    color: var(--status-red);
-    font-weight: 800;
-    font-size: 14px;
-    margin-bottom: 14px;
-    padding: 10px 14px;
-    background: var(--status-red-soft);
-    border-radius: 8px;
-    display: none;
-}
-.login-error.show { display: block; }
+        .input-senha:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,.1); }
+        .input-email {
+            padding: 14px;
+            border: 2px solid var(--border-mid);
+            border-radius: 10px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 14px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+        }
+        .input-email:focus { border-color: var(--randon-blue); box-shadow: 0 0 0 4px rgba(59,130,246,.1); }
+        .login-error {
+            color: var(--status-red);
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 14px;
+            padding: 10px 14px;
+            background: var(--status-red-soft);
+            border-radius: 8px;
+            display: none;
+        }
+        .login-error.show { display: block; }
 
         #toast { position: fixed; bottom: 32px; right: 32px; background-color: #0f172a; color: #fff; padding: 20px 30px; border-radius: 12px; transition: .3s; transform: translateY(100px); opacity: 0; font-weight: 800; z-index: 9999; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow-lg); font-size: 16px; border-left: 5px solid var(--status-green); }
         #toast.show { transform: translateY(0); opacity: 1; }
@@ -409,10 +411,181 @@
         .badge-status-ok { background: var(--status-green-soft); color: #065f46; padding: 6px 14px; border-radius: 20px; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; display: inline-block; }
         .badge-status-np { background: var(--status-red-soft); color: #991b1b; padding: 6px 14px; border-radius: 20px; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; display: inline-block; }
         
+        /* =========================================================
+           GUIA DE APONTAMENTO CONSOLIDADO — UMA PÁGINA
+           ========================================================= */
+        #guia-consolidado-wrapper {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+        #tabela-guia-estamparia {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        #tabela-guia-estamparia thead th {
+            background: #0f172a;
+            color: white;
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            padding: 6px 8px;
+            text-align: left;
+            border: 1px solid #1e293b;
+        }
+        #tabela-guia-estamparia tbody td {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border: 1px solid #e2e8f0;
+            height: 22px;
+            line-height: 1.1;
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        #tabela-guia-estamparia tbody tr:nth-child(even) td {
+            background: #fafbfc;
+        }
+        #tabela-guia-estamparia tbody td.col-ov {
+            font-weight: 900;
+            color: #b91c1c;
+            font-variant-numeric: tabular-nums;
+        }
+        #tabela-guia-estamparia tbody td.col-produto {
+            text-align: left;
+            padding-left: 10px;
+        }
+        .guia-header-compact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 10px 10px 0 0;
+            margin: -16px -20px 12px -20px;
+        }
+        .guia-header-compact h3 {
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: .3px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .guia-header-compact .guia-info {
+            font-size: 11px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+        .guia-rodape {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 2px solid var(--border-mid);
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+        .guia-rodape .total-itens {
+            color: var(--randon-red);
+            font-size: 13px;
+        }
+
+        /* =========================================================
+           IMPRESSÃO — GUIA CONSOLIDADO EM UMA PÁGINA
+           ========================================================= */
         @media print {
-            body { background-color: white !important; font-size: 14px; overflow: visible !important; }
-            .navbar, #toast, #btn-exit-tv, .btn-pdf, .btn-excel, .btn-tv, .btn-pcp, .btn-limpar, .ver-mais-container, .auth-container, .admin-only, .search-box-container, .net-badge, .excel-actions { display: none !important; }
-            .section-card, .chart-box, .dash-card { box-shadow: none !important; border: 1px solid #e2e8f0; }
+            @page {
+                size: A4 landscape;
+                margin: 6mm;
+            }
+            html, body {
+                width: 100% !important;
+                height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                font-size: 10px !important;
+            }
+            body * {
+                visibility: hidden !important;
+            }
+            #guia-consolidado-wrapper,
+            #guia-consolidado-wrapper * {
+                visibility: visible !important;
+            }
+            #guia-consolidado-wrapper {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+            }
+            #guia-consolidado-wrapper .guia-header-compact {
+                margin: 0 0 6px 0 !important;
+                border-radius: 0 !important;
+                padding: 6px 10px !important;
+            }
+            #guia-consolidado-wrapper .guia-header-compact h3 {
+                font-size: 12px !important;
+            }
+            #guia-consolidado-wrapper .guia-header-compact .guia-info {
+                font-size: 9px !important;
+            }
+            #tabela-guia-estamparia thead th {
+                font-size: 9px !important;
+                padding: 3px 5px !important;
+                background: #0f172a !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            #tabela-guia-estamparia tbody td {
+                font-size: 9px !important;
+                padding: 1px 5px !important;
+                height: 16px !important;
+                line-height: 1.05 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            #tabela-guia-estamparia tbody tr:nth-child(even) td {
+                background: #fafbfc !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .guia-rodape {
+                font-size: 9px !important;
+                margin-top: 4px !important;
+                padding-top: 3px !important;
+            }
+            .guia-rodape .total-itens {
+                font-size: 11px !important;
+            }
+            .navbar, #toast, #btn-exit-tv, .btn-pdf, .btn-excel, .btn-tv, .btn-pcp,
+            .btn-limpar, .ver-mais-container, .auth-container, .admin-only,
+            .search-box-container, .net-badge, .excel-actions, .analytics-header,
+            .apontamento-table-wrapper:not(#guia-consolidado-wrapper) {
+                display: none !important;
+            }
         }
     </style>
 </head>
@@ -472,7 +645,7 @@
 
     <button id="btn-exit-tv" onclick="sairModoTV()"><i class="fa-solid fa-power-off"></i> Sair do Modo TV</button>
 
-        <div class="modal-overlay" id="modal-auth">
+    <div class="modal-overlay" id="modal-auth">
         <div class="modal-content" style="width: 420px; text-align: center; padding: 40px 30px;">
             <div class="modal-header" style="justify-content: center; margin-bottom: 20px;"><h3 style="font-size: 26px;"><i class="fa-solid fa-shield-halved" style="color: var(--randon-blue); margin-right: 10px;"></i> Entrar como Gestor</h3></div>
             <p style="margin-bottom: 24px; color: var(--randon-grey); font-weight: 700; font-size: 16px;">Entre com seu e-mail e senha de gestor para liberar a edição.</p>
@@ -515,7 +688,9 @@
             <div class="modal-header"><h3><i class="fa-solid fa-route" style="color: var(--randon-blue);"></i> Rastreabilidade: <span id="timeline-op-title"></span></h3><button class="close-btn" onclick="fecharModalTimeline()"><i class="fa-solid fa-xmark"></i></button></div>
             <div id="timeline-body" class="op-timeline"></div>
         </div>
-    </div>    <div id="view-premio" class="view-container">
+    </div>
+
+    <div id="view-premio" class="view-container">
         <div class="premio-header-card">
             <div class="premio-title-row">
                 <div><h2><i class="fa-solid fa-trophy" style="color: #fde047;"></i> Termômetro do Prêmio</h2></div>
@@ -836,9 +1011,36 @@
             </div>
             <div style="display: flex; gap: 10px;">
                 <button class="btn btn-orange admin-only" onclick="zerarApontamentos()"><i class="fa-solid fa-eraser"></i> Limpar Apontamentos</button>
-                <button class="btn btn-tv" onclick="window.print()" style="padding: 14px 24px; font-size: 15px;"><i class="fa-solid fa-print"></i> Imprimir Guia Físico</button>
+                <button class="btn btn-tv" onclick="imprimirGuiaConsolidado()" style="padding: 14px 24px; font-size: 15px;"><i class="fa-solid fa-print"></i> Imprimir Guia Físico</button>
             </div>
         </div>
+
+        <div id="guia-consolidado-wrapper">
+            <div class="guia-header-compact">
+                <h3><i class="fa-solid fa-clipboard-list"></i> GUIA DE APONTAMENTO CONSOLIDADO — ESTAMPARIA</h3>
+                <span class="guia-info" id="guia-data-label">Data: --/--/----</span>
+            </div>
+            <table id="tabela-guia-estamparia">
+                <thead>
+                    <tr>
+                        <th style="width: 11%;">Origem</th>
+                        <th style="width: 8%;">Data</th>
+                        <th style="width: 12%;">OV</th>
+                        <th style="width: 45%;">Produto / Descrição</th>
+                        <th style="width: 8%;">Col.</th>
+                        <th style="width: 6%;">Linha</th>
+                        <th style="width: 10%;">Setor</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-guia-estamparia"></tbody>
+            </table>
+            <div class="guia-rodape">
+                <span>Randon Triel-HT — Controle de Produção</span>
+                <span>Total de Itens: <span class="total-itens" id="guia-total-itens">0</span></span>
+                <span>Emitido em: <span id="guia-emissao">--/--/---- --:--</span></span>
+            </div>
+        </div>
+
         <div class="apontamento-table-wrapper" style="box-shadow: inset 4px 0 0 var(--status-green), var(--shadow-md);">
             <h3 id="titulo-guia-saidas"><i class="fa-solid fa-door-open" style="margin-right: 8px;"></i> Saídas de Linha</h3>
             <table>
@@ -871,7 +1073,9 @@
         </div>
     </div>
 
-    <div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Sincronizado!</span></div>    <script>
+    <div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Sincronizado!</span></div>
+
+    <script>
     // =========================================================
     // CONFIGURAÇÕES GERAIS
     // =========================================================
@@ -888,8 +1092,6 @@
     let supressaoSync = false;
     const OP2_DIA_DEFAULT_ROWS = 4;
 
-    // Chave: data no formato 'YYYY-MM-DD'
-    // Nome do módulo de histórico diário
     const MAX_DIAS_HISTORICO = 120;
 
     const FIREBASE_PATHS = {
@@ -966,10 +1168,6 @@
         'tbody-op2-dia': 'op2Dia', 'tbody-pendencias-excel': 'pendencias', 'tbody-diario-op2': 'diarioOp2'
     };
 
-    // =========================================================
-    // 🔑 TABELAS QUE FICAM ISOLADAS POR DIA
-    // (Saídas DIA, Saídas Seguinte, Pintura, Montagem, OP1, OP2 DIA)
-    // =========================================================
     const TABELAS_POR_DIA = ['saidasDia', 'saidasSeguinte', 'pintura', 'montagem', 'op1', 'op2Dia'];
 
     let db = {
@@ -988,8 +1186,6 @@
             diasMes: [], saidasDia: [], saidasSeguinte: [], pintura: [],
             montagem: [], op1: [], op2Dia: [], pendencias: [], diarioOp2: []
         },
-        // 🔑 NOVO: histórico diário das 6 tabelas isoladas
-        // Estrutura: { 'YYYY-MM-DD': { saidasDia: [...], saidasSeguinte: [...], pintura: [...], montagem: [...], op1: [...], op2Dia: [...] } }
         historicoEstamparia: {}
     };
 
@@ -1112,9 +1308,6 @@
         return (o === null || o === undefined) ? '' : o;
     }
 
-    // =========================================================
-    // 🔑 CONVERSÃO DE DATA BR <-> ISO (para chave do histórico)
-    // =========================================================
     function brParaChaveISO(dataBR) {
         if (!dataBR) return '';
         const p = String(dataBR).trim().replace(/[.\-]/g,'/').split('/');
@@ -1125,11 +1318,7 @@
         return `${y.padStart(4,'0')}-${m}-${d}`;
     }
 
-    // =========================================================
-    // 🔑 HISTÓRICO DIÁRIO DAS 6 TABELAS DA ESTAMPARIA
-    // =========================================================
     function tabelasTemConteudo() {
-        // Verifica se pelo menos uma das 6 tabelas tem conteúdo
         return TABELAS_POR_DIA.some(ch => {
             const t = db.tabelasExcel[ch];
             if (!Array.isArray(t)) return false;
@@ -1146,22 +1335,12 @@
         const chave = brParaChaveISO(dataBR);
         if (!chave) return;
         if (!db.historicoEstamparia) db.historicoEstamparia = {};
-        
-        // Só salva se tiver conteúdo real (não grava tabelas em branco)
-        if (!tabelasTemConteudo()) {
-            // Se não tem conteúdo mas já existe histórico, mantém o histórico antigo
-            // (para não perder dados de um dia já preenchido)
-            return;
-        }
-        
+        if (!tabelasTemConteudo()) return;
         const snapshot = { ts: Date.now() };
         TABELAS_POR_DIA.forEach(ch => {
             snapshot[ch] = JSON.parse(JSON.stringify(db.tabelasExcel[ch] || []));
         });
-        
         db.historicoEstamparia[chave] = snapshot;
-        
-        // Limita o histórico para não crescer infinitamente
         const chaves = Object.keys(db.historicoEstamparia).sort();
         if (chaves.length > MAX_DIAS_HISTORICO) {
             const remover = chaves.slice(0, chaves.length - MAX_DIAS_HISTORICO);
@@ -1170,11 +1349,9 @@
     }
 
     function limparTabelasPorDia() {
-        // Zera as 6 tabelas (mantém a estrutura, só apaga o conteúdo)
         TABELAS_POR_DIA.forEach(ch => {
             if (!db.tabelasExcel[ch]) { db.tabelasExcel[ch] = []; return; }
             if (ch === 'op2Dia') {
-                // OP2 DIA sempre tem mínimo de linhas
                 while (db.tabelasExcel[ch].length < OP2_DIA_DEFAULT_ROWS) db.tabelasExcel[ch].push(['','','','']);
                 db.tabelasExcel[ch] = db.tabelasExcel[ch].map(() => ['','','','']);
             } else {
@@ -1182,7 +1359,6 @@
                     if (!Array.isArray(linha)) return [];
                     return linha.map(() => '');
                 });
-                // Garante pelo menos algumas linhas vazias
                 const minLinhas = (ch === 'montagem') ? 6 : (ch === 'op1') ? 4 : 5;
                 while (db.tabelasExcel[ch].length < 3) {
                     db.tabelasExcel[ch].push(new Array(minLinhas).fill(''));
@@ -1206,7 +1382,6 @@
     }
 
     function aplicarDia(dataBR) {
-        // Salva o dia ANTES, restaura o dia NOVO, e limpa se não tiver histórico
         const dataAntiga = db.globalDate;
         if (dataAntiga && dataAntiga !== dataBR) {
             salvarHistoricoEstamparia(dataAntiga);
@@ -1220,11 +1395,11 @@
             limparTabelasPorDia();
         }
         
-        // Re-renderiza tudo que depende dessas tabelas
         gerarTabelasExcel();
         renderizarOP2Dia();
         updateAnalytics();
         renderResumoApontamento();
+        renderGuiaApontamentoConsolidado();
         
         marcarAlteracao();
         return temHistorico;
@@ -1263,10 +1438,9 @@
     // =========================================================
     // AUTENTICAÇÃO ADMIN
     // =========================================================
-        function toggleAdmin() {
+    function toggleAdmin() {
         const m = document.getElementById('modal-auth');
         if (isAdmin) {
-            // Usuário logado → clicar no cadeado agora faz LOGOUT
             if (confirm('Deseja sair do modo Gestor?')) {
                 logoutGestor();
             }
@@ -1277,15 +1451,10 @@
             const senhaEl = document.getElementById('senha-admin');
             if (emailEl) emailEl.value = '';
             if (senhaEl) senhaEl.value = '';
-            setTimeout(() => {
-                if (emailEl) emailEl.focus();
-            }, 100);
+            setTimeout(() => { if (emailEl) emailEl.focus(); }, 100);
         }
     }
     function fecharModalAuth() { document.getElementById('modal-auth').classList.remove('active'); }
-        // =========================================================
-    // LOGIN COM FIREBASE AUTH
-    // =========================================================
     function mostrarErroLogin(msg) {
         const el = document.getElementById('login-error');
         if (!el) return;
@@ -1325,7 +1494,6 @@
         setBotaoLoginCarregando(true);
         firebase.auth().signInWithEmailAndPassword(email, senha)
             .then((userCredential) => {
-                // onAuthStateChanged vai tratar a UI
                 setBotaoLoginCarregando(false);
             })
             .catch((error) => {
@@ -1342,7 +1510,6 @@
             });
     }
 
-    // Deslogar (chamado pelo botão "Sair" que vamos adicionar depois)
     function logoutGestor() {
         if (!window.firebase || !firebase.auth) return;
         firebase.auth().signOut().then(() => {
@@ -1364,10 +1531,9 @@
         if (id === 'premio') recalcularPainelPremio();
         if (id === 'analytics') updateAnalytics();
         if (id === 'estamparia') updateEstampariaChart();
-        if (id === 'apontamento') renderResumoApontamento();
+        if (id === 'apontamento') { renderResumoApontamento(); renderGuiaApontamentoConsolidado(); }
     }
 
-    // 🔑 FUNÇÕES DE NAVEGAÇÃO DE DATA (modificadas para trabalhar com histórico)
     function alterarDiaReferencia(off) {
         let ref = parseDataComAnoRef(db.globalDate, 2026) || new Date();
         ref.setDate(ref.getDate() + off);
@@ -1429,7 +1595,9 @@
         const [ano, mes] = valor.split('-');
         const nomesMeses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
         mostrarToast(`✅ Mês ${nomesMeses[parseInt(mes,10)-1]}/${ano} carregado`, 'fa-cloud-arrow-up');
-    }    function preencherMetasSaidasInputs() {
+    }
+
+    function preencherMetasSaidasInputs() {
         if (!db.metasSaidas) db.metasSaidas = { metaMes:'81', produzidos:'60', mediaMeta:'3,9', mediaReal:'3,5', op2:{ metaMes:'81', produzidos:'59', mediaMeta:'3,9', mediaReal:'3,5' } };
         const m = db.metasSaidas;
         if (document.getElementById('meta-mes-saidas')) document.getElementById('meta-mes-saidas').value = m.metaMes || '';
@@ -1492,7 +1660,6 @@
         setStatusConexao('syncing');
         mostrarSyncIndicador(true);
         
-        // 🔑 Antes de enviar, salva o histórico do dia atual
         if (db.globalDate) {
             salvarHistoricoEstamparia(db.globalDate);
         }
@@ -1565,7 +1732,6 @@
             const authBtn = document.getElementById('auth-btn');
 
             if (user && user.email) {
-                // Usuário logado
                 isAdmin = true;
                 document.body.classList.remove('readonly-mode');
                 document.body.classList.add('admin-mode');
@@ -1578,7 +1744,6 @@
                 mostrarToast('Bem-vindo, ' + user.email, 'fa-shield-halved');
                 forceRenderTodasTabelas();
             } else {
-                // Sem login = visualização
                 isAdmin = false;
                 document.body.classList.add('readonly-mode');
                 document.body.classList.remove('admin-mode');
@@ -1611,7 +1776,6 @@
             dbRef.on('value', snapshot => {
                 const nuvem = snapshot.val();
                 if (!nuvem) return;
-                // Normaliza estrutura
                 if (!nuvem.data) nuvem.data = {};
                 if (!nuvem.basePCP) nuvem.basePCP = {};
                 if (!nuvem.premioConfig) nuvem.premioConfig = { metaBase:78, atraso:0, diasUteis:21 };
@@ -2252,6 +2416,7 @@
         db.tabelasExcel[chave].push(new Array(cols).fill(''));
         salvarHistoricoEstamparia(db.globalDate);
         marcarAlteracao();
+        renderGuiaApontamentoConsolidado();
         mostrarToast('Linha adicionada!', 'fa-plus');
     }
     function removerLinhaExcel(tbodyId) {
@@ -2264,6 +2429,7 @@
         if (db.tabelasExcel[chave]) db.tabelasExcel[chave].pop();
         salvarHistoricoEstamparia(db.globalDate);
         marcarAlteracao();
+        renderGuiaApontamentoConsolidado();
         mostrarToast('Linha removida.', 'fa-minus');
     }
     function renderizarOP2Dia() {
@@ -2288,6 +2454,7 @@
         renderizarOP2Dia();
         salvarHistoricoEstamparia(db.globalDate);
         marcarAlteracao();
+        renderGuiaApontamentoConsolidado();
         mostrarToast('Linha adicionada!', 'fa-plus');
     }
     function removerLinhaOP2Dia() {
@@ -2301,6 +2468,7 @@
         renderizarOP2Dia();
         salvarHistoricoEstamparia(db.globalDate);
         marcarAlteracao();
+        renderGuiaApontamentoConsolidado();
         mostrarToast('Removida.', 'fa-minus');
     }
     function toggleOcultarVazias(btn) {
@@ -2581,6 +2749,7 @@
         updateAnalytics();
         renderResumoApontamento();
         renderPainelGargalos();
+        renderGuiaApontamentoConsolidado();
         recalcularPainelPremio();
     }
     function recalcularDashboard() {
@@ -2761,6 +2930,7 @@
         tbS.innerHTML = hS || '<tr><td colspan="5" style="text-align:center;padding:20px;color:#94a3b8;">Nenhuma saída registrada.</td></tr>';
         tbE.innerHTML = hE || '<tr><td colspan="5" style="text-align:center;padding:20px;color:#94a3b8;">Nenhum processo final registrado.</td></tr>';
     }
+
     function renderPainelGargalos() {
         const tb = document.getElementById('tbody-painel-gargalos');
         const cont = document.getElementById('ggl-por-motivo');
@@ -2793,6 +2963,79 @@
             Object.entries(count).forEach(([m,q]) => { mh += `<span style="background:white;border:1px solid #fca5a5;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:800;color:#b91c1c;">${m}: ${q}</span>`; });
             cont.innerHTML = mh;
         }
+    }
+
+    // =========================================================
+    // GUIA DE APONTAMENTO CONSOLIDADO — ESTAMPARIA (UMA PÁGINA)
+    // =========================================================
+    function renderGuiaApontamentoConsolidado() {
+        const tbody = document.getElementById('tbody-guia-estamparia');
+        if (!tbody) return;
+
+        const nomesTabelas = {
+            saidasDia: 'Saídas Dia',
+            saidasSeguinte: 'Saídas Seguinte',
+            pintura: 'Pintura',
+            montagem: 'Montagem',
+            op1: 'OP1',
+            op2Dia: 'OP2 DIA'
+        };
+        const colunas = {
+            saidasDia: ['CT','TQ','Silo','BS','ESP'],
+            saidasSeguinte: ['CT','TQ','Silo','BS','ESP'],
+            pintura: ['CT','TQ','Silo','BS','ESP'],
+            montagem: ['CT','TQ','Silo','BS','ESP','TQ'],
+            op1: ['CT','TQ','BS','ESP'],
+            op2Dia: ['CT','TQ','Silo','BS']
+        };
+
+        const dataRef = db.globalDate || getDataCompleta();
+        const elData = document.getElementById('guia-data-label');
+        if (elData) elData.innerText = `Data: ${dataRef}`;
+
+        const elEmissao = document.getElementById('guia-emissao');
+        if (elEmissao) {
+            const agora = new Date();
+            elEmissao.innerText = `${String(agora.getDate()).padStart(2,'0')}/${String(agora.getMonth()+1).padStart(2,'0')}/${agora.getFullYear()} ${String(agora.getHours()).padStart(2,'0')}:${String(agora.getMinutes()).padStart(2,'0')}`;
+        }
+
+        let html = '';
+        let totalItens = 0;
+
+        TABELAS_POR_DIA.forEach(chave => {
+            const tabela = db.tabelasExcel[chave];
+            if (!Array.isArray(tabela)) return;
+            tabela.forEach((linha, rIdx) => {
+                if (!Array.isArray(linha)) return;
+                linha.forEach((celula, cIdx) => {
+                    const texto = String(celula || '').trim();
+                    if (!texto) return;
+                    const ov = extrairNumeroOrdem(texto);
+                    const produto = obterDescricaoProduto(texto, ov) || texto;
+                    const coluna = (colunas[chave] && colunas[chave][cIdx]) ? colunas[chave][cIdx] : `C${cIdx+1}`;
+                    const linhaNum = rIdx + 1;
+                    html += `<tr>
+                        <td style="font-weight:800;color:#1e40af;">${nomesTabelas[chave] || chave}</td>
+                        <td>${dataRef}</td>
+                        <td class="col-ov">${ov || '-'}</td>
+                        <td class="col-produto">${produto}</td>
+                        <td>${coluna}</td>
+                        <td>${linhaNum}</td>
+                        <td style="font-weight:900;color:#b45309;">${(nomesTabelas[chave]||'').toUpperCase()}</td>
+                    </tr>`;
+                    totalItens++;
+                });
+            });
+        });
+
+        if (totalItens === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:20px;color:#94a3b8;font-weight:800;font-size:13px;">Nenhum item preenchido nas tabelas da Estamparia para o dia selecionado.</td></tr>`;
+        } else {
+            tbody.innerHTML = html;
+        }
+
+        const elTotal = document.getElementById('guia-total-itens');
+        if (elTotal) elTotal.innerText = totalItens;
     }
 
     // =========================================================
@@ -2843,10 +3086,10 @@
             const r = parseInt(t.dataset.row), c = parseInt(t.dataset.col);
             if (db.tabelasExcel.op2Dia && db.tabelasExcel.op2Dia[r]) {
                 db.tabelasExcel.op2Dia[r][c] = t.value;
-                // 🔑 Snapshot do dia após edição (com debounce)
                 const dataAtual = db.globalDate;
                 setTimeout(() => { if (db.globalDate === dataAtual) salvarHistoricoEstamparia(dataAtual); }, 500);
                 marcarAlteracao();
+                renderGuiaApontamentoConsolidado();
             }
             return;
         }
@@ -2855,10 +3098,10 @@
             if (!db.tabelasExcel[ch]) db.tabelasExcel[ch] = [];
             if (!db.tabelasExcel[ch][r]) db.tabelasExcel[ch][r] = [];
             db.tabelasExcel[ch][r][c] = t.value;
-            // 🔑 Se for uma das 6 tabelas isoladas por dia, salva snapshot (com debounce)
             if (TABELAS_POR_DIA.includes(ch)) {
                 const dataAtual = db.globalDate;
                 setTimeout(() => { if (db.globalDate === dataAtual) salvarHistoricoEstamparia(dataAtual); }, 500);
+                renderGuiaApontamentoConsolidado();
             }
             marcarAlteracao();
             return;
@@ -3025,6 +3268,10 @@
         document.body.appendChild(link); link.click(); document.body.removeChild(link);
         mostrarToast('Planilha gerada!', 'fa-file-excel');
     }
+    function imprimirGuiaConsolidado() {
+        renderGuiaApontamentoConsolidado();
+        setTimeout(() => window.print(), 150);
+    }
     function gerarPDFExecutivo() {
         const el = document.querySelector('.view-container.active') || document.body;
         const opt = { margin:5, filename:`Relatorio_${(db.globalDate||getDataAtualFormatada()).replace(/[\/\.]/g,'-')}.pdf`, image:{ type:'jpeg', quality:0.98 }, html2canvas:{ scale:2, useCORS:true }, jsPDF:{ unit:'mm', format:'a4', orientation:'landscape' } };
@@ -3083,16 +3330,41 @@
         }
         const elMes = document.getElementById('global-month');
         if (elMes) elMes.value = db.mesReferencia;
-               initCharts();
-        initFirebase();
-        initAuth();
+
+        // Garante estruturas mínimas antes de renderizar
+        if (!db.tabelasExcel) db.tabelasExcel = {};
+        if (!db.tabelasExcel.saidasDia || db.tabelasExcel.saidasDia.length === 0) {
+            db.tabelasExcel.saidasDia = [['','','','',''],['','','','',''],['','','','','']];
+        }
+        if (!db.tabelasExcel.saidasSeguinte || db.tabelasExcel.saidasSeguinte.length === 0) {
+            db.tabelasExcel.saidasSeguinte = [['','','','','']];
+        }
+        if (!db.tabelasExcel.pintura || db.tabelasExcel.pintura.length === 0) {
+            db.tabelasExcel.pintura = Array.from({length: 10}, () => ['','','','','']);
+        }
+        if (!db.tabelasExcel.montagem || db.tabelasExcel.montagem.length === 0) {
+            db.tabelasExcel.montagem = Array.from({length: 10}, () => ['','','','','','']);
+        }
+        if (!db.tabelasExcel.op1 || db.tabelasExcel.op1.length === 0) {
+            db.tabelasExcel.op1 = Array.from({length: 10}, () => ['','','','']);
+        }
+        if (!db.tabelasExcel.op2Dia || db.tabelasExcel.op2Dia.length < OP2_DIA_DEFAULT_ROWS) {
+            db.tabelasExcel.op2Dia = Array.from({length: OP2_DIA_DEFAULT_ROWS}, () => ['','','','']);
+        }
+
+        initCharts();
         gerarTabelasExcel();
         renderizarEstampariaMatriz();
         renderizarViews();
         recalcularPainelPremio();
         forceRenderTodasTabelas();
+
+        // Firebase e Auth depois da renderização inicial
+        initFirebase();
+        initAuth();
+
         setTimeout(() => preencherMetasSaidasInputs(), 800);
-        console.log("🚀 Sistema iniciado. Mês:", db.mesReferencia);
+        console.log("🚀 Sistema iniciado. Mês:", db.mesReferencia, "Data:", db.globalDate);
     });
     </script>
 </body>
