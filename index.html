@@ -120,7 +120,7 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
 .estamparia-table th{background:#fafbfc;color:var(--text-secondary);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--border-mid);padding:6px 8px}
 .estamparia-table td{background:#fff;font-weight:800}
 .estamparia-table tbody tr:last-child td{border-bottom:none}
-.estamparia-table td input{font-size:10px;font-weight:900;width:100%;text-align:center;border:none;background:transparent;outline:none;font-variant-numeric:tabular-nums;color:var(--text-primary)}
+.estamparia-table td input{font-size:20px;font-weight:900;width:100%;text-align:center;border:none;background:transparent;outline:none;font-variant-numeric:tabular-nums;color:var(--text-primary)}
 .estamparia-table tbody tr.row-atraso td:first-child{background:#fee2e2!important;color:#991b1b!important;box-shadow:inset 5px 0 0 #ef4444}
 .estamparia-table tbody tr.row-geral td:first-child{background:#dbeafe!important;color:#1e40af!important;box-shadow:inset 5px 0 0 #3b82f6}
 .estamparia-table tbody tr.row-laser td:first-child{background:#d1fae5!important;color:#065f46!important;box-shadow:inset 5px 0 0 #10b981}
@@ -277,9 +277,9 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
             </svg>
         </div>
         <div class="nav-tabs">
-            <div class="nav-tab tab-chao active" onclick="switchTab('chao')" id="tab-btn-chao"><i class="fa-solid fa-industry"></i> Chão de Fábrica</div>
+            <div class="nav-tab tab-chao" onclick="switchTab('chao')" id="tab-btn-chao"><i class="fa-solid fa-industry"></i> Chão de Fábrica</div>
             <div class="nav-tab tab-premio" onclick="switchTab('premio')" id="tab-btn-premio"><i class="fa-solid fa-trophy"></i> Prêmio & Metas</div>
-            <div class="nav-tab" onclick="switchTab('estamparia')" id="tab-btn-estamparia">Estamparia</div>
+            <div class="nav-tab active" onclick="switchTab('estamparia')" id="tab-btn-estamparia">Estamparia</div>
             <div class="nav-tab" onclick="switchTab('solda')" id="tab-btn-solda">Linha Solda</div>
             <div class="nav-tab" onclick="switchTab('pintura')" id="tab-btn-pintura">Pintura</div>
             <div class="nav-tab" onclick="switchTab('op1')" id="tab-btn-op1">MOF OP1</div>
@@ -326,7 +326,7 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
     </div>
 </div>
 
-<div id="view-chao" class="view-container active">
+<div id="view-chao" class="view-container">
     <div class="cf-grid">
         <div class="cf-block" style="grid-column:1/-1">
             <div class="cf-block-header"><span><i class="fa-solid fa-clipboard-list"></i> CONTROLE MANUFATURADOS — ESTAMPARIA</span><span id="cf-est-data">--/--</span></div>
@@ -460,7 +460,7 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
     </div>
 </div>
 
-<div id="view-estamparia" class="view-container">
+<div id="view-estamparia" class="view-container active">
     <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start">
         <div class="section-card">
             <div class="section-header"><div class="section-title-box"><h2>Controle Manufaturados — Estamparia</h2></div></div>
@@ -1678,7 +1678,7 @@ function renderizarEstampariaMatriz() {
                         }
                     }
                 }
-                tbody += '<td style="' + bg + '"><input type="text" class="cell-input estamparia-val-input" style="font-size:10px;font-weight:900;text-align:center;' + colorStyle + '" data-row-name="' + linha + '" data-col-idx="' + i + '" value="' + val + '"></td>';
+                tbody += '<td style="' + bg + '"><input type="text" class="cell-input estamparia-val-input" style="font-size:20px;font-weight:900;text-align:center;' + colorStyle + '" data-row-name="' + linha + '" data-col-idx="' + i + '" value="' + val + '"></td>';
             });
             tbody += '</tr>';
         });
