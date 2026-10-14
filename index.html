@@ -942,6 +942,7 @@ function aplicarDia(dataBR) {
     renderizarOP2Dia();
     renderizarViews();
     atualizarChaoFabrica();
+    renderizarEstampariaMatriz();
     marcarAlteracao();
 }
 
@@ -1088,20 +1089,20 @@ function alterarDiaReferencia(off) {
     let ref = parseDataComAnoRef(dataLocalSelecionada, 2026) || new Date();
     ref.setDate(ref.getDate() + off);
     const nova = getDataCompleta(ref);
-    const restaurado = aplicarDia(nova);
+    aplicarDia(nova);
     forceRenderTodasTabelas();
     mostrarToast(`Data: ${nova}`, 'fa-calendar-day');
 }
 function irParaHoje() {
     const hoje = getDataCompleta();
-    const restaurado = aplicarDia(hoje);
+    aplicarDia(hoje);
     forceRenderTodasTabelas();
     mostrarToast(`Hoje: ${hoje}`, 'fa-calendar-check');
 }
 function definirDataManual(v) {
     if (!v || v.trim()==='') return;
     const dataNova = normalizarDataParaComparacao(v);
-    const restaurado = aplicarDia(dataNova);
+    aplicarDia(dataNova);
     forceRenderTodasTabelas();
     mostrarToast(`Data: ${dataNova}`, 'fa-calendar-day');
 }
@@ -1349,7 +1350,6 @@ function renderizarTabelaDiasMes() {
     const nomeMes = meses[mes];
     const ultimoDia = new Date(ano, mes+1, 0).getDate();
 
-    // Verifica tamanho da tabela
     let totalEsperado = 0;
     for (let d = 1; d <= ultimoDia; d++) {
         const dt = new Date(ano, mes, d);
@@ -1406,40 +1406,82 @@ function renderizarOP2Dia() {
 
 // =========================================================
 // RENDERIZAÇÃO — ESTAMPARIA MATRIZ
+// ✅ NÃO rotaciona sozinha. Mostra a data selecionada como última coluna.
 // =========================================================
 function atualizarDiasEstamparia() {
-    if (!db.estampariaMatriz || !db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) {
-        db.estampariaMatriz = { datas: [], valores: {} };
+    // ✅ Apenas garante a estrutura básica de 5 colunas.
+    // NÃO rotaciona automaticamente.
+    if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
+    if (!Array.isArray(db.estampariaMatriz.datas)) db.estampariaMatriz.datas = [];
+    if (!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {};
+
+    if (db.estampariaMatriz.datas.length === 0) {
+        const datas = [];
         let d = new Date();
-        while (db.estampariaMatriz.datas.length < 5) {
-            if (d.getDay() !== 0 && d.getDay() !== 6) db.estampariaMatriz.datas.unshift(formatarDataEstamparia(d));
+        while (datas.length < 5) {
+            if (d.getDay() !== 0 && d.getDay() !== 6) datas.unshift(formatarDataEstamparia(d));
             d.setDate(d.getDate() - 1);
         }
-        estampariaLinhas.forEach(l => db.estampariaMatriz.valores[l] = Array(5).fill(''));
-        return;
+        db.estampariaMatriz.datas = datas;
     }
-    let h = new Date();
-    while (h.getDay() === 0 || h.getDay() === 6) h.setDate(h.getDate() - 1);
-    const hF = formatarDataEstamparia(h);
-    if (db.estampariaMatriz.datas[4] !== hF) {
-        db.estampariaMatriz.datas.shift();
-        db.estampariaMatriz.datas.push(hF);
-        estampariaLinhas.forEach(l => {
-            if (!db.estampariaMatriz.valores[l]) db.estampariaMatriz.valores[l] = Array(5).fill('');
-            db.estampariaMatriz.valores[l].shift();
-            db.estampariaMatriz.valores[l].push('');
-        });
-        marcarAlteracao();
-    }
+
+    estampariaLinhas.forEach(l => {
+        if (!Array.isArray(db.estampariaMatriz.valores[l])) {
+            db.estampariaMatriz.valores[l] = Array(5).fill('');
+        }
+        while (db.estampariaMatriz.valores[l].length < 5) db.estampariaMatriz.valores[l].push('');
+    });
 }
 
 function renderizarEstampariaMatriz() {
-    // Duas tabelas: uma no Chão de Fábrica e outra na Estamparia
+    if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
+    if (!Array.isArray(db.estampariaMatriz.datas)) db.estampariaMatriz.datas = [];
+    if (!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {};
+
+    // ✅ Garante 5 datas terminando na data selecionada
+    const dataAtualBR = dataLocalSelecionada || getDataCompleta();
+    const dataRef = parseDataComAnoRef(dataAtualBR, 2026) || new Date();
+
+    const datasCalc = [];
+    let d = new Date(dataRef);
+    while (datasCalc.length < 5) {
+        if (d.getDay() !== 0 && d.getDay() !== 6) datasCalc.unshift(formatarDataEstamparia(d));
+        d.setDate(d.getDate() - 1);
+    }
+
+    const datasSalvas = db.estampariaMatriz.datas || [];
+    const mudouData = datasSalvas.length !== 5 || datasSalvas[4] !== datasCalc[4];
+
+    if (mudouData) {
+        // Mapeia valores antigos por data (preserva o que casa)
+        const mapaAntigo = {};
+        datasSalvas.forEach((dt, idx) => {
+            mapaAntigo[dt] = {};
+            estampariaLinhas.forEach(l => {
+                if (db.estampariaMatriz.valores[l] && db.estampariaMatriz.valores[l][idx] !== undefined) {
+                    mapaAntigo[dt][l] = db.estampariaMatriz.valores[l][idx];
+                }
+            });
+        });
+
+        db.estampariaMatriz.datas = datasCalc;
+        db.estampariaMatriz.valores = {};
+        estampariaLinhas.forEach(l => {
+            db.estampariaMatriz.valores[l] = datasCalc.map(dt => {
+                if (mapaAntigo[dt] && mapaAntigo[dt][l] !== undefined) return mapaAntigo[dt][l];
+                return '';
+            });
+        });
+    }
+
+    estampariaLinhas.forEach(l => {
+        if (!Array.isArray(db.estampariaMatriz.valores[l])) db.estampariaMatriz.valores[l] = Array(5).fill('');
+        while (db.estampariaMatriz.valores[l].length < 5) db.estampariaMatriz.valores[l].push('');
+    });
+
     ['tabela-estamparia-matriz', 'tabela-estamparia-matriz-2'].forEach(containerId => {
         const container = document.getElementById(containerId);
         if (!container) return;
-        if (!db.estampariaMatriz) db.estampariaMatriz = { datas: [], valores: {} };
-        if (!db.estampariaMatriz.datas || db.estampariaMatriz.datas.length !== 5) atualizarDiasEstamparia();
         const datas = db.estampariaMatriz.datas || ['','','','',''];
         let thead = '<thead><tr><th style="text-align:left;padding-left:20px">Linha</th>';
         datas.forEach((d, i) => {
@@ -1454,30 +1496,19 @@ function renderizarEstampariaMatriz() {
             tbody += '<tr class="' + (classes[linha]||'') + '"><td style="font-weight:900;padding-left:20px;text-align:left">' + linha + '</td>';
             datas.forEach((d, i) => {
                 const val = db.estampariaMatriz.valores[linha][i] || '';
-
-                // ✅ Lógica de cor por comparação com o dia anterior
                 let bg = i === 4 ? 'background:#eff6ff;' : '';
                 let colorStyle = 'color:#3b82f6;';
-
                 if (i > 0 && val !== '') {
                     const prev = db.estampariaMatriz.valores[linha][i-1] || '';
                     if (prev !== '') {
                         const nv = parseFloat(val);
                         const np = parseFloat(prev);
                         if (!isNaN(nv) && !isNaN(np)) {
-                            if (nv > np) {
-                                // 🔴 Subiu (piorou)
-                                bg = 'background:#fee2e2;';
-                                colorStyle = 'color:#b91c1c;font-weight:900;';
-                            } else if (nv < np) {
-                                // 🟢 Caiu (melhorou)
-                                bg = 'background:#d1fae5;';
-                                colorStyle = 'color:#047857;font-weight:900;';
-                            }
+                            if (nv > np) { bg = 'background:#fee2e2;'; colorStyle = 'color:#b91c1c;font-weight:900;'; }
+                            else if (nv < np) { bg = 'background:#d1fae5;'; colorStyle = 'color:#047857;font-weight:900;'; }
                         }
                     }
                 }
-
                 tbody += '<td style="' + bg + '"><input type="text" class="cell-input estamparia-val-input" style="font-size:20px;font-weight:900;text-align:center;' + colorStyle + '" data-row-name="' + linha + '" data-col-idx="' + i + '" value="' + val + '"></td>';
             });
             tbody += '</tr>';
@@ -1487,7 +1518,6 @@ function renderizarEstampariaMatriz() {
     const elData = document.getElementById('cf-est-data');
     if (elData && db.estampariaMatriz.datas && db.estampariaMatriz.datas[4]) elData.innerText = db.estampariaMatriz.datas[4];
     updateEstampariaChart();
-
 }
 
 function updateEstampariaChart() {
@@ -1572,7 +1602,6 @@ function atualizarChaoFabrica() {
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs) return;
 
-    // Saídas Dia (CT, TQ, Silo, BS, ESP)
     const tbSD = document.getElementById('tbody-cf-saidas-dia');
     if (tbSD) {
         tbSD.innerHTML = (tabs.saidasDia || []).map((linha, rIdx) => {
@@ -1582,7 +1611,6 @@ function atualizarChaoFabrica() {
         }).join('');
     }
 
-    // Saídas Seguinte
     const tbSS = document.getElementById('tbody-cf-saidas-seguinte');
     if (tbSS) {
         tbSS.innerHTML = (tabs.saidasSeguinte || []).map((linha, rIdx) => {
@@ -1592,7 +1620,6 @@ function atualizarChaoFabrica() {
         }).join('');
     }
 
-    // Pintura
     const tbP = document.getElementById('tbody-cf-pintura');
     if (tbP) {
         tbP.innerHTML = (tabs.pintura || []).map((linha, rIdx) => {
@@ -1602,7 +1629,6 @@ function atualizarChaoFabrica() {
         }).join('');
     }
 
-    // Montagem
     const tbM = document.getElementById('tbody-cf-montagem');
     if (tbM) {
         tbM.innerHTML = (tabs.montagem || []).map((linha, rIdx) => {
@@ -1612,7 +1638,6 @@ function atualizarChaoFabrica() {
         }).join('');
     }
 
-    // OP2
     const tbO2 = document.getElementById('tbody-cf-op2');
     if (tbO2) {
         tbO2.innerHTML = (tabs.op2Dia || []).map((linha, rIdx) => {
@@ -1622,7 +1647,6 @@ function atualizarChaoFabrica() {
         }).join('');
     }
 
-    // OP1
     const tbO1 = document.getElementById('tbody-cf-op1');
     if (tbO1) {
         tbO1.innerHTML = (tabs.op1 || []).map((linha, rIdx) => {
@@ -1632,7 +1656,6 @@ function atualizarChaoFabrica() {
         }).join('');
     }
 
-    // Pendências
     const tbPend = document.getElementById('tbody-cf-pendencias');
     if (tbPend) {
         tbPend.innerHTML = (tabs.pendencias || []).map((linha, rIdx) => {
@@ -1645,7 +1668,6 @@ function atualizarChaoFabrica() {
     const elDataDia = document.getElementById('cf-data-dia');
     if (elDataDia) elDataDia.innerText = dataLocalSelecionada || '--/--';
 
-    // KPIs Mês
     const m = db.metasSaidas || {};
     const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
     setTxt('cf-meta-prod', m.metaMes || '75');
@@ -1786,7 +1808,6 @@ function updateAnalytics() {
     const elMO = document.getElementById('media-op2-atual');
     if (elMO) elMO.innerHTML = mediaSolda + ' <small>OPs/dia</small>';
 
-    // Pareto
     const canvasP = document.getElementById('chartPareto');
     if (canvasP) {
         const sorted = Object.entries(pareto).sort((a,b) => b[1]-a[1]);
@@ -1803,7 +1824,6 @@ function updateAnalytics() {
         }
     }
 
-    // Evolução
     const canvasE = document.getElementById('chartEvolucao');
     if (canvasE) {
         const sd = Object.keys(evol).sort().slice(-7);
@@ -1820,7 +1840,6 @@ function updateAnalytics() {
         }
     }
 
-    // Status (Pie)
     const canvasS = document.getElementById('chartStatus');
     if (canvasS) {
         if (chartsObj.pie) {
@@ -1835,7 +1854,6 @@ function updateAnalytics() {
         }
     }
 
-    // Aderência (Bar)
     const canvasA = document.getElementById('chartAderencia');
     if (canvasA) {
         const aderencia = totalProg > 0 ? Math.round((totalOK/totalProg)*100) : 0;
@@ -1968,7 +1986,6 @@ function restaurarBackup() {
 
     mostrarToast('🔄 Buscando dados da nuvem...', 'fa-cloud-arrow-down');
 
-    // Função para aplicar os dados (usada tanto pelo Firebase quanto pelo localStorage)
     function aplicarDados(dados, origem) {
         if (!dados) return false;
         db = dados;
@@ -1991,7 +2008,6 @@ function restaurarBackup() {
         return true;
     }
 
-    // 1️⃣ Tenta buscar do Firebase primeiro (nuvem — versão mais recente)
     if (dbRef) {
         dbRef.once('value').then(snapshot => {
             const nuvem = snapshot.val();
@@ -2011,7 +2027,6 @@ function restaurarBackup() {
         tentarLocalStorage();
     }
 
-    // 2️⃣ Fallback: se a nuvem falhar, tenta o backup local
     function tentarLocalStorage() {
         const b = localStorage.getItem('erp_randon_backup_local');
         if (!b) {
@@ -2095,7 +2110,6 @@ document.addEventListener('input', function(e) {
     const t = e.target;
     if (supressaoSync) return;
 
-    // Estamparia matriz
     if (t.classList.contains('estamparia-val-input')) {
         const l = t.dataset.rowName, i = parseInt(t.dataset.colIdx);
         if (!db.estampariaMatriz.valores[l]) db.estampariaMatriz.valores[l] = Array(5).fill('');
@@ -2104,7 +2118,6 @@ document.addEventListener('input', function(e) {
         return;
     }
 
-    // OP2 dia
     if (t.classList.contains('op2-dia-input')) {
         const r = parseInt(t.dataset.row), c = parseInt(t.dataset.col);
         const tabs = getTabelasDoDia(dataLocalSelecionada);
@@ -2116,7 +2129,6 @@ document.addEventListener('input', function(e) {
         return;
     }
 
-    // Tabelas Excel gerais (Saídas, Pintura, Montagem, OP1, Pendências)
     if (t.dataset.chave && t.dataset.row !== undefined && t.dataset.col !== undefined && t.classList.contains('ex-in')) {
         const ch = t.dataset.chave, r = parseInt(t.dataset.row), c = parseInt(t.dataset.col);
         const tabs = getTabelasDoDia(dataLocalSelecionada);
@@ -2131,7 +2143,6 @@ document.addEventListener('input', function(e) {
         return;
     }
 
-    // Dias do mês (descrição)
     if (t.dataset.chave === 'diasMes' && t.dataset.flatIdx !== undefined && t.classList.contains('ex-in')) {
         const idx = parseInt(t.dataset.flatIdx);
         const tabs = getTabelasDoDia(dataLocalSelecionada);
@@ -2146,9 +2157,7 @@ document.addEventListener('input', function(e) {
         return;
     }
 
-    // Chão de Fábrica - inputs
     if (t.classList.contains('cf-in')) {
-        // Estamparia já tratada acima
         const ch = t.dataset.cfChave;
         if (!ch) return;
         const tabs = getTabelasDoDia(dataLocalSelecionada);
@@ -2166,14 +2175,12 @@ document.addEventListener('input', function(e) {
         const r = parseInt(t.dataset.cfRow), c = parseInt(t.dataset.cfCol);
         if (tabs[ch] && tabs[ch][r]) {
             tabs[ch][r][c] = t.value;
-            // Espelha nas tabelas principais também
             gerarTabelasExcel();
             marcarAlteracao();
         }
         return;
     }
 
-    // Inputs dos setores (Solda, Pintura, OP1, OP2)
     if (t.classList.contains('cell-input') && t.dataset.sec) {
         const s = t.dataset.sec, r = t.dataset.row, f = t.dataset.field;
         if (!db.data[s]) db.data[s] = [];
@@ -2187,7 +2194,6 @@ document.addEventListener('change', function(e) {
     const t = e.target;
     if (supressaoSync) return;
 
-    // Pinos
     if (t.classList.contains('pino-nome-input')) {
         const c = t.dataset.cat, i = parseInt(t.dataset.idx);
         if (db.pinosManual && db.pinosManual[c] && db.pinosManual[c][i]) {
@@ -2207,14 +2213,12 @@ document.addEventListener('change', function(e) {
         return;
     }
 
-    // Prêmio config
     if (t.id === 'premio-meta-base-input' || t.id === 'premio-atraso-input') {
         recalcularPainelPremio();
         marcarAlteracao();
         return;
     }
 
-    // Setores
     if (t.classList.contains('cell-input') && t.dataset.sec) {
         const s = t.dataset.sec, r = parseInt(t.dataset.row), f = t.dataset.field;
         if (!db.data[s]) db.data[s] = [];
@@ -2258,10 +2262,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     getTabelasDoDia(dataLocalSelecionada);
 
-    // Init charts
     Chart.defaults.font.family = "'Inter', sans-serif";
 
-    // Render inicial
     expurgarLinhasFantasmas();
     gerarTabelasExcel();
     renderizarEstampariaMatriz();
@@ -2271,7 +2273,6 @@ window.addEventListener('DOMContentLoaded', () => {
     atualizarChaoFabrica();
     renderizarGuia();
 
-    // Firebase + Auth
     initFirebase();
     initAuth();
 
