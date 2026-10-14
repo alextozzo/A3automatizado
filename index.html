@@ -116,11 +116,11 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
 .ordem-ok{background:#d1fae5!important;box-shadow:inset 5px 0 0 var(--status-green);color:#065f46!important;font-weight:900!important}
 .data-input{background:#fef3c7!important;font-weight:900!important;color:#92400e!important;border-radius:6px}
 .estamparia-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--border-light)}
-.estamparia-table th,.estamparia-table td{padding:18px 14px;text-align:center;border:none;border-bottom:1px solid var(--border-light)}
-.estamparia-table th{background:#fafbfc;color:var(--text-secondary);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.6px;border-bottom:2px solid var(--border-mid)}
+.estamparia-table th,.estamparia-table td{padding:2px 4px;text-align:center;border:none;border-bottom:1px solid var(--border-light);height:20px}
+.estamparia-table th{background:#fafbfc;color:var(--text-secondary);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--border-mid);padding:6px 8px}
 .estamparia-table td{background:#fff;font-weight:800}
 .estamparia-table tbody tr:last-child td{border-bottom:none}
-.estamparia-table td input{font-size:20px;font-weight:900;width:100%;text-align:center;border:none;background:transparent;outline:none;font-variant-numeric:tabular-nums;color:var(--text-primary)}
+.estamparia-table td input{font-size:10px;font-weight:900;width:100%;text-align:center;border:none;background:transparent;outline:none;font-variant-numeric:tabular-nums;color:var(--text-primary)}
 .estamparia-table tbody tr.row-atraso td:first-child{background:#fee2e2!important;color:#991b1b!important;box-shadow:inset 5px 0 0 #ef4444}
 .estamparia-table tbody tr.row-geral td:first-child{background:#dbeafe!important;color:#1e40af!important;box-shadow:inset 5px 0 0 #3b82f6}
 .estamparia-table tbody tr.row-laser td:first-child{background:#d1fae5!important;color:#065f46!important;box-shadow:inset 5px 0 0 #10b981}
@@ -164,7 +164,7 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
 .excel-grid{display:flex;gap:24px;min-width:900px}
 .excel-col{flex:1}
 .excel-table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;margin-bottom:16px;border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px var(--border-light)}
-.excel-table th,.excel-table td{padding:0;height:50px;text-align:center;border:none;border-bottom:1px solid var(--border-light)}
+.excel-table th,.excel-table td{padding:0;height:26px;text-align:center;border:none;border-bottom:1px solid var(--border-light)}
 .excel-table thead th{background:#fafbfc;font-weight:900;color:var(--text-secondary);font-size:13px;text-transform:uppercase;letter-spacing:.5px;padding:16px 10px;height:auto}
 .excel-table tbody tr:last-child td{border-bottom:none}
 .excel-table input.ex-in,.excel-table input.op2-dia-input,.excel-table input.desc-input-dia,.excel-table input.desc-input-diario{width:100%;height:100%;border:none;background:transparent;text-align:center;font-size:16px;font-weight:800;color:var(--text-primary);outline:none;display:block;box-sizing:border-box;padding:6px 10px}
@@ -239,6 +239,23 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
 .cf-info-card span{font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;display:block;margin-bottom:3px}
 .cf-info-card strong{font-size:16px;font-weight:900;color:#0f172a}
 @media(max-width:1400px){.cf-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:1400px){.cf-grid{grid-template-columns:1fr 1fr}}
+.media-container{display:flex;justify-content:space-between;align-items:center;background:#f0fdf4;padding:16px 24px;border-radius:12px;margin-bottom:20px;border:1px solid #dcfce7}
+.media-container .media-label{font-size:14px;font-weight:900;color:#065f46;text-transform:uppercase;letter-spacing:.5px}
+.media-container .media-value{font-size:32px;font-weight:900;color:#059669;line-height:1}
+.media-container .media-detail{font-size:13px;font-weight:700;color:#047857}
+.semana-container{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:16px;background:#fafbfc;padding:16px;border-radius:12px;border:1px solid var(--border-light)}
+.semana-item{text-align:center}
+.semana-item span{font-size:13px;font-weight:900;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:4px}
+.semana-item strong{font-size:20px;font-weight:900;color:var(--text-primary)}
+.op2-media-container{display:flex;justify-content:space-between;align-items:center;background:#faf5ff;padding:8px 16px;border-radius:10px;margin-bottom:12px;border:1px solid #e9d5ff}
+.op2-media-container .media-label{font-size:11px;font-weight:900;color:#5b21b6;text-transform:uppercase;letter-spacing:.4px}
+.op2-media-container .media-value{font-size:22px;font-weight:900;color:#7c3aed;line-height:1}
+.op2-media-container .media-detail{font-size:11px;font-weight:700;color:#6d28d9}
+.op2-semana-container{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px;background:#faf5ff;padding:8px;border-radius:8px;border:1px solid #e9d5ff}
+.op2-semana-item{text-align:center}
+.op2-semana-item span{font-size:9px;font-weight:900;color:#7c3aed;text-transform:uppercase;display:block;margin-bottom:2px}
+.op2-semana-item strong{font-size:18px;font-weight:900;color:#5b21b6}
 </style>
 </head>
 <body class="readonly-mode">
@@ -291,6 +308,7 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
         <button class="btn btn-excel" onclick="exportarExcel()"><i class="fa-solid fa-file-excel"></i> Excel</button>
         <button class="btn btn-pdf" onclick="gerarPDF()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
         <button class="btn btn-tv" onclick="iniciarModoTV()"><i class="fa-solid fa-tv"></i> TV</button>
+        <button class="btn" onclick="backupDoDia()" style="background:#7c3aed;color:#fff"><i class="fa-solid fa-floppy-disk"></i> Backup</button>
     </div>
 </nav>
 
@@ -443,20 +461,39 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
 </div>
 
 <div id="view-estamparia" class="view-container">
-    <div class="section-card">
-        <div class="section-header"><div class="section-title-box"><h2>Controle Manufaturados — Estamparia</h2></div></div>
-        <div style="padding:24px;background:#fff;overflow-x:auto"><table class="estamparia-table" id="tabela-estamparia-matriz-2"></table></div>
-    </div>
-    <div class="chart-box">
-        <h3>Evolução Diária</h3>
-        <div class="chart-container-bi"><canvas id="chartEstamparia"></canvas></div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start">
+        <div class="section-card">
+            <div class="section-header"><div class="section-title-box"><h2>Controle Manufaturados — Estamparia</h2></div></div>
+            <div style="padding:8px;background:#fff;overflow-x:auto"><table class="estamparia-table" id="tabela-estamparia-matriz-2"></table></div>
+        </div>
+        <div class="chart-box" style="margin:0">
+            <h3 style="font-size:14px;margin-bottom:14px;padding-bottom:10px">Evolução Diária</h3>
+            <div class="chart-container-bi" style="height:280px"><canvas id="chartEstamparia"></canvas></div>
+        </div>
     </div>
 
     <div class="excel-section">
         <div class="excel-title">Controle Produção — Saídas de Linha</div>
         <div class="excel-grid">
             <div class="excel-col" style="flex:1.1">
-                <table class="excel-table"><thead><tr><th colspan="3" class="bg-green">Dias do Mês (Dias Úteis)</th></tr><tr><th>Data</th><th>Descrição</th><th>Qtd</th></tr></thead><tbody id="tbody-dias-mes"></tbody></table>
+                <div class="media-container">
+                    <div>
+                        <div class="media-label"><i class="fa-solid fa-chart-line"></i> Média de Saídas por Dia Útil</div>
+                        <div class="media-detail" id="media-detail-dias">Total: 0 produtos em 0 dias úteis</div>
+                    </div>
+                    <div class="media-value" id="media-value-dias">0,00</div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                    <table class="excel-table"><thead><tr><th colspan="3" class="bg-green">Dias do Mês (Dias Úteis) — 1ª Parte</th></tr><tr><th>Data</th><th>Descrição</th><th>Qtd</th></tr></thead><tbody id="tbody-dias-mes"></tbody></table>
+                    <table class="excel-table"><thead><tr><th colspan="3" class="bg-green">Dias do Mês (Dias Úteis) — 2ª Parte</th></tr><tr><th>Data</th><th>Descrição</th><th>Qtd</th></tr></thead><tbody id="tbody-dias-mes-2"></tbody></table>
+                </div>
+                <div class="semana-container" id="semana-container-dias">
+                    <div class="semana-item"><span>1ª Semana</span><strong id="total-semana-1">0</strong></div>
+                    <div class="semana-item"><span>2ª Semana</span><strong id="total-semana-2">0</strong></div>
+                    <div class="semana-item"><span>3ª Semana</span><strong id="total-semana-3">0</strong></div>
+                    <div class="semana-item"><span>4ª Semana</span><strong id="total-semana-4">0</strong></div>
+                    <div class="semana-item"><span>5ª Semana</span><strong id="total-semana-5">0</strong></div>
+                </div>
             </div>
             <div class="excel-col">
                 <table class="excel-table"><thead><tr><th colspan="5" class="bg-pink">Saídas de Linha do DIA</th></tr><tr><th>CT</th><th>TQ</th><th>Silo</th><th>BS</th><th>ESP</th></tr></thead><tbody id="tbody-saidas-dia"></tbody></table>
@@ -502,14 +539,41 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
 
     <div class="excel-section">
         <div class="excel-title">Controle Produção — OP2 / Pendências</div>
-        <div style="max-width:700px;margin:0 auto 20px">
-            <table class="excel-table"><thead><tr><th colspan="4" style="font-size:16px;padding:16px">OP2 DIA</th></tr><tr><th>CT</th><th>TQ</th><th>Silo</th><th>BS</th></tr></thead><tbody id="tbody-op2-dia"></tbody></table>
-            <div class="excel-actions admin-only">
-                <button class="btn-excel-action btn-excel-add" onclick="addRowOP2Dia()"><i class="fa-solid fa-plus"></i> Adicionar Linha OP2</button>
-                <button class="btn-excel-action btn-excel-rem" onclick="removerLinhaOP2Dia()"><i class="fa-solid fa-minus"></i> Remover Última</button>
-                <span style="font-size:14px;font-weight:800">Total: <span id="op2-dia-count">4</span> linhas</span>
+
+        <div style="display:grid;grid-template-columns:0.9fr 1fr 1fr;gap:16px;align-items:start;margin-bottom:16px">
+            <!-- Coluna 1: OP2 DIA -->
+            <div>
+                <table class="excel-table"><thead><tr><th colspan="4" style="font-size:13px;padding:8px">OP2 DIA</th></tr><tr><th>CT</th><th>TQ</th><th>Silo</th><th>BS</th></tr></thead><tbody id="tbody-op2-dia"></tbody></table>
+                <div class="excel-actions admin-only" style="padding:6px;gap:6px">
+                    <button class="btn-excel-action btn-excel-add" onclick="addRowOP2Dia()" style="font-size:11px;padding:5px 10px"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                    <button class="btn-excel-action btn-excel-rem" onclick="removerLinhaOP2Dia()" style="font-size:11px;padding:5px 10px"><i class="fa-solid fa-minus"></i> Remover</button>
+                    <span style="font-size:11px;font-weight:800">Total: <span id="op2-dia-count">4</span></span>
+                </div>
             </div>
+
+            <!-- Coluna 2: Dias do Mês 1ª Parte -->
+            <table class="excel-table"><thead><tr><th colspan="3" class="bg-purple">Dias do Mês (OP2) — 1ª Parte</th></tr><tr><th>Data</th><th>Descrição</th><th>Qtd</th></tr></thead><tbody id="tbody-op2-dias-mes"></tbody></table>
+
+            <!-- Coluna 3: Dias do Mês 2ª Parte -->
+            <table class="excel-table"><thead><tr><th colspan="3" class="bg-purple">Dias do Mês (OP2) — 2ª Parte</th></tr><tr><th>Data</th><th>Descrição</th><th>Qtd</th></tr></thead><tbody id="tbody-op2-dias-mes-2"></tbody></table>
         </div>
+
+        <div class="op2-media-container">
+            <div>
+                <div class="media-label"><i class="fa-solid fa-chart-line"></i> Média de Saídas OP2 por Dia Útil</div>
+                <div class="media-detail" id="media-detail-op2">Total: 0 produtos em 0 dias úteis</div>
+            </div>
+            <div class="media-value" id="media-value-op2">0,00</div>
+        </div>
+
+        <div class="op2-semana-container" id="op2-semana-container">
+            <div class="op2-semana-item"><span>1ª Semana</span><strong id="op2-total-semana-1">0</strong></div>
+            <div class="op2-semana-item"><span>2ª Semana</span><strong id="op2-total-semana-2">0</strong></div>
+            <div class="op2-semana-item"><span>3ª Semana</span><strong id="op2-total-semana-3">0</strong></div>
+            <div class="op2-semana-item"><span>4ª Semana</span><strong id="op2-total-semana-4">0</strong></div>
+            <div class="op2-semana-item"><span>5ª Semana</span><strong id="op2-total-semana-5">0</strong></div>
+        </div>
+
         <table class="excel-table" style="margin-top:20px"><thead><tr><th>Produto</th><th>Pendências</th><th>Resp.</th></tr></thead><tbody id="tbody-pendencias-excel"></tbody></table>
         <div class="excel-actions admin-only">
             <button class="btn-excel-action btn-excel-add" onclick="addRowExcel('pendencias','tbody-pendencias-excel',3)"><i class="fa-solid fa-plus"></i> Adicionar</button>
@@ -615,6 +679,83 @@ let saveEmAndamento = false;
 let supressaoSync = false;
 const OP2_DIA_DEFAULT_ROWS = 4;
 const MAX_DIAS_HISTORICO = 120;
+// =========================================================
+// 🎉 FERIADOS — Configuração Central
+// =========================================================
+// Fixos (todo ano): formato 'MM-DD'
+// Móveis (ano específico): formato 'YYYY-MM-DD'
+const FERIADOS_FIXOS = [
+    '01-01', // Confraternização Universal
+    '04-21', // Tiradentes
+    '05-01', // Dia do Trabalho
+    '09-07', // Independência
+    '10-12', // Nossa Senhora Aparecida
+    '11-02', // Finados
+    '11-15', // Proclamação da República
+    '11-20', // Consciência Negra
+    '12-25'  // Natal
+];
+const FERIADOS_MOVEIS = [
+    // 2026
+    '2026-02-16', '2026-02-17', // Carnaval
+    '2026-04-03',               // Sexta-feira Santa
+    '2026-06-04',               // Corpus Christi
+    // 2027
+    '2027-02-08', '2027-02-09', // Carnaval
+    '2027-03-26',               // Sexta-feira Santa
+    '2027-05-27'                // Corpus Christi
+];
+
+// Cache para não recalcular toda hora
+const _cacheFeriado = new Map();
+
+function ehFeriado(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const dia = String(d.getDate()).padStart(2, '0');
+    const mmdd = m + '-' + dia;
+    const yyyymmdd = y + '-' + mmdd;
+
+    if (_cacheFeriado.has(yyyymmdd)) return _cacheFeriado.get(yyyymmdd);
+
+    // Feriado em data fixa
+    if (FERIADOS_FIXOS.includes(mmdd)) { _cacheFeriado.set(yyyymmdd, true); return true; }
+
+    // Feriado móvel (data exata)
+    if (FERIADOS_MOVEIS.includes(yyyymmdd)) { _cacheFeriado.set(yyyymmdd, true); return true; }
+
+    // 🎯 DICA INTELIGENTE: se cair em seg/ter/qua/qui/sex e o dia anterior ou posterior for feriado,
+    //    também é considerado feriado (emenda automática). Descomente se quiser:
+    // const ontem = new Date(d); ontem.setDate(ontem.getDate() - 1);
+    // const amanha = new Date(d); amanha.setDate(amanha.getDate() + 1);
+    // if (FERIADOS_MOVEIS.includes(ontem.getFullYear() + '-' + String(ontem.getMonth()+1).padStart(2,'0') + '-' + String(ontem.getDate()).padStart(2,'0'))) { _cacheFeriado.set(yyyymmdd, true); return true; }
+    // if (FERIADOS_MOVEIS.includes(amanha.getFullYear() + '-' + String(amanha.getMonth()+1).padStart(2,'0') + '-' + String(amanha.getDate()).padStart(2,'0'))) { _cacheFeriado.set(yyyymmdd, true); return true; }
+
+    _cacheFeriado.set(yyyymmdd, false);
+    return false;
+}
+
+function ehDiaUtil(d) {
+    const w = d.getDay();
+    if (w === 0 || w === 6) return false;
+    if (ehFeriado(d)) return false;
+    return true;
+}
+
+// 🎯 HACK: sobrescreve o getDay() global
+//    - Sábado (6) e domingo (0) → mantém
+//    - Feriado em dia útil → retorna 0 (como se fosse domingo)
+// Isso faz TODAS as funções existentes (que já checam getDay !== 0 && getDay !== 6)
+// pularem feriados AUTOMATICAMENTE, sem precisar mudar nada.
+const _getDayOriginal = Date.prototype.getDay;
+Date.prototype.getDay = function() {
+    const original = _getDayOriginal.call(this);
+    // Se já é fim de semana, retorna o normal
+    if (original === 0 || original === 6) return original;
+    // Se for feriado em dia útil, "engana" o sistema como se fosse domingo
+    if (ehFeriado(this)) return 0;
+    return original;
+};
 
 const TABELA_PINOS_DEFAULT = {
     bases: [
@@ -854,11 +995,11 @@ function garantirEstruturaTabelas(tabs) {
     };
     garantir('saidasDia', 5, 3);
     garantir('saidasSeguinte', 5, 1);
-    garantir('pintura', 5, 10);
-    garantir('montagem', 6, 10);
-    garantir('op1', 4, 10);
+    garantir('pintura', 5, 2);
+    garantir('montagem', 6, 2);
+    garantir('op1', 4, 2);
     garantir('op2Dia', 4, OP2_DIA_DEFAULT_ROWS);
-    garantir('pendencias', 3, 10);
+    garantir('pendencias', 3, 2);
     if (!Array.isArray(tabs.diasMes)) tabs.diasMes = [];
     if (!Array.isArray(tabs.diarioOp2)) tabs.diarioOp2 = [];
 }
@@ -1112,6 +1253,7 @@ function definirMesManual(valor) {
     marcarAlteracao();
     gerarTabelasExcel();
     renderizarTabelaDiasMes();
+    renderizarTabelaOP2DiasMes();
     mostrarToast(`Mês ${valor} carregado`, 'fa-cloud-arrow-up');
 }
 
@@ -1253,6 +1395,7 @@ function gerarTabelasExcel() {
 
     // Dias do mês
     renderizarTabelaDiasMes();
+    renderizarTabelaOP2DiasMes();
 
     // Saídas Dia
     const tbSD = document.getElementById('tbody-saidas-dia');
@@ -1353,7 +1496,7 @@ function renderizarTabelaDiasMes() {
     let totalEsperado = 0;
     for (let d = 1; d <= ultimoDia; d++) {
         const dt = new Date(ano, mes, d);
-        if (dt.getDay() !== 0 && dt.getDay() !== 6) totalEsperado++;
+         if (ehDiaUtil(dt)) totalEsperado++;
     }
     if (!Array.isArray(tabs.diasMes) || tabs.diasMes.length !== totalEsperado) {
         const antigos = {};
@@ -1361,7 +1504,7 @@ function renderizarTabelaDiasMes() {
         let flat = [];
         for (let d = 1; d <= ultimoDia; d++) {
             const dt = new Date(ano, mes, d);
-            if (dt.getDay() === 0 || dt.getDay() === 6) continue;
+             if (!ehDiaUtil(dt)) continue;
             const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
             const antigo = antigos[dataStr];
             flat.push(antigo ? { data: dataStr, desc: antigo.desc||'', qtd: antigo.qtd||0 } : { data: dataStr, desc: '', qtd: 0 });
@@ -1369,21 +1512,38 @@ function renderizarTabelaDiasMes() {
         tabs.diasMes = flat;
     }
 
-    let html = '', idxFlat = 0;
+    // Monta todas as linhas primeiro
+    const linhas = [];
+    let idxFlat = 0;
     for (let d = 1; d <= ultimoDia; d++) {
         const dt = new Date(ano, mes, d);
-        if (dt.getDay() === 0 || dt.getDay() === 6) continue;
+        if (!ehDiaUtil(dt)) continue;
         const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
         const reg = tabs.diasMes[idxFlat] || { data: dataStr, desc: '', qtd: 0 };
         reg.data = dataStr;
-        html += '<tr>' +
-            '<td style="font-weight:900;background:#fafbfc;text-align:center;color:var(--text-secondary);font-size:13px">' + dataStr + '</td>' +
-            '<td><input type="text" class="ex-in desc-input-dia" data-chave="diasMes" data-flat-idx="' + idxFlat + '" placeholder="Ex: ct-bs-sl" value="' + (reg.desc||'') + '"></td>' +
-            '<td style="text-align:center;font-weight:900;background:#f0fdf4"><span class="qtd-dia-' + idxFlat + '" style="color:#059669;font-size:18px">' + (reg.qtd||0) + '</span></td>' +
-        '</tr>';
+        linhas.push(
+            '<tr>' +
+                '<td style="font-weight:900;background:#fafbfc;text-align:center;color:var(--text-secondary);font-size:10px;padding:1px 4px">' + dataStr + '</td>' +
+                '<td><input type="text" class="ex-in desc-input-dia" data-chave="diasMes" data-flat-idx="' + idxFlat + '" placeholder="ct-bs-sl" value="' + (reg.desc||'') + '" style="padding:1px 4px;font-size:10px"></td>' +
+                '<td style="text-align:center;font-weight:900;background:#f0fdf4"><span class="qtd-dia-' + idxFlat + '" style="color:#059669;font-size:12px">' + (reg.qtd||0) + '</span></td>' +
+            '</tr>'
+        );
         idxFlat++;
     }
-    tbody.innerHTML = html;
+
+    // Divide em 2 partes iguais
+    const meio = Math.ceil(linhas.length / 2);
+    const parte1 = linhas.slice(0, meio).join('');
+    const parte2 = linhas.slice(meio).join('');
+
+    // Renderiza nas duas tabelas
+    const tbody1 = document.getElementById('tbody-dias-mes');
+    const tbody2 = document.getElementById('tbody-dias-mes-2');
+    if (tbody1) tbody1.innerHTML = parte1 || '<tr><td colspan="3" style="text-align:center;color:#94a3b8;font-weight:800;padding:12px">—</td></tr>';
+    if (tbody2) tbody2.innerHTML = parte2 || '<tr><td colspan="3" style="text-align:center;color:#94a3b8;font-weight:800;padding:12px">—</td></tr>';
+
+    calcularMediaDiasUteis();
+    calcularTotaisSemanais();
 }
 
 function renderizarOP2Dia() {
@@ -1438,19 +1598,28 @@ function renderizarEstampariaMatriz() {
     if (!Array.isArray(db.estampariaMatriz.datas)) db.estampariaMatriz.datas = [];
     if (!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {};
 
-    // ✅ Garante 5 datas terminando na data selecionada
+    // ✅ Garante 5 datas ÚTEIS terminando na data selecionada (ou no dia útil anterior se a data for fim de semana)
     const dataAtualBR = dataLocalSelecionada || getDataCompleta();
-    const dataRef = parseDataComAnoRef(dataAtualBR, 2026) || new Date();
+    let dataRef = parseDataComAnoRef(dataAtualBR, 2026) || new Date();
+    // Se a data selecionada for sábado ou domingo, recua até o último dia útil
+    while (dataRef.getDay() === 0 || dataRef.getDay() === 6) {
+        dataRef.setDate(dataRef.getDate() - 1);
+    }
 
     const datasCalc = [];
     let d = new Date(dataRef);
     while (datasCalc.length < 5) {
-        if (d.getDay() !== 0 && d.getDay() !== 6) datasCalc.unshift(formatarDataEstamparia(d));
+        if (ehDiaUtil(d)) datasCalc.unshift(formatarDataEstamparia(d));
         d.setDate(d.getDate() - 1);
     }
 
     const datasSalvas = db.estampariaMatriz.datas || [];
-    const mudouData = datasSalvas.length !== 5 || datasSalvas[4] !== datasCalc[4];
+    // 🎯 Força recalcular se alguma data salva for feriado ou fim de semana
+    const temDataInvalida = datasSalvas.some(dt => {
+        const parsed = parseDataComAnoRef(dt, 2026);
+        return parsed ? !ehDiaUtil(parsed) : false;
+    });
+    const mudouData = datasSalvas.length !== 5 || datasSalvas[4] !== datasCalc[4] || temDataInvalida;
 
     if (mudouData) {
         // Mapeia valores antigos por data (preserva o que casa)
@@ -1509,7 +1678,7 @@ function renderizarEstampariaMatriz() {
                         }
                     }
                 }
-                tbody += '<td style="' + bg + '"><input type="text" class="cell-input estamparia-val-input" style="font-size:20px;font-weight:900;text-align:center;' + colorStyle + '" data-row-name="' + linha + '" data-col-idx="' + i + '" value="' + val + '"></td>';
+                tbody += '<td style="' + bg + '"><input type="text" class="cell-input estamparia-val-input" style="font-size:10px;font-weight:900;text-align:center;' + colorStyle + '" data-row-name="' + linha + '" data-col-idx="' + i + '" value="' + val + '"></td>';
             });
             tbody += '</tr>';
         });
@@ -1546,7 +1715,22 @@ function updateEstampariaChart() {
         chartsObj.estamparia = new Chart(canvas, {
             type: 'line',
             data: { labels: datas, datasets },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 14, weight: '700' },
+                            padding: 14,
+                            boxWidth: 18,
+                            boxHeight: 12,
+                            color: '#0f172a'
+                        }
+                    }
+                }
+            }
         });
     }
 }
@@ -1939,7 +2123,29 @@ function addRowExcel(chave, tbodyId, cols) {
     marcarAlteracao();
     mostrarToast('Linha adicionada!', 'fa-plus');
 }
+// =========================================================
+// APARAR PINTURA PARA 4 LINHAS
+// =========================================================
+function apararPinturaPara4() {
+    if (!isAdmin) { toggleAdmin(); return; }
+    if (!confirm('Aparar a tabela Pintura para 4 linhas?\n\n⚠️ Isso vai REMOVER as linhas extras (do 5º ao 10º).')) return;
 
+    let total = 0;
+    Object.keys(db.tabelasExcelPorDia || {}).forEach(chave => {
+        const tabs = db.tabelasExcelPorDia[chave];
+        if (tabs && Array.isArray(tabs.pintura) && tabs.pintura.length > 4) {
+            const removeu = tabs.pintura.length - 4;
+            tabs.pintura = tabs.pintura.slice(0, 4);
+            total += removeu;
+        }
+    });
+
+    if (typeof salvarNoFirebase === 'function') salvarNoFirebase(true);
+    if (typeof gerarTabelasExcel === 'function') gerarTabelasExcel();
+    if (typeof atualizarChaoFabrica === 'function') atualizarChaoFabrica();
+    mostrarToast('✅ Pintura aparada para 4 linhas (' + total + ' removidas)', 'fa-scissors');
+    console.log('✅ Pintura aparada em', Object.keys(db.tabelasExcelPorDia).length, 'dias');
+}
 function removerLinhaExcel(chave, tbodyId) {
     if (!isAdmin) { toggleAdmin(); return; }
     const tabs = getTabelasDoDia(dataLocalSelecionada);
@@ -2077,6 +2283,76 @@ function exportarExcel() {
     mostrarToast('Planilha gerada!', 'fa-file-excel');
 }
 
+// ============ BACKUP POR DIA ============
+function backupDoDia() {
+    const dataRef = dataLocalSelecionada || getDataCompleta();
+    const chaveISO = brParaChaveISO(dataRef);
+    if (!chaveISO) { mostrarToast('Data inválida', 'fa-triangle-exclamation'); return; }
+    const tabs = getTabelasDoDia(dataRef) || {};
+    const pacote = {
+        _meta: { versao: 1, dataBR: dataRef, dataISO: chaveISO, criadoEm: new Date().toISOString() },
+        tabelasDoDia: JSON.parse(JSON.stringify(tabs)),
+        estampariaMatriz: JSON.parse(JSON.stringify(db.estampariaMatriz || {})),
+        data: JSON.parse(JSON.stringify(db.data || {})),
+        premioConfig: JSON.parse(JSON.stringify(db.premioConfig || {})),
+        pinosManual: JSON.parse(JSON.stringify(db.pinosManual || {}))
+    };
+    const json = JSON.stringify(pacote, null, 2);
+    try { localStorage.setItem('backup_dia_' + chaveISO, json); } catch(e) {}
+    const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'backup_randon_' + chaveISO + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    mostrarToast('💾 Backup do dia ' + dataRef + ' salvo!', 'fa-floppy-disk');
+    console.log('📥 Arquivo baixado: backup_randon_' + chaveISO + '.json');
+}
+
+function restaurarBackupDia() {
+    const keys = Object.keys(localStorage).filter(k => k.startsWith('backup_dia_'));
+    if (keys.length === 0) { mostrarToast('Nenhum backup encontrado', 'fa-triangle-exclamation'); return; }
+    keys.sort().reverse();
+    const lista = keys.map((k, i) => {
+        const info = JSON.parse(localStorage.getItem(k) || '{}');
+        const meta = info._meta || {};
+        return (i+1) + ') ' + (meta.dataBR || k) + ' — ' + (meta.criadoEm || '?');
+    }).join('\n');
+    const escolha = prompt('Qual backup restaurar?\n\n' + lista + '\n\nDigite o número:');
+    if (!escolha) return;
+    const idx = parseInt(escolha, 10) - 1;
+    if (isNaN(idx) || idx < 0 || idx >= keys.length) { mostrarToast('Opção inválida', 'fa-triangle-exclamation'); return; }
+    const chave = keys[idx];
+    const pacote = JSON.parse(localStorage.getItem(chave));
+    if (!pacote || !pacote._meta) { mostrarToast('Backup corrompido', 'fa-triangle-exclamation'); return; }
+    if (!confirm('Restaurar backup de ' + pacote._meta.dataBR + '?')) return;
+    const chaveTabs = chaveDia(pacote._meta.dataBR);
+    if (pacote.tabelasDoDia) db.tabelasExcelPorDia[chaveTabs] = pacote.tabelasDoDia;
+    if (pacote.estampariaMatriz) db.estampariaMatriz = pacote.estampariaMatriz;
+    if (pacote.data) db.data = pacote.data;
+    if (pacote.premioConfig) db.premioConfig = pacote.premioConfig;
+    if (pacote.pinosManual) db.pinosManual = pacote.pinosManual;
+    dataLocalSelecionada = pacote._meta.dataBR;
+    try { localStorage.setItem('erp_randon_data_individual', dataLocalSelecionada); } catch(e) {}
+    if (typeof salvarNoFirebase === 'function') salvarNoFirebase(true);
+    if (typeof forceRenderTodasTabelas === 'function') forceRenderTodasTabelas();
+    mostrarToast('✅ Backup de ' + pacote._meta.dataBR + ' restaurado!', 'fa-wand-magic-sparkles');
+}
+
+function listarBackupsDia() {
+    const keys = Object.keys(localStorage).filter(k => k.startsWith('backup_dia_'));
+    if (keys.length === 0) { console.log('Nenhum backup por dia'); return; }
+    console.log('📦 Backups disponíveis:');
+    keys.sort().reverse().forEach(k => {
+        try {
+            const info = JSON.parse(localStorage.getItem(k));
+            const m = info._meta || {};
+            console.log('  •', m.dataBR, '|', m.criadoEm);
+        } catch(e) { console.log('  •', k, '(corrompido)'); }
+    });
+}
+// ============ FIM BACKUP ============
 function gerarPDF() {
     const el = document.querySelector('.view-container.active') || document.body;
     const opt = { margin: 5, filename: 'Relatorio_' + (dataLocalSelecionada||getDataCompleta()).replace(/[\/\.]/g,'-') + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' } };
@@ -2152,6 +2428,24 @@ document.addEventListener('input', function(e) {
             tabs.diasMes[idx].qtd = partes.length;
             const elQtd = document.querySelector('.qtd-dia-' + idx);
             if (elQtd) elQtd.innerText = partes.length;
+            calcularMediaDiasUteis();
+            calcularTotaisSemanais();
+            marcarAlteracao();
+        }
+        return;
+    }
+
+    if (t.dataset.chave === 'diarioOp2' && t.dataset.flatIdx !== undefined && t.classList.contains('ex-in')) {
+        const idx = parseInt(t.dataset.flatIdx);
+        const tabs = getTabelasDoDia(dataLocalSelecionada);
+        if (tabs && Array.isArray(tabs.diarioOp2) && tabs.diarioOp2[idx]) {
+            tabs.diarioOp2[idx].desc = t.value;
+            const partes = t.value.split('-').map(p => p.trim()).filter(p => p);
+            tabs.diarioOp2[idx].qtd = partes.length;
+            const elQtd = document.querySelector('.op2-qtd-dia-' + idx);
+            if (elQtd) elQtd.innerText = partes.length;
+            calcularMediaOP2DiasUteis();
+            calcularTotaisSemanaisOP2();
             marcarAlteracao();
         }
         return;
@@ -2228,6 +2522,202 @@ document.addEventListener('change', function(e) {
         updateAnalytics();
     }
 });
+
+// =========================================================
+// MÉDIAS E TOTAIS SEMANAIS
+// =========================================================
+function calcularMediaDiasUteis() {
+    const tabs = getTabelasDoDia(dataLocalSelecionada);
+    if (!tabs || !Array.isArray(tabs.diasMes)) return;
+    let totalProdutos = 0, diasPreenchidos = 0;
+    tabs.diasMes.forEach(reg => {
+        if (reg && reg.qtd > 0) { totalProdutos += reg.qtd; diasPreenchidos++; }
+    });
+    const media = diasPreenchidos > 0 ? (totalProdutos / diasPreenchidos) : 0;
+    const elMedia = document.getElementById('media-value-dias');
+    if (elMedia) elMedia.innerText = media.toFixed(2).replace('.', ',');
+    const elDetail = document.getElementById('media-detail-dias');
+    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasPreenchidos} dias úteis`;
+}
+
+function calcularMediaOP2DiasUteis() {
+    const tabs = getTabelasDoDia(dataLocalSelecionada);
+    if (!tabs || !Array.isArray(tabs.diarioOp2)) return;
+    let totalProdutos = 0, diasPreenchidos = 0;
+    tabs.diarioOp2.forEach(reg => {
+        if (reg && reg.qtd > 0) { totalProdutos += reg.qtd; diasPreenchidos++; }
+    });
+    const media = diasPreenchidos > 0 ? (totalProdutos / diasPreenchidos) : 0;
+    const elMedia = document.getElementById('media-value-op2');
+    if (elMedia) elMedia.innerText = media.toFixed(2).replace('.', ',');
+    const elDetail = document.getElementById('media-detail-op2');
+    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasPreenchidos} dias úteis`;
+}
+
+function calcularTotaisSemanais() {
+    const tabs = getTabelasDoDia(dataLocalSelecionada);
+    if (!tabs || !Array.isArray(tabs.diasMes)) return;
+
+    // Agrupa por semana do calendário real
+    const semanas = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+
+    let ano, mes;
+    if (db.mesReferencia && /^\d{4}-\d{2}$/.test(db.mesReferencia)) {
+        const parts = db.mesReferencia.split('-');
+        ano = parseInt(parts[0], 10);
+        mes = parseInt(parts[1], 10) - 1;
+    } else {
+        const hoje = new Date();
+        ano = hoje.getFullYear();
+        mes = hoje.getMonth();
+    }
+
+    const primeiroDia = new Date(ano, mes, 1);
+    const diaSemanaInicio = primeiroDia.getDay(); // 0=Dom ... 6=Sáb
+
+    tabs.diasMes.forEach(reg => {
+        if (!reg || !reg.qtd) return;
+        const dia = parseInt(reg.data.split('/')[0], 10);
+        const dataReal = new Date(ano, mes, dia);
+
+        let semana;
+        if (dia < (8 - diaSemanaInicio) && diaSemanaInicio !== 1) {
+            // Dias antes da 1ª segunda-feira cheia do mês → Semana 1
+            semana = 1;
+        } else {
+            const primeiraSegunda = new Date(ano, mes, diaSemanaInicio === 1 ? 1 : (8 - diaSemanaInicio));
+            const diffDias = Math.floor((dataReal - primeiraSegunda) / (1000 * 60 * 60 * 24));
+            semana = 2 + Math.floor(diffDias / 7);
+        }
+        if (semana > 6) semana = 6;
+        semanas[semana] += reg.qtd;
+    });
+
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+    set('total-semana-1', semanas[1]);
+    set('total-semana-2', semanas[2]);
+    set('total-semana-3', semanas[3]);
+    set('total-semana-4', semanas[4]);
+    set('total-semana-5', semanas[5]);
+}
+
+function calcularTotaisSemanaisOP2() {
+    const tabs = getTabelasDoDia(dataLocalSelecionada);
+    if (!tabs || !Array.isArray(tabs.diarioOp2)) return;
+
+    const semanas = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+
+    let ano, mes;
+    if (db.mesReferencia && /^\d{4}-\d{2}$/.test(db.mesReferencia)) {
+        const parts = db.mesReferencia.split('-');
+        ano = parseInt(parts[0], 10);
+        mes = parseInt(parts[1], 10) - 1;
+    } else {
+        const hoje = new Date();
+        ano = hoje.getFullYear();
+        mes = hoje.getMonth();
+    }
+
+    const primeiroDia = new Date(ano, mes, 1);
+    const diaSemanaInicio = primeiroDia.getDay();
+
+    tabs.diarioOp2.forEach(reg => {
+        if (!reg || !reg.qtd) return;
+        const dia = parseInt(reg.data.split('/')[0], 10);
+        const dataReal = new Date(ano, mes, dia);
+
+        let semana;
+        if (dia < (8 - diaSemanaInicio) && diaSemanaInicio !== 1) {
+            semana = 1;
+        } else {
+            const primeiraSegunda = new Date(ano, mes, diaSemanaInicio === 1 ? 1 : (8 - diaSemanaInicio));
+            const diffDias = Math.floor((dataReal - primeiraSegunda) / (1000 * 60 * 60 * 24));
+            semana = 2 + Math.floor(diffDias / 7);
+        }
+        if (semana > 6) semana = 6;
+        semanas[semana] += reg.qtd;
+    });
+
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+    set('op2-total-semana-1', semanas[1]);
+    set('op2-total-semana-2', semanas[2]);
+    set('op2-total-semana-3', semanas[3]);
+    set('op2-total-semana-4', semanas[4]);
+    set('op2-total-semana-5', semanas[5]);
+}
+
+function renderizarTabelaOP2DiasMes() {
+    const tbody = document.getElementById('tbody-op2-dias-mes');
+    if (!tbody) return;
+    const tabs = getTabelasDoDia(dataLocalSelecionada);
+    if (!tabs) return;
+
+    let ano, mes;
+    if (db.mesReferencia && /^\d{4}-\d{2}$/.test(db.mesReferencia)) {
+        const parts = db.mesReferencia.split('-');
+        ano = parseInt(parts[0], 10);
+        mes = parseInt(parts[1], 10) - 1;
+    } else {
+        const hoje = new Date();
+        ano = hoje.getFullYear();
+        mes = hoje.getMonth();
+    }
+    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    const nomeMes = meses[mes];
+    const ultimoDia = new Date(ano, mes+1, 0).getDate();
+
+    let totalEsperado = 0;
+    for (let d = 1; d <= ultimoDia; d++) {
+        const dt = new Date(ano, mes, d);
+        if (ehDiaUtil(dt)) totalEsperado++;
+    }
+    if (!Array.isArray(tabs.diarioOp2) || tabs.diarioOp2.length !== totalEsperado) {
+        const antigos = {};
+        (tabs.diarioOp2 || []).forEach(r => { if (r && r.data) antigos[r.data] = r; });
+        let flat = [];
+        for (let d = 1; d <= ultimoDia; d++) {
+            const dt = new Date(ano, mes, d);
+            if (!ehDiaUtil(dt)) continue;
+            const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
+            const antigo = antigos[dataStr];
+            flat.push(antigo ? { data: dataStr, desc: antigo.desc||'', qtd: antigo.qtd||0 } : { data: dataStr, desc: '', qtd: 0 });
+        }
+        tabs.diarioOp2 = flat;
+    }
+
+    // Monta todas as linhas primeiro
+    const linhas = [];
+    let idxFlat = 0;
+    for (let d = 1; d <= ultimoDia; d++) {
+        const dt = new Date(ano, mes, d);
+        if (!ehDiaUtil(dt)) continue;
+        const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
+        const reg = tabs.diarioOp2[idxFlat] || { data: dataStr, desc: '', qtd: 0 };
+        reg.data = dataStr;
+        linhas.push(
+            '<tr>' +
+                '<td style="font-weight:900;background:#fafbfc;text-align:center;color:var(--text-secondary);font-size:10px;padding:1px 4px">' + dataStr + '</td>' +
+                '<td><input type="text" class="ex-in desc-input-dia" data-chave="diarioOp2" data-flat-idx="' + idxFlat + '" placeholder="ct-bs-sl" value="' + (reg.desc||'') + '" style="padding:1px 4px;font-size:10px"></td>' +
+                '<td style="text-align:center;font-weight:900;background:#faf5ff"><span class="op2-qtd-dia-' + idxFlat + '" style="color:#7c3aed;font-size:12px">' + (reg.qtd||0) + '</span></td>' +
+            '</tr>'
+        );
+        idxFlat++;
+    }
+
+    // Divide em 2 partes iguais
+    const meio = Math.ceil(linhas.length / 2);
+    const parte1 = linhas.slice(0, meio).join('');
+    const parte2 = linhas.slice(meio).join('');
+
+    // Renderiza nas duas tabelas
+    const tbody1 = document.getElementById('tbody-op2-dias-mes');
+    const tbody2 = document.getElementById('tbody-op2-dias-mes-2');
+    if (tbody1) tbody1.innerHTML = parte1 || '<tr><td colspan="3" style="text-align:center;color:#94a3b8;font-weight:800;padding:11px">—</td></tr>';
+    if (tbody2) tbody2.innerHTML = parte2 || '<tr><td colspan="3" style="text-align:center;color:#94a3b8;font-weight:800;padding:11px">—</td></tr>';
+
+    calcularMediaOP2DiasUteis();
+    calcularTotaisSemanaisOP2();
+}
 
 // =========================================================
 // FORCE RENDER
