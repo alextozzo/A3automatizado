@@ -534,9 +534,15 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
                     <button class="btn-excel-action btn-excel-rem" onclick="removerLinhaExcel('op1','tbody-op1-excel')"><i class="fa-solid fa-minus"></i> Remover</button>
                 </div>
             </div>
+            <div class="excel-col" style="flex:0.35">
+                <table class="excel-table"><thead><tr><th colspan="1" class="bg-yellow">TORRE</th></tr></thead><tbody id="tbody-torre-excel"></tbody></table>
+                <div class="excel-actions admin-only" style="padding:6px;gap:4px;flex-wrap:nowrap">
+                    <button class="btn-excel-action btn-excel-add" onclick="addRowExcel('torre','tbody-torre-excel',1)" style="padding:4px 8px;font-size:11px"><i class="fa-solid fa-plus"></i></button>
+                    <button class="btn-excel-action btn-excel-rem" onclick="removerLinhaExcel('torre','tbody-torre-excel')" style="padding:4px 8px;font-size:11px"><i class="fa-solid fa-minus"></i></button>
+                </div>
+            </div>
         </div>
     </div>
-
     <div class="excel-section">
         <div class="excel-title">Controle Produção — OP2 / Pendências</div>
 
@@ -802,7 +808,7 @@ const configuracaoSetores = [
 ];
 
 const estampariaLinhas = ["Atraso Programação","Estamparia Geral","Laser","Linea","Dobra","PRM - Carbo","115 - CDL","160 - Externo"];
-const TABELAS_POR_DIA = ['saidasDia', 'saidasSeguinte', 'pintura', 'montagem', 'op1', 'op2Dia'];
+const TABELAS_POR_DIA = ['saidasDia', 'saidasSeguinte', 'pintura', 'montagem', 'op1', 'op2Dia', 'torre'];
 
 let db = {
     mesReferencia: '',
@@ -1000,8 +1006,8 @@ function garantirEstruturaTabelas(tabs) {
     garantir('op1', 4, 2);
     garantir('op2Dia', 4, OP2_DIA_DEFAULT_ROWS);
     garantir('pendencias', 3, 2);
-    if (!Array.isArray(tabs.diasMes)) tabs.diasMes = [];
-    if (!Array.isArray(tabs.diarioOp2)) tabs.diarioOp2 = [];
+    garantir('torre', 1, 6);
+    // ✅ diasMes e diarioOp2 agora vivem em db (por mês), não por dia
 }
 
 function getTabelasDoDia(dataBR) {
@@ -1010,11 +1016,20 @@ function getTabelasDoDia(dataBR) {
     if (!db.tabelasExcelPorDia) db.tabelasExcelPorDia = {};
     if (!db.tabelasExcelPorDia[chave]) {
         db.tabelasExcelPorDia[chave] = {
-            diasMes: [], saidasDia: [], saidasSeguinte: [], pintura: [],
-            montagem: [], op1: [], op2Dia: [], pendencias: [], diarioOp2: []
+            saidasDia: [], saidasSeguinte: [], pintura: [],
+            montagem: [], op1: [], op2Dia: [], pendencias: [], torre: []
         };
         garantirEstruturaTabelas(db.tabelasExcelPorDia[chave]);
     }
+
+    // ✅ diasMes e diarioOp2 são do MÊS — compartilhados entre todos os dias
+    if (!db.diasMes || !Array.isArray(db.diasMes)) db.diasMes = [];
+    if (!db.diarioOp2 || !Array.isArray(db.diarioOp2)) db.diarioOp2 = [];
+
+    // ✅ Amarra as referências do mês ao objeto do dia (aponta pra mesma array)
+    db.tabelasExcelPorDia[chave].diasMes = db.diasMes;
+    db.tabelasExcelPorDia[chave].diarioOp2 = db.diarioOp2;
+
     return db.tabelasExcelPorDia[chave];
 }
 
@@ -1036,11 +1051,10 @@ function salvarHistoricoEstamparia(dataBR) {
     const tabs = getTabelasDoDia(dataBR);
     if (!tabs) return;
     const snapshot = { ts: Date.now() };
+    // ✅ Salva SOMENTE as tabelas do dia (não inclui diasMes/diarioOp2, que são do mês)
     TABELAS_POR_DIA.forEach(ch => {
         snapshot[ch] = JSON.parse(JSON.stringify(tabs[ch] || []));
     });
-    snapshot.diasMes = JSON.parse(JSON.stringify(tabs.diasMes || []));
-    snapshot.diarioOp2 = JSON.parse(JSON.stringify(tabs.diarioOp2 || []));
     db.historicoEstamparia[chave] = snapshot;
     const chaves = Object.keys(db.historicoEstamparia).sort();
     if (chaves.length > MAX_DIAS_HISTORICO) {
@@ -1062,29 +1076,41 @@ function restaurarHistoricoEstamparia(dataBR) {
             tabs[ch] = JSON.parse(JSON.stringify(snap[ch]));
         }
     });
-    if (Array.isArray(snap.diasMes) && snap.diasMes.length > 0) tabs.diasMes = JSON.parse(JSON.stringify(snap.diasMes));
-    if (Array.isArray(snap.diarioOp2) && snap.diarioOp2.length > 0) tabs.diarioOp2 = JSON.parse(JSON.stringify(snap.diarioOp2));
+    // ✅ diasMes e diarioOp2 NÃO são restaurados por dia — são do mês, já estão em db
     return true;
 }
 
 function aplicarDia(dataBR) {
     const dataAntiga = dataLocalSelecionada;
+
+    // 1) Salva o estado do dia que está saindo
     if (dataAntiga && dataAntiga !== dataBR) {
         salvarHistoricoEstamparia(dataAntiga);
-        try { salvarNoFirebase(false); } catch(e) {}
     }
+
+    // 2) Troca a data
     dataLocalSelecionada = dataBR;
     try { localStorage.setItem('erp_randon_data_individual', dataBR); } catch(e) {}
     const elData = document.getElementById('global-date');
     if (elData && elData.value !== dataBR) elData.value = dataBR;
+
+    // 3) Garante que a tabela do dia novo existe
     getTabelasDoDia(dataBR);
+
+    // 4) Restaura o histórico do dia novo (inclui saidasDia, diarioOp2, etc)
     restaurarHistoricoEstamparia(dataBR);
+
+    // 5) Renderiza tudo
     gerarTabelasExcel();
     renderizarOP2Dia();
     renderizarViews();
     atualizarChaoFabrica();
     renderizarEstampariaMatriz();
+    renderizarGuia();
+
+    // 6) Persiste (salva dia antigo no Firebase + dia novo)
     marcarAlteracao();
+    try { salvarNoFirebase(false); } catch(e) {}
 }
 
 // =========================================================
@@ -1447,6 +1473,15 @@ function gerarTabelasExcel() {
         }).join('');
     }
 
+    // TORRE (1 coluna, 6 linhas)
+    const tbTorre = document.getElementById('tbody-torre-excel');
+    if (tbTorre) {
+        tbTorre.innerHTML = (tabs.torre || []).map((linha, rIdx) => {
+            const val = Array.isArray(linha) ? (linha[0] || '') : (linha || '');
+            return '<tr><td><input type="text" class="ex-in" data-chave="torre" data-row="' + rIdx + '" data-col="0" value="' + val + '" style="text-align:center;font-weight:900;font-size:14px;padding:2px 4px"></td></tr>';
+        }).join('');
+    }
+
     // Pendências
     const tbPend = document.getElementById('tbody-pendencias-excel');
     if (tbPend) {
@@ -1592,78 +1627,59 @@ function renderizarEstampariaMatriz() {
     if (!Array.isArray(db.estampariaMatriz.datas)) db.estampariaMatriz.datas = [];
     if (!db.estampariaMatriz.valores) db.estampariaMatriz.valores = {};
 
-    // ✅ Garante 5 datas ÚTEIS terminando na data selecionada (ou no dia útil anterior se a data for fim de semana)
+    // ✅ Garante mapa por data (migra array antigo se preciso)
+    estampariaLinhas.forEach(l => {
+        const v = db.estampariaMatriz.valores[l];
+        if (Array.isArray(v)) {
+            const datasSalvas = db.estampariaMatriz.datas || [];
+            const mapa = {};
+            datasSalvas.forEach((dt, idx) => {
+                if (v[idx] !== undefined && v[idx] !== '') mapa[dt] = v[idx];
+            });
+            db.estampariaMatriz.valores[l] = mapa;
+        }
+        if (!db.estampariaMatriz.valores[l] || typeof db.estampariaMatriz.valores[l] !== 'object') {
+            db.estampariaMatriz.valores[l] = {};
+        }
+    });
+
+    // ✅ 5 datas úteis terminando na data selecionada
     const dataAtualBR = dataLocalSelecionada || getDataCompleta();
     let dataRef = parseDataComAnoRef(dataAtualBR, 2026) || new Date();
-    // Se a data selecionada for sábado ou domingo, recua até o último dia útil
-    while (dataRef.getDay() === 0 || dataRef.getDay() === 6) {
+    while (dataRef.getDay() === 0 || dataRef.getDay() === 6 || ehFeriado(dataRef)) {
         dataRef.setDate(dataRef.getDate() - 1);
     }
-
     const datasCalc = [];
     let d = new Date(dataRef);
     while (datasCalc.length < 5) {
         if (ehDiaUtil(d)) datasCalc.unshift(formatarDataEstamparia(d));
         d.setDate(d.getDate() - 1);
     }
-
-    const datasSalvas = db.estampariaMatriz.datas || [];
-    // 🎯 Força recalcular se alguma data salva for feriado ou fim de semana
-    const temDataInvalida = datasSalvas.some(dt => {
-        const parsed = parseDataComAnoRef(dt, 2026);
-        return parsed ? !ehDiaUtil(parsed) : false;
-    });
-    const mudouData = datasSalvas.length !== 5 || datasSalvas[4] !== datasCalc[4] || temDataInvalida;
-
-    if (mudouData) {
-        // Mapeia valores antigos por data (preserva o que casa)
-        const mapaAntigo = {};
-        datasSalvas.forEach((dt, idx) => {
-            mapaAntigo[dt] = {};
-            estampariaLinhas.forEach(l => {
-                if (db.estampariaMatriz.valores[l] && db.estampariaMatriz.valores[l][idx] !== undefined) {
-                    mapaAntigo[dt][l] = db.estampariaMatriz.valores[l][idx];
-                }
-            });
-        });
-
-        db.estampariaMatriz.datas = datasCalc;
-        db.estampariaMatriz.valores = {};
-        estampariaLinhas.forEach(l => {
-            db.estampariaMatriz.valores[l] = datasCalc.map(dt => {
-                if (mapaAntigo[dt] && mapaAntigo[dt][l] !== undefined) return mapaAntigo[dt][l];
-                return '';
-            });
-        });
-    }
-
-    estampariaLinhas.forEach(l => {
-        if (!Array.isArray(db.estampariaMatriz.valores[l])) db.estampariaMatriz.valores[l] = Array(5).fill('');
-        while (db.estampariaMatriz.valores[l].length < 5) db.estampariaMatriz.valores[l].push('');
-    });
+    db.estampariaMatriz.datas = datasCalc;
 
     ['tabela-estamparia-matriz', 'tabela-estamparia-matriz-2'].forEach(containerId => {
         const container = document.getElementById(containerId);
         if (!container) return;
         const datas = db.estampariaMatriz.datas || ['','','','',''];
         let thead = '<thead><tr><th style="text-align:left;padding-left:20px">Linha</th>';
-        datas.forEach((d, i) => {
+        datas.forEach((dt, i) => {
             const bg = i === 4 ? 'background:#dbeafe;color:#1e40af;' : '';
-            thead += '<th style="' + bg + '">' + (d||'--/--') + '</th>';
+            thead += '<th style="' + bg + '">' + (dt||'--/--') + '</th>';
         });
         thead += '</tr></thead>';
         let tbody = '';
         estampariaLinhas.forEach(linha => {
-            if (!db.estampariaMatriz.valores[linha]) db.estampariaMatriz.valores[linha] = Array(5).fill('');
+            const mapa = db.estampariaMatriz.valores[linha] || {};
             const classes = { "Atraso Programação":"row-atraso", "Estamparia Geral":"row-geral", "Laser":"row-laser", "Linea":"row-linea", "Dobra":"row-dobra", "PRM - Carbo":"row-prm", "115 - CDL":"row-cdl", "160 - Externo":"row-externo" };
             tbody += '<tr class="' + (classes[linha]||'') + '"><td style="font-weight:900;padding-left:20px;text-align:left">' + linha + '</td>';
-            datas.forEach((d, i) => {
-                const val = db.estampariaMatriz.valores[linha][i] || '';
+            datas.forEach((dt, i) => {
+                const val = mapa[dt] !== undefined ? mapa[dt] : '';
                 let bg = i === 4 ? 'background:#eff6ff;' : '';
                 let colorStyle = 'color:#3b82f6;';
-                if (i > 0 && val !== '') {
-                    const prev = db.estampariaMatriz.valores[linha][i-1] || '';
-                    if (prev !== '') {
+                if (i > 0) {
+                    const dtPrev = datas[i-1];
+                    const prev = mapa[dtPrev] !== undefined ? mapa[dtPrev] : '';
+                    if (prev !== '' && val !== '') {
                         const nv = parseFloat(val);
                         const np = parseFloat(prev);
                         if (!isNaN(nv) && !isNaN(np)) {
@@ -1672,12 +1688,13 @@ function renderizarEstampariaMatriz() {
                         }
                     }
                 }
-                tbody += '<td style="' + bg + '"><input type="text" class="cell-input estamparia-val-input" style="font-size:20px;font-weight:900;text-align:center;' + colorStyle + '" data-row-name="' + linha + '" data-col-idx="' + i + '" value="' + val + '"></td>';
+                tbody += '<td style="' + bg + '"><input type="text" class="cell-input estamparia-val-input" style="font-size:20px;font-weight:900;text-align:center;' + colorStyle + '" data-row-name="' + linha + '" data-data-ref="' + dt + '" value="' + val + '"></td>';
             });
             tbody += '</tr>';
         });
         container.innerHTML = thead + '<tbody>' + tbody + '</tbody>';
     });
+
     const elData = document.getElementById('cf-est-data');
     if (elData && db.estampariaMatriz.datas && db.estampariaMatriz.datas[4]) elData.innerText = db.estampariaMatriz.datas[4];
     updateEstampariaChart();
@@ -1690,10 +1707,19 @@ function updateEstampariaChart() {
     const datas = db.estampariaMatriz.datas || [];
     const cores = { "Atraso Programação":"#ef4444", "Estamparia Geral":"#3b82f6", "Laser":"#10b981", "Linea":"#f59e0b", "Dobra":"#8b5cf6", "PRM - Carbo":"#ec4899", "115 - CDL":"#14b8a6", "160 - Externo":"#64748b" };
     const datasets = estampariaLinhas.map(l => {
-        const arr = (db.estampariaMatriz.valores[l] || []);
+        const v = db.estampariaMatriz.valores[l];
+        // ✅ Lê tanto array (formato antigo) quanto mapa por data (formato novo)
+        let dataArr;
+        if (Array.isArray(v)) {
+            dataArr = datas.map((_, idx) => parseFloat(v[idx]) || 0);
+        } else if (v && typeof v === 'object') {
+            dataArr = datas.map(dt => parseFloat(v[dt]) || 0);
+        } else {
+            dataArr = datas.map(() => 0);
+        }
         return {
             label: l,
-            data: arr.map(v => parseFloat(v) || 0),
+            data: dataArr,
             borderColor: cores[l] || '#cbd5e1',
             backgroundColor: 'transparent',
             borderWidth: 4,
@@ -2381,9 +2407,12 @@ document.addEventListener('input', function(e) {
     if (supressaoSync) return;
 
     if (t.classList.contains('estamparia-val-input')) {
-        const l = t.dataset.rowName, i = parseInt(t.dataset.colIdx);
-        if (!db.estampariaMatriz.valores[l]) db.estampariaMatriz.valores[l] = Array(5).fill('');
-        db.estampariaMatriz.valores[l][i] = t.value;
+        const l = t.dataset.rowName;
+        const dtRef = t.dataset.dataRef;
+        if (!db.estampariaMatriz.valores[l] || Array.isArray(db.estampariaMatriz.valores[l]) || typeof db.estampariaMatriz.valores[l] !== 'object') {
+            db.estampariaMatriz.valores[l] = {};
+        }
+        if (dtRef) db.estampariaMatriz.valores[l][dtRef] = t.value;
         marcarAlteracao();
         return;
     }
@@ -2524,17 +2553,27 @@ function calcularMediaDiasUteis() {
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs || !Array.isArray(tabs.diasMes)) return;
 
-    // ✅ Considera dias úteis de 1 até ONTEM (D-1). O dia atual NÃO entra.
+    // ✅ D-1: pega a data selecionada e recua 1 dia ÚTIL
     const dataRef = dataLocalSelecionada || getDataCompleta();
-    let limiteDia = 0;
-    const p = normalizarDataParaComparacao(dataRef).split('/');
-    if (p.length >= 2) limiteDia = parseInt(p[0], 10) - 1;  // D-1
+    let dRef = parseDataComAnoRef(dataRef, 2026);
+    if (!dRef) return;
+
+    // Recua até o dia ÚTIL anterior (pula fds/feriado)
+    dRef.setDate(dRef.getDate() - 1);
+    while (!ehDiaUtil(dRef)) dRef.setDate(dRef.getDate() - 1);
+
+    const diaLimite = dRef.getDate();
+    const mesLimite = dRef.getMonth();
 
     let totalProdutos = 0, diasContados = 0;
     tabs.diasMes.forEach(reg => {
         if (!reg || !reg.data) return;
         const dia = parseInt(reg.data.split('/')[0], 10);
-        if (isNaN(dia) || dia > limiteDia) return;  // ignora hoje e futuros
+        const mesTxt = reg.data.split('/')[1];
+        const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+        const mesReg = meses.indexOf(mesTxt);
+        if (isNaN(dia) || mesReg !== mesLimite) return;
+        if (dia > diaLimite) return; // ignora D-1 em diante
         totalProdutos += (reg.qtd || 0);
         diasContados++;
     });
@@ -2550,17 +2589,26 @@ function calcularMediaOP2DiasUteis() {
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs || !Array.isArray(tabs.diarioOp2)) return;
 
-    // ✅ Considera dias úteis de 1 até ONTEM (D-1). O dia atual NÃO entra.
+    // ✅ D-1: pega a data selecionada e recua 1 dia ÚTIL
     const dataRef = dataLocalSelecionada || getDataCompleta();
-    let limiteDia = 0;
-    const p = normalizarDataParaComparacao(dataRef).split('/');
-    if (p.length >= 2) limiteDia = parseInt(p[0], 10) - 1;  // D-1
+    let dRef = parseDataComAnoRef(dataRef, 2026);
+    if (!dRef) return;
+
+    dRef.setDate(dRef.getDate() - 1);
+    while (!ehDiaUtil(dRef)) dRef.setDate(dRef.getDate() - 1);
+
+    const diaLimite = dRef.getDate();
+    const mesLimite = dRef.getMonth();
 
     let totalProdutos = 0, diasContados = 0;
     tabs.diarioOp2.forEach(reg => {
         if (!reg || !reg.data) return;
         const dia = parseInt(reg.data.split('/')[0], 10);
-        if (isNaN(dia) || dia > limiteDia) return;  // ignora hoje e futuros
+        const mesTxt = reg.data.split('/')[1];
+        const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+        const mesReg = meses.indexOf(mesTxt);
+        if (isNaN(dia) || mesReg !== mesLimite) return;
+        if (dia > diaLimite) return;
         totalProdutos += (reg.qtd || 0);
         diasContados++;
     });
@@ -2576,8 +2624,8 @@ function calcularTotaisSemanais() {
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs || !Array.isArray(tabs.diasMes)) return;
 
-    // Agrupa por semana do calendário real
     const semanas = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+    const diasPorSemana = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 
     let ano, mes;
     if (db.mesReferencia && /^\d{4}-\d{2}$/.test(db.mesReferencia)) {
@@ -2591,16 +2639,15 @@ function calcularTotaisSemanais() {
     }
 
     const primeiroDia = new Date(ano, mes, 1);
-    const diaSemanaInicio = primeiroDia.getDay(); // 0=Dom ... 6=Sáb
+    const diaSemanaInicio = primeiroDia.getDay();
 
     tabs.diasMes.forEach(reg => {
-        if (!reg || !reg.qtd) return;
+        if (!reg || !reg.data) return;
         const dia = parseInt(reg.data.split('/')[0], 10);
         const dataReal = new Date(ano, mes, dia);
 
         let semana;
         if (dia < (8 - diaSemanaInicio) && diaSemanaInicio !== 1) {
-            // Dias antes da 1ª segunda-feira cheia do mês → Semana 1
             semana = 1;
         } else {
             const primeiraSegunda = new Date(ano, mes, diaSemanaInicio === 1 ? 1 : (8 - diaSemanaInicio));
@@ -2608,15 +2655,20 @@ function calcularTotaisSemanais() {
             semana = 2 + Math.floor(diffDias / 7);
         }
         if (semana > 6) semana = 6;
-        semanas[semana] += reg.qtd;
+        semanas[semana] += (reg.qtd || 0);
+        diasPorSemana[semana]++;
     });
 
-    const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
-    set('total-semana-1', semanas[1]);
-    set('total-semana-2', semanas[2]);
-    set('total-semana-3', semanas[3]);
-    set('total-semana-4', semanas[4]);
-    set('total-semana-5', semanas[5]);
+    [1,2,3,4,5].forEach(s => {
+        const el = document.getElementById('total-semana-' + s);
+        if (!el) return;
+        const total = semanas[s] || 0;
+        const dias = diasPorSemana[s] || 0;
+        const media = dias > 0 ? (total / dias).toFixed(2).replace('.', ',') : '0,00';
+        el.innerText = total;
+        el.title = `Semana ${s}: total ${total} produtos em ${dias} dia(s) útil(eis) — média ${media}`;
+        el.style.cursor = 'help';
+    });
 }
 
 function calcularTotaisSemanaisOP2() {
@@ -2624,6 +2676,7 @@ function calcularTotaisSemanaisOP2() {
     if (!tabs || !Array.isArray(tabs.diarioOp2)) return;
 
     const semanas = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+    const diasPorSemana = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 
     let ano, mes;
     if (db.mesReferencia && /^\d{4}-\d{2}$/.test(db.mesReferencia)) {
@@ -2640,7 +2693,7 @@ function calcularTotaisSemanaisOP2() {
     const diaSemanaInicio = primeiroDia.getDay();
 
     tabs.diarioOp2.forEach(reg => {
-        if (!reg || !reg.qtd) return;
+        if (!reg || !reg.data) return;
         const dia = parseInt(reg.data.split('/')[0], 10);
         const dataReal = new Date(ano, mes, dia);
 
@@ -2653,15 +2706,20 @@ function calcularTotaisSemanaisOP2() {
             semana = 2 + Math.floor(diffDias / 7);
         }
         if (semana > 6) semana = 6;
-        semanas[semana] += reg.qtd;
+        semanas[semana] += (reg.qtd || 0);
+        diasPorSemana[semana]++;
     });
 
-    const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
-    set('op2-total-semana-1', semanas[1]);
-    set('op2-total-semana-2', semanas[2]);
-    set('op2-total-semana-3', semanas[3]);
-    set('op2-total-semana-4', semanas[4]);
-    set('op2-total-semana-5', semanas[5]);
+    [1,2,3,4,5].forEach(s => {
+        const el = document.getElementById('op2-total-semana-' + s);
+        if (!el) return;
+        const total = semanas[s] || 0;
+        const dias = diasPorSemana[s] || 0;
+        const media = dias > 0 ? (total / dias).toFixed(2).replace('.', ',') : '0,00';
+        el.innerText = total;
+        el.title = `Semana ${s}: total ${total} produtos em ${dias} dia(s) útil(eis) — média ${media}`;
+        el.style.cursor = 'help';
+    });
 }
 
 function renderizarTabelaOP2DiasMes() {
