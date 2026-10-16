@@ -854,7 +854,7 @@ function getDataCompleta(d = new Date()) {
 
 function formatarDataEstamparia(d) {
     const m = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-    return `${String(d.getDate()).padStart(2,'0')}/${m[d.getMonth()]}`;
+    return `${String(d.getDate()).padStart(2,'0')}-${m[d.getMonth()]}`;
 }
 
 function extrairAnoDeData(s) {
@@ -1474,8 +1474,6 @@ function gerarTabelasExcel() {
 }
 
 function renderizarTabelaDiasMes() {
-    const tbody = document.getElementById('tbody-dias-mes');
-    if (!tbody) return;
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs) return;
 
@@ -1493,34 +1491,32 @@ function renderizarTabelaDiasMes() {
     const nomeMes = meses[mes];
     const ultimoDia = new Date(ano, mes+1, 0).getDate();
 
-    let totalEsperado = 0;
+    const mapaExistente = {};
+    (tabs.diasMes || []).forEach(r => {
+        if (r && r.data) mapaExistente[r.data] = { desc: r.desc || '', qtd: r.qtd || 0 };
+    });
+
+    const novoDiasMes = [];
     for (let d = 1; d <= ultimoDia; d++) {
         const dt = new Date(ano, mes, d);
-         if (ehDiaUtil(dt)) totalEsperado++;
+        if (!ehDiaUtil(dt)) continue;
+        const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
+        const antigo = mapaExistente[dataStr];
+        novoDiasMes.push({
+            data: dataStr,
+            desc: antigo ? antigo.desc : '',
+            qtd: antigo ? antigo.qtd : 0
+        });
     }
-    if (!Array.isArray(tabs.diasMes) || tabs.diasMes.length !== totalEsperado) {
-        const antigos = {};
-        (tabs.diasMes || []).forEach(r => { if (r && r.data) antigos[r.data] = r; });
-        let flat = [];
-        for (let d = 1; d <= ultimoDia; d++) {
-            const dt = new Date(ano, mes, d);
-             if (!ehDiaUtil(dt)) continue;
-            const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
-            const antigo = antigos[dataStr];
-            flat.push(antigo ? { data: dataStr, desc: antigo.desc||'', qtd: antigo.qtd||0 } : { data: dataStr, desc: '', qtd: 0 });
-        }
-        tabs.diasMes = flat;
-    }
+    tabs.diasMes = novoDiasMes;
 
-    // Monta todas as linhas primeiro
     const linhas = [];
     let idxFlat = 0;
     for (let d = 1; d <= ultimoDia; d++) {
         const dt = new Date(ano, mes, d);
         if (!ehDiaUtil(dt)) continue;
         const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
-        const reg = tabs.diasMes[idxFlat] || { data: dataStr, desc: '', qtd: 0 };
-        reg.data = dataStr;
+        const reg = tabs.diasMes[idxFlat];
         linhas.push(
             '<tr>' +
                 '<td style="font-weight:900;background:#fafbfc;text-align:center;color:var(--text-secondary);font-size:10px;padding:1px 4px">' + dataStr + '</td>' +
@@ -1531,12 +1527,10 @@ function renderizarTabelaDiasMes() {
         idxFlat++;
     }
 
-    // Divide em 2 partes iguais
     const meio = Math.ceil(linhas.length / 2);
     const parte1 = linhas.slice(0, meio).join('');
     const parte2 = linhas.slice(meio).join('');
 
-    // Renderiza nas duas tabelas
     const tbody1 = document.getElementById('tbody-dias-mes');
     const tbody2 = document.getElementById('tbody-dias-mes-2');
     if (tbody1) tbody1.innerHTML = parte1 || '<tr><td colspan="3" style="text-align:center;color:#94a3b8;font-weight:800;padding:12px">—</td></tr>';
@@ -2529,29 +2523,53 @@ document.addEventListener('change', function(e) {
 function calcularMediaDiasUteis() {
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs || !Array.isArray(tabs.diasMes)) return;
-    let totalProdutos = 0, diasPreenchidos = 0;
+
+    // ✅ Conta TODOS os dias úteis até a data selecionada (inclusive os zerados)
+    const dataRef = dataLocalSelecionada || getDataCompleta();
+    let limiteDia = 31;
+    const p = normalizarDataParaComparacao(dataRef).split('/');
+    if (p.length >= 2) limiteDia = parseInt(p[0], 10);
+
+    let totalProdutos = 0, diasContados = 0;
     tabs.diasMes.forEach(reg => {
-        if (reg && reg.qtd > 0) { totalProdutos += reg.qtd; diasPreenchidos++; }
+        if (!reg || !reg.data) return;
+        const dia = parseInt(reg.data.split('/')[0], 10);
+        if (isNaN(dia) || dia > limiteDia) return;  // ignora dias futuros
+        totalProdutos += (reg.qtd || 0);
+        diasContados++;
     });
-    const media = diasPreenchidos > 0 ? (totalProdutos / diasPreenchidos) : 0;
+
+    const media = diasContados > 0 ? (totalProdutos / diasContados) : 0;
     const elMedia = document.getElementById('media-value-dias');
     if (elMedia) elMedia.innerText = media.toFixed(2).replace('.', ',');
     const elDetail = document.getElementById('media-detail-dias');
-    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasPreenchidos} dias úteis`;
+    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasContados} dias úteis`;
 }
 
 function calcularMediaOP2DiasUteis() {
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs || !Array.isArray(tabs.diarioOp2)) return;
-    let totalProdutos = 0, diasPreenchidos = 0;
+
+    // ✅ Conta TODOS os dias úteis até a data selecionada (inclusive os zerados)
+    const dataRef = dataLocalSelecionada || getDataCompleta();
+    let limiteDia = 31;
+    const p = normalizarDataParaComparacao(dataRef).split('/');
+    if (p.length >= 2) limiteDia = parseInt(p[0], 10);
+
+    let totalProdutos = 0, diasContados = 0;
     tabs.diarioOp2.forEach(reg => {
-        if (reg && reg.qtd > 0) { totalProdutos += reg.qtd; diasPreenchidos++; }
+        if (!reg || !reg.data) return;
+        const dia = parseInt(reg.data.split('/')[0], 10);
+        if (isNaN(dia) || dia > limiteDia) return;  // ignora dias futuros
+        totalProdutos += (reg.qtd || 0);
+        diasContados++;
     });
-    const media = diasPreenchidos > 0 ? (totalProdutos / diasPreenchidos) : 0;
+
+    const media = diasContados > 0 ? (totalProdutos / diasContados) : 0;
     const elMedia = document.getElementById('media-value-op2');
     if (elMedia) elMedia.innerText = media.toFixed(2).replace('.', ',');
     const elDetail = document.getElementById('media-detail-op2');
-    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasPreenchidos} dias úteis`;
+    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasContados} dias úteis`;
 }
 
 function calcularTotaisSemanais() {
@@ -2647,8 +2665,6 @@ function calcularTotaisSemanaisOP2() {
 }
 
 function renderizarTabelaOP2DiasMes() {
-    const tbody = document.getElementById('tbody-op2-dias-mes');
-    if (!tbody) return;
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs) return;
 
@@ -2666,34 +2682,32 @@ function renderizarTabelaOP2DiasMes() {
     const nomeMes = meses[mes];
     const ultimoDia = new Date(ano, mes+1, 0).getDate();
 
-    let totalEsperado = 0;
+    const mapaExistente = {};
+    (tabs.diarioOp2 || []).forEach(r => {
+        if (r && r.data) mapaExistente[r.data] = { desc: r.desc || '', qtd: r.qtd || 0 };
+    });
+
+    const novoDiarioOp2 = [];
     for (let d = 1; d <= ultimoDia; d++) {
         const dt = new Date(ano, mes, d);
-        if (ehDiaUtil(dt)) totalEsperado++;
+        if (!ehDiaUtil(dt)) continue;
+        const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
+        const antigo = mapaExistente[dataStr];
+        novoDiarioOp2.push({
+            data: dataStr,
+            desc: antigo ? antigo.desc : '',
+            qtd: antigo ? antigo.qtd : 0
+        });
     }
-    if (!Array.isArray(tabs.diarioOp2) || tabs.diarioOp2.length !== totalEsperado) {
-        const antigos = {};
-        (tabs.diarioOp2 || []).forEach(r => { if (r && r.data) antigos[r.data] = r; });
-        let flat = [];
-        for (let d = 1; d <= ultimoDia; d++) {
-            const dt = new Date(ano, mes, d);
-            if (!ehDiaUtil(dt)) continue;
-            const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
-            const antigo = antigos[dataStr];
-            flat.push(antigo ? { data: dataStr, desc: antigo.desc||'', qtd: antigo.qtd||0 } : { data: dataStr, desc: '', qtd: 0 });
-        }
-        tabs.diarioOp2 = flat;
-    }
+    tabs.diarioOp2 = novoDiarioOp2;
 
-    // Monta todas as linhas primeiro
     const linhas = [];
     let idxFlat = 0;
     for (let d = 1; d <= ultimoDia; d++) {
         const dt = new Date(ano, mes, d);
         if (!ehDiaUtil(dt)) continue;
         const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
-        const reg = tabs.diarioOp2[idxFlat] || { data: dataStr, desc: '', qtd: 0 };
-        reg.data = dataStr;
+        const reg = tabs.diarioOp2[idxFlat];
         linhas.push(
             '<tr>' +
                 '<td style="font-weight:900;background:#fafbfc;text-align:center;color:var(--text-secondary);font-size:10px;padding:1px 4px">' + dataStr + '</td>' +
@@ -2704,12 +2718,10 @@ function renderizarTabelaOP2DiasMes() {
         idxFlat++;
     }
 
-    // Divide em 2 partes iguais
     const meio = Math.ceil(linhas.length / 2);
     const parte1 = linhas.slice(0, meio).join('');
     const parte2 = linhas.slice(meio).join('');
 
-    // Renderiza nas duas tabelas
     const tbody1 = document.getElementById('tbody-op2-dias-mes');
     const tbody2 = document.getElementById('tbody-op2-dias-mes-2');
     if (tbody1) tbody1.innerHTML = parte1 || '<tr><td colspan="3" style="text-align:center;color:#94a3b8;font-weight:800;padding:11px">—</td></tr>';
