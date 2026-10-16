@@ -2524,17 +2524,17 @@ function calcularMediaDiasUteis() {
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs || !Array.isArray(tabs.diasMes)) return;
 
-    // ✅ Conta TODOS os dias úteis até a data selecionada (inclusive os zerados)
+    // ✅ Considera dias úteis de 1 até ONTEM (D-1). O dia atual NÃO entra.
     const dataRef = dataLocalSelecionada || getDataCompleta();
-    let limiteDia = 31;
+    let limiteDia = 0;
     const p = normalizarDataParaComparacao(dataRef).split('/');
-    if (p.length >= 2) limiteDia = parseInt(p[0], 10);
+    if (p.length >= 2) limiteDia = parseInt(p[0], 10) - 1;  // D-1
 
     let totalProdutos = 0, diasContados = 0;
     tabs.diasMes.forEach(reg => {
         if (!reg || !reg.data) return;
         const dia = parseInt(reg.data.split('/')[0], 10);
-        if (isNaN(dia) || dia > limiteDia) return;  // ignora dias futuros
+        if (isNaN(dia) || dia > limiteDia) return;  // ignora hoje e futuros
         totalProdutos += (reg.qtd || 0);
         diasContados++;
     });
@@ -2543,24 +2543,24 @@ function calcularMediaDiasUteis() {
     const elMedia = document.getElementById('media-value-dias');
     if (elMedia) elMedia.innerText = media.toFixed(2).replace('.', ',');
     const elDetail = document.getElementById('media-detail-dias');
-    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasContados} dias úteis`;
+    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasContados} dias úteis (até D-1)`;
 }
 
 function calcularMediaOP2DiasUteis() {
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs || !Array.isArray(tabs.diarioOp2)) return;
 
-    // ✅ Conta TODOS os dias úteis até a data selecionada (inclusive os zerados)
+    // ✅ Considera dias úteis de 1 até ONTEM (D-1). O dia atual NÃO entra.
     const dataRef = dataLocalSelecionada || getDataCompleta();
-    let limiteDia = 31;
+    let limiteDia = 0;
     const p = normalizarDataParaComparacao(dataRef).split('/');
-    if (p.length >= 2) limiteDia = parseInt(p[0], 10);
+    if (p.length >= 2) limiteDia = parseInt(p[0], 10) - 1;  // D-1
 
     let totalProdutos = 0, diasContados = 0;
     tabs.diarioOp2.forEach(reg => {
         if (!reg || !reg.data) return;
         const dia = parseInt(reg.data.split('/')[0], 10);
-        if (isNaN(dia) || dia > limiteDia) return;  // ignora dias futuros
+        if (isNaN(dia) || dia > limiteDia) return;  // ignora hoje e futuros
         totalProdutos += (reg.qtd || 0);
         diasContados++;
     });
@@ -2569,7 +2569,7 @@ function calcularMediaOP2DiasUteis() {
     const elMedia = document.getElementById('media-value-op2');
     if (elMedia) elMedia.innerText = media.toFixed(2).replace('.', ',');
     const elDetail = document.getElementById('media-detail-op2');
-    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasContados} dias úteis`;
+    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasContados} dias úteis (até D-1)`;
 }
 
 function calcularTotaisSemanais() {
