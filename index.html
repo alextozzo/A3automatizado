@@ -279,7 +279,7 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
         <div class="nav-tabs">
             <div class="nav-tab tab-chao" onclick="switchTab('chao')" id="tab-btn-chao"><i class="fa-solid fa-industry"></i> Chão de Fábrica</div>
             <div class="nav-tab tab-premio" onclick="switchTab('premio')" id="tab-btn-premio"><i class="fa-solid fa-trophy"></i> Prêmio & Metas</div>
-            <div class="nav-tab active" onclick="switchTab('estamparia')" id="tab-btn-estamparia">Estamparia</div>
+<div class="nav-tab active" onclick="switchTab('estamparia')" id="tab-btn-estamparia">BI & Produção</div>
             <div class="nav-tab" onclick="switchTab('solda')" id="tab-btn-solda">Linha Solda</div>
             <div class="nav-tab" onclick="switchTab('pintura')" id="tab-btn-pintura">Pintura</div>
             <div class="nav-tab" onclick="switchTab('op1')" id="tab-btn-op1">MOF OP1</div>
@@ -329,7 +329,7 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
 <div id="view-chao" class="view-container">
     <div class="cf-grid">
         <div class="cf-block" style="grid-column:1/-1">
-            <div class="cf-block-header"><span><i class="fa-solid fa-clipboard-list"></i> CONTROLE MANUFATURADOS — ESTAMPARIA</span><span id="cf-est-data">--/--</span></div>
+            <div class="cf-block-header"><span><i class="fa-solid fa-clipboard-list"></i> CONTROLE MANUFATURADOS — BI & Produção</span><span id="cf-est-data">--/--</span></div>
             <div class="cf-block-body" style="padding:0"><table class="estamparia-table" id="tabela-estamparia-matriz"></table></div>
         </div>
         <div class="cf-col">
@@ -463,7 +463,7 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
 <div id="view-estamparia" class="view-container active">
     <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start">
         <div class="section-card">
-            <div class="section-header"><div class="section-title-box"><h2>Controle Manufaturados — Estamparia</h2></div></div>
+            <div class="section-header"><div class="section-title-box"><h2>Controle Manufaturados —BIProdução</h2></div></div>
             <div style="padding:8px;background:#fff;overflow-x:auto"><table class="estamparia-table" id="tabela-estamparia-matriz-2"></table></div>
         </div>
         <div class="chart-box" style="margin:0">
@@ -634,6 +634,18 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
         <div class="chart-box"><h3>Qualidade Geral</h3><div class="chart-container-bi"><canvas id="chartStatus"></canvas></div></div>
         <div class="chart-box"><h3>Aderência por Setor</h3><div class="chart-container-bi"><canvas id="chartAderencia"></canvas></div></div>
     </div>
+
+    <!-- ✅ NOVO GRÁFICO DO BI (Separado em 2 para melhor leitura) -->
+    <div class="charts-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="chart-box">
+            <h3>Desempenho Solda (Meta vs Realizado)</h3>
+            <div class="chart-container-bi"><canvas id="chartMetasSolda"></canvas></div>
+        </div>
+        <div class="chart-box">
+            <h3>Desempenho OP2 (Meta vs Realizado)</h3>
+            <div class="chart-container-bi"><canvas id="chartMetasOp2"></canvas></div>
+        </div>
+    </div>
 </div>
 
 <div id="view-apontamento" class="view-container">
@@ -789,14 +801,15 @@ const TABELA_PINOS_DEFAULT = {
 };
 
 const configuracaoSetores = [
-    { id: 'tq', view: 'solda', title: 'TANQUES (TQ)', rows: 21, cls: 'sec-tanques' },
-    { id: 'ct', view: 'solda', title: 'CARREGA TUDO (CT)', rows: 25, cls: 'sec-ct' },
-    { id: 'bases', view: 'solda', title: 'BASES (CHASSI)', rows: 52, cls: 'sec-bases' },
-    { id: 'silo', view: 'solda', title: 'SILOS', rows: 5, cls: 'sec-silo' },
-    { id: 'esp_box1', view: 'solda', title: 'ESPECIAIS - BOX 1', rows: 4, cls: 'sec-esp' },
-    { id: 'esp_box2', view: 'solda', title: 'ESPECIAIS - BOX 2', rows: 4, cls: 'sec-esp' },
-    { id: 'esp_box3', view: 'solda', title: 'ESPECIAIS - BOX 3', rows: 4, cls: 'sec-esp' },
-    { id: 'extra', view: 'solda', title: 'EQUIPE EXTRA', rows: 5, cls: 'sec-extra' },
+    // Setores da Linha Solda antiga foram removidos para dar lugar à Programação Semanal
+    // { id: 'tq', view: 'solda', title: 'TANQUES (TQ)', rows: 21, cls: 'sec-tanques' },
+    // { id: 'ct', view: 'solda', title: 'CARREGA TUDO (CT)', rows: 25, cls: 'sec-ct' },
+    // { id: 'bases', view: 'solda', title: 'BASES (CHASSI)', rows: 52, cls: 'sec-bases' },
+    // { id: 'silo', view: 'solda', title: 'SILOS', rows: 5, cls: 'sec-silo' },
+    // { id: 'esp_box1', view: 'solda', title: 'ESPECIAIS - BOX 1', rows: 4, cls: 'sec-esp' },
+    // { id: 'esp_box2', view: 'solda', title: 'ESPECIAIS - BOX 2', rows: 4, cls: 'sec-esp' },
+    // { id: 'esp_box3', view: 'solda', title: 'ESPECIAIS - BOX 3', rows: 4, cls: 'sec-esp' },
+    // { id: 'extra', view: 'solda', title: 'EQUIPE EXTRA', rows: 5, cls: 'sec-extra' },
     { id: 'pintura', view: 'pintura', title: 'PROCESSO DE PINTURA', rows: 30, cls: 'sec-pintura' },
     { id: 'op1_tq1', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 1)', rows: 5, cls: 'sec-op1' },
     { id: 'op1_tq2', view: 'op1', title: 'MOF OP1: TANQUE (POSTO 2)', rows: 5, cls: 'sec-op1' },
@@ -821,7 +834,7 @@ let db = {
 };
 
 let dataLocalSelecionada = '';
-let chartsObj = { pareto: null, pie: null, line: null, aderencia: null, estamparia: null };
+let chartsObj = { pareto: null, pie: null, line: null, aderencia: null, estamparia: null, metasSolda: null, metasOp2: null };
 let firebaseDB = null, dbRef = null;
 let tvInterval;
 
@@ -1246,9 +1259,29 @@ function switchTab(id) {
     document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
     const c = document.getElementById('view-' + id); if (c) c.classList.add('active');
     const b = document.getElementById('tab-btn-' + id); if (b) b.classList.add('active');
+    
+    // ✅ Atualiza a Estamparia (cores e gráfico) toda vez que a aba é aberta
+    if (id === 'estamparia') {
+        if (typeof gerarTabelasExcel === 'function') gerarTabelasExcel();
+        if (typeof updateEstampariaChart === 'function') updateEstampariaChart();
+    }
+    
     if (id === 'premio') recalcularPainelPremio();
-    if (id === 'analytics') updateAnalytics();
-    if (id === 'estamparia') updateEstampariaChart();
+    
+    if (id === 'analytics') {
+        updateAnalytics();
+        
+        // ✅ MÁGICA AQUI: Inverte a ordem visual, jogando os gráficos novos para o topo!
+        const viewAnalytics = document.getElementById('view-analytics');
+        if (viewAnalytics) {
+            const todosOsFilhos = Array.from(viewAnalytics.children);
+            // Pega o gráfico novo (que é o último elemento do BI)
+            const graficoMetas = todosOsFilhos[todosOsFilhos.length - 1];
+            if (graficoMetas && graficoMetas.classList.contains('charts-grid')) {
+                viewAnalytics.insertBefore(graficoMetas, viewAnalytics.children[1]); // Coloca logo após o cabeçalho
+            }
+        }
+    }
     if (id === 'chao') atualizarChaoFabrica();
 }
 
@@ -1768,6 +1801,38 @@ function expurgarLinhasFantasmas() {
 
 function renderizarViews() {
     const htmlViews = { solda:'', pintura:'', op1:'', op2:'' };
+    
+    // ✅ Cria o painel de metas semanais na aba Linha Solda
+    if (!db.metasSemanais) db.metasSemanais = { solda: {1:0,2:0,3:0,4:0,5:0}, op2: {1:0,2:0,3:0,4:0,5:0} };
+    
+    let htmlMetas = `
+    <div class="section-card" style="margin-bottom:24px; background:#fff; border-left:4px solid #3b82f6; box-shadow:var(--shadow-md);">
+        <div class="section-header" style="border-bottom:1px solid #e2e8f0; padding:16px 24px;">
+            <h2 style="font-size:18px; font-weight:900; color:#0f172a;"><i class="fa-solid fa-bullseye" style="color:#3b82f6;margin-right:8px;"></i> PROGRAMAÇÃO SEMANAL (METAS)</h2>
+        </div>
+        <div style="padding:20px; display:flex; gap:20px; flex-wrap:wrap;">
+    `;
+    [1,2,3,4,5].forEach(s => {
+        const vSolda = db.metasSemanais.solda[s] || '';
+        const vOp2 = db.metasSemanais.op2[s] || '';
+        htmlMetas += `
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px; flex:1; min-width:120px;">
+                <div style="font-size:13px; font-weight:900; color:#64748b; text-transform:uppercase; margin-bottom:8px; text-align:center;">Semana ${s}</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:12px; font-weight:800; color:#059669;">Solda:</span>
+                    <input type="number" class="meta-semanal-input" data-setor="solda" data-semana="${s}" value="${vSolda}" placeholder="0" style="width:65px; border:1px solid #cbd5e1; border-radius:4px; padding:6px; text-align:center; font-weight:900; font-size:15px; outline:none;">
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:12px; font-weight:800; color:#7c3aed;">OP2:</span>
+                    <input type="number" class="meta-semanal-input" data-setor="op2" data-semana="${s}" value="${vOp2}" placeholder="0" style="width:65px; border:1px solid #cbd5e1; border-radius:4px; padding:6px; text-align:center; font-weight:900; font-size:15px; outline:none;">
+                </div>
+            </div>
+        `;
+    });
+    htmlMetas += `</div></div>`;
+    
+    htmlViews.solda += htmlMetas; 
+
     configuracaoSetores.forEach(sec => {
         let tbody = '';
         const total = db.data[sec.id] ? Math.max(db.data[sec.id].length, sec.rows) : sec.rows;
@@ -2003,14 +2068,58 @@ function updateAnalytics() {
     setTxt('dash-atrasos', totalAtrasos);
     setTxt('dash-aderencia', totalProg > 0 ? (((totalOK+totalCOGI)/totalProg)*100).toFixed(0)+'%' : '0%');
 
+    // ✅ Puxa a média real da Estamparia (D-1)
+    const tabsEstamparia = getTabelasDoDia(dataLocalSelecionada);
+    let totalProdutosSolda = 0, diasContadosSolda = 0;
+    let totalProdutosOp2 = 0, diasContadosOp2 = 0;
+    
+    let dRef = parseDataComAnoRef(dataLocalSelecionada, 2026);
+    if (dRef) {
+        dRef.setDate(dRef.getDate() - 1);
+        while (!ehDiaUtil(dRef)) dRef.setDate(dRef.getDate() - 1);
+        const diaLimite = dRef.getDate();
+        const mesLimite = dRef.getMonth();
+        const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+        if (tabsEstamparia && Array.isArray(tabsEstamparia.diasMes)) {
+            tabsEstamparia.diasMes.forEach(reg => {
+                if (!reg || !reg.data) return;
+                const dia = parseInt(reg.data.split('/')[0], 10);
+                const mesTxt = reg.data.split('/')[1];
+                const mesReg = meses.indexOf(mesTxt);
+                if (isNaN(dia) || mesReg !== mesLimite || dia > diaLimite) return;
+                totalProdutosSolda += (reg.qtd || 0);
+                diasContadosSolda++;
+            });
+        }
+
+        if (tabsEstamparia && Array.isArray(tabsEstamparia.diarioOp2)) {
+            tabsEstamparia.diarioOp2.forEach(reg => {
+                if (!reg || !reg.data) return;
+                const dia = parseInt(reg.data.split('/')[0], 10);
+                const mesTxt = reg.data.split('/')[1];
+                const mesReg = meses.indexOf(mesTxt);
+                if (isNaN(dia) || mesReg !== mesLimite || dia > diaLimite) return;
+                totalProdutosOp2 += (reg.qtd || 0);
+                diasContadosOp2++;
+            });
+        }
+    }
+
+    const mediaRealSolda = diasContadosSolda > 0 ? (totalProdutosSolda / diasContadosSolda).toFixed(1) : '0.0';
+    const mediaRealOp2 = diasContadosOp2 > 0 ? (totalProdutosOp2 / diasContadosOp2).toFixed(1) : '0.0';
+
     const diasUteis = calcularDiasUteisMesAteHoje(hoje);
     setTxt('lbl-dias-uteis', diasUteis);
-    const mediaSolda = (totalOK / Math.max(1, diasUteis)).toFixed(1);
-    setTxt('subtotal-solda', totalOK);
+    
+    // ✅ Atualiza os cards com os valores da Estamparia
+    setTxt('subtotal-solda', totalProdutosSolda);
+    setTxt('subtotal-op2', totalProdutosOp2);
+    
     const elMS = document.getElementById('media-solda-atual');
-    if (elMS) elMS.innerHTML = mediaSolda + ' <small>OPs/dia</small>';
+    if (elMS) elMS.innerHTML = mediaRealSolda + ' <small>peças/dia</small>';
     const elMO = document.getElementById('media-op2-atual');
-    if (elMO) elMO.innerHTML = mediaSolda + ' <small>OPs/dia</small>';
+    if (elMO) elMO.innerHTML = mediaRealOp2 + ' <small>peças/dia</small>';
 
     const canvasP = document.getElementById('chartPareto');
     if (canvasP) {
@@ -2071,6 +2180,213 @@ function updateAnalytics() {
                 data: { labels: ['Geral'], datasets: [{ label: 'Aderência %', data: [aderencia], backgroundColor: '#3b82f6' }] },
                 options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
             });
+        }
+    }
+
+// ✅ GRÁFICO DE METAS SEMANAIS VS REALIZADO (BI) - SEPARADO
+    const canvasMetasSolda = document.getElementById('chartMetasSolda');
+    const canvasMetasOp2 = document.getElementById('chartMetasOp2');
+    
+    if (canvasMetasSolda || canvasMetasOp2) {
+        const metasSolda = db.metasSemanais?.solda || {};
+        const metasOp2 = db.metasSemanais?.op2 || {};
+        
+        const tabs = getTabelasDoDia(dataLocalSelecionada);
+        let realSolda = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+        let realOp2 = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+        
+        let ano, mes;
+        if (db.mesReferencia && /^\d{4}-\d{2}$/.test(db.mesReferencia)) {
+            const parts = db.mesReferencia.split('-');
+            ano = parseInt(parts[0], 10); mes = parseInt(parts[1], 10) - 1;
+        } else {
+            const hoje = new Date(); ano = hoje.getFullYear(); mes = hoje.getMonth();
+        }
+        const primeiroDia = new Date(ano, mes, 1);
+        const diaSemanaInicio = primeiroDia.getDay();
+
+        if (tabs && Array.isArray(tabs.diasMes)) {
+            tabs.diasMes.forEach(reg => {
+                if (!reg || !reg.data) return;
+                const dia = parseInt(reg.data.split('/')[0], 10);
+                const dataReal = new Date(ano, mes, dia);
+                let semana = (dia < (8 - diaSemanaInicio) && diaSemanaInicio !== 1) ? 1 : (2 + Math.floor((dataReal - new Date(ano, mes, diaSemanaInicio === 1 ? 1 : (8 - diaSemanaInicio))) / (1000 * 60 * 60 * 24) / 7));
+                if (semana > 6) semana = 6;
+                if (semana <= 5) realSolda[semana] += (reg.qtd || 0);
+            });
+        }
+
+        if (tabs && Array.isArray(tabs.diarioOp2)) {
+            tabs.diarioOp2.forEach(reg => {
+                if (!reg || !reg.data) return;
+                const dia = parseInt(reg.data.split('/')[0], 10);
+                const dataReal = new Date(ano, mes, dia);
+                let semana = (dia < (8 - diaSemanaInicio) && diaSemanaInicio !== 1) ? 1 : (2 + Math.floor((dataReal - new Date(ano, mes, diaSemanaInicio === 1 ? 1 : (8 - diaSemanaInicio))) / (1000 * 60 * 60 * 24) / 7));
+                if (semana > 6) semana = 6;
+                if (semana <= 5) realOp2[semana] += (reg.qtd || 0);
+            });
+        }
+
+        // ✅ NOVO: Conta quantos dias úteis cada semana teve para calcular a média
+        let diasUteisSemanaSolda = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+        let diasUteisSemanaOp2 = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+        
+        if (tabs && Array.isArray(tabs.diasMes)) {
+            tabs.diasMes.forEach(reg => {
+                if (!reg || !reg.data) return;
+                const dia = parseInt(reg.data.split('/')[0], 10);
+                const dataReal = new Date(ano, mes, dia);
+                let semana = (dia < (8 - diaSemanaInicio) && diaSemanaInicio !== 1) ? 1 : (2 + Math.floor((dataReal - new Date(ano, mes, diaSemanaInicio === 1 ? 1 : (8 - diaSemanaInicio))) / (1000 * 60 * 60 * 24) / 7));
+                if (semana > 6) semana = 6;
+                if (semana <= 5) diasUteisSemanaSolda[semana]++;
+            });
+        }
+        
+        if (tabs && Array.isArray(tabs.diarioOp2)) {
+            tabs.diarioOp2.forEach(reg => {
+                if (!reg || !reg.data) return;
+                const dia = parseInt(reg.data.split('/')[0], 10);
+                const dataReal = new Date(ano, mes, dia);
+                let semana = (dia < (8 - diaSemanaInicio) && diaSemanaInicio !== 1) ? 1 : (2 + Math.floor((dataReal - new Date(ano, mes, diaSemanaInicio === 1 ? 1 : (8 - diaSemanaInicio))) / (1000 * 60 * 60 * 24) / 7));
+                if (semana > 6) semana = 6;
+                if (semana <= 5) diasUteisSemanaOp2[semana]++;
+            });
+        }
+
+        const labelsSemanas = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'];
+        const dataMetaSolda = [1,2,3,4,5].map(s => parseInt(metasSolda[s]) || 0);
+        const dataRealSolda = [1,2,3,4,5].map(s => realSolda[s] || 0);
+        const dataMetaOp2 = [1,2,3,4,5].map(s => parseInt(metasOp2[s]) || 0);
+        const dataRealOp2 = [1,2,3,4,5].map(s => realOp2[s] || 0);
+
+        // ✅ Calcula o total da meta e do realizado para achar a %
+        const totalMetaSolda = dataMetaSolda.reduce((a, b) => a + b, 0);
+        const totalRealSolda = dataRealSolda.reduce((a, b) => a + b, 0);
+        const totalMetaOp2 = dataMetaOp2.reduce((a, b) => a + b, 0);
+        const totalRealOp2 = dataRealOp2.reduce((a, b) => a + b, 0);
+
+        const pctSolda = totalMetaSolda > 0 ? Math.round((totalRealSolda / totalMetaSolda) * 100) : 0;
+        const pctOp2 = totalMetaOp2 > 0 ? Math.round((totalRealOp2 / totalMetaOp2) * 100) : 0;
+
+        // ✅ Atualiza os títulos dos gráficos
+        const h3Solda = document.querySelector('#chartMetasSolda')?.closest('.chart-box')?.querySelector('h3');
+        if (h3Solda) {
+            h3Solda.innerHTML = `Desempenho Solda (Meta vs Realizado) — <span style="color: ${pctSolda >= 100 ? '#10b981' : (pctSolda > 0 ? '#ef4444' : '#64748b')}">${pctSolda}%</span>`;
+        }
+
+        const h3Op2 = document.querySelector('#chartMetasOp2')?.closest('.chart-box')?.querySelector('h3');
+        if (h3Op2) {
+            h3Op2.innerHTML = `Desempenho OP2 (Meta vs Realizado) — <span style="color: ${pctOp2 >= 100 ? '#10b981' : (pctOp2 > 0 ? '#ef4444' : '#64748b')}">${pctOp2}%</span>`;
+        }
+
+        // Gráfico Solda
+        if (canvasMetasSolda) {
+            if (chartsObj.metasSolda) {
+                chartsObj.metasSolda.data.datasets[0].data = dataRealSolda;
+                chartsObj.metasSolda.data.datasets[1].data = dataMetaSolda;
+                chartsObj.metasSolda.update();
+            } else {
+                chartsObj.metasSolda = new Chart(canvasMetasSolda, {
+                    type: 'bar',
+                    data: {
+                        labels: labelsSemanas,
+                        datasets: [
+                            { 
+                                label: 'Realizado', 
+                                data: dataRealSolda, 
+                                backgroundColor: dataRealSolda.map((val, i) => {
+                                    if (dataMetaSolda[i] === 0) return '#059669'; 
+                                    return val >= dataMetaSolda[i] ? '#10b981' : '#ef4444';
+                                }),
+                                borderRadius: 4 
+                            },
+                            { label: 'Meta', data: dataMetaSolda, backgroundColor: '#6ee7b7', borderRadius: 4 }
+                        ]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { position: 'bottom', labels: { font: { weight: '800' } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) label += ': ';
+                                        if (context.parsed.y !== null) label += context.parsed.y;
+                                        
+                                        if (context.datasetIndex === 0) {
+                                            const meta = dataMetaSolda[context.dataIndex];
+                                            if (meta > 0) {
+                                                const pct = Math.round((context.parsed.y / meta) * 100);
+                                                label += ` (${pct}% da meta)`;
+                                            }
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: { y: { beginAtZero: true, grid: { color: '#e2e8f0' } }, x: { grid: { display: false } } }
+                    }
+                });
+            }
+        }
+
+        // Gráfico OP2
+        if (canvasMetasOp2) {
+            if (chartsObj.metasOp2) {
+                chartsObj.metasOp2.data.datasets[0].data = dataRealOp2;
+                chartsObj.metasOp2.data.datasets[1].data = dataMetaOp2;
+                chartsObj.metasOp2.update();
+            } else {
+                chartsObj.metasOp2 = new Chart(canvasMetasOp2, {
+                    type: 'bar',
+                    data: {
+                        labels: labelsSemanas,
+                        datasets: [
+                            { 
+                                label: 'Realizado', 
+                                data: dataRealOp2, 
+                                backgroundColor: dataRealOp2.map((val, i) => val >= dataMetaOp2[i] && dataMetaOp2[i] > 0 ? '#10b981' : '#ef4444'),
+                                borderRadius: 4 
+                            },
+                            { label: 'Meta', data: dataMetaOp2, backgroundColor: '#c4b5fd', borderRadius: 4 }
+                        ]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { position: 'bottom', labels: { font: { weight: '800' } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) label += ': ';
+                                        if (context.parsed.y !== null) label += context.parsed.y;
+                                        
+                                        if (context.datasetIndex === 0) {
+                                            const meta = dataMetaSolda[context.dataIndex];
+                                            const dias = diasUteisSemanaSolda[context.dataIndex+1] || 1;
+                                            const media = (context.parsed.y / dias).toFixed(2).replace('.', ',');
+                                            
+                                            if (meta > 0) {
+                                                const pct = Math.round((context.parsed.y / meta) * 100);
+                                                const status = pct >= 100 ? '✅ Bateu a meta!' : '❌ Abaixo da meta.';
+                                                label += `\nMédia: ${media}/dia`;
+                                                label += `\n${pct}% da meta (${status})`;
+                                            } else {
+                                                label += `\nMédia: ${media}/dia`;
+                                            }
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: { y: { beginAtZero: true, grid: { color: '#e2e8f0' } }, x: { grid: { display: false } } }
+                    }
+                });
+            }
         }
     }
 }
@@ -2536,6 +2852,24 @@ document.addEventListener('change', function(e) {
         return;
     }
 
+    // ✅ Salva a meta semanal e atualiza as cores na hora
+    if (t.classList.contains('meta-semanal-input')) {
+        const setor = t.dataset.setor;
+        const semana = t.dataset.semana;
+        
+        if (!db.metasSemanais) db.metasSemanais = { solda: {}, op2: {} };
+        if (!db.metasSemanais[setor]) db.metasSemanais[setor] = {};
+        
+        db.metasSemanais[setor][semana] = parseInt(t.value) || 0;
+        
+        marcarAlteracao();
+        
+        // ✅ Atualiza a Estamparia e o BI na mesma hora
+        if (typeof calcularTotaisSemanais === 'function') calcularTotaisSemanais(); 
+        if (typeof calcularTotaisSemanaisOP2 === 'function') calcularTotaisSemanaisOP2();
+        if (typeof updateAnalytics === 'function') updateAnalytics();
+        return;
+    }
     if (t.classList.contains('cell-input') && t.dataset.sec) {
         const s = t.dataset.sec, r = parseInt(t.dataset.row), f = t.dataset.field;
         if (!db.data[s]) db.data[s] = [];
@@ -2608,7 +2942,7 @@ function calcularMediaOP2DiasUteis() {
         const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
         const mesReg = meses.indexOf(mesTxt);
         if (isNaN(dia) || mesReg !== mesLimite) return;
-        if (dia > diaLimite) return;
+        if (dia > diaLimite) return; 
         totalProdutos += (reg.qtd || 0);
         diasContados++;
     });
@@ -2659,15 +2993,38 @@ function calcularTotaisSemanais() {
         diasPorSemana[semana]++;
     });
 
+    // ✅ Lê as metas salvas
+    const metasSolda = db.metasSemanais?.solda || {};
+
     [1,2,3,4,5].forEach(s => {
         const el = document.getElementById('total-semana-' + s);
         if (!el) return;
         const total = semanas[s] || 0;
         const dias = diasPorSemana[s] || 0;
         const media = dias > 0 ? (total / dias).toFixed(2).replace('.', ',') : '0,00';
+        
+        const metaSemanal = parseInt(metasSolda[s]) || 0; 
+        
         el.innerText = total;
-        el.title = `Semana ${s}: total ${total} produtos em ${dias} dia(s) útil(eis) — média ${media}`;
         el.style.cursor = 'help';
+
+        // ✅ Tooltip mostrando Média e Meta
+        let tooltip = `Semana ${s}\nTotal: ${total} produtos\nMédia: ${media}/dia (${dias} dias úteis)`;
+
+        if (metaSemanal > 0) {
+            const pct = Math.round((total / metaSemanal) * 100);
+            if (total >= metaSemanal) {
+                el.style.color = '#10b981'; // Verde
+                tooltip += `\n✅ Bateu a meta! (${pct}%)`;
+            } else {
+                el.style.color = '#ef4444'; // Vermelho
+                tooltip += `\n❌ Abaixo da meta. (${pct}%)\nFaltaram: ${metaSemanal - total} produtos`;
+            }
+        } else {
+            el.style.color = '#0f172a'; // Preto padrão
+        }
+        
+        el.title = tooltip;
     });
 }
 
@@ -2710,15 +3067,38 @@ function calcularTotaisSemanaisOP2() {
         diasPorSemana[semana]++;
     });
 
+    // ✅ Lê as metas salvas
+    const metasOp2 = db.metasSemanais?.op2 || {};
+
     [1,2,3,4,5].forEach(s => {
         const el = document.getElementById('op2-total-semana-' + s);
         if (!el) return;
         const total = semanas[s] || 0;
         const dias = diasPorSemana[s] || 0;
         const media = dias > 0 ? (total / dias).toFixed(2).replace('.', ',') : '0,00';
+        
+        const metaSemanal = parseInt(metasOp2[s]) || 0;
+        
         el.innerText = total;
-        el.title = `Semana ${s}: total ${total} produtos em ${dias} dia(s) útil(eis) — média ${media}`;
         el.style.cursor = 'help';
+
+        // ✅ Tooltip mostrando Média e Meta
+        let tooltip = `Semana ${s}\nTotal: ${total} produtos\nMédia: ${media}/dia (${dias} dias úteis)`;
+
+        if (metaSemanal > 0) {
+            const pct = Math.round((total / metaSemanal) * 100);
+            if (total >= metaSemanal) {
+                el.style.color = '#10b981'; // Verde
+                tooltip += `\n✅ Bateu a meta! (${pct}%)`;
+            } else {
+                el.style.color = '#ef4444'; // Vermelho
+                tooltip += `\n❌ Abaixo da meta. (${pct}%)\nFaltaram: ${metaSemanal - total} produtos`;
+            }
+        } else {
+            el.style.color = '#0f172a'; // Preto padrão
+        }
+        
+        el.title = tooltip;
     });
 }
 
