@@ -280,7 +280,7 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
             <div class="nav-tab tab-chao" onclick="switchTab('chao')" id="tab-btn-chao"><i class="fa-solid fa-industry"></i> Chão de Fábrica</div>
             <div class="nav-tab tab-premio" onclick="switchTab('premio')" id="tab-btn-premio"><i class="fa-solid fa-trophy"></i> Prêmio & Metas</div>
 <div class="nav-tab active" onclick="switchTab('estamparia')" id="tab-btn-estamparia">BI & Produção</div>
-            <div class="nav-tab" onclick="switchTab('solda')" id="tab-btn-solda">Linha Solda</div>
+            <div class="nav-tab admin-only" onclick="switchTab('solda')" id="tab-btn-solda">Linha Solda</div>
             <div class="nav-tab" onclick="switchTab('pintura')" id="tab-btn-pintura">Pintura</div>
             <div class="nav-tab" onclick="switchTab('op1')" id="tab-btn-op1">MOF OP1</div>
             <div class="nav-tab" onclick="switchTab('op2')" id="tab-btn-op2">MOF OP2</div>
@@ -428,13 +428,39 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
         <div class="termometro-container">
             <div class="termometro-labels">
                 <span>Progresso: <strong id="termometro-pct" style="color:#60a5fa;font-size:22px">0%</strong></span>
-                <span id="termometro-status-msg" style="color:#fde047;font-weight:900;font-size:18px">Calculando...</span>
+                <span id="termometro-status-msg" style="color:#fde047;font-weight:900;font-size:40px">Calculando...</span>
             </div>
             <div class="termometro-bar-bg"><div id="termometro-bar-fill" class="termometro-fill"></div></div>
             <div class="termometro-markers">
                 <div class="marker-tag" id="marker-90">90% (<span id="txt-meta-90">70</span>) ➔ R$ 150</div>
                 <div class="marker-tag" id="marker-100">100% (<span id="txt-meta-100">78</span>) ➔ R$ 200</div>
                 <div class="marker-tag" id="marker-110">&gt;110% (<span id="txt-meta-110">86</span>) ➔ R$ 260</div>
+            </div>
+                        <!-- ✅ CAMINHO DA PRODUÇÃO (ESTILO CORRIDA) -->
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px dashed rgba(255,255,255,0.2);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <span style="font-size:14px; font-weight:900; color:#cbd5e1;"><i class="fa-solid fa-truck-fast" style="color:#34d399; margin-right:8px;"></i> AVANÇO SAÍDAS DE LINHA (MÊS)</span>
+                    <strong id="premio-pct-saidas" style="color:#34d399; font-size:20px;">0%</strong>
+                </div>
+                
+                <!-- A PISTA -->
+                <div style="position: relative; height: 45px; background: #1e293b; border-radius: 30px; border: 2px solid #334155; overflow: hidden; display: flex; align-items: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);">
+                    <!-- A PISTA PREENCHIDA (VERDE) -->
+                    <div id="premio-bar-saidas" style="height: 100%; width: 0%; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.8s ease-in-out; border-radius: 20px 0 0 20px;"></div>
+                    
+                    <!-- A CARRETA RANDON -->
+                    <div id="premio-truck" style="position: absolute; left: 0%; transition: left 0.8s ease-in-out; transform: translateX(-50%); z-index: 10;">
+                        <img src="carreta.png" alt="Carreta Randon" style="height: 90px; width: auto; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.5)); border-radius: 4px;">
+                    </div>
+                    
+                    <!-- A BANDEIRA DE CHEGADA -->
+                    <div style="position: absolute; right: 5px; font-size: 60px; opacity: 0.8; z-index: 5;">🏁</div>
+                </div>
+                
+                <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:13px; font-weight:700; color:#94a3b8;">
+                    <span>Realizado (D-1): <strong id="premio-real-saidas" style="color:#fff; font-size:15px;">0</strong></span>
+                    <span>Meta Mês: <strong id="premio-meta-saidas" style="color:#fff; font-size:15px;">75</strong></span>
+                </div>
             </div>
         </div>
         <div class="premio-kpi-grid">
@@ -448,14 +474,26 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
         <div class="pinos-col-card pinos-bases">
             <div class="pinos-col-header"><span><i class="fa-solid fa-truck-monster"></i> BASES</span><span id="saldo-total-bases" class="badge-saldo pendente">0</span></div>
             <table class="pinos-table"><thead><tr><th>Modelo</th><th>Prog.</th><th>OK</th><th>Saldo</th></tr></thead><tbody id="tbody-pinos-bases"></tbody></table>
+            <div class="excel-actions admin-only" style="padding:10px;gap:10px">
+                <button class="btn-excel-action btn-excel-add" onclick="addRowPino('bases')"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                <button class="btn-excel-action btn-excel-rem" onclick="removerLinhaPino('bases')"><i class="fa-solid fa-minus"></i> Excluir</button>
+            </div>
         </div>
         <div class="pinos-col-card pinos-especiais">
             <div class="pinos-col-header"><span><i class="fa-solid fa-star"></i> ESPECIAIS</span><span id="saldo-total-especiais" class="badge-saldo pendente">0</span></div>
             <table class="pinos-table"><thead><tr><th>Modelo</th><th>Prog.</th><th>OK</th><th>Saldo</th></tr></thead><tbody id="tbody-pinos-especiais"></tbody></table>
+            <div class="excel-actions admin-only" style="padding:10px;gap:10px">
+                <button class="btn-excel-action btn-excel-add" onclick="addRowPino('especiais')"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                <button class="btn-excel-action btn-excel-rem" onclick="removerLinhaPino('especiais')"><i class="fa-solid fa-minus"></i> Excluir</button>
+            </div>
         </div>
         <div class="pinos-col-card pinos-tanques">
             <div class="pinos-col-header"><span><i class="fa-solid fa-oil-can"></i> TANQUES</span><span id="saldo-total-tanques" class="badge-saldo pendente">0</span></div>
             <table class="pinos-table"><thead><tr><th>Modelo</th><th>Prog.</th><th>OK</th><th>Saldo</th></tr></thead><tbody id="tbody-pinos-tanques"></tbody></table>
+            <div class="excel-actions admin-only" style="padding:10px;gap:10px">
+                <button class="btn-excel-action btn-excel-add" onclick="addRowPino('tanques')"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                <button class="btn-excel-action btn-excel-rem" onclick="removerLinhaPino('tanques')"><i class="fa-solid fa-minus"></i> Excluir</button>
+            </div>
         </div>
     </div>
 </div>
@@ -595,6 +633,17 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
 
 <div id="view-analytics" class="view-container">
     <div class="analytics-header">
+            <!-- ✅ NOVO PAINEL: CONTADOR DE PRODUTOS ENTREGUES -->
+    <div class="charts-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="chart-box">
+            <h3>Entregues: Saída de Linha</h3>
+            <div id="contador-produtos-saida" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+        </div>
+        <div class="chart-box">
+            <h3>Entregues: OP2</h3>
+            <div id="contador-produtos-op2" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+        </div>
+    </div>
         <div>
             <h2 style="font-size:30px;font-weight:900;letter-spacing:-.5px">Inteligência de Produção</h2>
             <p style="color:var(--text-secondary);font-weight:700">Business Intelligence — Relatório Gerencial</p>
@@ -644,6 +693,18 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
         <div class="chart-box">
             <h3>Desempenho OP2 (Meta vs Realizado)</h3>
             <div class="chart-container-bi"><canvas id="chartMetasOp2"></canvas></div>
+        </div>
+    </div>
+
+    <!-- ✅ NOVO PAINEL: CONTADOR DE PRODUTOS ENTREGUES -->
+    <div class="charts-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="chart-box">
+            <h3>Entregues: Saída de Linha</h3>
+            <div id="contador-produtos-saida" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+        </div>
+        <div class="chart-box">
+            <h3>Entregues: OP2</h3>
+            <div id="contador-produtos-op2" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
         </div>
     </div>
 </div>
@@ -830,7 +891,9 @@ let db = {
     premioConfig: { metaBase: 78, atraso: 0 },
     pinosManual: null,
     tabelasExcelPorDia: {},
-    historicoEstamparia: {}
+    historicoEstamparia: {},
+    metasSemanais: { solda: {1:0,2:0,3:0,4:0,5:0}, op2: {1:0,2:0,3:0,4:0,5:0} },
+    metasSaidas: { metaMes: 0, produzidos: 0 }
 };
 
 let dataLocalSelecionada = '';
@@ -1259,28 +1322,19 @@ function switchTab(id) {
     document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
     const c = document.getElementById('view-' + id); if (c) c.classList.add('active');
     const b = document.getElementById('tab-btn-' + id); if (b) b.classList.add('active');
-    
-    // ✅ Atualiza a Estamparia (cores e gráfico) toda vez que a aba é aberta
+
     if (id === 'estamparia') {
         if (typeof gerarTabelasExcel === 'function') gerarTabelasExcel();
         if (typeof updateEstampariaChart === 'function') updateEstampariaChart();
     }
-    
-    if (id === 'premio') recalcularPainelPremio();
-    
+
+    if (id === 'premio') {
+        recalcularPainelPremio();
+        if (typeof atualizarCaminhaoPremio === 'function') atualizarCaminhaoPremio();
+    }
+
     if (id === 'analytics') {
         updateAnalytics();
-        
-        // ✅ MÁGICA AQUI: Inverte a ordem visual, jogando os gráficos novos para o topo!
-        const viewAnalytics = document.getElementById('view-analytics');
-        if (viewAnalytics) {
-            const todosOsFilhos = Array.from(viewAnalytics.children);
-            // Pega o gráfico novo (que é o último elemento do BI)
-            const graficoMetas = todosOsFilhos[todosOsFilhos.length - 1];
-            if (graficoMetas && graficoMetas.classList.contains('charts-grid')) {
-                viewAnalytics.insertBefore(graficoMetas, viewAnalytics.children[1]); // Coloca logo após o cabeçalho
-            }
-        }
     }
     if (id === 'chao') atualizarChaoFabrica();
 }
@@ -1330,36 +1384,63 @@ function marcarAlteracao() {
     }, DEBOUNCE_SAVE_MS);
 }
 function salvarNoFirebase(exibirAviso = false) {
-    if (saveEmAndamento) return;
+    if (saveEmAndamento) {
+        // ✅ PATCH: em vez de descartar, reagenda
+        if (debounceSaveTimer) clearTimeout(debounceSaveTimer);
+        debounceSaveTimer = setTimeout(() => salvarNoFirebase(false), DEBOUNCE_SAVE_MS);
+        return;
+    }
     saveEmAndamento = true;
     setStatusConexao('syncing');
     mostrarSyncIndicador(true);
     if (dataLocalSelecionada) salvarHistoricoEstamparia(dataLocalSelecionada);
+
+    // Snapshot local (com tabelas do dia para backup local)
     let dbLocal = sanearParaFirebase(db);
     delete dbLocal.globalDate;
     try { dbLocal.tabelasExcel = JSON.parse(JSON.stringify(getTabelasDoDia(dataLocalSelecionada) || {})); } catch(e) {}
     try { localStorage.setItem('erp_randon_backup_local', JSON.stringify(dbLocal)); } catch(e) {}
+
+    // ✅ PATCH: NÃO envia diasMes/diarioOp2 dentro de cada dia
     let dbLimpo = sanearParaFirebase(db);
     delete dbLimpo.globalDate;
     delete dbLimpo.tabelasExcel;
-    if (dbRef) {
-        dbRef.set(dbLimpo).then(() => {
-            temAlteracoesPendentes = false;
-            saveEmAndamento = false;
-            setStatusConexao('online');
-            mostrarSyncIndicador(false);
-            if (exibirAviso) mostrarToast('☁️ Nuvem atualizada', 'fa-cloud-arrow-up');
-        }).catch(err => {
-            console.error('Erro Firebase:', err);
-            saveEmAndamento = false;
-            setStatusConexao('offline');
-            mostrarSyncIndicador(false);
+    if (dbLimpo.tabelasExcelPorDia) {
+        Object.keys(dbLimpo.tabelasExcelPorDia).forEach(k => {
+            if (dbLimpo.tabelasExcelPorDia[k]) {
+                delete dbLimpo.tabelasExcelPorDia[k].diasMes;
+                delete dbLimpo.tabelasExcelPorDia[k].diarioOp2;
+            }
         });
-    } else {
+    }
+
+    if (!dbRef) {
         saveEmAndamento = false;
         setStatusConexao('offline');
         mostrarSyncIndicador(false);
+        return;
     }
+
+    // ✅ PATCH: Merge por dia — não sobrescreve dias que este PC não tocou
+    dbRef.once('value').then(snapshot => {
+        const nuvemAtual = snapshot.val() || {};
+        const nuvemTabelas = nuvemAtual.tabelasExcelPorDia || {};
+        const localTabelas = dbLimpo.tabelasExcelPorDia || {};
+        const tabelasMerge = { ...nuvemTabelas, ...localTabelas };
+        const payload = { ...dbLimpo, tabelasExcelPorDia: tabelasMerge };
+        return dbRef.set(payload);
+    }).then(() => {
+        temAlteracoesPendentes = false;
+        saveEmAndamento = false;
+        setStatusConexao('online');
+        mostrarSyncIndicador(false);
+        if (exibirAviso) mostrarToast('☁️ Nuvem atualizada', 'fa-cloud-arrow-up');
+    }).catch(err => {
+        console.error('Erro Firebase:', err);
+        saveEmAndamento = false;
+        setStatusConexao('offline');
+        mostrarSyncIndicador(false);
+    });
 }
 function iniciarAutoSavePeriodico() {
     if (autoSaveIntervalId) clearInterval(autoSaveIntervalId);
@@ -1367,16 +1448,16 @@ function iniciarAutoSavePeriodico() {
         if (temAlteracoesPendentes && !saveEmAndamento) salvarNoFirebase(false);
     }, AUTO_SAVE_INTERVAL_MS);
 }
-window.addEventListener('beforeunload', () => {
+window.addEventListener('beforeunload', (e) => {
     if (temAlteracoesPendentes) {
         const dbLocal = sanearParaFirebase(db);
         delete dbLocal.globalDate;
         try { dbLocal.tabelasExcel = JSON.parse(JSON.stringify(getTabelasDoDia(dataLocalSelecionada) || {})); } catch(e) {}
         try { localStorage.setItem('erp_randon_backup_local', JSON.stringify(dbLocal)); } catch(e) {}
-        const dbLimpo = sanearParaFirebase(db);
-        delete dbLimpo.globalDate;
-        delete dbLimpo.tabelasExcel;
-        if (dbRef) dbRef.set(dbLimpo);
+        // ✅ PATCH: avisa o navegador para esperar / confirmar
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
     }
 });
 
@@ -1396,6 +1477,7 @@ function initFirebase() {
         firebaseDB = firebase.database();
         dbRef = firebaseDB.ref('operacao_atual');
         firebaseDB.ref('.info/connected').on('value', snap => setStatusConexao(snap.val()===true?'online':'offline'));
+
         dbRef.on('value', snapshot => {
             const nuvem = snapshot.val();
             if (!nuvem) return;
@@ -1403,18 +1485,32 @@ function initFirebase() {
             if (!nuvem.premioConfig) nuvem.premioConfig = { metaBase:78, atraso:0 };
             if (!nuvem.tabelasExcelPorDia) nuvem.tabelasExcelPorDia = {};
             if (!nuvem.historicoEstamparia) nuvem.historicoEstamparia = {};
+            if (!nuvem.pinosManual) nuvem.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
+            if (!nuvem.metasSemanais) nuvem.metasSemanais = { solda: {1:0,2:0,3:0,4:0,5:0}, op2: {1:0,2:0,3:0,4:0,5:0} };
+            if (!nuvem.metasSaidas) nuvem.metasSaidas = { metaMes: 0, produzidos: 0 };
             if (!nuvem.mesReferencia) {
                 const agora = new Date();
                 nuvem.mesReferencia = `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}`;
             }
+
             supressaoSync = true;
             const dataMantida = dataLocalSelecionada || localStorage.getItem('erp_randon_data_individual') || getDataCompleta();
             const tabelasMemoria = db.tabelasExcelPorDia || {};
-            db = nuvem;
+
+            // ✅ PATCH: preserva referências em uso via Object.assign
+            // (em vez de db = nuvem, que quebra closures)
+            Object.keys(db).forEach(k => { delete db[k]; });
+            Object.assign(db, nuvem);
+
             dataLocalSelecionada = dataMantida;
+
+            // ✅ PATCH: se a nuvem veio vazia mas temos backup local, restaura E reenvia
+            let precisaReenviar = false;
             if (Object.keys(db.tabelasExcelPorDia || {}).length === 0 && Object.keys(tabelasMemoria).length > 0) {
                 db.tabelasExcelPorDia = tabelasMemoria;
+                precisaReenviar = true;
             }
+
             getTabelasDoDia(dataLocalSelecionada);
             gerarTabelasExcel();
             renderizarEstampariaMatriz();
@@ -1425,6 +1521,12 @@ function initFirebase() {
             renderizarGuia();
             supressaoSync = false;
             temAlteracoesPendentes = false;
+
+            // ✅ PATCH: se restaurou do backup local, reenvia para a nuvem
+            if (precisaReenviar) {
+                console.log('📤 Backup local restaurado na memória — reenviando para a nuvem...');
+                setTimeout(() => salvarNoFirebase(true), 1000);
+            }
         });
         iniciarAutoSavePeriodico();
     } catch(e) {
@@ -2038,6 +2140,8 @@ function renderColunaPinos(cat) {
 // ANALYTICS
 // =========================================================
 function updateAnalytics() {
+    gerarContadoresEntrega(); // ✅ CHAMA OS CONTADORES AQUI
+
     if (!db.data) return;
     const hoje = dataLocalSelecionada || getDataCompleta();
     let totalAp = 0, totalOK = 0, totalCOGI = 0, totalAtrasos = 0, totalProg = 0;
@@ -2503,6 +2607,7 @@ function addRowOP2Dia() {
     tabs.op2Dia.push(['','','','']);
     renderizarOP2Dia();
     atualizarChaoFabrica();
+    salvarHistoricoEstamparia(dataLocalSelecionada);
     marcarAlteracao();
     mostrarToast('Linha OP2 adicionada', 'fa-plus');
 }
@@ -2518,6 +2623,7 @@ function removerLinhaOP2Dia() {
     tabs.op2Dia.pop();
     renderizarOP2Dia();
     atualizarChaoFabrica();
+    salvarHistoricoEstamparia(dataLocalSelecionada);
     marcarAlteracao();
     mostrarToast('Removida', 'fa-minus');
 }
@@ -2592,6 +2698,9 @@ function apagarTudo() {
     db.data = {};
     db.tabelasExcelPorDia = {};
     db.historicoEstamparia = {};
+    // ✅ PATCH: limpa também o que é do mês
+    db.diasMes = [];
+    db.diarioOp2 = [];
     configuracaoSetores.forEach(sec => {
         db.data[sec.id] = [];
         for (let i = 0; i < sec.rows; i++) db.data[sec.id].push(getEmptyRow());
@@ -2625,9 +2734,18 @@ function backupDoDia() {
     const chaveISO = brParaChaveISO(dataRef);
     if (!chaveISO) { mostrarToast('Data inválida', 'fa-triangle-exclamation'); return; }
     const tabs = getTabelasDoDia(dataRef) || {};
+
+    // ✅ PATCH: NÃO inclui diasMes/diarioOp2 no backup do dia
+    // (eles são do mês, vivem em db.diasMes/db.diarioOp2, salvos à parte)
+    const tabsLimpo = JSON.parse(JSON.stringify(tabs));
+    delete tabsLimpo.diasMes;
+    delete tabsLimpo.diarioOp2;
+
     const pacote = {
         _meta: { versao: 1, dataBR: dataRef, dataISO: chaveISO, criadoEm: new Date().toISOString() },
-        tabelasDoDia: JSON.parse(JSON.stringify(tabs)),
+        tabelasDoDia: tabsLimpo,
+        diasMes: JSON.parse(JSON.stringify(db.diasMes || [])),
+        diarioOp2: JSON.parse(JSON.stringify(db.diarioOp2 || [])),
         estampariaMatriz: JSON.parse(JSON.stringify(db.estampariaMatriz || {})),
         data: JSON.parse(JSON.stringify(db.data || {})),
         premioConfig: JSON.parse(JSON.stringify(db.premioConfig || {})),
@@ -2665,6 +2783,12 @@ function restaurarBackupDia() {
     if (!confirm('Restaurar backup de ' + pacote._meta.dataBR + '?')) return;
     const chaveTabs = chaveDia(pacote._meta.dataBR);
     if (pacote.tabelasDoDia) db.tabelasExcelPorDia[chaveTabs] = pacote.tabelasDoDia;
+
+    // ✅ PATCH: restaura diasMes/diarioOp2 separadamente
+    // (o backupDoDia agora os salva à parte, não dentro de tabelasDoDia)
+    if (Array.isArray(pacote.diasMes)) db.diasMes = pacote.diasMes;
+    if (Array.isArray(pacote.diarioOp2)) db.diarioOp2 = pacote.diarioOp2;
+
     if (pacote.estampariaMatriz) db.estampariaMatriz = pacote.estampariaMatriz;
     if (pacote.data) db.data = pacote.data;
     if (pacote.premioConfig) db.premioConfig = pacote.premioConfig;
@@ -3218,6 +3342,164 @@ window.addEventListener('DOMContentLoaded', () => {
 
     console.log('🚀 Sistema iniciado. Mês: ' + db.mesReferencia + ' | Data local: ' + dataLocalSelecionada);
 });
+// =========================================================
+// CONTADORES DO BI (global)
+// =========================================================
+function gerarContadoresEntrega() {
+    const siglas = {
+        'CT': 'Carreta Tudo', 'CTE': 'Carreta Especial',
+        'BS': 'Base', 'SL': 'Silo', 'PM': 'Piso Móvel',
+        'TQ': 'Tanque', 'SLBA': 'Silo Basculante'
+    };
+
+    const tabs = getTabelasDoDia(dataLocalSelecionada);
+    if (!tabs) return;
+
+    function contar(tabela) {
+        const contagem = {};
+        if (!Array.isArray(tabela)) return contagem;
+
+        let dRef = parseDataComAnoRef(dataLocalSelecionada, 2026) || new Date();
+        dRef.setDate(dRef.getDate() - 1);
+        while (!ehDiaUtil(dRef)) dRef.setDate(dRef.getDate() - 1);
+        const diaLimite = dRef.getDate();
+        const mesLimite = dRef.getMonth();
+        const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+        tabela.forEach(reg => {
+            if (!reg || !reg.data || !reg.desc) return;
+            const dia = parseInt(reg.data.split('/')[0], 10);
+            const mesTxt = reg.data.split('/')[1];
+            if (isNaN(dia) || meses.indexOf(mesTxt) !== mesLimite || dia > diaLimite) return;
+
+            const itens = reg.desc.split('-').map(s => s.trim().toUpperCase()).filter(s => s !== '');
+            itens.forEach(sigla => {
+                if (siglas[sigla]) contagem[sigla] = (contagem[sigla] || 0) + 1;
+            });
+        });
+        return contagem;
+    }
+
+    function renderizar(idContainer, contagem) {
+        const container = document.getElementById(idContainer);
+        if (!container) return;
+
+        if (Object.keys(contagem).length === 0) {
+            container.innerHTML = '<div style="color:#94a3b8;font-weight:800;padding:10px">Nenhum produto entregue (até D-1).</div>';
+            return;
+        }
+
+        let html = '';
+        Object.keys(contagem).sort().forEach(sigla => {
+            html += `
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:10px 16px; border-radius:8px; display:flex; align-items:center; justify-content:space-between; min-width:140px; box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+                    <div style="display:flex; flex-direction:column">
+                        <span style="font-weight:900; color:#3b82f6; font-size:18px">${sigla}</span>
+                        <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase">${siglas[sigla]}</span>
+                    </div>
+                    <strong style="font-size:26px; color:#0f172a">${contagem[sigla]}</strong>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    renderizar('contador-produtos-saida', contar(tabs.diasMes));
+    renderizar('contador-produtos-op2', contar(tabs.diarioOp2));
+}
+
+// =========================================================
+// CAMINHÃO DO PRÊMIO (global)
+// =========================================================
+function atualizarCaminhaoPremio() {
+    const tabs = getTabelasDoDia(dataLocalSelecionada);
+    let totalProdutosSaidas = 0;
+
+    if (tabs && Array.isArray(tabs.diasMes)) {
+        let dRef = parseDataComAnoRef(dataLocalSelecionada, 2026);
+        if (dRef) {
+            dRef.setDate(dRef.getDate() - 1);
+            while (!ehDiaUtil(dRef)) dRef.setDate(dRef.getDate() - 1);
+            const diaLimite = dRef.getDate();
+            const mesLimite = dRef.getMonth();
+            const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+            tabs.diasMes.forEach(reg => {
+                if (!reg || !reg.data) return;
+                const dia = parseInt(reg.data.split('/')[0], 10);
+                const mesTxt = reg.data.split('/')[1];
+                if (isNaN(dia) || meses.indexOf(mesTxt) !== mesLimite || dia > diaLimite) return;
+                totalProdutosSaidas += (reg.qtd || 0);
+            });
+        }
+    }
+
+    const metaSaidas = parseInt(document.getElementById('cf-meta-prod')?.innerText) || 75;
+    const pctSaidas = metaSaidas > 0 ? Math.min(100, Math.round((totalProdutosSaidas / metaSaidas) * 100)) : 0;
+
+    const elPctSaidas = document.getElementById('premio-pct-saidas');
+    if (elPctSaidas) {
+        elPctSaidas.innerText = pctSaidas + '%';
+        elPctSaidas.style.color = pctSaidas >= 100 ? '#fde047' : '#34d399';
+    }
+
+    const elBarSaidas = document.getElementById('premio-bar-saidas');
+    if (elBarSaidas) elBarSaidas.style.width = pctSaidas + '%';
+
+    const elTruck = document.getElementById('premio-truck');
+    if (elTruck) {
+        const leftPos = Math.min(96, Math.max(0, pctSaidas));
+        elTruck.style.left = leftPos + '%';
+
+        if (pctSaidas >= 100) {
+            elTruck.style.transform = 'translateX(-50%) scale(1.1)';
+            elTruck.style.borderColor = '#10b981';
+            elTruck.style.boxShadow = '0 0 15px #10b981';
+        } else {
+            elTruck.style.transform = 'translateX(-50%) scale(1)';
+            elTruck.style.borderColor = '#e32128';
+            elTruck.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+        }
+    }
+
+    const elRealSaidas = document.getElementById('premio-real-saidas');
+    if (elRealSaidas) elRealSaidas.innerText = totalProdutosSaidas;
+
+    const elMetaSaidas = document.getElementById('premio-meta-saidas');
+    if (elMetaSaidas) elMetaSaidas.innerText = metaSaidas;
+}
+function addRowPino(cat) {
+    if (!isAdmin) { toggleAdmin(); return; }
+    if (!db.pinosManual) db.pinosManual = JSON.parse(JSON.stringify(TABELA_PINOS_DEFAULT));
+    if (!db.pinosManual[cat]) db.pinosManual[cat] = [];
+    
+    db.pinosManual[cat].push({ modelo: "", prog: 0, ok: 0 });
+    
+    recalcularPainelPremio();
+    marcarAlteracao();
+    
+    const tbody = document.getElementById('tbody-pinos-' + cat);
+    if (tbody && tbody.lastElementChild) {
+        const input = tbody.lastElementChild.querySelector('input');
+        if (input) input.focus();
+    }
+    mostrarToast('Linha adicionada em ' + cat, 'fa-plus');
+}
+
+function removerLinhaPino(cat) {
+    if (!isAdmin) { toggleAdmin(); return; }
+    if (!db.pinosManual || !db.pinosManual[cat] || db.pinosManual[cat].length <= 1) {
+        mostrarToast('Não é possível remover todas as linhas', 'fa-triangle-exclamation');
+        return;
+    }
+    if (!confirm('Tem certeza que deseja excluir a última linha de ' + cat + '?')) return;
+    
+    db.pinosManual[cat].pop();
+    
+    recalcularPainelPremio();
+    marcarAlteracao();
+    mostrarToast('Linha removida de ' + cat, 'fa-minus');
+}
 </script>
 </body>
 </html>
