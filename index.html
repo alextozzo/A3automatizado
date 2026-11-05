@@ -1193,13 +1193,24 @@ function getTabelasDoDia(dataBR) {
         garantirEstruturaTabelas(db.tabelasExcelPorDia[chave]);
     }
 
-    // ✅ diasMes e diarioOp2 são do MÊS — compartilhados entre todos os dias
-    if (!db.diasMes || !Array.isArray(db.diasMes)) db.diasMes = [];
-    if (!db.diarioOp2 || !Array.isArray(db.diarioOp2)) db.diarioOp2 = [];
+    // ✅ FIX: diasMes e diarioOp2 agora são POR MÊS (não mais globais)
+    const mesChave = (db.mesReferencia && /^\d{4}-\d{2}$/.test(db.mesReferencia))
+        ? db.mesReferencia
+        : (() => { const h = new Date(); return h.getFullYear() + '-' + String(h.getMonth()+1).padStart(2,'0'); })();
 
-    // ✅ Amarra as referências do mês ao objeto do dia (aponta pra mesma array)
-    db.tabelasExcelPorDia[chave].diasMes = db.diasMes;
-    db.tabelasExcelPorDia[chave].diarioOp2 = db.diarioOp2;
+    if (!db.diasMesPorMes) db.diasMesPorMes = {};
+    if (!db.diarioOp2PorMes) db.diarioOp2PorMes = {};
+
+    if (!Array.isArray(db.diasMesPorMes[mesChave])) db.diasMesPorMes[mesChave] = [];
+    if (!Array.isArray(db.diarioOp2PorMes[mesChave])) db.diarioOp2PorMes[mesChave] = [];
+
+    // ✅ Amarra as referências do MÊS ao objeto do dia (cada mês tem seu próprio array)
+    db.tabelasExcelPorDia[chave].diasMes = db.diasMesPorMes[mesChave];
+    db.tabelasExcelPorDia[chave].diarioOp2 = db.diarioOp2PorMes[mesChave];
+
+    // ✅ Compatibilidade retroativa (algumas funções ainda leem db.diasMes)
+    db.diasMes = db.diasMesPorMes[mesChave];
+    db.diarioOp2 = db.diarioOp2PorMes[mesChave];
 
     return db.tabelasExcelPorDia[chave];
 }
@@ -2957,6 +2968,7 @@ document.addEventListener('input', function(e) {
     const t = e.target;
     if (supressaoSync) return;
 
+    // --- 1. ESTAMPARIA ---
     if (t.classList.contains('estamparia-val-input')) {
         const l = t.dataset.rowName;
         const dtRef = t.dataset.dataRef;
@@ -2968,17 +2980,20 @@ document.addEventListener('input', function(e) {
         return;
     }
 
+    // --- 2. OP2 DIA ---
     if (t.classList.contains('op2-dia-input')) {
         const r = parseInt(t.dataset.row), c = parseInt(t.dataset.col);
         const tabs = getTabelasDoDia(dataLocalSelecionada);
         if (tabs && tabs.op2Dia && tabs.op2Dia[r]) {
             tabs.op2Dia[r][c] = t.value;
+            t.setAttribute('value', t.value);
             atualizarChaoFabrica();
             marcarAlteracao();
         }
         return;
     }
 
+    // --- 3. TABELAS EXCEL (Saídas, Pintura, Montagem, OP1, etc) ---
     if (t.dataset.chave && t.dataset.row !== undefined && t.dataset.col !== undefined && t.classList.contains('ex-in')) {
         const ch = t.dataset.chave, r = parseInt(t.dataset.row), c = parseInt(t.dataset.col);
         const tabs = getTabelasDoDia(dataLocalSelecionada);
@@ -2986,6 +3001,7 @@ document.addEventListener('input', function(e) {
             if (!tabs[ch]) tabs[ch] = [];
             if (!tabs[ch][r]) tabs[ch][r] = [];
             tabs[ch][r][c] = t.value;
+            t.setAttribute('value', t.value);
             atualizarChaoFabrica();
             renderizarGuia();
             marcarAlteracao();
@@ -2993,6 +3009,7 @@ document.addEventListener('input', function(e) {
         return;
     }
 
+    // --- 4. DIAS MÊS (Descrição) ---
     if (t.dataset.chave === 'diasMes' && t.dataset.flatIdx !== undefined && t.classList.contains('ex-in')) {
         const idx = parseInt(t.dataset.flatIdx);
         const tabs = getTabelasDoDia(dataLocalSelecionada);
@@ -3000,6 +3017,7 @@ document.addEventListener('input', function(e) {
             tabs.diasMes[idx].desc = t.value;
             const partes = t.value.split('-').map(p => p.trim()).filter(p => p);
             tabs.diasMes[idx].qtd = partes.length;
+            t.setAttribute('value', t.value);
             const elQtd = document.querySelector('.qtd-dia-' + idx);
             if (elQtd) elQtd.innerText = partes.length;
             calcularMediaDiasUteis();
@@ -3009,6 +3027,7 @@ document.addEventListener('input', function(e) {
         return;
     }
 
+    // --- 5. DIARIO OP2 (Descrição) ---
     if (t.dataset.chave === 'diarioOp2' && t.dataset.flatIdx !== undefined && t.classList.contains('ex-in')) {
         const idx = parseInt(t.dataset.flatIdx);
         const tabs = getTabelasDoDia(dataLocalSelecionada);
@@ -3016,6 +3035,7 @@ document.addEventListener('input', function(e) {
             tabs.diarioOp2[idx].desc = t.value;
             const partes = t.value.split('-').map(p => p.trim()).filter(p => p);
             tabs.diarioOp2[idx].qtd = partes.length;
+            t.setAttribute('value', t.value);
             const elQtd = document.querySelector('.op2-qtd-dia-' + idx);
             if (elQtd) elQtd.innerText = partes.length;
             calcularMediaOP2DiasUteis();
@@ -3025,6 +3045,7 @@ document.addEventListener('input', function(e) {
         return;
     }
 
+    // --- 6. CHÃO DE FÁBRICA ---
     if (t.classList.contains('cf-in')) {
         const ch = t.dataset.cfChave;
         if (!ch) return;
@@ -3036,6 +3057,7 @@ document.addEventListener('input', function(e) {
                 tabs.diasMes[idx].desc = t.value;
                 const partes = t.value.split('-').map(p => p.trim()).filter(p => p);
                 tabs.diasMes[idx].qtd = partes.length;
+                t.setAttribute('value', t.value);
                 marcarAlteracao();
             }
             return;
@@ -3043,17 +3065,20 @@ document.addEventListener('input', function(e) {
         const r = parseInt(t.dataset.cfRow), c = parseInt(t.dataset.cfCol);
         if (tabs[ch] && tabs[ch][r]) {
             tabs[ch][r][c] = t.value;
+            t.setAttribute('value', t.value);
             gerarTabelasExcel();
             marcarAlteracao();
         }
         return;
     }
 
+    // --- 7. TABELAS DE SETORES (Solda, Pintura, OP1, OP2) ---
     if (t.classList.contains('cell-input') && t.dataset.sec) {
         const s = t.dataset.sec, r = t.dataset.row, f = t.dataset.field;
         if (!db.data[s]) db.data[s] = [];
         if (!db.data[s][r]) db.data[s][r] = getEmptyRow();
         db.data[s][r][f] = t.value;
+        t.setAttribute('value', t.value);
         marcarAlteracao();
     }
 });
@@ -3122,71 +3147,116 @@ function calcularMediaDiasUteis() {
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs || !Array.isArray(tabs.diasMes)) return;
 
-    // ✅ D-1: pega a data selecionada e recua 1 dia ÚTIL
     const dataRef = dataLocalSelecionada || getDataCompleta();
     let dRef = parseDataComAnoRef(dataRef, 2026);
     if (!dRef) return;
 
-    // Recua até o dia ÚTIL anterior (pula fds/feriado)
+    const mesSelecionado = dRef.getMonth();
+    const anoSelecionado = dRef.getFullYear();
+
     dRef.setDate(dRef.getDate() - 1);
     while (!ehDiaUtil(dRef)) dRef.setDate(dRef.getDate() - 1);
 
+    // ✅ Se D-1 caiu em outro mês, não há dias úteis do mês atual para contar
+    if (dRef.getMonth() !== mesSelecionado || dRef.getFullYear() !== anoSelecionado) {
+        const elMedia = document.getElementById('media-value-dias');
+        if (elMedia) elMedia.innerText = '0,00';
+        const elDetail = document.getElementById('media-detail-dias');
+        if (elDetail) elDetail.innerText = 'Total: 0 produtos em 0 dias úteis (até D-1)';
+        return;
+    }
+
     const diaLimite = dRef.getDate();
     const mesLimite = dRef.getMonth();
+    const anoLimite = dRef.getFullYear();
 
-    let totalProdutos = 0, diasContados = 0;
-    tabs.diasMes.forEach(reg => {
-        if (!reg || !reg.data) return;
-        const dia = parseInt(reg.data.split('/')[0], 10);
-        const mesTxt = reg.data.split('/')[1];
-        const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-        const mesReg = meses.indexOf(mesTxt);
-        if (isNaN(dia) || mesReg !== mesLimite) return;
-        if (dia > diaLimite) return; // ignora D-1 em diante
-        totalProdutos += (reg.qtd || 0);
-        diasContados++;
-    });
+    let totalProdutos = 0;
+    let diasUteisConsiderados = 0;
 
-    const media = diasContados > 0 ? (totalProdutos / diasContados) : 0;
+    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    const nomeMes = meses[mesLimite];
+
+    // ✅ Loop do dia 1 até D-1, contando TODOS os dias úteis (mesmo com qtd = 0)
+    for (let dia = 1; dia <= diaLimite; dia++) {
+        const dataIteracao = new Date(anoLimite, mesLimite, dia);
+
+        if (ehDiaUtil(dataIteracao)) {
+            diasUteisConsiderados++;
+
+            const dataStr = String(dia).padStart(2,'0') + '/' + nomeMes;
+            const registro = tabs.diasMes.find(r => r.data === dataStr);
+
+            if (registro && registro.qtd) {
+                totalProdutos += parseInt(registro.qtd) || 0;
+            }
+        }
+    }
+
+    const media = diasUteisConsiderados > 0 ? (totalProdutos / diasUteisConsiderados) : 0;
+
     const elMedia = document.getElementById('media-value-dias');
     if (elMedia) elMedia.innerText = media.toFixed(2).replace('.', ',');
+
     const elDetail = document.getElementById('media-detail-dias');
-    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasContados} dias úteis (até D-1)`;
+    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasUteisConsiderados} dias úteis (até D-1)`;
 }
 
 function calcularMediaOP2DiasUteis() {
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs || !Array.isArray(tabs.diarioOp2)) return;
 
-    // ✅ D-1: pega a data selecionada e recua 1 dia ÚTIL
     const dataRef = dataLocalSelecionada || getDataCompleta();
     let dRef = parseDataComAnoRef(dataRef, 2026);
     if (!dRef) return;
 
+    const mesSelecionado = dRef.getMonth();
+    const anoSelecionado = dRef.getFullYear();
+
     dRef.setDate(dRef.getDate() - 1);
     while (!ehDiaUtil(dRef)) dRef.setDate(dRef.getDate() - 1);
 
+    // ✅ Se D-1 caiu em outro mês, não há dias úteis do mês atual para contar
+    if (dRef.getMonth() !== mesSelecionado || dRef.getFullYear() !== anoSelecionado) {
+        const elMedia = document.getElementById('media-value-op2');
+        if (elMedia) elMedia.innerText = '0,00';
+        const elDetail = document.getElementById('media-detail-op2');
+        if (elDetail) elDetail.innerText = 'Total: 0 produtos em 0 dias úteis (até D-1)';
+        return;
+    }
+
     const diaLimite = dRef.getDate();
     const mesLimite = dRef.getMonth();
+    const anoLimite = dRef.getFullYear();
 
-    let totalProdutos = 0, diasContados = 0;
-    tabs.diarioOp2.forEach(reg => {
-        if (!reg || !reg.data) return;
-        const dia = parseInt(reg.data.split('/')[0], 10);
-        const mesTxt = reg.data.split('/')[1];
-        const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-        const mesReg = meses.indexOf(mesTxt);
-        if (isNaN(dia) || mesReg !== mesLimite) return;
-        if (dia > diaLimite) return; 
-        totalProdutos += (reg.qtd || 0);
-        diasContados++;
-    });
+    let totalProdutos = 0;
+    let diasUteisConsiderados = 0;
 
-    const media = diasContados > 0 ? (totalProdutos / diasContados) : 0;
+    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    const nomeMes = meses[mesLimite];
+
+    // ✅ Loop do dia 1 até D-1, contando TODOS os dias úteis (mesmo com qtd = 0)
+    for (let dia = 1; dia <= diaLimite; dia++) {
+        const dataIteracao = new Date(anoLimite, mesLimite, dia);
+
+        if (ehDiaUtil(dataIteracao)) {
+            diasUteisConsiderados++;
+
+            const dataStr = String(dia).padStart(2,'0') + '/' + nomeMes;
+            const registro = tabs.diarioOp2.find(r => r.data === dataStr);
+
+            if (registro && registro.qtd) {
+                totalProdutos += parseInt(registro.qtd) || 0;
+            }
+        }
+    }
+
+    const media = diasUteisConsiderados > 0 ? (totalProdutos / diasUteisConsiderados) : 0;
+
     const elMedia = document.getElementById('media-value-op2');
     if (elMedia) elMedia.innerText = media.toFixed(2).replace('.', ',');
+
     const elDetail = document.getElementById('media-detail-op2');
-    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasContados} dias úteis (até D-1)`;
+    if (elDetail) elDetail.innerText = `Total: ${totalProdutos} produtos em ${diasUteisConsiderados} dias úteis (até D-1)`;
 }
 
 function calcularTotaisSemanais() {
@@ -3209,10 +3279,17 @@ function calcularTotaisSemanais() {
 
     const primeiroDia = new Date(ano, mes, 1);
     const diaSemanaInicio = primeiroDia.getDay();
+    const mesesNomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    const nomeMesRef = mesesNomes[mes];
 
     tabs.diasMes.forEach(reg => {
         if (!reg || !reg.data) return;
-        const dia = parseInt(reg.data.split('/')[0], 10);
+        const partesData = reg.data.split('/');
+        if (partesData.length < 2) return;
+        const dia = parseInt(partesData[0], 10);
+        const mesTxt = partesData[1];
+        // ✅ CORREÇÃO: Só conta se for do mês de referência
+        if (mesTxt !== nomeMesRef) return;
         const dataReal = new Date(ano, mes, dia);
 
         let semana;
@@ -3228,7 +3305,6 @@ function calcularTotaisSemanais() {
         diasPorSemana[semana]++;
     });
 
-    // ✅ Lê as metas salvas
     const metasSolda = db.metasSemanais?.solda || {};
 
     [1,2,3,4,5].forEach(s => {
@@ -3237,26 +3313,24 @@ function calcularTotaisSemanais() {
         const total = semanas[s] || 0;
         const dias = diasPorSemana[s] || 0;
         const media = dias > 0 ? (total / dias).toFixed(2).replace('.', ',') : '0,00';
-        
         const metaSemanal = parseInt(metasSolda[s]) || 0; 
         
         el.innerText = total;
         el.style.cursor = 'help';
 
-        // ✅ Tooltip mostrando Média e Meta
         let tooltip = `Semana ${s}\nTotal: ${total} produtos\nMédia: ${media}/dia (${dias} dias úteis)`;
 
         if (metaSemanal > 0) {
             const pct = Math.round((total / metaSemanal) * 100);
             if (total >= metaSemanal) {
-                el.style.color = '#10b981'; // Verde
+                el.style.color = '#10b981';
                 tooltip += `\n✅ Bateu a meta! (${pct}%)`;
             } else {
-                el.style.color = '#ef4444'; // Vermelho
+                el.style.color = '#ef4444';
                 tooltip += `\n❌ Abaixo da meta. (${pct}%)\nFaltaram: ${metaSemanal - total} produtos`;
             }
         } else {
-            el.style.color = '#0f172a'; // Preto padrão
+            el.style.color = '#0f172a';
         }
         
         el.title = tooltip;
@@ -3457,18 +3531,19 @@ window.addEventListener('DOMContentLoaded', () => {
 // CONTADORES DO BI (global)
 // =========================================================
 function gerarContadoresEntrega() {
-    const siglas = {
-        'CT': 'Carreta Tudo', 'CTE': 'Carreta Especial',
-        'BS': 'Base', 'SL': 'Silo', 'PM': 'Piso Móvel',
-        'TQ': 'Tanque', 'SLBA': 'Silo Basculante'
-    };
-
     const tabs = getTabelasDoDia(dataLocalSelecionada);
     if (!tabs) return;
 
+    const siglas = {
+        'CT':'Carreta Tudo','CTE':'Carreta Especial',
+        'BS':'Base','SL':'Silo','PM':'Piso Móvel',
+        'TQ':'Tanque','SLBA':'Silo Basculante'
+    };
+
     function contar(tabela) {
-        const contagem = {};
-        if (!Array.isArray(tabela)) return contagem;
+        const porSigla = {};
+        let totalProdutos = 0;
+        if (!Array.isArray(tabela)) return { porSigla, totalProdutos };
 
         let dRef = parseDataComAnoRef(dataLocalSelecionada, 2026) || new Date();
         dRef.setDate(dRef.getDate() - 1);
@@ -3478,41 +3553,40 @@ function gerarContadoresEntrega() {
         const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 
         tabela.forEach(reg => {
-            if (!reg || !reg.data || !reg.desc) return;
+            if (!reg || !reg.data) return;
             const dia = parseInt(reg.data.split('/')[0], 10);
             const mesTxt = reg.data.split('/')[1];
             if (isNaN(dia) || meses.indexOf(mesTxt) !== mesLimite || dia > diaLimite) return;
-
-            const itens = reg.desc.split('-').map(s => s.trim().toUpperCase()).filter(s => s !== '');
-            itens.forEach(sigla => {
-                if (siglas[sigla]) contagem[sigla] = (contagem[sigla] || 0) + 1;
-            });
+            totalProdutos += (reg.qtd || 0);
+            if (reg.desc) {
+                reg.desc.split('-').map(s => s.trim().toUpperCase()).filter(Boolean)
+                    .forEach(sigla => { if (siglas[sigla]) porSigla[sigla] = (porSigla[sigla]||0)+1; });
+            }
         });
-        return contagem;
+        return { porSigla, totalProdutos };
     }
 
-    function renderizar(idContainer, contagem) {
+    function renderizar(idContainer, resultado) {
         const container = document.getElementById(idContainer);
         if (!container) return;
-
-        if (Object.keys(contagem).length === 0) {
-            container.innerHTML = '<div style="color:#94a3b8;font-weight:800;padding:10px">Nenhum produto entregue (até D-1).</div>';
-            return;
-        }
-
+        const { porSigla, totalProdutos } = resultado;
         let html = '';
-        Object.keys(contagem).sort().forEach(sigla => {
-            html += `
-                <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:10px 16px; border-radius:8px; display:flex; align-items:center; justify-content:space-between; min-width:140px; box-shadow:0 1px 3px rgba(0,0,0,0.05)">
-                    <div style="display:flex; flex-direction:column">
-                        <span style="font-weight:900; color:#3b82f6; font-size:18px">${sigla}</span>
-                        <span style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase">${siglas[sigla]}</span>
-                    </div>
-                    <strong style="font-size:26px; color:#0f172a">${contagem[sigla]}</strong>
+        if (totalProdutos > 0) {
+            html += `<div style="background:#ecfdf5;border:1px solid #10b981;padding:10px 16px;border-radius:8px;min-width:140px">
+                <div style="font-size:11px;color:#065f46;font-weight:900;text-transform:uppercase">Total produtos</div>
+                <strong style="font-size:26px;color:#047857">${totalProdutos}</strong>
+            </div>`;
+        }
+        Object.keys(porSigla).sort().forEach(sigla => {
+            html += `<div style="background:#f8fafc;border:1px solid #e2e8f0;padding:10px 16px;border-radius:8px;min-width:140px">
+                <div style="display:flex;flex-direction:column">
+                    <span style="font-weight:900;color:#3b82f6;font-size:18px">${sigla}</span>
+                    <span style="font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase">${siglas[sigla]}</span>
                 </div>
-            `;
+                <strong style="font-size:26px;color:#0f172a">${porSigla[sigla]}</strong>
+            </div>`;
         });
-        container.innerHTML = html;
+        container.innerHTML = html || '<div style="color:#94a3b8;font-weight:800;padding:10px">Nenhum produto entregue (até D-1).</div>';
     }
 
     renderizar('contador-produtos-saida', contar(tabs.diasMes));
@@ -3523,26 +3597,28 @@ function gerarContadoresEntrega() {
 // CAMINHÃO DO PRÊMIO (global)
 // =========================================================
 function atualizarCaminhaoPremio() {
-    const tabs = getTabelasDoDia(dataLocalSelecionada);
+    // ✅ FIX: usa db.diasMesPorMes[mesReferencia] — cada mês tem seu próprio array
     let totalProdutosSaidas = 0;
 
-    if (tabs && Array.isArray(tabs.diasMes)) {
-        let dRef = parseDataComAnoRef(dataLocalSelecionada, 2026);
-        if (dRef) {
-            dRef.setDate(dRef.getDate() - 1);
-            while (!ehDiaUtil(dRef)) dRef.setDate(dRef.getDate() - 1);
-            const diaLimite = dRef.getDate();
-            const mesLimite = dRef.getMonth();
-            const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    const mesChave = (db.mesReferencia && /^\d{4}-\d{2}$/.test(db.mesReferencia))
+        ? db.mesReferencia
+        : (() => { const h = new Date(); return h.getFullYear() + '-' + String(h.getMonth()+1).padStart(2,'0'); })();
 
-            tabs.diasMes.forEach(reg => {
-                if (!reg || !reg.data) return;
-                const dia = parseInt(reg.data.split('/')[0], 10);
-                const mesTxt = reg.data.split('/')[1];
-                if (isNaN(dia) || meses.indexOf(mesTxt) !== mesLimite || dia > diaLimite) return;
-                totalProdutosSaidas += (reg.qtd || 0);
-            });
-        }
+    const diasDoMes = (db.diasMesPorMes && db.diasMesPorMes[mesChave]) || [];
+
+    if (Array.isArray(diasDoMes) && diasDoMes.length > 0) {
+        // Data de referência (D-1): recua 1 dia útil
+        let dRef = parseDataComAnoRef(dataLocalSelecionada, 2026) || new Date();
+        dRef.setDate(dRef.getDate() - 1);
+        while (!ehDiaUtil(dRef)) dRef.setDate(dRef.getDate() - 1);
+        const diaLimite = dRef.getDate();
+
+        diasDoMes.forEach(reg => {
+            if (!reg || !reg.data) return;
+            const dia = parseInt(reg.data.split('/')[0], 10);
+            if (isNaN(dia) || dia > diaLimite) return;
+            totalProdutosSaidas += (reg.qtd || 0);
+        });
     }
 
     const metaSaidas = parseInt(document.getElementById('cf-meta-prod')?.innerText) || 75;
