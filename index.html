@@ -1599,10 +1599,18 @@ function initFirebase() {
                 nuvem.mesReferencia = `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}`;
             }
 
+            // 🛡️ MIGRAÇÃO SEGURA: Transforma metas antigas em metas por mês
+            if (!nuvem.metasSemanaisPorMes) nuvem.metasSemanaisPorMes = {};
+            
+            // Se o mês atual ainda não tem metas no novo formato, copia do antigo
+            if (!nuvem.metasSemanaisPorMes[nuvem.mesReferencia]) {
+                nuvem.metasSemanaisPorMes[nuvem.mesReferencia] = JSON.parse(JSON.stringify(nuvem.metasSemanais));
+                console.log(`🛡️ Migração: Metas copiadas para o mês ${nuvem.mesReferencia}`);
+            }
+
             supressaoSync = true;
             const dataMantida = dataLocalSelecionada || localStorage.getItem('erp_randon_data_individual') || getDataCompleta();
             const tabelasMemoria = db.tabelasExcelPorDia || {};
-
             // ✅ PATCH: preserva referências em uso via Object.assign
             // (em vez de db = nuvem, que quebra closures)
             Object.keys(db).forEach(k => { delete db[k]; });
