@@ -1775,24 +1775,7 @@ function renderizarTabelaDiasMes() {
     const nomeMes = meses[mes];
     const ultimoDia = new Date(ano, mes+1, 0).getDate();
 
-    const mapaExistente = {};
-    (tabs.diasMes || []).forEach(r => {
-        if (r && r.data) mapaExistente[r.data] = { desc: r.desc || '', qtd: r.qtd || 0 };
-    });
-
-    const novoDiasMes = [];
-    for (let d = 1; d <= ultimoDia; d++) {
-        const dt = new Date(ano, mes, d);
-        if (!ehDiaUtil(dt)) continue;
-        const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
-        const antigo = mapaExistente[dataStr];
-        novoDiasMes.push({
-            data: dataStr,
-            desc: antigo ? antigo.desc : '',
-            qtd: antigo ? antigo.qtd : 0
-        });
-    }
-    tabs.diasMes = novoDiasMes;
+    if (!Array.isArray(tabs.diasMes)) tabs.diasMes = [];
 
     const linhas = [];
     let idxFlat = 0;
@@ -1800,12 +1783,20 @@ function renderizarTabelaDiasMes() {
         const dt = new Date(ano, mes, d);
         if (!ehDiaUtil(dt)) continue;
         const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
-        const reg = tabs.diasMes[idxFlat];
+        
+        let reg = tabs.diasMes.find(r => r && r.data === dataStr);
+        if (!reg) {
+            reg = { data: dataStr, desc: '', qtd: 0 };
+            tabs.diasMes.push(reg);
+        }
+
+        const qtdReal = (reg.desc || '').split('-').map(p => p.trim()).filter(p => p).length;
+
         linhas.push(
             '<tr>' +
                 '<td style="font-weight:900;background:#fafbfc;text-align:center;color:var(--text-secondary);font-size:10px;padding:1px 4px">' + dataStr + '</td>' +
-                '<td><input type="text" class="ex-in desc-input-dia" data-chave="diasMes" data-flat-idx="' + idxFlat + '" placeholder="ct-bs-sl" value="' + (reg.desc||'') + '" style="padding:1px 4px;font-size:10px"></td>' +
-                '<td style="text-align:center;font-weight:900;background:#f0fdf4"><span class="qtd-dia-' + idxFlat + '" style="color:#059669;font-size:12px">' + (reg.qtd||0) + '</span></td>' +
+                '<td><input type="text" class="ex-in desc-input-dia" data-chave="diasMes" data-flat-idx="' + idxFlat + '" placeholder="ct-bs-sl" value="' + (reg.desc||'') + '" style="padding:1px 4px;font-size:10px" oninput="atualizarDiaMes(\'' + dataStr + '\', this.value, this)"></td>' +
+                '<td style="text-align:center;font-weight:900;background:#f0fdf4"><span class="qtd-dia-' + idxFlat + '" style="color:#059669;font-size:12px">' + qtdReal + '</span></td>' +
             '</tr>'
         );
         idxFlat++;
@@ -3437,24 +3428,7 @@ function renderizarTabelaOP2DiasMes() {
     const nomeMes = meses[mes];
     const ultimoDia = new Date(ano, mes+1, 0).getDate();
 
-    const mapaExistente = {};
-    (tabs.diarioOp2 || []).forEach(r => {
-        if (r && r.data) mapaExistente[r.data] = { desc: r.desc || '', qtd: r.qtd || 0 };
-    });
-
-    const novoDiarioOp2 = [];
-    for (let d = 1; d <= ultimoDia; d++) {
-        const dt = new Date(ano, mes, d);
-        if (!ehDiaUtil(dt)) continue;
-        const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
-        const antigo = mapaExistente[dataStr];
-        novoDiarioOp2.push({
-            data: dataStr,
-            desc: antigo ? antigo.desc : '',
-            qtd: antigo ? antigo.qtd : 0
-        });
-    }
-    tabs.diarioOp2 = novoDiarioOp2;
+    if (!Array.isArray(tabs.diarioOp2)) tabs.diarioOp2 = [];
 
     const linhas = [];
     let idxFlat = 0;
@@ -3462,12 +3436,20 @@ function renderizarTabelaOP2DiasMes() {
         const dt = new Date(ano, mes, d);
         if (!ehDiaUtil(dt)) continue;
         const dataStr = String(d).padStart(2,'0') + '/' + nomeMes;
-        const reg = tabs.diarioOp2[idxFlat];
+        
+        let reg = tabs.diarioOp2.find(r => r && r.data === dataStr);
+        if (!reg) {
+            reg = { data: dataStr, desc: '', qtd: 0 };
+            tabs.diarioOp2.push(reg);
+        }
+
+        const qtdReal = (reg.desc || '').split('-').map(p => p.trim()).filter(p => p).length;
+
         linhas.push(
             '<tr>' +
                 '<td style="font-weight:900;background:#fafbfc;text-align:center;color:var(--text-secondary);font-size:10px;padding:1px 4px">' + dataStr + '</td>' +
-                '<td><input type="text" class="ex-in desc-input-dia" data-chave="diarioOp2" data-flat-idx="' + idxFlat + '" placeholder="ct-bs-sl" value="' + (reg.desc||'') + '" style="padding:1px 4px;font-size:10px"></td>' +
-                '<td style="text-align:center;font-weight:900;background:#faf5ff"><span class="op2-qtd-dia-' + idxFlat + '" style="color:#7c3aed;font-size:12px">' + (reg.qtd||0) + '</span></td>' +
+                '<td><input type="text" class="ex-in desc-input-dia" data-chave="diarioOp2" data-flat-idx="' + idxFlat + '" placeholder="ct-bs-sl" value="' + (reg.desc||'') + '" style="padding:1px 4px;font-size:10px" oninput="atualizarDiarioOp2(\'' + dataStr + '\', this.value, this)"></td>' +
+                '<td style="text-align:center;font-weight:900;background:#faf5ff"><span class="op2-qtd-dia-' + idxFlat + '" style="color:#7c3aed;font-size:12px">' + qtdReal + '</span></td>' +
             '</tr>'
         );
         idxFlat++;
