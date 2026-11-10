@@ -344,6 +344,7 @@ select.cell-input{cursor:pointer;text-align-last:center;font-size:14px;font-weig
         <button class="btn btn-pdf" onclick="gerarPDF()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
         <button class="btn btn-tv" onclick="iniciarModoTV()"><i class="fa-solid fa-tv"></i> TV</button>
         <button class="btn" onclick="backupDoDia()" style="background:#7c3aed;color:#fff"><i class="fa-solid fa-floppy-disk"></i> Backup</button>
+        <button class="btn" onclick="backupTotal()" style="background:#059669;color:#fff"><i class="fa-solid fa-database"></i> Backup Total</button>
     </div>
 </nav>
 
@@ -1490,6 +1491,22 @@ function marcarAlteracao() {
     }, DEBOUNCE_SAVE_MS);
 }
 function salvarNoFirebase(exibirAviso = false) {
+        // 🛡️ TRAVA DE SEGURANÇA: Impede que a nuvem seja apagada se a tela estiver vazia!
+    if (!db || !db.tabelasExcelPorDia || Object.keys(db.tabelasExcelPorDia).length === 0) {
+        console.warn("🛑 Salvamento bloqueado: os dados na tela estão vazios.");
+        saveEmAndamento = false;
+        if (typeof setStatusConexao === 'function') setStatusConexao('online');
+        return;
+    }
+
+       // 🛡️ TRAVA DE SEGURANÇA: Impede que a nuvem seja apagada se a tela estiver vazia!
+    if (!db || !db.tabelasExcelPorDia || Object.keys(db.tabelasExcelPorDia).length === 0) {
+        console.warn("🛑 Salvamento bloqueado: os dados na tela estão vazios.");
+        saveEmAndamento = false;
+        if (typeof setStatusConexao === 'function') setStatusConexao('online');
+        return;
+    }
+
     if (saveEmAndamento) {
         // ✅ PATCH: em vez de descartar, reagenda
         if (debounceSaveTimer) clearTimeout(debounceSaveTimer);
@@ -3676,6 +3693,38 @@ function removerLinhaPino(cat) {
     recalcularPainelPremio();
     marcarAlteracao();
     mostrarToast('Linha removida de ' + cat, 'fa-minus');
+}
+function backupTotal() {
+    mostrarToast('🔄 Buscando todos os dados...', 'fa-cloud-arrow-down');
+    
+    if (!firebase || !firebase.database) {
+        mostrarToast('❌ Firebase não conectado.', 'fa-triangle-exclamation');
+        return;
+    }
+
+    firebase.database().ref('operacao_atual').once('value', s => {
+        const dados = s.val();
+        if (!dados) {
+            mostrarToast('❌ Nuvem vazia.', 'fa-triangle-exclamation');
+            return;
+        }
+        
+        const dias = Object.keys(dados.tabelasExcelPorDia || {}).length;
+        const meses = Object.keys(dados.diasMesPorMes || {}).length;
+        
+        const blob = new Blob([JSON.stringify(dados, null, 2)], {type: 'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        
+        const dataHoje = new Date().toISOString().slice(0, 10);
+        a.download = 'BACKUP_TOTAL_COMPLETO_' + dataHoje + '.json';
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        mostrarToast(`✅ Backup baixado! ${dias} dias e ${meses} meses.`, 'fa-circle-check');
+    });
 }
 </script>
 </body>
